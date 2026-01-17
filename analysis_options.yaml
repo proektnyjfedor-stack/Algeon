@@ -1,0 +1,25 @@
+# Настройки линтера для MathPilot
+# Документация: https://dart.dev/guides/language/analysis-options
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Разрешаем print для логирования
+    avoid_print: false
+    
+    # Строгие правила
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    
+    # Стиль кода
+    sort_constructors_first: true
+    sort_unnamed_constructors_first: true
+
+analyzer:
+  errors:
+    # Предупреждения вместо ошибок
+    missing_required_param: warning
+    missing_return: warning
