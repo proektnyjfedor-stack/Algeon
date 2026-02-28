@@ -12,6 +12,7 @@ import '../theme/theme_provider.dart';
 import '../data/tasks_data.dart';
 import '../services/progress_service.dart';
 import '../services/achievements_service.dart';
+import '../services/auth_service.dart';
 import '../widgets/avatars.dart';
 import '../widgets/avatar_builder.dart';
 import '../widgets/user_avatar_display.dart';
@@ -26,11 +27,15 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab> {
   @override
   Widget build(BuildContext context) {
+    final isGuest = AuthService.isAnonymous();
+
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _buildProfileHeader()),
+          if (isGuest)
+            SliverToBoxAdapter(child: _buildGuestBanner()),
           SliverToBoxAdapter(child: _buildStatsSection()),
           SliverToBoxAdapter(child: _buildProgressSection()),
           SliverToBoxAdapter(child: _buildAchievementsPreview()),
@@ -185,6 +190,78 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildGuestBanner() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: GestureDetector(
+        onTap: () => context.go('/auth'),
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.accent, AppColors.accent.withValues(alpha: 0.7)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.accent.withValues(alpha: 0.3),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Ты в гостевом режиме',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Создай аккаунт — сохраним прогресс на всех устройствах',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white.withValues(alpha: 0.85),
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  'Войти',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.accent,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

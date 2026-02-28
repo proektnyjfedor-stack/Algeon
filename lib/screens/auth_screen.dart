@@ -213,7 +213,29 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
+
+                  // Гостевой вход
+                  Center(
+                    child: GestureDetector(
+                      onTap: _isLoading ? null : _continueAsGuest,
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          'Продолжить без регистрации',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: AppThemeColors.textHint(context),
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppThemeColors.textHint(context),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
@@ -579,6 +601,34 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _isLoading = false;
         _errorMessage = 'Ошибка входа через Google';
+      });
+    }
+  }
+
+  Future<void> _continueAsGuest() async {
+    HapticFeedback.lightImpact();
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+      _successMessage = null;
+    });
+
+    try {
+      final result = await AuthService.signInAnonymously();
+      if (!mounted) return;
+      if (result != null) {
+        _navigateNext();
+      } else {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Не удалось войти как гость';
+        });
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Ошибка входа как гость';
       });
     }
   }

@@ -97,6 +97,25 @@ class AuthService {
   }
 
   // ============================================================
+  // ANONYMOUS (guest mode)
+  // ============================================================
+
+  /// Вход как гость (анонимная авторизация Firebase)
+  static Future<UserCredential?> signInAnonymously() async {
+    try {
+      final result = await _auth.signInAnonymously();
+      await _prefs?.setString(_keyAuthMethod, 'anonymous');
+      return result;
+    } catch (e) {
+      debugPrint('Anonymous sign-in error: $e');
+      return null;
+    }
+  }
+
+  /// Гость (анонимный пользователь)?
+  static bool isAnonymous() => _auth.currentUser?.isAnonymous ?? false;
+
+  // ============================================================
   // SIGN OUT
   // ============================================================
 
