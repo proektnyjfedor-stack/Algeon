@@ -5,6 +5,7 @@ class AppUser {
   final String email;
   final String? displayName;
   final int? grade;
+  final String? avatar;
   final DateTime createdAt;
 
   const AppUser({
@@ -12,58 +13,47 @@ class AppUser {
     required this.email,
     this.displayName,
     this.grade,
+    this.avatar,
     required this.createdAt,
   });
 
-  /// Из JSON
   factory AppUser.fromJson(Map<String, dynamic> json) {
     return AppUser(
       uid: json['uid'] as String,
-      email: json['email'] as String,
+      email: json['email'] as String? ?? '',
       displayName: json['displayName'] as String?,
       grade: json['grade'] as int?,
+      avatar: json['avatar'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
 
-  /// В JSON
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
       'email': email,
       'displayName': displayName,
       'grade': grade,
+      'avatar': avatar,
       'createdAt': createdAt.toIso8601String(),
     };
   }
 
-  /// Из Firebase (для будущего)
-  factory AppUser.fromFirebase(dynamic firebaseUser) {
-    return AppUser(
-      uid: firebaseUser.uid as String,
-      email: firebaseUser.email as String? ?? '',
-      displayName: firebaseUser.displayName as String?,
-      grade: null,
-      createdAt: DateTime.now(),
-    );
-  }
-
-  /// Копия с изменениями
   AppUser copyWith({
     String? displayName,
     int? grade,
+    String? avatar,
   }) {
     return AppUser(
       uid: uid,
       email: email,
       displayName: displayName ?? this.displayName,
       grade: grade ?? this.grade,
+      avatar: avatar ?? this.avatar,
       createdAt: createdAt,
     );
   }
 
   @override
-  String toString() {
-    return 'AppUser(uid: $uid, email: $email, grade: $grade)';
-  }
+  String toString() => 'AppUser(uid: $uid, grade: $grade)';
 }

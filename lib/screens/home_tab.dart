@@ -1,12 +1,15 @@
-/// Вкладка "Главная" — список тем как на макете
-/// 
-/// Показывает: прогресс, кол-во заданий, уровень, замки
+/// Home Tab — Главная с прогрессом
+/// Величественный дизайн Algeon
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
+import '../models/task.dart';
 import '../services/progress_service.dart';
-import 'task_screen.dart';
+import '../widgets/app_logo.dart';
+import '../widgets/user_avatar_display.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -15,251 +18,447 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
+  int get _grade => ProgressService.getCurrentGrade();
+
+  late AnimationController _listAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _listAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+    _listAnim.forward();
+  }
+
+  @override
+  void dispose() {
+    _listAnim.dispose();
+    super.dispose();
+  }
+
+  void _refresh() {
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Все темы из всех классов
-    final allTopics = _getAllTopicsWithLevels();
-    
-    return SafeArea(
-      child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-        itemCount: allTopics.length,
-        itemBuilder: (context, index) {
-          final topic = allTopics[index];
-          return _buildTopicCard(topic, index);
-        },
-      ),
+    final topics = getTopicsInfoByGrade(_grade);
+    final allGradeTasks = getTasksByGrade(_grade);
+    final totalTasks = allGradeTasks.length;
+    final totalSolved = ProgressService.getSolvedCountForGrade(
+      _grade,
+      allGradeTasks.map((t) => t.id).toList(),
     );
-  }
+    final todayCompleted = ProgressService.getTodayCompletedCount();
+    final userName = ProgressService.getUserName();
+    final overallProgress = totalTasks > 0 ? totalSolved / totalTasks : 0.0;
 
-  /// Получить все темы с уровнями
-  List<_TopicData> _getAllTopicsWithLevels() {
-    final List<_TopicData> result = [];
-    
-    // Уровень 1 — 2 класс
-    final grade2Topics = getTopicsInfoByGrade(2);
-    for (final topic in grade2Topics) {
-      final tasks = getTasksByGradeAndTopic(2, topic.name);
-      final solvedCount = ProgressService.getSolvedCountForTopic(
-        topic.name, 
-        tasks.map((t) => t.id).toList(),
-      );
-      result.add(_TopicData(
-        name: topic.name,
-        grade: 2,
-        level: 1,
-        taskCount: tasks.length,
-        solvedCount: solvedCount,
-        isUnlocked: true, // Первый уровень всегда открыт
-      ));
-    }
-    
-    // Уровень 2 — 3 класс (заблокирован пока не пройден уровень 1)
-    final grade3Topics = getTopicsInfoByGrade(3);
-    final level1Completed = result.isNotEmpty && 
-        result.every((t) => t.solvedCount >= t.taskCount * 0.5);
-    
-    for (final topic in grade3Topics) {
-      final tasks = getTasksByGradeAndTopic(3, topic.name);
-      final solvedCount = ProgressService.getSolvedCountForTopic(
-        topic.name,
-        tasks.map((t) => t.id).toList(),
-      );
-      result.add(_TopicData(
-        name: topic.name,
-        grade: 3,
-        level: 2,
-        taskCount: tasks.length,
-        solvedCount: solvedCount,
-        isUnlocked: level1Completed,
-      ));
-    }
-    
-    // Добавляем заглушки для демо (как на макете — много карточек)
-    if (result.length < 8) {
-      for (int i = result.length; i < 8; i++) {
-        result.add(_TopicData(
-          name: 'Тема ${i + 1}',
-          grade: 3,
-          level: 2,
-          taskCount: 0,
-          solvedCount: 0,
-          isUnlocked: false,
-        ));
-      }
-    }
-    
-    return result;
-  }
-
-  /// Карточка темы (как на макете)
-  Widget _buildTopicCard(_TopicData topic, int index) {
-    final progress = topic.taskCount > 0 
-        ? topic.solvedCount / topic.taskCount 
-        : 0.0;
-    
-    return GestureDetector(
-      onTap: topic.isUnlocked && topic.taskCount > 0
-          ? () => _openTopic(topic)
-          : null,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: topic.isUnlocked ? AppColors.accent : AppColors.border,
-            width: topic.isUnlocked ? 2 : 1,
+    return Scaffold(
+      backgroundColor: AppThemeColors.background(context),
+      body: CustomScrollView(
+        slivers: [
+          // Hero header
+          SliverToBoxAdapter(
+            child: _buildHeroHeader(userName, todayCompleted, totalSolved, totalTasks, overallProgress),
           ),
-        ),
-        child: Row(
-          children: [
-            // Иконка (замок или галочка)
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: topic.isUnlocked 
-                    ? AppColors.accentLight 
-                    : AppColors.background,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                topic.isUnlocked ? Icons.lock_open : Icons.lock,
-                color: topic.isUnlocked 
-                    ? AppColors.accent 
-                    : AppColors.textHint,
-                size: 20,
-              ),
-            ),
-            
-            const SizedBox(width: 12),
-            
-            // Прогресс и текст
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+
+          // Section title
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+              child: Row(
                 children: [
-                  // Текст "Пройдено X из Y" или название
-                  Text(
-                    topic.isUnlocked && topic.taskCount > 0
-                        ? 'Пройдено ${topic.solvedCount} из ${topic.taskCount}'
-                        : topic.name,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: topic.isUnlocked 
-                          ? AppColors.textPrimary 
-                          : AppColors.textHint,
+                  Container(
+                    width: 4,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  
-                  const SizedBox(height: 8),
-                  
-                  // Прогресс-бар
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      backgroundColor: AppColors.border,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        topic.isUnlocked ? AppColors.accent : AppColors.textHint,
+                  const SizedBox(width: 10),
+                  Text(
+                    'Темы $_grade класса',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppThemeColors.textPrimary(context),
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppThemeColors.accentLight(context),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${topics.length} тем',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.accent,
                       ),
-                      minHeight: 6,
                     ),
                   ),
                 ],
               ),
             ),
-            
-            const SizedBox(width: 12),
-            
-            // Кол-во заданий
-            Column(
-              children: [
-                Text(
-                  '${topic.taskCount}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: topic.isUnlocked 
-                        ? AppColors.textPrimary 
-                        : AppColors.textHint,
-                  ),
+          ),
+
+          // Topics list
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _buildTopicCard(
+                  topic: topics[index],
+                  index: index,
+                  allTopics: topics,
                 ),
-                Text(
-                  'заданий',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: AppColors.textHint,
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(width: 12),
-            
-            // Уровень
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: topic.isUnlocked 
-                    ? AppColors.accent 
-                    : AppColors.background,
-                borderRadius: BorderRadius.circular(8),
-                border: topic.isUnlocked 
-                    ? null 
-                    : Border.all(color: AppColors.border),
+                childCount: topics.length,
               ),
-              child: Text(
-                'Ур ${topic.level}',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroHeader(String userName, int todayCompleted, int solved, int total, double progress) {
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        child: Container(
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+          child: Column(
+            children: [
+              // Top row: logo + grade / avatar + greeting
+              Row(
+                children: [
+                  const AppLogo(size: 36),
+                  const SizedBox(width: 10),
+                  const Text(
+                    'Algeon',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => context.go('/profile'),
+                    behavior: HitTestBehavior.opaque,
+                    child: const UserAvatarDisplay(size: 40),
+                  ),
+                  const SizedBox(width: 10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '$_grade кл.',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              // Greeting row
+              Text(
+                'Привет, $userName! Сегодня решено: $todayCompleted',
                 style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: topic.isUnlocked 
-                      ? Colors.white 
-                      : AppColors.textHint,
+                  fontSize: 13,
+                  color: Colors.white.withValues(alpha: 0.75),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 20),
+
+              // Progress card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: [
+                    // Circle progress
+                    SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: CircularProgressIndicator(
+                              value: progress,
+                              strokeWidth: 4,
+                              backgroundColor: Colors.white.withValues(alpha: 0.25),
+                              valueColor: const AlwaysStoppedAnimation(Colors.white),
+                              strokeCap: StrokeCap.round,
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              '${(progress * 100).toInt()}%',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Прогресс по классу',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.white.withValues(alpha: 0.75),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '$solved',
+                                  style: const TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' / $total задач',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white.withValues(alpha: 0.75),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Streak indicator
+                    Column(
+                      children: [
+                        Icon(Icons.local_fire_department_rounded,
+                            color: const Color(0xFFFF9600), size: 22),
+                        Text(
+                          '${ProgressService.getStreakDays()}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'дней',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
         ),
       ),
     );
   }
 
-  /// Открыть тему
-  void _openTopic(_TopicData topic) {
-    final tasks = getTasksByGradeAndTopic(topic.grade, topic.name);
-    
-    if (tasks.isEmpty) return;
-    
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => TaskScreen(tasks: tasks, topicName: topic.name),
+  Widget _buildTopicCard({
+    required TopicInfo topic,
+    required int index,
+    required List<TopicInfo> allTopics,
+  }) {
+    final tasks = getTasksByGradeAndTopic(_grade, topic.name);
+    final taskIds = tasks.map((t) => t.id).toList();
+    final solved = ProgressService.getSolvedCountForTopic(topic.name, taskIds);
+    final total = topic.taskCount;
+
+    bool isUnlocked = index == 0;
+    if (index > 0) {
+      final prevTopic = allTopics[index - 1];
+      final prevTasks = getTasksByGradeAndTopic(_grade, prevTopic.name);
+      final prevIds = prevTasks.map((t) => t.id).toList();
+      final prevSolved = ProgressService.getSolvedCountForTopic(prevTopic.name, prevIds);
+      isUnlocked = prevSolved >= (prevTopic.taskCount * 0.5);
+    }
+
+    final isComplete = solved >= total && total > 0;
+    final progress = total > 0 ? solved / total : 0.0;
+
+    final delay = (index * 0.08).clamp(0.0, 0.55);
+    final interval = Interval(delay, (delay + 0.4).clamp(0.0, 1.0), curve: Curves.easeOutCubic);
+    final fadeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _listAnim, curve: interval),
+    );
+    final slideAnim = Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero).animate(
+      CurvedAnimation(parent: _listAnim, curve: interval),
+    );
+
+    return FadeTransition(
+      opacity: fadeAnim,
+      child: SlideTransition(
+        position: slideAnim,
+        child: Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
+        onTap: isUnlocked
+            ? () {
+                HapticFeedback.lightImpact();
+                _openTopic(topic.name, tasks);
+              }
+            : null,
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppThemeColors.surface(context),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isComplete
+                    ? AppColors.success.withValues(alpha: 0.5)
+                    : isUnlocked
+                        ? AppThemeColors.border(context)
+                        : AppThemeColors.borderLight(context),
+                width: isComplete ? 1.5 : 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                // Icon container
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isComplete
+                        ? AppColors.success
+                        : isUnlocked
+                            ? AppColors.accent
+                            : AppThemeColors.borderLight(context),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    isComplete
+                        ? Icons.check_rounded
+                        : isUnlocked
+                            ? topic.icon
+                            : Icons.lock_rounded,
+                    color: isComplete || isUnlocked
+                        ? Colors.white
+                        : AppThemeColors.textHint(context),
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 14),
+
+                // Topic info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              topic.name,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: isUnlocked
+                                    ? AppThemeColors.textPrimary(context)
+                                    : AppThemeColors.textHint(context),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '$solved/$total',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isComplete
+                                  ? AppColors.success
+                                  : AppThemeColors.textHint(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(3),
+                        child: LinearProgressIndicator(
+                          value: progress,
+                          minHeight: 4,
+                          backgroundColor: AppThemeColors.borderLight(context),
+                          valueColor: AlwaysStoppedAnimation(
+                            isComplete ? AppColors.success : AppColors.accent,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+                if (isUnlocked)
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppThemeColors.textHint(context),
+                    size: 20,
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
-    ).then((_) => setState(() {}));
+    ),
+  );
   }
-}
 
-/// Данные темы
-class _TopicData {
-  final String name;
-  final int grade;
-  final int level;
-  final int taskCount;
-  final int solvedCount;
-  final bool isUnlocked;
-
-  _TopicData({
-    required this.name,
-    required this.grade,
-    required this.level,
-    required this.taskCount,
-    required this.solvedCount,
-    required this.isUnlocked,
-  });
+  void _openTopic(String topicName, List<Task> tasks) {
+    HapticFeedback.mediumImpact();
+    context
+        .push('/learn/intro', extra: {'name': topicName, 'tasks': tasks})
+        .then((_) => _refresh());
+  }
 }

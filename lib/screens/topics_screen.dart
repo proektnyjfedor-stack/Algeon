@@ -143,7 +143,7 @@ class _TopicCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          splashColor: AppColors.accent.withOpacity(0.1),
+          splashColor: AppColors.accent.withValues(alpha: 0.1),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Row(
@@ -153,13 +153,14 @@ class _TopicCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.1),
+                    color: AppColors.accent.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
-                    child: Text(
+                    child: Icon(
                       topic.icon,
-                      style: const TextStyle(fontSize: 24),
+                      color: AppColors.accent,
+                      size: 26,
                     ),
                   ),
                 ),
@@ -187,7 +188,7 @@ class _TopicCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: progress,
-                                backgroundColor: AppColors.surfaceLight,
+                                backgroundColor: AppColors.borderLight,
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   progress == 1.0 
                                       ? AppColors.success 

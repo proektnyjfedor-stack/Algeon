@@ -1,11 +1,32 @@
-/// Логотип приложения — лестница на чёрном фоне
+/// Логотип приложения — минималистичная белая лестница
 
 import 'package:flutter/material.dart';
 
+/// Логотип: синий фон + белая лестница (для светлых экранов)
 class AppLogo extends StatelessWidget {
   final double size;
-  
-  const AppLogo({super.key, this.size = 80});
+  final Color? color;
+
+  const AppLogo({super.key, this.size = 80, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(
+        painter: _StairsPainter(color: color ?? Colors.white),
+        size: Size(size, size),
+      ),
+    );
+  }
+}
+
+/// Логотип в синем квадрате — иконка приложения
+class AppLogoIcon extends StatelessWidget {
+  final double size;
+
+  const AppLogoIcon({super.key, this.size = 80});
 
   @override
   Widget build(BuildContext context) {
@@ -13,97 +34,83 @@ class AppLogo extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A), // Чёрный фон
-        borderRadius: BorderRadius.circular(size * 0.22), // Скруглённые углы
+        color: const Color(0xFF2563EB),
+        borderRadius: BorderRadius.circular(size * 0.22),
       ),
       child: CustomPaint(
-        painter: _StairsPainter(),
+        painter: _StairsPainter(color: Colors.white),
         size: Size(size, size),
       ),
     );
   }
 }
 
-/// Рисует ступеньки (лестницу)
+/// Лестница — единый силуэт без зазоров
 class _StairsPainter extends CustomPainter {
+  final Color color;
+
+  const _StairsPainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
-    // Градиент синий
+    final w = size.width;
+    final h = size.height;
+
     final paint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [
-          const Color(0xFF60A5FA), // Светло-синий
-          const Color(0xFF3B82F6), // Синий
-        ],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..color = color
       ..style = PaintingStyle.fill;
 
-    final strokePaint = Paint()
-      ..color = const Color(0xFF3B82F6)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.04
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
+    final pad  = w * 0.06;
+    final step = (w - pad * 2) / 3;
+    final base = h - pad;
+    final rr   = step * 0.18;
 
-    // Размеры
-    final padding = size.width * 0.2;
-    final stepWidth = (size.width - padding * 2) / 3;
-    final stepHeight = (size.height - padding * 2) / 3;
-    
-    // Рисуем ступеньки снизу вверх
-    final path = Path();
-    
-    // Начальная точка (левый нижний угол)
-    final startX = padding;
-    final startY = size.height - padding;
-    
-    path.moveTo(startX, startY);
-    
-    // Первая ступенька (нижняя)
-    path.lineTo(startX, startY - stepHeight);
-    path.lineTo(startX + stepWidth, startY - stepHeight);
-    
-    // Вторая ступенька (средняя)
-    path.lineTo(startX + stepWidth, startY - stepHeight * 2);
-    path.lineTo(startX + stepWidth * 2, startY - stepHeight * 2);
-    
-    // Третья ступенька (верхняя)
-    path.lineTo(startX + stepWidth * 2, startY - stepHeight * 3);
-    path.lineTo(startX + stepWidth * 3, startY - stepHeight * 3);
-    
-    // Закрываем путь
-    path.lineTo(startX + stepWidth * 3, startY);
-    path.close();
+    final path = Path()
+      ..moveTo(pad + rr, base)
+      ..lineTo(w - pad - rr, base)
+      ..arcToPoint(Offset(w - pad, base - rr),   radius: Radius.circular(rr))
+      ..lineTo(w - pad, pad + rr)
+      ..arcToPoint(Offset(w - pad - rr, pad),     radius: Radius.circular(rr))
+      ..lineTo(pad + step * 2 + rr, pad)
+      ..arcToPoint(Offset(pad + step * 2, pad + rr), radius: Radius.circular(rr))
+      ..lineTo(pad + step * 2, base - step * 2)
+      ..lineTo(pad + step,     base - step * 2)
+      ..lineTo(pad + step,     base - step)
+      ..lineTo(pad + rr,       base - step)
+      ..arcToPoint(Offset(pad, base - step + rr), radius: Radius.circular(rr))
+      ..lineTo(pad, base - rr)
+      ..arcToPoint(Offset(pad + rr, base),        radius: Radius.circular(rr))
+      ..close();
 
-    // Заливка градиентом
     canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _StairsPainter old) => old.color != color;
 }
 
-/// Логотип с названием
+/// Логотип с названием (для онбординга и др.)
 class AppLogoWithText extends StatelessWidget {
   final double logoSize;
-  
-  const AppLogoWithText({super.key, this.logoSize = 80});
+  final Color? textColor;
+
+  const AppLogoWithText({super.key, this.logoSize = 80, this.textColor});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppLogo(size: logoSize),
+        AppLogoIcon(size: logoSize),
         const SizedBox(height: 16),
-        const Text(
-          'MathPilot',
+        Text(
+          'Algeon',
           style: TextStyle(
+            fontFamily: 'Inter',
             fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF6366F1),
+            fontWeight: FontWeight.w800,
+            color: textColor ?? const Color(0xFF2563EB),
+            letterSpacing: -0.5,
           ),
         ),
       ],

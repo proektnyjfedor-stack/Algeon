@@ -1,38 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="Algeon — математический тренажёр для учеников 1-4 классов">
 
-  <!-- iOS meta tags & icons -->
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com">
+
+  <!-- iOS meta tags -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="math_pilot">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Algeon">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>math_pilot</title>
+  <title>Algeon</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Loading Screen Styles -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+      z-index: 9999;
+    }
+
+    /* Лого — поднимается снизу вверх, квадратное, не больше 62vmin */
+    .loading-logo {
+      width: min(62vmin, 260px);
+      aspect-ratio: 1 / 1;
+      animation: logoRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+    }
+
+    @keyframes logoRise {
+      from { transform: translateY(90px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .loading-title {
+      color: #1E3A8A;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      font-size: clamp(28px, 9vmin, 44px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-top: 28px;
+      animation: textIn 0.45s ease-out 0.75s both;
+    }
+
+    .loading-sub {
+      color: #6B7280;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      margin-top: 8px;
+      animation: textIn 0.45s ease-out 0.88s both;
+    }
+
+    @keyframes textIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" async></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" async></script>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading">
+    <!-- Лестница: синяя на белом фоне, большая -->
+    <div class="loading-logo">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <!-- Единый силуэт лестницы (один path, без зазоров).
+             pad=18, step=88, rOuter=14.
+             5 скруглённых внешних углов: BL, BR, TR, step3-TL, step1-left-TL.
+             3 острых внутренних вогнутых угла. -->
+        <path d="
+          M 32,282
+          L 268,282  A 14,14 0 0 1 282,268
+          L 282,32   A 14,14 0 0 1 268,18
+          L 208,18   A 14,14 0 0 1 194,32
+          L 194,106
+          L 106,106
+          L 106,194
+          L 32,194   A 14,14 0 0 1 18,208
+          L 18,268   A 14,14 0 0 1 32,282
+          Z"
+          fill="#2563EB"/>
+      </svg>
+    </div>
+    <div class="loading-title">Algeon</div>
+    <div class="loading-sub">Математика с пониманием</div>
+  </div>
+
+  <script>
+    // Принудительно обновляем сервис-воркер при каждом запуске
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs) {
+        regs.forEach(function(reg) { reg.update(); });
+      });
+    }
+
+    // Скрываем загрузочный экран когда Flutter готов
+    window.addEventListener('flutter-first-frame', function() {
+      const loading = document.getElementById('loading');
+      if (loading) {
+        // ВАЖНО: сразу убираем pointer-events чтобы невидимый div
+        // не перехватывал тач-события пока идёт анимация исчезновения
+        loading.style.pointerEvents = 'none';
+        loading.style.transition = 'opacity 0.4s ease-out';
+        loading.style.opacity = '0';
+        // Удаляем из DOM после анимации
+        setTimeout(() => { if (loading.parentNode) loading.remove(); }, 500);
+      }
+    });
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

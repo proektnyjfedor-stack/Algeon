@@ -1,161 +1,138 @@
-/// Локальный сервис авторизации
-/// 
-/// Автоматически регистрирует пользователя при первом входе
-/// Сохраняет сессию между запусками
+/// Auth Service — Firebase Authentication (Web-only)
+///
+/// Email/Password, Google Sign-In (popup), Apple Sign-In (popup)
 
-import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/user.dart';
 
 class AuthService {
-  static const String _keyUser = 'current_user';
-  static const String _keyUsers = 'registered_users';
-  
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
   static SharedPreferences? _prefs;
-  static AppUser? _currentUser;
-  
-  /// Инициализация
+
+  static const String _keyAuthMethod = 'auth_method';
+
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
-    _loadCurrentUser();
-    _log('AuthService инициализирован');
   }
-  
-  /// Текущий пользователь
-  static AppUser? get currentUser => _currentUser;
-  
-  /// Проверка авторизации
-  static bool get isLoggedIn => _currentUser != null;
-  
-  /// Загрузка текущего пользователя из SharedPreferences
-  static void _loadCurrentUser() {
-    final userData = _prefs?.getString(_keyUser);
-    if (userData != null) {
-      try {
-        final json = jsonDecode(userData) as Map<String, dynamic>;
-        _currentUser = AppUser.fromJson(json);
-        _log('Пользователь загружен: ${_currentUser?.email}');
-      } catch (e) {
-        _log('Ошибка загрузки: $e');
-        _currentUser = null;
-      }
+
+  /// Текущий пользователь Firebase
+  static User? get currentUser => _auth.currentUser;
+
+  /// Пользователь авторизован?
+  static bool isLoggedIn() => _auth.currentUser != null;
+
+  /// Получить email
+  static String? getUserEmail() => _auth.currentUser?.email;
+
+  /// Получить метод авторизации
+  static String? getAuthMethod() => _prefs?.getString(_keyAuthMethod);
+
+  // ============================================================
+  // EMAIL / PASSWORD
+  // ============================================================
+
+  /// Регистрация через Email
+  static Future<UserCredential> registerWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await _prefs?.setString(_keyAuthMethod, 'email');
+    return credential;
+  }
+
+  /// Вход через Email
+  static Future<UserCredential> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    await _prefs?.setString(_keyAuthMethod, 'email');
+    return credential;
+  }
+
+  // ============================================================
+  // GOOGLE (Web popup)
+  // ============================================================
+
+  static Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final googleProvider = GoogleAuthProvider();
+      googleProvider.addScope('email');
+      googleProvider.addScope('profile');
+
+      final result = await _auth.signInWithPopup(googleProvider);
+      await _prefs?.setString(_keyAuthMethod, 'google');
+      return result;
+    } catch (e) {
+      debugPrint('Google Sign-In error: $e');
+      return null;
     }
   }
-  
-  /// Регистрация
-  static Future<AppUser> signUp({
+
+  // ============================================================
+  // APPLE (Web popup)
+  // ============================================================
+
+  static Future<UserCredential?> signInWithApple() async {
+    try {
+      final appleProvider = OAuthProvider('apple.com');
+      appleProvider.addScope('email');
+      appleProvider.addScope('name');
+
+      final result = await _auth.signInWithPopup(appleProvider);
+      await _prefs?.setString(_keyAuthMethod, 'apple');
+      return result;
+    } catch (e) {
+      debugPrint('Apple Sign-In error: $e');
+      return null;
+    }
+  }
+
+  // ============================================================
+  // SIGN OUT
+  // ============================================================
+
+  static Future<void> signOut() async {
+    await _auth.signOut();
+    await _prefs?.remove(_keyAuthMethod);
+  }
+
+  // ============================================================
+  // LEGACY ALIASES (for old screens that still reference these)
+  // ============================================================
+
+  static Future<UserCredential> signIn({
+    required String email,
+    required String password,
+  }) => signInWithEmail(email: email, password: password);
+
+  static Future<UserCredential> signUp({
     required String email,
     required String password,
     String? displayName,
   }) async {
-    _log('Регистрация: $email');
-    
-    final users = _getRegisteredUsers();
-    if (users.containsKey(email)) {
-      throw 'Этот email уже зарегистрирован';
+    final cred = await registerWithEmail(email: email, password: password);
+    if (displayName != null) {
+      await cred.user?.updateDisplayName(displayName);
     }
-    
-    final user = AppUser(
-      uid: DateTime.now().millisecondsSinceEpoch.toString(),
-      email: email,
-      displayName: displayName ?? email.split('@').first,
-      grade: null,
-      createdAt: DateTime.now(),
-    );
-    
-    users[email] = {
-      'password': password,
-      'user': user.toJson(),
-    };
-    await _saveRegisteredUsers(users);
-    await _setCurrentUser(user);
-    
-    _log('Регистрация успешна: ${user.uid}');
-    return user;
+    return cred;
   }
-  
-  /// Вход (с авто-регистрацией)
-  static Future<AppUser> signIn({
-    required String email,
-    required String password,
+
+  static Future<void> sendPhoneCode({
+    required String phoneNumber,
+    required VoidCallback onCodeSent,
+    required Function(String) onError,
   }) async {
-    _log('Вход: $email');
-    
-    final users = _getRegisteredUsers();
-    
-    // Автоматическая регистрация
-    if (!users.containsKey(email)) {
-      _log('Автоматическая регистрация...');
-      return await signUp(
-        email: email,
-        password: password,
-        displayName: email.split('@').first,
-      );
-    }
-    
-    final userData = users[email] as Map<String, dynamic>;
-    if (userData['password'] != password) {
-      throw 'Неверный пароль';
-    }
-    
-    final user = AppUser.fromJson(userData['user'] as Map<String, dynamic>);
-    await _setCurrentUser(user);
-    
-    _log('Вход успешен: ${user.uid}');
-    return user;
+    onError('Phone auth not supported');
   }
-  
-  /// Обновить имя пользователя
-  static Future<void> updateDisplayName(String name) async {
-    if (_currentUser == null) return;
-    
-    _log('Обновление имени: $name');
-    
-    final updatedUser = _currentUser!.copyWith(displayName: name);
-    
-    // Обновляем в списке пользователей
-    final users = _getRegisteredUsers();
-    if (users.containsKey(_currentUser!.email)) {
-      final userData = users[_currentUser!.email] as Map<String, dynamic>;
-      userData['user'] = updatedUser.toJson();
-      await _saveRegisteredUsers(users);
-    }
-    
-    // Обновляем текущего пользователя
-    await _setCurrentUser(updatedUser);
-  }
-  
-  /// Выход
-  static Future<void> signOut() async {
-    _log('Выход');
-    _currentUser = null;
-    await _prefs?.remove(_keyUser);
-  }
-  
-  /// Установка текущего пользователя
-  static Future<void> _setCurrentUser(AppUser user) async {
-    _currentUser = user;
-    await _prefs?.setString(_keyUser, jsonEncode(user.toJson()));
-  }
-  
-  /// Получить зарегистрированных пользователей
-  static Map<String, dynamic> _getRegisteredUsers() {
-    final data = _prefs?.getString(_keyUsers);
-    if (data == null) return {};
-    try {
-      return jsonDecode(data) as Map<String, dynamic>;
-    } catch (e) {
-      return {};
-    }
-  }
-  
-  /// Сохранить пользователей
-  static Future<void> _saveRegisteredUsers(Map<String, dynamic> users) async {
-    await _prefs?.setString(_keyUsers, jsonEncode(users));
-  }
-  
-  static void _log(String message) {
-    // ignore: avoid_print
-    print('[AuthService] $message');
-  }
+
+  static Future<bool> verifyPhoneCode(String code) async => false;
 }

@@ -1,5 +1,5 @@
 name: math_pilot
-description: Математический тренажёр для начальной школы
+description: Algeon — математический тренажёр для начальной школы
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -9,12 +9,35 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # Локальное хранение
   shared_preferences: ^2.2.2
-  
+
   # Шрифт
   google_fonts: ^6.1.0
+
+  # Firebase
+  firebase_core: ^3.8.1
+  firebase_auth: ^5.3.4
+  crypto: ^3.0.6
+
+  # Роутинг
+  go_router: ^14.0.0
+
+  # State management
+  provider: ^6.1.0
+
+  # HTTP для AI API
+  http: ^1.2.0
+
+  # Рендеринг LaTeX-формул (дроби, степени, корни)
+  flutter_math_fork: ^0.7.2
+
+  # Выбор фото из галереи
+  image_picker: ^1.1.2
+
+  # Web interop (replaces deprecated dart:html)
+  web: ^1.1.0
 
 dev_dependencies:
   flutter_test:

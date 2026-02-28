@@ -1,12 +1,12 @@
 {
-    "name": "math_pilot",
-    "short_name": "math_pilot",
+    "name": "Algeon",
+    "short_name": "Algeon",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#1A1A2E",
+    "theme_color": "#1CB0F6",
+    "description": "Algeon — математический тренажёр для учеников 1-4 классов",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

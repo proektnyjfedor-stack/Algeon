@@ -1,48 +1,28 @@
-/// Модель задачи для MathPilot
+/// Модель задачи для Algeon
 /// 
 /// Два типа заданий:
-/// - multipleChoice: выбор из вариантов (как на левом макете)
-/// - textInput: свободный ввод (как на правом макете)
+/// - multipleChoice: выбор из вариантов
+/// - textInput: свободный ввод
 
 /// Тип задания
 enum TaskType {
-  /// Выбор из нескольких вариантов
   multipleChoice,
-  
-  /// Текстовое поле для ввода ответа
   textInput,
 }
 
 /// Модель математической задачи
 class Task {
-  /// Уникальный ID задачи
   final String id;
-  
-  /// Класс (1-4)
   final int grade;
-  
-  /// Название темы
   final String topic;
-  
-  /// Текст задачи
   final String question;
-  
-  /// Тип задания
   final TaskType type;
-  
-  /// Варианты ответов (для multipleChoice)
   final List<String>? options;
-  
-  /// Правильный ответ (текст или число в виде строки)
   final String answer;
-  
-  /// Единица измерения (кг, м, см и т.д.)
   final String? unit;
-  
-  /// Подсказка для ввода
   final String? hint;
   
-  /// Пошаговое объяснение решения
+  /// Пошаговое объяснение (только для текстовых задач!)
   final List<String> explanationSteps;
 
   const Task({
@@ -55,19 +35,16 @@ class Task {
     required this.answer,
     this.unit,
     this.hint,
-    required this.explanationSteps,
+    this.explanationSteps = const [], // По умолчанию пустой список!
   });
 
   /// Проверка ответа
   bool checkAnswer(String userAnswer) {
-    // Нормализуем оба ответа
     final userNormalized = _normalize(userAnswer);
     final correctNormalized = _normalize(answer);
-    
     return userNormalized == correctNormalized;
   }
   
-  /// Нормализация ответа для сравнения
   String _normalize(String text) {
     return text
         .trim()
@@ -76,7 +53,6 @@ class Task {
         .replaceAll(RegExp(r'\s+'), ' ');
   }
 
-  /// Создание из JSON/Map
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
       id: json['id'] as String,
@@ -90,13 +66,12 @@ class Task {
       answer: json['answer'].toString(),
       unit: json['unit'] as String?,
       hint: json['hint'] as String?,
-      explanationSteps: (json['explanationSteps'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      explanationSteps: (json['explanationSteps'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ?? const [],
     );
   }
 
-  /// Парсинг типа задания
   static TaskType _parseTaskType(String value) {
     switch (value) {
       case 'multipleChoice':
@@ -109,7 +84,5 @@ class Task {
   }
 
   @override
-  String toString() {
-    return 'Task(id: $id, topic: $topic, type: $type)';
-  }
+  String toString() => 'Task(id: $id, topic: $topic)';
 }
