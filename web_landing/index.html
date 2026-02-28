@@ -1,276 +1,305 @@
-                        Каждая задача содержит подробное решение с объяснением каждого шага
-                    </p>
-                </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathPilot — Математика с пониманием</title>
+  <meta name="description" content="Приложение для детей 7–12 лет. 200+ задач, объяснения шаг за шагом, геймификация. Бесплатно.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                            <path d="M20 8V14M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-title">Множественные профили</h3>
-                    <p class="feature-description">
-                        Несколько детей в семье? Создайте отдельный профиль для каждого
-                    </p>
-                </div>
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <div class="nav-logo-icon">✕</div>
+        <span>MathPilot</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Возможности</a>
+        <a href="#grades">Классы</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a class="btn btn-sm" href="#download">Скачать бесплатно</a>
+    </div>
+  </nav>
 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M20.24 12.24C21.3658 11.1142 21.9983 9.58722 21.9983 7.99504C21.9983 6.40285 21.3658 4.87588 20.24 3.75004C19.1142 2.62419 17.5872 1.9917 15.995 1.9917C14.4028 1.9917 12.8758 2.62419 11.75 3.75004L5 10.5V19H13.5L20.24 12.24Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M16 8L2 22M17.5 15H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <h3 class="feature-title">Без рекламы</h3>
-                    <p class="feature-description">
-                        Полностью бесплатное приложение без навязчивой рекламы и платных подписок
-                    </p>
-                </div>
-            </div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-badge">🎉 Полностью бесплатно · Без рекламы</div>
+      <h1 class="hero-title">
+        Математика,<br>
+        которую понимают дети
+      </h1>
+      <p class="hero-subtitle">
+        Приложение для школьников 7–12 лет. 200+ задач, объяснения шаг за шагом,
+        ИИ-подсказки и геймификация. Не просто решать — понимать.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-lg" href="#download">Попробовать бесплатно</a>
+        <a class="btn btn-outline btn-lg" href="#features">Как это работает</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num" data-target="200">0</span><span class="stat-plus">+</span>
+          <span class="stat-label">Задач</span>
         </div>
-    </section>
-
-    <!-- Grades Section -->
-    <section id="grades" class="grades">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Программа для<br>каждого класса</h2>
-                <p class="section-description">
-                    Полное покрытие школьной программы с 1 по 4 класс
-                </p>
-            </div>
-
-            <div class="grades-grid">
-                <div class="grade-card">
-                    <div class="grade-number">1</div>
-                    <h3 class="grade-title">Первый класс</h3>
-                    <ul class="grade-topics">
-                        <li>Счёт до 10</li>
-                        <li>Счёт до 20</li>
-                        <li>Вычитание до 10</li>
-                        <li>Вычитание до 20</li>
-                        <li>Сравнение чисел</li>
-                        <li>Простые задачи</li>
-                    </ul>
-                    <div class="grade-stats">
-                        <span>~50 заданий</span>
-                    </div>
-                </div>
-
-                <div class="grade-card">
-                    <div class="grade-number">2</div>
-                    <h3 class="grade-title">Второй класс</h3>
-                    <ul class="grade-topics">
-                        <li>Счёт до 100</li>
-                        <li>Умножение</li>
-                        <li>Деление</li>
-                        <li>Периметр</li>
-                        <li>Время</li>
-                        <li>Текстовые задачи</li>
-                    </ul>
-                    <div class="grade-stats">
-                        <span>~50 заданий</span>
-                    </div>
-                </div>
-
-                <div class="grade-card">
-                    <div class="grade-number">3</div>
-                    <h3 class="grade-title">Третий класс</h3>
-                    <ul class="grade-topics">
-                        <li>Умножение до 100</li>
-                        <li>Деление до 100</li>
-                        <li>Дроби</li>
-                        <li>Площадь</li>
-                        <li>Периметр фигур</li>
-                        <li>Задачи на движение</li>
-                    </ul>
-                    <div class="grade-stats">
-                        <span>~50 заданий</span>
-                    </div>
-                </div>
-
-                <div class="grade-card">
-                    <div class="grade-number">4</div>
-                    <h3 class="grade-title">Четвёртый класс</h3>
-                    <ul class="grade-topics">
-                        <li>Многозначные числа</li>
-                        <li>Уравнения</li>
-                        <li>Дроби и проценты</li>
-                        <li>Объём</li>
-                        <li>Масштаб</li>
-                        <li>Комплексные задачи</li>
-                    </ul>
-                    <div class="grade-stats">
-                        <span>~50 заданий</span>
-                    </div>
-                </div>
-            </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="24">0</span>
+          <span class="stat-label">Темы</span>
         </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="faq">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Частые вопросы</h2>
-            </div>
-
-            <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Приложение действительно бесплатное?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Да, MathPilot полностью бесплатен. Мы не показываем рекламу и не требуем платных подписок. Наша цель — сделать качественное математическое образование доступным для всех.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>На каких устройствах работает приложение?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>MathPilot доступен на iOS (iPhone, iPad), Android-устройствах и в браузере. Прогресс синхронизируется между всеми устройствами через ваш аккаунт.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Нужен ли интернет для работы приложения?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Интернет нужен только при первом запуске и для синхронизации прогресса. Все задания доступны офлайн, так что ребёнок может заниматься где угодно.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Как отслеживать прогресс ребёнка?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>В разделе "Профиль" доступна подробная статистика: количество решённых задач, точность ответов, время занятий и streak (дни подряд). Также можно посмотреть, какие темы даются легко, а какие требуют дополнительной практики.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Соответствует ли программа школьной?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Да, программа полностью соответствует ФГОС для начальной школы. Мы охватываем все ключевые темы из учебников 1-4 классов.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Можно ли создать несколько профилей?</span>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" class="faq-icon">
-                            <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Да! Вы можете создать отдельные профили для каждого ребёнка. У каждого будет свой прогресс, достижения и статистика.</p>
-                    </div>
-                </div>
-            </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="4">0</span>
+          <span class="stat-label">Класса</span>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- CTA Section -->
-    <section id="download" class="cta">
-        <div class="cta-pattern"></div>
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Начните заниматься<br>уже сегодня</h2>
-                <p class="cta-description">
-                    Присоединяйтесь к тысячам семей, которые выбрали MathPilot для обучения своих детей
-                </p>
-                <div class="cta-buttons">
-                    <a href="#" class="download-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M17.05 20.28C16.65 20.67 16.14 20.89 15.61 20.92C15.08 20.95 14.55 20.78 14.14 20.42L12 18.78L9.86 20.42C9.45 20.78 8.92 20.95 8.39 20.92C7.86 20.89 7.35 20.67 6.95 20.28L2.47 15.8C2.18 15.51 2 15.13 2 14.72V7C2 5.9 2.9 5 4 5H20C21.1 5 22 5.9 22 7V14.72C22 15.13 21.82 15.51 21.53 15.8L17.05 20.28Z" fill="currentColor"/>
-                        </svg>
-                        <div>
-                            <div class="download-label">Download on the</div>
-                            <div class="download-store">App Store</div>
-                        </div>
-                    </a>
-                    <a href="#" class="download-btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path d="M3 20.5V3.5C3 2.67 3.84 2.07 4.57 2.43L20.57 11.43C21.37 11.82 21.37 12.18 20.57 12.57L4.57 21.57C3.84 21.93 3 21.33 3 20.5Z" fill="currentColor"/>
-                        </svg>
-                        <div>
-                            <div class="download-label">GET IT ON</div>
-                            <div class="download-store">Google Play</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Почему MathPilot</h2>
+        <p class="section-desc">Разработано вместе с педагогами. Проверено детьми.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card feature-large">
+          <div class="feature-icon">🧠</div>
+          <h3>ИИ-подсказки</h3>
+          <p>Когда ребёнок застревает — ИИ даёт умную подсказку, которая направляет, а не даёт ответ. Учит думать, а не подсматривать.</p>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <rect width="32" height="32" rx="8" fill="url(#footer-logo-gradient)"/>
-                            <path d="M16 8L12 16H16L14 24L20 14H16L18 8H16Z" fill="white"/>
-                            <defs>
-                                <linearGradient id="footer-logo-gradient" x1="0" y1="0" x2="32" y2="32">
-                                    <stop offset="0%" stop-color="#0066FF"/>
-                                    <stop offset="100%" stop-color="#0052CC"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <span>MathPilot</span>
-                    </div>
-                    <p class="footer-tagline">Математика с пониманием</p>
-                </div>
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Продукт</h4>
-                        <a href="#features">Возможности</a>
-                        <a href="#grades">Классы</a>
-                        <a href="#download">Скачать</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Поддержка</h4>
-                        <a href="#faq">FAQ</a>
-                        <a href="mailto:support@mathpilot.app">Связаться</a>
-                    </div>
-                    <div class="footer-column">
-                        <h4>Компания</h4>
-                        <a href="#">О нас</a>
-                        <a href="#">Политика конфиденциальности</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 MathPilot. Все права защищены.</p>
-            </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Шаг за шагом</h3>
+          <p>Каждая задача содержит подробное объяснение решения — ребёнок понимает, а не зазубривает.</p>
         </div>
-    </footer>
+        <div class="feature-card">
+          <div class="feature-icon">🎮</div>
+          <h3>Геймификация</h3>
+          <p>Стрики, достижения, уровни, конфетти — учёба становится игрой, в которую хочется возвращаться.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Прогресс</h3>
+          <p>Наглядная статистика: точность, решённые задачи, серия дней. Видно, что было и куда двигаться.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">✈️</div>
+          <h3>Офлайн</h3>
+          <p>Работает без интернета — в самолёте, на даче, в метро. Прогресс синхронизируется при подключении.</p>
+        </div>
+        <div class="feature-card feature-large">
+          <div class="feature-icon">🏆</div>
+          <h3>Достижения и мотивация</h3>
+          <p>30+ уникальных достижений. От «Первый шаг» до «Идеальная неделя». Каждое открытие — повод для гордости.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <script src="script.js"></script>
+  <!-- How it works -->
+  <section class="section how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Как это работает</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Выбери класс и тему</h3>
+          <p>Программа с 1 по 4 класс. Темы разблокируются последовательно.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Реши задачи</h3>
+          <p>Выбор варианта или ввод числа. Мгновенная проверка и объяснение.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Получи ИИ-подсказку</h3>
+          <p>Застрял? Нажми «Подсказка» — ИИ направит на верный путь.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Открой достижения</h3>
+          <p>Завершил тему? Получи награду и переходи к следующей.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Grades -->
+  <section class="section" id="grades">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Программа 1–4 класс</h2>
+        <p class="section-desc">Полное покрытие школьной программы</p>
+      </div>
+      <div class="grades-grid">
+        <div class="grade-card">
+          <div class="grade-num">1</div>
+          <h3>Первый класс</h3>
+          <ul>
+            <li>Счёт до 10 и до 20</li>
+            <li>Сложение и вычитание</li>
+            <li>Сравнение чисел</li>
+            <li>Простые задачи</li>
+          </ul>
+          <div class="grade-meta">~50 заданий</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-num">2</div>
+          <h3>Второй класс</h3>
+          <ul>
+            <li>Числа до 100</li>
+            <li>Таблица умножения</li>
+            <li>Деление</li>
+            <li>Задачи в 2 действия</li>
+          </ul>
+          <div class="grade-meta">~60 заданий</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-num">3</div>
+          <h3>Третий класс</h3>
+          <ul>
+            <li>Числа до 1000</li>
+            <li>Умножение на 2 цифры</li>
+            <li>Дроби (введение)</li>
+            <li>Задачи в 3 действия</li>
+          </ul>
+          <div class="grade-meta">~50 заданий</div>
+        </div>
+        <div class="grade-card">
+          <div class="grade-num">4</div>
+          <h3>Четвёртый класс</h3>
+          <ul>
+            <li>Числа до миллиона</li>
+            <li>Обыкновенные дроби</li>
+            <li>ОГЭ/ЕГЭ-подготовка</li>
+            <li>Сложные задачи</li>
+          </ul>
+          <div class="grade-meta">~50 заданий</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Часто задаваемые вопросы</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">Приложение платное?</button>
+          <div class="faq-answer">
+            <p>Нет. MathPilot полностью бесплатен — без рекламы и без платных функций. Всё, что есть в приложении, доступно сразу.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Нужен интернет?</button>
+          <div class="faq-answer">
+            <p>Нет. Приложение работает полностью офлайн. Интернет нужен только для синхронизации прогресса с аккаунтом.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Как работает ИИ-подсказка?</button>
+          <div class="faq-answer">
+            <p>Когда ребёнок нажимает «Подсказка», ИИ анализирует задачу и даёт наводящий вопрос или объяснение — без готового ответа. Это развивает мышление.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Для какого возраста подходит?</button>
+          <div class="faq-answer">
+            <p>MathPilot создан для детей 7–12 лет (1–4 класс). Дизайн простой и понятный даже для первоклассника.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Можно использовать без регистрации?</button>
+          <div class="faq-answer">
+            <p>Да. Можно начать без регистрации в гостевом режиме. Для сохранения прогресса между устройствами — нужен аккаунт (Email, Google или Apple).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download CTA -->
+  <section class="section download" id="download">
+    <div class="container">
+      <div class="download-card">
+        <div class="orb orb-sm orb-dl-1"></div>
+        <div class="orb orb-sm orb-dl-2"></div>
+        <h2>Начни учиться сегодня</h2>
+        <p>Бесплатно. Без рекламы. Без регистрации.</p>
+        <div class="download-buttons">
+          <a class="btn btn-white btn-lg" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store
+          </a>
+          <a class="btn btn-white btn-lg" href="#">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.2.96.08L14.46 12 3.04.16C2.72.04 2.38.07 2.08.24 1.48.58 1.07 1.22 1.07 2v20c0 .78.41 1.42 1.01 1.76zM16.66 13.69l2.64 2.65-9.37 5.37 6.73-8.02zM22.4 10.65l-2.82-1.61-2.97 2.97 2.97 2.96 2.85-1.63c.81-.46.81-1.22-.03-1.69zM10.27 12L16.66 5.3l-6.39-7.26z"/></svg>
+            Google Play
+          </a>
+        </div>
+        <p class="download-sub">Или откройте в браузере — работает как PWA</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#">
+          <div class="nav-logo-icon">✕</div>
+          <span>MathPilot</span>
+        </a>
+        <p>Математика с пониманием</p>
+      </div>
+      <div class="footer-links-grid">
+        <div>
+          <h4>Продукт</h4>
+          <a href="#features">Возможности</a>
+          <a href="#grades">Классы</a>
+          <a href="#download">Скачать</a>
+        </div>
+        <div>
+          <h4>Поддержка</h4>
+          <a href="#faq">FAQ</a>
+          <a href="mailto:support@mathpilot.app">Написать нам</a>
+        </div>
+        <div>
+          <h4>Компания</h4>
+          <a href="#">О проекте</a>
+          <a href="#">Политика конфиденциальности</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>© 2025 MathPilot. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
