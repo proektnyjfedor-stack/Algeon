@@ -30,6 +30,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _passwordController = TextEditingController();
 
   String? _errorMessage;
+  String? _successMessage;
 
   @override
   void dispose() {
@@ -42,6 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() {
       _mode = newMode;
       _errorMessage = null;
+      _successMessage = null;
     });
   }
 
@@ -321,9 +323,32 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         ),
 
+        // Forgot password (только в режиме логина)
+        if (_mode == AuthMode.login) ...[
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: _isLoading ? null : _resetPassword,
+              behavior: HitTestBehavior.opaque,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(
+                  'Забыл пароль?',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.accent,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+
         // Error
         if (_errorMessage != null) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -340,6 +365,32 @@ class _AuthScreenState extends State<AuthScreen> {
                     _errorMessage!,
                     style: const TextStyle(
                         color: AppColors.error, fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+
+        // Success message (например, письмо для сброса пароля отправлено)
+        if (_successMessage != null) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: AppThemeColors.successLight(context),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.check_circle_outline,
+                    color: AppColors.success, size: 20),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _successMessage!,
+                    style: TextStyle(
+                        color: AppColors.success, fontSize: 14),
                   ),
                 ),
               ],
@@ -392,6 +443,39 @@ class _AuthScreenState extends State<AuthScreen> {
   // ============================================================
   // ACTIONS
   // ============================================================
+
+  Future<void> _resetPassword() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      setState(() {
+        _errorMessage = 'Введи email для сброса пароля';
+        _successMessage = null;
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+      _successMessage = null;
+    });
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      if (!mounted) return;
+      setState(() {
+        _successMessage = 'Письмо отправлено на $email. Проверь почту!';
+      });
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      setState(() => _errorMessage = _firebaseErrorMessage(e.code));
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _errorMessage = 'Не удалось отправить письмо');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   Future<void> _submit() async {
     if (_emailController.text.isEmpty ||

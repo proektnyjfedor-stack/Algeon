@@ -39,6 +39,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   bool _isChecked = false;
   bool _isCorrect = false;
   int _explanationStep = 0;
+  int _wrongAttemptsOnCurrentTask = 0; // счётчик ошибок на текущей задаче
 
   int _correctCount = 0;
   int _wrongCount = 0;
@@ -106,6 +107,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     _textIsNotEmpty = false;
     _aiHintLoading = false;
     _aiHintText = null;
+    _wrongAttemptsOnCurrentTask = 0;
     _cardAnimController.forward(from: 0);
   }
 
@@ -735,11 +737,14 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                     : AppThemeColors.disabled(context),
                 onTap: _textIsNotEmpty ? _checkAnswer : null,
               ),
-            if (!_isChecked)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: _buildSkipButton(),
-              ),
+            if (!_isChecked) ...[
+              const SizedBox(height: 8),
+              // После 2 ошибок на одной задаче — показываем «Не знаю»
+              if (_wrongAttemptsOnCurrentTask >= 2)
+                _buildDontKnowButton()
+              else
+                _buildSkipButton(),
+            ],
           ],
         ),
       ),
@@ -804,6 +809,41 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildDontKnowButton() {
+    return GestureDetector(
+      onTap: _revealAnswer,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          color: AppThemeColors.errorLight(context),
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          border: Border.all(
+            color: AppColors.error.withValues(alpha: 0.4),
+            width: 2,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.help_outline_rounded,
+                size: 20, color: AppColors.error),
+            const SizedBox(width: 8),
+            Text(
+              'Не знаю — покажи ответ',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.error,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _checkAnswer() async {
     String answer;
     if (_task.type == TaskType.multipleChoice) {
@@ -827,9 +867,32 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       SoundService.playCorrect();
     } else {
       _wrongCount++;
+      _wrongAttemptsOnCurrentTask++;
       _wrongTasks.add(_task);
       SoundService.playWrong();
     }
+  }
+
+  /// «Не знаю» — раскрываем правильный ответ без перехода к следующей задаче
+  void _revealAnswer() {
+    HapticFeedback.mediumImpact();
+    setState(() {
+      _isChecked = true;
+      _isCorrect = false;
+      _skippedCount++;
+      if (!_wrongTasks.contains(_task)) {
+        _wrongCount++;
+        _wrongTasks.add(_task);
+      }
+      // Для textInput показываем правильный ответ в поле
+      if (_task.type == TaskType.textInput) {
+        _textController.text = _task.answer;
+        _textIsNotEmpty = true;
+      }
+      // Для multipleChoice убираем выделение — только зелёный правильный ответ
+      _selectedOption = null;
+    });
+    SoundService.playWrong();
   }
 
   void _skipTask() {
