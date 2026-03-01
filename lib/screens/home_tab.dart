@@ -65,10 +65,15 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             child: _buildHeroHeader(userName, todayCompleted, totalSolved, totalTasks, overallProgress),
           ),
 
+          // Daily goal widget
+          SliverToBoxAdapter(
+            child: _buildDailyGoal(todayCompleted),
+          ),
+
           // Section title
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
               child: Row(
                 children: [
                   Container(
@@ -300,6 +305,111 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDailyGoal(int todayCompleted) {
+    const int dailyGoal = 10;
+    final int done = todayCompleted.clamp(0, dailyGoal);
+    final double progress = done / dailyGoal;
+    final bool goalReached = done >= dailyGoal;
+
+    String message;
+    if (goalReached) {
+      message = 'Цель достигнута! 🎉';
+    } else if (done == 0) {
+      message = 'Начни решать — цель $dailyGoal задач в день';
+    } else {
+      message = 'Ещё ${dailyGoal - done} до цели';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppThemeColors.surface(context),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: goalReached
+                ? AppColors.success.withValues(alpha: 0.4)
+                : AppThemeColors.border(context),
+          ),
+        ),
+        child: Row(
+          children: [
+            // Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: goalReached
+                    ? AppThemeColors.successLight(context)
+                    : AppThemeColors.accentLight(context),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Text(
+                  goalReached ? '🏆' : '🎯',
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            // Progress info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Дневная цель',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppThemeColors.textPrimary(context),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '$done / $dailyGoal',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: goalReached
+                              ? AppColors.success
+                              : AppColors.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 5,
+                      backgroundColor: AppThemeColors.border(context),
+                      valueColor: AlwaysStoppedAnimation(
+                        goalReached ? AppColors.success : AppColors.accent,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    message,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppThemeColors.textSecondary(context),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
