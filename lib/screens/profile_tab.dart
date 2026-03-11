@@ -34,8 +34,7 @@ class _ProfileTabState extends State<ProfileTab> {
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(child: _buildProfileHeader()),
-          if (isGuest)
-            SliverToBoxAdapter(child: _buildGuestBanner()),
+          if (isGuest) SliverToBoxAdapter(child: _buildGuestBanner()),
           SliverToBoxAdapter(child: _buildStatsSection()),
           SliverToBoxAdapter(child: _buildProgressSection()),
           SliverToBoxAdapter(child: _buildAchievementsPreview()),
@@ -68,108 +67,112 @@ class _ProfileTabState extends State<ProfileTab> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
         child: Container(
-      decoration: BoxDecoration(
-        color: AppColors.accent,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 20, 24, 28),
-          child: Column(
-            children: [
-              // Avatar + edit
-              GestureDetector(
-                onTap: _showAvatarPicker,
-                behavior: HitTestBehavior.opaque,
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.3),
-                          width: 3,
-                        ),
-                      ),
-                      child: UserAvatarDisplay(size: 88, showBorder: false),
-                    ),
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(Icons.edit_rounded,
-                            color: AppColors.accent, size: 14),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // Name
-              GestureDetector(
-                onTap: _showNameEditor,
-                behavior: HitTestBehavior.opaque,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.edit_outlined,
-                        color: Colors.white.withValues(alpha: 0.6), size: 18),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Badges row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildBadge(
-                    icon: Icons.star_rounded,
-                    iconColor: Colors.amber,
-                    label: 'Уровень $level',
-                  ),
-                  const SizedBox(width: 10),
-                  _buildBadge(
-                    icon: Icons.local_fire_department_rounded,
-                    iconColor: const Color(0xFFFF9600),
-                    label: '$streak дней',
-                  ),
-                ],
-              ),
-            ],
+          decoration: BoxDecoration(
+            color: AppColors.accent,
+            borderRadius: BorderRadius.circular(28),
           ),
-        ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 28),
+            child: Column(
+              children: [
+                // Avatar + edit
+                GestureDetector(
+                  onTap: _showAvatarPicker,
+                  behavior: HitTestBehavior.opaque,
+                  child: Stack(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            width: 3,
+                          ),
+                        ),
+                        child: const UserAvatarDisplay(
+                            size: 88, showBorder: false),
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          width: 28,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.15),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Icon(Icons.edit_rounded,
+                              color: AppColors.accent, size: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 14),
+
+                // Name
+                GestureDetector(
+                  onTap: _showNameEditor,
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Icon(Icons.edit_outlined,
+                          color: Colors.white.withValues(alpha: 0.6), size: 18),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // Badges row
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildBadge(
+                      icon: Icons.star_rounded,
+                      iconColor: Colors.amber,
+                      label: 'Уровень $level',
+                    ),
+                    const SizedBox(width: 10),
+                    _buildBadge(
+                      icon: Icons.local_fire_department_rounded,
+                      iconColor: const Color(0xFFFF9600),
+                      label: '$streak дней',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBadge({required IconData icon, required Color iconColor, required String label}) {
+  Widget _buildBadge(
+      {required IconData icon,
+      required Color iconColor,
+      required String label}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
@@ -204,7 +207,10 @@ class _ProfileTabState extends State<ProfileTab> {
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.accent, AppColors.accent.withValues(alpha: 0.7)],
+              colors: [
+                AppColors.accent,
+                AppColors.accent.withValues(alpha: 0.7)
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -245,7 +251,8 @@ class _ProfileTabState extends State<ProfileTab> {
               ),
               const SizedBox(width: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -337,11 +344,12 @@ class _ProfileTabState extends State<ProfileTab> {
         const SizedBox(width: 10),
         Icon(icon, color: AppColors.accent, size: 20),
         const SizedBox(width: 8),
-        Text(title, style: TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
-          color: AppThemeColors.textPrimary(context),
-        )),
+        Text(title,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: AppThemeColors.textPrimary(context),
+            )),
       ],
     );
   }
@@ -411,7 +419,8 @@ class _ProfileTabState extends State<ProfileTab> {
             decoration: BoxDecoration(
               color: AppThemeColors.surface(context),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppThemeColors.border(context), width: 1),
+              border:
+                  Border.all(color: AppThemeColors.border(context), width: 1),
             ),
             child: Column(
               children: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((grade) {
@@ -489,9 +498,12 @@ class _ProfileTabState extends State<ProfileTab> {
                               child: LinearProgressIndicator(
                                 value: progress,
                                 minHeight: 5,
-                                backgroundColor: AppThemeColors.borderLight(context),
+                                backgroundColor:
+                                    AppThemeColors.borderLight(context),
                                 valueColor: AlwaysStoppedAnimation(
-                                  isComplete ? AppColors.success : AppColors.accent,
+                                  isComplete
+                                      ? AppColors.success
+                                      : AppColors.accent,
                                 ),
                               ),
                             ),
@@ -532,14 +544,16 @@ class _ProfileTabState extends State<ProfileTab> {
               const SizedBox(width: 10),
               Icon(Icons.emoji_events_rounded, color: AppColors.gold, size: 20),
               const SizedBox(width: 8),
-              Text('Достижения', style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: AppThemeColors.textPrimary(context),
-              )),
+              Text('Достижения',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: AppThemeColors.textPrimary(context),
+                  )),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: AppColors.gold.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(8),
@@ -561,7 +575,8 @@ class _ProfileTabState extends State<ProfileTab> {
             decoration: BoxDecoration(
               color: AppThemeColors.surface(context),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppThemeColors.border(context), width: 1),
+              border:
+                  Border.all(color: AppThemeColors.border(context), width: 1),
             ),
             child: recent.isEmpty
                 ? Padding(
@@ -582,7 +597,9 @@ class _ProfileTabState extends State<ProfileTab> {
                         const SizedBox(height: 4),
                         Text(
                           'Решай задачи, чтобы получить первые награды!',
-                          style: TextStyle(fontSize: 13, color: AppThemeColors.textHint(context)),
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: AppThemeColors.textHint(context)),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -592,7 +609,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     children: [
                       ...recent.map((a) => Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
                               child: Container(
                                 height: 64,
                                 decoration: BoxDecoration(
@@ -600,7 +618,8 @@ class _ProfileTabState extends State<ProfileTab> {
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Center(
-                                  child: Icon(a.icon, color: Colors.white, size: 28),
+                                  child: Icon(a.icon,
+                                      color: Colors.white, size: 28),
                                 ),
                               ),
                             ),
@@ -609,16 +628,19 @@ class _ProfileTabState extends State<ProfileTab> {
                           4 - recent.length,
                           (_) => Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   child: Container(
                                     height: 64,
                                     decoration: BoxDecoration(
-                                      color: AppThemeColors.borderLight(context),
+                                      color:
+                                          AppThemeColors.borderLight(context),
                                       borderRadius: BorderRadius.circular(14),
                                     ),
                                     child: Center(
                                       child: Icon(Icons.lock_rounded,
-                                          color: AppThemeColors.textHint(context),
+                                          color:
+                                              AppThemeColors.textHint(context),
                                           size: 24),
                                     ),
                                   ),
@@ -647,7 +669,8 @@ class _ProfileTabState extends State<ProfileTab> {
             decoration: BoxDecoration(
               color: AppThemeColors.surface(context),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppThemeColors.border(context), width: 1),
+              border:
+                  Border.all(color: AppThemeColors.border(context), width: 1),
             ),
             child: Column(
               children: [
@@ -675,7 +698,9 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 _buildDivider(),
                 _buildSettingsTile(
-                  icon: isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                  icon: isDark
+                      ? Icons.dark_mode_rounded
+                      : Icons.light_mode_rounded,
                   iconColor: isDark ? AppColors.accent : AppColors.orange,
                   title: 'Тема',
                   subtitle: isDark ? 'Тёмная' : 'Светлая',
@@ -746,7 +771,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: titleColor ?? AppThemeColors.textPrimary(context),
+                        color:
+                            titleColor ?? AppThemeColors.textPrimary(context),
                       ),
                     ),
                     if (subtitle != null)
@@ -796,7 +822,8 @@ class _ProfileTabState extends State<ProfileTab> {
           children: [
             // Handle
             Container(
-              width: 40, height: 4,
+              width: 40,
+              height: 4,
               margin: const EdgeInsets.only(bottom: 20),
               decoration: BoxDecoration(
                 color: AppThemeColors.border(context),
@@ -806,7 +833,8 @@ class _ProfileTabState extends State<ProfileTab> {
             Text(
               'Сменить аватар',
               style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w700,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
                 color: AppThemeColors.textPrimary(context),
               ),
             ),
@@ -864,8 +892,10 @@ class _ProfileTabState extends State<ProfileTab> {
         child: Row(
           children: [
             Container(
-              width: 48, height: 48,
-              decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(12)),
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                  color: bgColor, borderRadius: BorderRadius.circular(12)),
               child: Icon(icon, color: iconColor, size: 24),
             ),
             const SizedBox(width: 14),
@@ -873,17 +903,22 @@ class _ProfileTabState extends State<ProfileTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w600,
-                    color: AppThemeColors.textPrimary(context),
-                  )),
-                  Text(subtitle, style: TextStyle(
-                    fontSize: 12, color: AppThemeColors.textSecondary(context),
-                  )),
+                  Text(title,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppThemeColors.textPrimary(context),
+                      )),
+                  Text(subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppThemeColors.textSecondary(context),
+                      )),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded, color: AppThemeColors.textHint(context)),
+            Icon(Icons.chevron_right_rounded,
+                color: AppThemeColors.textHint(context)),
           ],
         ),
       ),
@@ -899,50 +934,60 @@ class _ProfileTabState extends State<ProfileTab> {
       ..accept = 'image/*';
     web.document.body?.append(input);
 
-    // 2. Слушаем выбор файла
-    input.addEventListener('change', (web.Event _) {
-      final files = input.files;
-      input.remove();
-      if (files == null || files.length == 0) return;
+    // 2. Слушаем выбор файла (убрали async снаружи)
+    input.addEventListener(
+        'change',
+        ((web.Event _) {
+          final files = input.files;
+          input.remove();
+          if (files == null || files.length == 0) return;
 
-      final file = files.item(0)!;
+          final file = files.item(0)!;
 
-      // 3. Читаем через readAsDataURL — возвращает строку "data:image/...;base64,XXX"
-      final reader = web.FileReader();
+          // 3. Читаем через readAsDataURL
+          final reader = web.FileReader();
 
-      reader.addEventListener('load', (web.Event _) async {
-        try {
-          final result = reader.result;
-          if (result == null) return;
-          final dataUrl = (result as JSString).toDart;
-          // Обрезаем префикс "data:image/jpeg;base64," — берём только base64
-          final base64Str = dataUrl.split(',').last;
-          await ProgressService.setCustomPhoto(base64Str);
-          if (mounted) setState(() {});
-        } catch (e) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Не удалось обработать фото')),
-            );
-          }
-        }
-      }.toJS);
+          // Обработчик загрузки (завернули async внутрь)
+          reader.addEventListener(
+              'load',
+              ((web.Event _) {
+                Future(() async {
+                  try {
+                    final result = reader.result;
+                    if (result == null) return;
+                    final dataUrl = (result as JSString).toDart;
+                    final base64Str = dataUrl.split(',').last;
+                    await ProgressService.setCustomPhoto(base64Str);
+                    if (mounted) setState(() {});
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Не удалось обработать фото')),
+                      );
+                    }
+                  }
+                });
+              }).toJS);
 
-      reader.addEventListener('error', (web.Event _) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Ошибка чтения файла')),
-          );
-        }
-      }.toJS);
+          // Обработчик ошибки (без async)
+          reader.addEventListener(
+              'error',
+              ((web.Event _) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Ошибка чтения файла')),
+                  );
+                }
+              }).toJS);
 
-      reader.readAsDataURL(file);
-    }.toJS);
+          reader.readAsDataURL(file);
+        }).toJS);
 
     // 4. Кликаем — открывает проводник браузера
     input.click();
 
-    // 5. Закрываем модал ПОСЛЕ клика (не до)
+    // 5. Закрываем модал ПОСЛЕ клика
     Navigator.pop(sheetCtx);
   }
 
@@ -964,18 +1009,18 @@ class _ProfileTabState extends State<ProfileTab> {
 
   void _showNameEditor() {
     HapticFeedback.lightImpact();
-    final controller = TextEditingController(
-        text: ProgressService.getUserName());
+    final controller =
+        TextEditingController(text: ProgressService.getUserName());
 
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppThemeColors.surface(context),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-        title: Text('Изменить имя', style: TextStyle(
-          color: AppThemeColors.textPrimary(context),
-        )),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text('Изменить имя',
+            style: TextStyle(
+              color: AppThemeColors.textPrimary(context),
+            )),
         content: TextField(
           controller: controller,
           autofocus: true,
@@ -1039,18 +1084,20 @@ class _ProfileTabState extends State<ProfileTab> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Выбери класс', style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: AppThemeColors.textPrimary(context),
-            )),
+            Text('Выбери класс',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: AppThemeColors.textPrimary(context),
+                )),
             const SizedBox(height: 20),
             Flexible(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((grade) {
-                      final isSelected = ProgressService.getCurrentGrade() == grade;
+                      final isSelected =
+                          ProgressService.getCurrentGrade() == grade;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: GestureDetector(
@@ -1070,7 +1117,8 @@ class _ProfileTabState extends State<ProfileTab> {
                                   : AppThemeColors.borderLight(context),
                               borderRadius: BorderRadius.circular(14),
                               border: isSelected
-                                  ? Border.all(color: AppColors.accent, width: 2)
+                                  ? Border.all(
+                                      color: AppColors.accent, width: 2)
                                   : null,
                             ),
                             child: Row(
@@ -1111,8 +1159,7 @@ class _ProfileTabState extends State<ProfileTab> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppThemeColors.surface(context),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
           children: [
             Container(
@@ -1126,18 +1173,20 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: Colors.white, size: 20),
             ),
             const SizedBox(width: 12),
-            Text('Algeon', style: TextStyle(
-              color: AppThemeColors.textPrimary(context),
-            )),
+            Text('Algeon',
+                style: TextStyle(
+                  color: AppThemeColors.textPrimary(context),
+                )),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Версия 1.0.0', style: TextStyle(
-              color: AppThemeColors.textPrimary(context),
-            )),
+            Text('Версия 1.0.0',
+                style: TextStyle(
+                  color: AppThemeColors.textPrimary(context),
+                )),
             const SizedBox(height: 12),
             Text(
               'Математический тренажёр для учеников 1-4 классов. '
@@ -1162,11 +1211,11 @@ class _ProfileTabState extends State<ProfileTab> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppThemeColors.surface(context),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
-        title: Text('Сбросить прогресс?', style: TextStyle(
-          color: AppThemeColors.textPrimary(context),
-        )),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text('Сбросить прогресс?',
+            style: TextStyle(
+              color: AppThemeColors.textPrimary(context),
+            )),
         content: Text(
             'Весь прогресс и достижения будут удалены. Это действие нельзя отменить.',
             style: TextStyle(color: AppThemeColors.textSecondary(context))),
@@ -1184,8 +1233,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 context.go('/onboarding');
               }
             },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
             child: const Text('Сбросить'),
           ),
         ],
