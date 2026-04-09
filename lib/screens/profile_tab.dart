@@ -368,6 +368,7 @@ class _ProfileTabState extends State<ProfileTab> {
       ('skin_gold_star', 'Скин: Золотая Звезда', 180),
       ('theme_space', 'Тема: Космос', 250),
     ];
+    String? equippingItemId;
 
     await showModalBottomSheet<void>(
       context: context,
@@ -425,6 +426,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       final price = item.$3;
                       final owned = ProgressService.getBool('shop_item_$id');
                       final isEquipped = equipped == id;
+                      final isEquipAnimating = equippingItemId == id;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
@@ -456,62 +458,84 @@ class _ProfileTabState extends State<ProfileTab> {
                           ),
                           subtitle: Text(owned ? 'Куплено' : '$price монет'),
                           trailing: owned
-                              ? ElevatedButton(
-                                  onPressed: isEquipped
-                                      ? null
-                                      : () async {
-                                          await ProgressService.setEquippedBetaItem(id);
-                                          if (!mounted) return;
-                                          setModalState(() {});
-                                          setState(() {});
-                                          _showSnack('Экипировано: $title');
-                                        },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isEquipped
-                                        ? AppThemeColors.disabled(context)
-                                        : _bluePrimary,
-                                    foregroundColor: Colors.white,
+                              ? AnimatedScale(
+                                  duration: const Duration(milliseconds: 220),
+                                  curve: Curves.easeOutBack,
+                                  scale: isEquipAnimating ? 1.08 : 1.0,
+                                  child: ElevatedButton(
+                                    onPressed: isEquipped
+                                        ? null
+                                        : () async {
+                                            setModalState(() => equippingItemId = id);
+                                            await ProgressService.setEquippedBetaItem(id);
+                                            if (!mounted) return;
+                                            setModalState(() {});
+                                            setState(() {});
+                                            _showSnack('Экипировано: $title');
+                                            await Future<void>.delayed(
+                                              const Duration(milliseconds: 260),
+                                            );
+                                            if (!mounted) return;
+                                            setModalState(() => equippingItemId = null);
+                                          },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: isEquipped
+                                          ? AppThemeColors.disabled(context)
+                                          : _bluePrimary,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: Text(isEquipped ? 'Надето' : 'Надеть'),
                                   ),
-                                  child: Text(isEquipped ? 'Надето' : 'Надеть'),
                                 )
-                              : ElevatedButton(
-                                  onPressed: () async {
-                                    final confirm = await showDialog<bool>(
-                                      context: context,
-                                      builder: (ctx) => AlertDialog(
-                                        title: const Text('Подтвердить покупку'),
-                                        content: Text('Купить "$title" за $price монет?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(ctx, false),
-                                            child: const Text('Отмена'),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () => Navigator.pop(ctx, true),
-                                            child: const Text('Купить'),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                    if (confirm != true) return;
+                              : AnimatedScale(
+                                  duration: const Duration(milliseconds: 220),
+                                  curve: Curves.easeOutBack,
+                                  scale: isEquipAnimating ? 1.08 : 1.0,
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      final confirm = await showDialog<bool>(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text('Подтвердить покупку'),
+                                          content: Text('Купить "$title" за $price монет?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(ctx, false),
+                                              child: const Text('Отмена'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () => Navigator.pop(ctx, true),
+                                              child: const Text('Купить'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                      if (confirm != true) return;
 
-                                    final ok = await ProgressService.spendCoins(price);
-                                    if (!ok) {
-                                      _showSnack('Недостаточно монет');
-                                      return;
-                                    }
-                                    await ProgressService.setBool('shop_item_$id', true);
-                                    await ProgressService.setEquippedBetaItem(id);
-                                    if (!mounted) return;
-                                    setModalState(() {});
-                                    setState(() {});
-                                    _showSnack('Покупка: $title (экипировано)');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: _bluePrimary,
-                                    foregroundColor: Colors.white,
+                                      final ok = await ProgressService.spendCoins(price);
+                                      if (!ok) {
+                                        _showSnack('Недостаточно монет');
+                                        return;
+                                      }
+                                      setModalState(() => equippingItemId = id);
+                                      await ProgressService.setBool('shop_item_$id', true);
+                                      await ProgressService.setEquippedBetaItem(id);
+                                      if (!mounted) return;
+                                      setModalState(() {});
+                                      setState(() {});
+                                      _showSnack('Покупка: $title (экипировано)');
+                                      await Future<void>.delayed(
+                                        const Duration(milliseconds: 260),
+                                      );
+                                      if (!mounted) return;
+                                      setModalState(() => equippingItemId = null);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: _bluePrimary,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: const Text('Купить'),
                                   ),
-                                  child: const Text('Купить'),
                                 ),
                         ),
                       );
