@@ -8,8 +8,28 @@ import '../services/achievements_service.dart';
 import '../services/auth_service.dart';
 import '../widgets/user_avatar_display.dart';
 
-class ProfileTab extends StatelessWidget {
+class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
+
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    // On web, avoid restoring stale offsets between tab switches.
+    _scrollController = ScrollController(keepScrollOffset: false);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +51,8 @@ class ProfileTab extends StatelessWidget {
           // Explicit key prevents PageStorage from restoring a scroll offset
           // from a previously visited tab (common on Flutter Web).
           child: ListView(
+            controller: _scrollController,
+            primary: false,
             key: const ValueKey('profile_list'),
             padding: const EdgeInsets.all(20),
             children: [
