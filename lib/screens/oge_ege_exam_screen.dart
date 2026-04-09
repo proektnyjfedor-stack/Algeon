@@ -33,6 +33,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   bool _finished = false;
   bool _submitted = false;
   List<Achievement> _newAchievements = const [];
+  int _coinsEarned = 0;
 
   // Контроллеры текстовых полей — один на задачу
   late List<TextEditingController> _textControllers;
@@ -120,6 +121,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       if (isCorrect) {
         await ProgressService.markSolved(task.id);
         await ProgressService.addCoins(5); // beta reward per correct answer
+        _coinsEarned += 5;
       } else {
         await ProgressService.recordAttempt(false);
       }
@@ -156,7 +158,9 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       gradeProgress: gradeProgress,
     );
     if (_newAchievements.isNotEmpty) {
-      await ProgressService.addCoins(_newAchievements.length * 50);
+      final bonus = _newAchievements.length * 50;
+      await ProgressService.addCoins(bonus);
+      _coinsEarned += bonus;
     }
 
     _showResultDialog(correct, widget.variant.tasks.length, passed);
@@ -222,6 +226,26 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.gold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (_coinsEarned > 0) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Награда за экзамен: +$_coinsEarned монет',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.accent,
                   ),
                 ),
               ),

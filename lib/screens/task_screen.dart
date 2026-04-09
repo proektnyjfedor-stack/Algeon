@@ -865,9 +865,13 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       _correctCount++;
       await ProgressService.markSolved(_task.id);
       await ProgressService.addCoins(5); // beta reward per correct answer
+      _showCoinsToast(5);
       final newAchievements = await _checkProgressAchievements();
       if (newAchievements.isNotEmpty) {
-        await ProgressService.addCoins(newAchievements.length * 50);
+        final bonus = newAchievements.length * 50;
+        await ProgressService.addCoins(bonus);
+        _showCoinsToast(bonus);
+        await _showAchievementsUnlockedDialog(newAchievements);
       }
       SoundService.playCorrect();
     } else {
@@ -1011,6 +1015,67 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
+    );
+  }
+
+  void _showCoinsToast(int amount) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(milliseconds: 1300),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            const Icon(Icons.monetization_on_rounded, color: AppColors.gold),
+            const SizedBox(width: 8),
+            Text('+$amount монет'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showAchievementsUnlockedDialog(
+      List<Achievement> achievements) async {
+    if (!mounted || achievements.isEmpty) return;
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('Новое достижение!'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: achievements
+                .take(3)
+                .map(
+                  (a) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        Icon(a.icon, color: AppColors.gold, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            a.title,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('Круто'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

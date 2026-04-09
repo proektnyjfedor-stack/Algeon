@@ -598,6 +598,7 @@ class _ExamScreenState extends State<ExamScreen> {
   bool _textIsNotEmpty = false;
   final Set<String> _solvedInExam = <String>{};
   List<Achievement> _newAchievements = const [];
+  int _coinsEarned = 0;
 
   @override
   void initState() {
@@ -661,6 +662,7 @@ class _ExamScreenState extends State<ExamScreen> {
       if (_solvedInExam.add(_currentTask.id)) {
         await ProgressService.markSolved(_currentTask.id);
         await ProgressService.addCoins(5); // beta reward per correct answer
+        _coinsEarned += 5;
       } else {
         await ProgressService.recordAttempt(true);
       }
@@ -732,7 +734,9 @@ class _ExamScreenState extends State<ExamScreen> {
       gradeProgress: gradeProgress,
     );
     if (_newAchievements.isNotEmpty) {
-      await ProgressService.addCoins(_newAchievements.length * 50);
+      final bonus = _newAchievements.length * 50;
+      await ProgressService.addCoins(bonus);
+      _coinsEarned += bonus;
     }
 
     _showResultsDialog();
@@ -811,6 +815,26 @@ class _ExamScreenState extends State<ExamScreen> {
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.gold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+            ],
+            if (_coinsEarned > 0) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Награда за экзамен: +$_coinsEarned монет',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.accent,
                   ),
                 ),
               ),
