@@ -660,6 +660,7 @@ class _ExamScreenState extends State<ExamScreen> {
     if (isCorrect) {
       if (_solvedInExam.add(_currentTask.id)) {
         await ProgressService.markSolved(_currentTask.id);
+        await ProgressService.addCoins(5); // beta reward per correct answer
       } else {
         await ProgressService.recordAttempt(true);
       }
@@ -730,6 +731,9 @@ class _ExamScreenState extends State<ExamScreen> {
       grade: widget.grade,
       gradeProgress: gradeProgress,
     );
+    if (_newAchievements.isNotEmpty) {
+      await ProgressService.addCoins(_newAchievements.length * 50);
+    }
 
     _showResultsDialog();
   }

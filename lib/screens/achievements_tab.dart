@@ -17,6 +17,42 @@ class AchievementsTab extends StatefulWidget {
 }
 
 class _AchievementsTabState extends State<AchievementsTab> {
+  @override
+  void initState() {
+    super.initState();
+    _syncAchievementsWithProgress();
+  }
+
+  Future<void> _syncAchievementsWithProgress() async {
+    final totalSolved = ProgressService.getTotalSolved();
+    final streak = ProgressService.getStreakDays();
+    final accuracy = ProgressService.getAccuracy();
+    final totalAttempts = ProgressService.getTotalAttempts();
+    final grade = ProgressService.getCurrentGrade();
+    final gradeTasks = getTasksByGrade(grade);
+    final gradeSolved = ProgressService.getSolvedCountForGrade(
+      grade,
+      gradeTasks.map((t) => t.id).toList(),
+    );
+    final gradeProgress =
+        gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
+
+    final unlockedNow = await AchievementsService.evaluateProgress(
+      totalSolved: totalSolved,
+      streak: streak,
+      accuracy: accuracy,
+      totalAttempts: totalAttempts,
+      grade: grade,
+      gradeProgress: gradeProgress,
+    );
+
+    if (unlockedNow.isNotEmpty) {
+      await ProgressService.addCoins(unlockedNow.length * 50);
+    }
+
+    if (mounted) setState(() {});
+  }
+
   int _getGridColumns(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     if (width > 900) return 4;
@@ -106,6 +142,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final unlocked = achievements.where((a) => a.isUnlocked).toList();
     final locked = achievements.where((a) => !a.isUnlocked).toList();
     final progress = AchievementsService.getProgress();
+    final coins = ProgressService.getCoins();
     final columns = _getGridColumns(context);
 
     return Scaffold(
@@ -142,6 +179,31 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           style: TextStyle(
                             fontSize: 15,
                             color: AppThemeColors.textSecondary(context),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: AppThemeColors.accentLight(context),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.monetization_on_rounded,
+                                  size: 18, color: AppColors.accent),
+                              const SizedBox(width: 6),
+                              Text(
+                                '$coins монет (бета-приз)',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.accent,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

@@ -119,6 +119,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       _results[i] = isCorrect;
       if (isCorrect) {
         await ProgressService.markSolved(task.id);
+        await ProgressService.addCoins(5); // beta reward per correct answer
       } else {
         await ProgressService.recordAttempt(false);
       }
@@ -154,6 +155,9 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       grade: grade,
       gradeProgress: gradeProgress,
     );
+    if (_newAchievements.isNotEmpty) {
+      await ProgressService.addCoins(_newAchievements.length * 50);
+    }
 
     _showResultDialog(correct, widget.variant.tasks.length, passed);
   }

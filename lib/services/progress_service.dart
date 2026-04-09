@@ -20,6 +20,7 @@ class ProgressService {
   static const String _keyAvatar = 'user_avatar';
   static const String _keyTodayDate = 'today_date';
   static const String _keyTodayCompleted = 'today_completed';
+  static const String _keyCoins = 'coins_balance';
   
   static SharedPreferences? _prefs;
   static Set<String> _solvedTaskIds = {};
@@ -250,6 +251,21 @@ class ProgressService {
   
   static int getTotalCorrect() {
     return _prefs?.getInt(_keyCorrect) ?? 0;
+  }
+
+  // ============================================================
+  // BETA REWARDS (coins)
+  // ============================================================
+
+  static int getCoins() {
+    return _prefs?.getInt(_keyCoins) ?? 0;
+  }
+
+  static Future<void> addCoins(int amount) async {
+    if (amount <= 0) return;
+    final next = getCoins() + amount;
+    await _prefs?.setInt(_keyCoins, next);
+    _log('Coins +$amount => $next');
   }
 
   /// Generic bool getter (for exam pass flags etc.)

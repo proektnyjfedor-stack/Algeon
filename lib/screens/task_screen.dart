@@ -864,7 +864,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     if (correct) {
       _correctCount++;
       await ProgressService.markSolved(_task.id);
-      await _checkProgressAchievements();
+      await ProgressService.addCoins(5); // beta reward per correct answer
+      final newAchievements = await _checkProgressAchievements();
+      if (newAchievements.isNotEmpty) {
+        await ProgressService.addCoins(newAchievements.length * 50);
+      }
       SoundService.playCorrect();
     } else {
       _wrongCount++;
