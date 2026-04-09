@@ -198,7 +198,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       bottom: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-        child: Container(
+        child: AnimatedContainer(
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [palette.primary, palette.secondary],
