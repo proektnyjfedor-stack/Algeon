@@ -10,6 +10,7 @@ import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
 import '../data/oge_ege_data.dart';
 import '../models/task.dart';
+import '../services/achievements_service.dart';
 import '../services/progress_service.dart';
 import 'oge_ege_exam_screen.dart';
 
@@ -595,6 +596,8 @@ class _ExamScreenState extends State<ExamScreen> {
   bool _examFinished = false;
   final _textController = TextEditingController();
   bool _textIsNotEmpty = false;
+  final Set<String> _solvedInExam = <String>{};
+  List<Achievement> _newAchievements = const [];
 
   @override
   void initState() {
@@ -633,7 +636,7 @@ class _ExamScreenState extends State<ExamScreen> {
 
   Task get _currentTask => widget.tasks[_currentIndex];
 
-  void _selectAnswer(String answer) {
+  Future<void> _selectAnswer(String answer) async {
     if (_showResult) return;
 
     HapticFeedback.lightImpact();
@@ -641,16 +644,28 @@ class _ExamScreenState extends State<ExamScreen> {
     final normalized = answer.trim().toLowerCase().replaceAll(',', '.').replaceAll(RegExp(r'\s+'), ' ');
     final correctNormalized = _currentTask.answer.trim().toLowerCase().replaceAll(',', '.').replaceAll(RegExp(r'\s+'), ' ');
 
+    final isCorrect = normalized == correctNormalized;
+
     setState(() {
       _selectedAnswer = answer;
       _showResult = true;
 
-      if (normalized == correctNormalized) {
+      if (isCorrect) {
         _correctCount++;
       } else {
         _wrongCount++;
       }
     });
+
+    if (isCorrect) {
+      if (_solvedInExam.add(_currentTask.id)) {
+        await ProgressService.markSolved(_currentTask.id);
+      } else {
+        await ProgressService.recordAttempt(true);
+      }
+    } else {
+      await ProgressService.recordAttempt(false);
+    }
 
     Future.delayed(const Duration(milliseconds: 700), () {
       if (mounted && _showResult) {
@@ -692,6 +707,29 @@ class _ExamScreenState extends State<ExamScreen> {
         await ProgressService.setBool('exam_grade_${widget.grade}_passed', true);
       }
     }
+
+    final totalSolved = ProgressService.getTotalSolved();
+    final streak = ProgressService.getStreakDays();
+    final accuracy = ProgressService.getAccuracy();
+    final totalAttempts = ProgressService.getTotalAttempts();
+    final gradeTasks = getTasksByGrade(widget.grade);
+    final gradeSolved = ProgressService.getSolvedCountForGrade(
+      widget.grade,
+      gradeTasks.map((t) => t.id).toList(),
+    );
+    final gradeProgress =
+        gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
+
+    _newAchievements = await AchievementsService.evaluateProgress(
+      totalSolved: totalSolved,
+      streak: streak,
+      accuracy: accuracy,
+      totalAttempts: totalAttempts,
+      sessionCorrect: _correctCount,
+      sessionTotal: widget.tasks.length,
+      grade: widget.grade,
+      gradeProgress: gradeProgress,
+    );
 
     _showResultsDialog();
   }
@@ -754,6 +792,26 @@ class _ExamScreenState extends State<ExamScreen> {
               ],
             ),
             const SizedBox(height: 20),
+            if (_newAchievements.isNotEmpty) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Новых достижений: ${_newAchievements.length}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+            ],
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

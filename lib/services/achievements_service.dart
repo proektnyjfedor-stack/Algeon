@@ -370,6 +370,36 @@ class AchievementsService {
     }
     return null;
   }
+
+  /// Единая точка проверки достижений по текущему прогрессу.
+  static Future<List<Achievement>> evaluateProgress({
+    required int totalSolved,
+    required int streak,
+    required double accuracy,
+    required int totalAttempts,
+    int? sessionCorrect,
+    int? sessionTotal,
+    int? grade,
+    double? gradeProgress,
+  }) async {
+    final unlocked = <Achievement>[];
+
+    unlocked.addAll(await checkTaskAchievements(totalSolved));
+    unlocked.addAll(await checkStreakAchievements(streak));
+    unlocked.addAll(await checkAccuracyAchievements(accuracy, totalAttempts));
+
+    if (sessionCorrect != null && sessionTotal != null) {
+      final perfect = await checkPerfectSession(sessionCorrect, sessionTotal);
+      if (perfect != null) unlocked.add(perfect);
+    }
+
+    if (grade != null && gradeProgress != null) {
+      final gradeAch = await checkGradeComplete(grade, gradeProgress);
+      if (gradeAch != null) unlocked.add(gradeAch);
+    }
+
+    return unlocked;
+  }
   
   /// Сброс достижений
   static Future<void> reset() async {

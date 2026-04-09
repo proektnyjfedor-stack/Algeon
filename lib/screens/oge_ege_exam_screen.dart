@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../data/oge_ege_data.dart';
+import '../data/tasks_data.dart';
 import '../models/task.dart';
+import '../services/achievements_service.dart';
 import '../services/progress_service.dart';
 import '../widgets/math_text.dart';
 
@@ -30,6 +32,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   int _remainingSeconds = 0;
   bool _finished = false;
   bool _submitted = false;
+  List<Achievement> _newAchievements = const [];
 
   // Контроллеры текстовых полей — один на задачу
   late List<TextEditingController> _textControllers;
@@ -99,7 +102,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   }
 
   // ── Проверить всё и показать результат ──────────────────────
-  void _submitAll() {
+  Future<void> _submitAll() async {
     if (_finished) return;
     _timer.cancel();
     setState(() {
@@ -112,15 +115,45 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       final task  = widget.variant.tasks[i];
       final given = (_answers[i] ?? '').trim().toLowerCase().replaceAll(',', '.');
       final right = task.answer.trim().toLowerCase().replaceAll(',', '.');
-      _results[i] = given == right;
+      final isCorrect = given == right;
+      _results[i] = isCorrect;
+      if (isCorrect) {
+        await ProgressService.markSolved(task.id);
+      } else {
+        await ProgressService.recordAttempt(false);
+      }
     }
 
     final correct = _results.where((r) => r == true).length;
     final passed  = correct / widget.variant.tasks.length >= 0.7;
 
     if (passed) {
-      ProgressService.setBool('exam_${widget.variant.id}_passed', true);
+      await ProgressService.setBool('exam_${widget.variant.id}_passed', true);
     }
+
+    final totalSolved = ProgressService.getTotalSolved();
+    final streak = ProgressService.getStreakDays();
+    final accuracy = ProgressService.getAccuracy();
+    final totalAttempts = ProgressService.getTotalAttempts();
+    final grade = ProgressService.getCurrentGrade();
+    final gradeTasks = getTasksByGrade(grade);
+    final gradeSolved = ProgressService.getSolvedCountForGrade(
+      grade,
+      gradeTasks.map((t) => t.id).toList(),
+    );
+    final gradeProgress =
+        gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
+
+    _newAchievements = await AchievementsService.evaluateProgress(
+      totalSolved: totalSolved,
+      streak: streak,
+      accuracy: accuracy,
+      totalAttempts: totalAttempts,
+      sessionCorrect: correct,
+      sessionTotal: widget.variant.tasks.length,
+      grade: grade,
+      gradeProgress: gradeProgress,
+    );
 
     _showResultDialog(correct, widget.variant.tasks.length, passed);
   }
@@ -170,6 +203,26 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
               ),
             ),
             const SizedBox(height: 24),
+            if (_newAchievements.isNotEmpty) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  'Новых достижений: ${_newAchievements.length}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.gold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
             Row(
               children: [
                 Expanded(

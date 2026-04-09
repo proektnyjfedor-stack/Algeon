@@ -864,13 +864,44 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     if (correct) {
       _correctCount++;
       await ProgressService.markSolved(_task.id);
+      await _checkProgressAchievements();
       SoundService.playCorrect();
     } else {
       _wrongCount++;
       _wrongAttemptsOnCurrentTask++;
       _wrongTasks.add(_task);
+      await ProgressService.recordAttempt(false);
       SoundService.playWrong();
     }
+  }
+
+  Future<List<Achievement>> _checkProgressAchievements({
+    int? sessionCorrect,
+    int? sessionTotal,
+  }) async {
+    final totalSolved = ProgressService.getTotalSolved();
+    final streak = ProgressService.getStreakDays();
+    final accuracy = ProgressService.getAccuracy();
+    final totalAttempts = ProgressService.getTotalAttempts();
+    final grade = ProgressService.getCurrentGrade();
+    final gradeTasks = getTasksByGrade(grade);
+    final gradeSolved = ProgressService.getSolvedCountForGrade(
+      grade,
+      gradeTasks.map((t) => t.id).toList(),
+    );
+    final gradeProgress =
+        gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
+
+    return AchievementsService.evaluateProgress(
+      totalSolved: totalSolved,
+      streak: streak,
+      accuracy: accuracy,
+      totalAttempts: totalAttempts,
+      sessionCorrect: sessionCorrect,
+      sessionTotal: sessionTotal,
+      grade: grade,
+      gradeProgress: gradeProgress,
+    );
   }
 
   /// «Не знаю» — раскрываем правильный ответ без перехода к следующей задаче
@@ -926,34 +957,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _showSummary() async {
     _stopwatch.stop();
-
-    final totalSolved = ProgressService.getTotalSolved();
-    final streak = ProgressService.getStreakDays();
-    final accuracy = ProgressService.getAccuracy();
-    final totalAttempts = ProgressService.getTotalAttempts();
-
-    final newAchievements = <Achievement>[];
-
-    newAchievements
-        .addAll(await AchievementsService.checkTaskAchievements(totalSolved));
-    newAchievements
-        .addAll(await AchievementsService.checkStreakAchievements(streak));
-    newAchievements.addAll(await AchievementsService.checkAccuracyAchievements(
-        accuracy, totalAttempts));
-
-    final perfect = await AchievementsService.checkPerfectSession(
-        _correctCount, widget.tasks.length);
-    if (perfect != null) newAchievements.add(perfect);
-
-    final grade = ProgressService.getCurrentGrade();
-    final gradeTasks = getTasksByGrade(grade);
-    final gradeSolved = ProgressService.getSolvedCountForGrade(
-        grade, gradeTasks.map((t) => t.id).toList());
-    final gradeProgress =
-        gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
-    final gradeAch =
-        await AchievementsService.checkGradeComplete(grade, gradeProgress);
-    if (gradeAch != null) newAchievements.add(gradeAch);
+    final newAchievements = await _checkProgressAchievements(
+      sessionCorrect: _correctCount,
+      sessionTotal: widget.tasks.length,
+    );
 
     if (!mounted) return;
 
