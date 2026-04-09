@@ -369,6 +369,7 @@ class _ProfileTabState extends State<ProfileTab> {
       ('theme_space', 'Тема: Космос', 250),
     ];
     String? equippingItemId;
+    String? sparkleItemId;
 
     await showModalBottomSheet<void>(
       context: context,
@@ -427,6 +428,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       final owned = ProgressService.getBool('shop_item_$id');
                       final isEquipped = equipped == id;
                       final isEquipAnimating = equippingItemId == id;
+                      final showSparkle = sparkleItemId == id;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
@@ -438,21 +440,42 @@ class _ProfileTabState extends State<ProfileTab> {
                             children: [
                               Expanded(child: Text(title)),
                               if (isEquipped)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: AppThemeColors.accentLight(context),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Text(
-                                    'Экипировано',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.accent,
+                                Row(
+                                  children: [
+                                    AnimatedOpacity(
+                                      duration: const Duration(milliseconds: 220),
+                                      opacity: showSparkle ? 1 : 0,
+                                      child: AnimatedScale(
+                                        duration: const Duration(milliseconds: 220),
+                                        curve: Curves.easeOutBack,
+                                        scale: showSparkle ? 1.15 : 0.7,
+                                        child: const Padding(
+                                          padding: EdgeInsets.only(right: 4),
+                                          child: Icon(
+                                            Icons.auto_awesome_rounded,
+                                            size: 14,
+                                            color: AppColors.gold,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: AppThemeColors.accentLight(context),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text(
+                                        'Экипировано',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.accent,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                             ],
                           ),
@@ -469,6 +492,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                             setModalState(() => equippingItemId = id);
                                             await ProgressService.setEquippedBetaItem(id);
                                             if (!mounted) return;
+                                            setModalState(() => sparkleItemId = id);
                                             setModalState(() {});
                                             setState(() {});
                                             _showSnack('Экипировано: $title');
@@ -477,6 +501,11 @@ class _ProfileTabState extends State<ProfileTab> {
                                             );
                                             if (!mounted) return;
                                             setModalState(() => equippingItemId = null);
+                                            await Future<void>.delayed(
+                                              const Duration(milliseconds: 450),
+                                            );
+                                            if (!mounted) return;
+                                            setModalState(() => sparkleItemId = null);
                                           },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: isEquipped
@@ -521,6 +550,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                       await ProgressService.setBool('shop_item_$id', true);
                                       await ProgressService.setEquippedBetaItem(id);
                                       if (!mounted) return;
+                                      setModalState(() => sparkleItemId = id);
                                       setModalState(() {});
                                       setState(() {});
                                       _showSnack('Покупка: $title (экипировано)');
@@ -529,6 +559,11 @@ class _ProfileTabState extends State<ProfileTab> {
                                       );
                                       if (!mounted) return;
                                       setModalState(() => equippingItemId = null);
+                                      await Future<void>.delayed(
+                                        const Duration(milliseconds: 450),
+                                      );
+                                      if (!mounted) return;
+                                      setModalState(() => sparkleItemId = null);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: _bluePrimary,
