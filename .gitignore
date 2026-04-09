@@ -32,21 +32,24 @@ ios/Flutter/Flutter.podspec
 # Web
 web/.dart_tool/
 
+# Node/Firebase Functions
+node_modules/
+functions/node_modules/
+functions/.firebase/
+
+# Python backend
+ai-backend/.env
+.venv/
+__pycache__/
+logs/
+chroma_db/
+
 # Secrets (если будут)
 .env
 *.env
 secrets.dart
 
-# Сборка
+# Build and logs
 *.log
 *.lock
 !pubspec.lock
-ai-backend/.env
-.venv
-.env
-__pycache__
-logs
-chroma_db
-.DS_Store
-node_modules
-build
