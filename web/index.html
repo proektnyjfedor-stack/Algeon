@@ -125,6 +125,12 @@
       navigator.serviceWorker.getRegistrations().then(function(regs) {
         regs.forEach(function(reg) { reg.update(); });
       });
+
+      // If a new service worker takes control, reload to pick up new JS/CSS.
+      // This prevents "nothing changed" reports after redeploy.
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        window.location.reload();
+      });
     }
 
     // Скрываем загрузочный экран когда Flutter готов

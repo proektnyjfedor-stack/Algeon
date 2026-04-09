@@ -1,22 +1,22 @@
 import logging
 import os
 import time
-import re
 from contextlib import asynccontextmanager
+from typing import Optional
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
-from typing import Optional
 from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
 from config import settings
-from fastapi.responses import StreamingResponse
-from llm_service import generate_reply, stream_reply
-from session_service import get_history, add_message, clear_history
+from session_service import add_message, clear_history, get_history
 
+
+os.makedirs("logs", exist_ok=True)
 
 logging.basicConfig(
     level=logging.DEBUG if settings.app_debug else logging.INFO,
@@ -33,8 +33,7 @@ limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    os.makedirs("logs", exist_ok=True)
-    logger.info(f"Сервер запускается (env={settings.app_env})")
+    logger.info("Сервер запускается (env=%s)", settings.app_env)
     yield
     logger.info("Сервер останавливается")
 
@@ -80,12 +79,11 @@ async def health():
 @app.post("/chat")
 @limiter.limit(f"{settings.rate_limit_per_minute}/minute")
 async def chat(request: Request, payload: ChatRequest):
-    logger.info(f"chat request: user_id={payload.user_id}, grade={payload.grade}")
-
-    history = get_history(payload.user_id)
+    logger.info("chat request: user_id=%s, grade=%s", payload.user_id, payload.grade)
 
     add_message(payload.user_id, "user", payload.message)
 
+    from llm_service import generate_reply
     reply = generate_reply(payload.message)
 
     add_message(payload.user_id, "assistant", reply)
@@ -94,33 +92,49 @@ async def chat(request: Request, payload: ChatRequest):
         "reply": reply,
         "user_id": payload.user_id,
         "grade": payload.grade,
-        "mode": "math",
-        "history_length": len(get_history(payload.user_id))
+        "mode": "ai",
+        "history_length": len(get_history(payload.user_id)),
     }
 
 
 @app.post("/chat/stream")
 @limiter.limit(f"{settings.rate_limit_per_minute}/minute")
 async def chat_stream(request: Request, payload: ChatRequest):
+    from llm_service import stream_reply
+
+    add_message(payload.user_id, "user", payload.message)
+
+    collected_chunks = []
+
     async def event_generator():
-        async for chunk in stream_reply(payload.message):
+        for chunk in stream_reply(payload.message):
+            collected_chunks.append(chunk)
             yield f"data: {chunk}\n\n"
+
+        full_reply = "".join(collected_chunks).strip()
+        if full_reply:
+            add_message(payload.user_id, "assistant", full_reply)
+
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(
         event_generator(),
         media_type="text/event-stream",
     )
+
+
 @app.get("/history/{user_id}")
 async def history(user_id: str):
     return {
         "user_id": user_id,
-        "history": get_history(user_id)
+        "history": get_history(user_id),
     }
+
+
 @app.delete("/history/{user_id}")
 async def delete_history(user_id: str):
     clear_history(user_id)
     return {
         "status": "cleared",
-        "user_id": user_id
+        "user_id": user_id,
     }

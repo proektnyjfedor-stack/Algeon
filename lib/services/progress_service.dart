@@ -96,7 +96,12 @@ class ProgressService {
   static Map<String, dynamic>? getCustomAvatar() {
     final str = _prefs?.getString('custom_avatar');
     if (str == null) return null;
-    return jsonDecode(str) as Map<String, dynamic>;
+    try {
+      return jsonDecode(str) as Map<String, dynamic>;
+    } catch (e) {
+      _log('Invalid custom avatar data: $e');
+      return null;
+    }
   }
 
   // ============================================================

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/main_screen.dart';
+import '../theme/app_theme.dart';
 import '../screens/home_tab.dart';
 import '../screens/practice_tab.dart';
 import '../screens/exams_tab.dart';
@@ -40,11 +41,11 @@ class AppRoutes {
 }
 
 /// Resolves the bottom-nav / rail index from the current location.
-int _indexFromLocation(String location) {
-  if (location.startsWith(AppRoutes.practice)) return 1;
-  if (location.startsWith(AppRoutes.exams)) return 2;
-  if (location.startsWith(AppRoutes.achievements)) return 3;
-  if (location.startsWith(AppRoutes.profile)) return 4;
+int _indexFromLocation(String path) {
+  if (path.startsWith(AppRoutes.practice)) return 1;
+  if (path.startsWith(AppRoutes.exams)) return 2;
+  if (path.startsWith(AppRoutes.achievements)) return 3;
+  if (path.startsWith(AppRoutes.profile)) return 4;
   return 0; // /learn or fallback
 }
 
@@ -61,16 +62,26 @@ final GoRouter appRouter = GoRouter(
   // Redirect logic
   // ------------------------------------------------------------------
   redirect: (BuildContext context, GoRouterState state) {
-    final location = state.uri.toString();
+    final uri = state.uri;
+    final path = uri.path;
+
+    // Normalize trailing slash to keep route matching consistent.
+    // Example: `/profile/` -> `/profile`
+    if (path.length > 1 && path.endsWith('/')) {
+      final normalized = uri.replace(
+        path: path.substring(0, path.length - 1),
+      );
+      return normalized.toString();
+    }
 
     // Already heading to splash -- allow.
-    if (location == AppRoutes.splash) return null;
+    if (path == AppRoutes.splash) return null;
 
     // Already heading to onboarding -- allow.
-    if (location == AppRoutes.onboarding) return null;
+    if (path == AppRoutes.onboarding) return null;
 
     // Already heading to auth -- allow.
-    if (location == AppRoutes.auth) return null;
+    if (path == AppRoutes.auth) return null;
 
     // On web, Firebase is not configured yet -- skip auth entirely.
     if (!kIsWeb) {
@@ -94,7 +105,7 @@ final GoRouter appRouter = GoRouter(
     // Shell route -- wraps tabs in MainScreen scaffold.
     ShellRoute(
       builder: (BuildContext context, GoRouterState state, Widget child) {
-        final index = _indexFromLocation(state.uri.toString());
+        final index = _indexFromLocation(state.uri.path);
         return MainScreen(
           currentIndex: index,
           child: child,
@@ -127,6 +138,14 @@ final GoRouter appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.profile,
+          pageBuilder: (context, state) => const NoTransitionPage(
+            child: ProfileTab(),
+          ),
+        ),
+        // Some hosts/redirects may keep a trailing slash; keep a route alias
+        // to ensure the profile tab always renders.
+        GoRoute(
+          path: '${AppRoutes.profile}/',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: ProfileTab(),
           ),
@@ -223,4 +242,24 @@ final GoRouter appRouter = GoRouter(
       },
     ),
   ],
+  errorBuilder: (context, state) {
+    // Make routing issues visible instead of showing an empty tab.
+    return Scaffold(
+      backgroundColor: AppThemeColors.background(context),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            'Страница не найдена: ${state.uri}',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppThemeColors.textPrimary(context),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
+  },
 );

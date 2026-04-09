@@ -28,18 +28,28 @@ class UserAvatarDisplay extends StatelessWidget {
     if (avatarId == 'photo') {
       final photoB64 = ProgressService.getCustomPhoto();
       if (photoB64 != null) {
-        return _PhotoFrame(
-          size: size,
-          showBorder: showBorder,
-          borderColor: borderColor,
-          child: Image.memory(
-            base64Decode(photoB64),
-            width: size,
-            height: size,
-            fit: BoxFit.cover,
-            gaplessPlayback: true,
-          ),
-        );
+        try {
+          return _PhotoFrame(
+            size: size,
+            showBorder: showBorder,
+            borderColor: borderColor,
+            child: Image.memory(
+              base64Decode(photoB64),
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+              errorBuilder: (_, __, ___) =>
+                  AvatarWidget(avatarId: 'boy_blue', size: size, showBorder: showBorder),
+            ),
+          );
+        } catch (_) {
+          return AvatarWidget(
+            avatarId: 'boy_blue',
+            size: size,
+            showBorder: showBorder,
+          );
+        }
       }
     }
 
@@ -47,8 +57,20 @@ class UserAvatarDisplay extends StatelessWidget {
     if (avatarId == 'custom') {
       final customData = ProgressService.getCustomAvatar();
       if (customData != null) {
-        final avatar = AvatarData.fromMap(customData);
-        return AvatarWidget(avatarData: avatar, size: size, showBorder: showBorder);
+        try {
+          final avatar = AvatarData.fromMap(customData);
+          return AvatarWidget(
+            avatarData: avatar,
+            size: size,
+            showBorder: showBorder,
+          );
+        } catch (_) {
+          return AvatarWidget(
+            avatarId: 'boy_blue',
+            size: size,
+            showBorder: showBorder,
+          );
+        }
       }
     }
 

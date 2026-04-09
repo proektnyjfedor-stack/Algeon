@@ -3,6 +3,7 @@ from typing import Optional
 
 
 class Settings(BaseSettings):
+    deepseek_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
     app_env: str = "development"
     app_debug: bool = True

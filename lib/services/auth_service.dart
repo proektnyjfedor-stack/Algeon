@@ -7,23 +7,31 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
   static SharedPreferences? _prefs;
 
   static const String _keyAuthMethod = 'auth_method';
+
+  static FirebaseAuth? get _authOrNull {
+    try {
+      return FirebaseAuth.instance;
+    } catch (e) {
+      debugPrint('FirebaseAuth unavailable: $e');
+      return null;
+    }
+  }
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
   }
 
   /// Текущий пользователь Firebase
-  static User? get currentUser => _auth.currentUser;
+  static User? get currentUser => _authOrNull?.currentUser;
 
   /// Пользователь авторизован?
-  static bool isLoggedIn() => _auth.currentUser != null;
+  static bool isLoggedIn() => _authOrNull?.currentUser != null;
 
   /// Получить email
-  static String? getUserEmail() => _auth.currentUser?.email;
+  static String? getUserEmail() => _authOrNull?.currentUser?.email;
 
   /// Получить метод авторизации
   static String? getAuthMethod() => _prefs?.getString(_keyAuthMethod);
@@ -37,7 +45,11 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    final credential = await _auth.createUserWithEmailAndPassword(
+    final auth = _authOrNull;
+    if (auth == null) {
+      throw StateError('Firebase Auth is not configured');
+    }
+    final credential = await auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -50,7 +62,11 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    final credential = await _auth.signInWithEmailAndPassword(
+    final auth = _authOrNull;
+    if (auth == null) {
+      throw StateError('Firebase Auth is not configured');
+    }
+    final credential = await auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -64,11 +80,13 @@ class AuthService {
 
   static Future<UserCredential?> signInWithGoogle() async {
     try {
+      final auth = _authOrNull;
+      if (auth == null) return null;
       final googleProvider = GoogleAuthProvider();
       googleProvider.addScope('email');
       googleProvider.addScope('profile');
 
-      final result = await _auth.signInWithPopup(googleProvider);
+      final result = await auth.signInWithPopup(googleProvider);
       await _prefs?.setString(_keyAuthMethod, 'google');
       return result;
     } catch (e) {
@@ -83,11 +101,13 @@ class AuthService {
 
   static Future<UserCredential?> signInWithApple() async {
     try {
+      final auth = _authOrNull;
+      if (auth == null) return null;
       final appleProvider = OAuthProvider('apple.com');
       appleProvider.addScope('email');
       appleProvider.addScope('name');
 
-      final result = await _auth.signInWithPopup(appleProvider);
+      final result = await auth.signInWithPopup(appleProvider);
       await _prefs?.setString(_keyAuthMethod, 'apple');
       return result;
     } catch (e) {
@@ -103,7 +123,9 @@ class AuthService {
   /// Вход как гость (анонимная авторизация Firebase)
   static Future<UserCredential?> signInAnonymously() async {
     try {
-      final result = await _auth.signInAnonymously();
+      final auth = _authOrNull;
+      if (auth == null) return null;
+      final result = await auth.signInAnonymously();
       await _prefs?.setString(_keyAuthMethod, 'anonymous');
       return result;
     } catch (e) {
@@ -113,14 +135,17 @@ class AuthService {
   }
 
   /// Гость (анонимный пользователь)?
-  static bool isAnonymous() => _auth.currentUser?.isAnonymous ?? false;
+  static bool isAnonymous() => _authOrNull?.currentUser?.isAnonymous ?? false;
 
   // ============================================================
   // SIGN OUT
   // ============================================================
 
   static Future<void> signOut() async {
-    await _auth.signOut();
+    final auth = _authOrNull;
+    if (auth != null) {
+      await auth.signOut();
+    }
     await _prefs?.remove(_keyAuthMethod);
   }
 
