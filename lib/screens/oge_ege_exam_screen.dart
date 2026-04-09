@@ -34,6 +34,7 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   bool _submitted = false;
   List<Achievement> _newAchievements = const [];
   int _coinsEarned = 0;
+  int _comboStreak = 0;
 
   // Контроллеры текстовых полей — один на задачу
   late List<TextEditingController> _textControllers;
@@ -119,10 +120,13 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       final isCorrect = given == right;
       _results[i] = isCorrect;
       if (isCorrect) {
+        _comboStreak++;
         await ProgressService.markSolved(task.id);
-        await ProgressService.addCoins(5); // beta reward per correct answer
-        _coinsEarned += 5;
+        final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
+        await ProgressService.addCoins(coins);
+        _coinsEarned += coins;
       } else {
+        _comboStreak = 0;
         await ProgressService.recordAttempt(false);
       }
     }

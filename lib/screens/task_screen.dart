@@ -45,6 +45,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   int _wrongCount = 0;
   int _skippedCount = 0;
   final List<Task> _wrongTasks = [];
+  int _comboStreak = 0;
 
   final Stopwatch _stopwatch = Stopwatch();
 
@@ -863,9 +864,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
     if (correct) {
       _correctCount++;
+      _comboStreak++;
       await ProgressService.markSolved(_task.id);
-      await ProgressService.addCoins(5); // beta reward per correct answer
-      _showCoinsToast(5);
+      final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
+      await ProgressService.addCoins(coins);
+      _showCoinsToast(coins, combo: _comboStreak);
       final newAchievements = await _checkProgressAchievements();
       if (newAchievements.isNotEmpty) {
         final bonus = newAchievements.length * 50;
@@ -876,6 +879,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       SoundService.playCorrect();
     } else {
       _wrongCount++;
+      _comboStreak = 0;
       _wrongAttemptsOnCurrentTask++;
       _wrongTasks.add(_task);
       await ProgressService.recordAttempt(false);
@@ -918,6 +922,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     setState(() {
       _isChecked = true;
       _isCorrect = false;
+      _comboStreak = 0;
       _skippedCount++;
       if (!_wrongTasks.contains(_task)) {
         _wrongCount++;
@@ -936,6 +941,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _skipTask() {
     setState(() {
+      _comboStreak = 0;
       _skippedCount++;
       _wrongCount++;
       _wrongTasks.add(_task);
@@ -1018,8 +1024,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     );
   }
 
-  void _showCoinsToast(int amount) {
+  void _showCoinsToast(int amount, {int? combo}) {
     if (!mounted) return;
+    final comboText = (combo != null && combo > 1) ? ' • Комбо x$combo' : '';
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(milliseconds: 1300),
@@ -1028,7 +1035,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           children: [
             const Icon(Icons.monetization_on_rounded, color: AppColors.gold),
             const SizedBox(width: 8),
-            Text('+$amount монет'),
+            Text('+$amount монет$comboText'),
           ],
         ),
       ),

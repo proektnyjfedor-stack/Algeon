@@ -22,6 +22,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   int get _grade => ProgressService.getCurrentGrade();
 
   late AnimationController _listAnim;
+  bool _dailyBonusChecked = false;
 
   @override
   void initState() {
@@ -31,6 +32,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 700),
     );
     _listAnim.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkDailyBonus();
+    });
   }
 
   @override
@@ -41,6 +45,26 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
   void _refresh() {
     if (mounted) setState(() {});
+  }
+
+  Future<void> _checkDailyBonus() async {
+    if (_dailyBonusChecked) return;
+    _dailyBonusChecked = true;
+    final bonus = await ProgressService.claimDailyBonusIfAvailable();
+    if (!mounted || bonus <= 0) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            const Icon(Icons.card_giftcard_rounded, color: AppColors.gold),
+            const SizedBox(width: 8),
+            Text('Ежедневный бонус: +$bonus монет'),
+          ],
+        ),
+      ),
+    );
+    setState(() {});
   }
 
   @override
@@ -54,6 +78,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
     final todayCompleted = ProgressService.getTodayCompletedCount();
     final userName = ProgressService.getUserName();
+    final coins = ProgressService.getCoins();
     final overallProgress = totalTasks > 0 ? totalSolved / totalTasks : 0.0;
 
     return Scaffold(
@@ -62,7 +87,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         slivers: [
           // Hero header
           SliverToBoxAdapter(
-            child: _buildHeroHeader(userName, todayCompleted, totalSolved, totalTasks, overallProgress),
+            child: _buildHeroHeader(userName, todayCompleted, totalSolved, totalTasks, overallProgress, coins),
           ),
 
           // Daily goal widget
@@ -133,7 +158,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildHeroHeader(String userName, int todayCompleted, int solved, int total, double progress) {
+  Widget _buildHeroHeader(String userName, int todayCompleted, int solved, int total, double progress, int coins) {
     return SafeArea(
       bottom: false,
       child: Padding(
@@ -195,6 +220,29 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.white.withValues(alpha: 0.75),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.monetization_on_rounded, color: AppColors.gold, size: 16),
+                    const SizedBox(width: 6),
+                    Text(
+                      '$coins монет',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 

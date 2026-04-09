@@ -599,6 +599,7 @@ class _ExamScreenState extends State<ExamScreen> {
   final Set<String> _solvedInExam = <String>{};
   List<Achievement> _newAchievements = const [];
   int _coinsEarned = 0;
+  int _comboStreak = 0;
 
   @override
   void initState() {
@@ -659,14 +660,17 @@ class _ExamScreenState extends State<ExamScreen> {
     });
 
     if (isCorrect) {
+      _comboStreak++;
       if (_solvedInExam.add(_currentTask.id)) {
         await ProgressService.markSolved(_currentTask.id);
-        await ProgressService.addCoins(5); // beta reward per correct answer
-        _coinsEarned += 5;
+        final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
+        await ProgressService.addCoins(coins);
+        _coinsEarned += coins;
       } else {
         await ProgressService.recordAttempt(true);
       }
     } else {
+      _comboStreak = 0;
       await ProgressService.recordAttempt(false);
     }
 

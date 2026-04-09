@@ -328,6 +328,118 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
+  Future<void> _openBetaShop() async {
+    final items = [
+      ('skin_neon_blue', 'Скин: Неон Синий', 120),
+      ('skin_gold_star', 'Скин: Золотая Звезда', 180),
+      ('theme_space', 'Тема: Космос', 250),
+    ];
+
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final coins = ProgressService.getCoins();
+            return Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+              decoration: BoxDecoration(
+                color: AppThemeColors.surface(context),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.storefront_rounded, color: AppColors.accent),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Бета-магазин',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: AppThemeColors.textPrimary(context),
+                          ),
+                        ),
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppThemeColors.accentLight(context),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '$coins монет',
+                            style: const TextStyle(
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    ...items.map((item) {
+                      final id = item.$1;
+                      final title = item.$2;
+                      final price = item.$3;
+                      final owned = ProgressService.getBool('shop_item_$id');
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: BorderSide(color: AppThemeColors.border(context)),
+                          ),
+                          title: Text(title),
+                          subtitle: Text(owned ? 'Куплено' : '$price монет'),
+                          trailing: owned
+                              ? const Icon(Icons.check_circle_rounded, color: AppColors.success)
+                              : ElevatedButton(
+                                  onPressed: () async {
+                                    final ok = await ProgressService.spendCoins(price);
+                                    if (!ok) {
+                                      _showSnack('Недостаточно монет');
+                                      return;
+                                    }
+                                    await ProgressService.setBool('shop_item_$id', true);
+                                    if (!mounted) return;
+                                    setModalState(() {});
+                                    setState(() {});
+                                    _showSnack('Покупка: $title');
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: _bluePrimary,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: const Text('Купить'),
+                                ),
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Это бета-магазин. Позже добавим реальные скины и эффекты.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppThemeColors.textSecondary(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _showSnack(String text) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -573,6 +685,12 @@ class _ProfileTabState extends State<ProfileTab> {
                   icon: Icons.school_rounded,
                   color: _bluePrimary,
                   onTap: _changeGrade,
+                ),
+                _QuickActionButton(
+                  title: 'Бета-магазин',
+                  icon: Icons.storefront_rounded,
+                  color: _bluePrimary,
+                  onTap: _openBetaShop,
                 ),
               ],
             ),

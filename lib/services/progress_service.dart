@@ -21,6 +21,7 @@ class ProgressService {
   static const String _keyTodayDate = 'today_date';
   static const String _keyTodayCompleted = 'today_completed';
   static const String _keyCoins = 'coins_balance';
+  static const String _keyDailyBonusDate = 'daily_bonus_date';
   
   static SharedPreferences? _prefs;
   static Set<String> _solvedTaskIds = {};
@@ -266,6 +267,35 @@ class ProgressService {
     final next = getCoins() + amount;
     await _prefs?.setInt(_keyCoins, next);
     _log('Coins +$amount => $next');
+  }
+
+  static Future<bool> spendCoins(int amount) async {
+    if (amount <= 0) return true;
+    final current = getCoins();
+    if (current < amount) return false;
+    final next = current - amount;
+    await _prefs?.setInt(_keyCoins, next);
+    _log('Coins -$amount => $next');
+    return true;
+  }
+
+  static int coinsForCorrectAnswer(int comboStreak) {
+    final clampedCombo = comboStreak < 1 ? 1 : comboStreak;
+    final bonus = (clampedCombo - 1).clamp(0, 5);
+    return 5 + bonus;
+  }
+
+  static Future<int> claimDailyBonusIfAvailable() async {
+    final now = DateTime.now();
+    final today = '${now.year}-${now.month}-${now.day}';
+    final savedDate = _prefs?.getString(_keyDailyBonusDate);
+    if (savedDate == today) return 0;
+
+    final streak = getStreakDays();
+    final bonus = 20 + (streak.clamp(0, 10) * 2);
+    await addCoins(bonus);
+    await _prefs?.setString(_keyDailyBonusDate, today);
+    return bonus;
   }
 
   /// Generic bool getter (for exam pass flags etc.)
