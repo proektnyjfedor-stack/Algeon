@@ -601,8 +601,18 @@ class _ProfileTabState extends State<ProfileTab> {
                                       setState(() {});
                                       _showSnack('Покупка: $title (экипировано)');
                                       if (!firstPurchaseFxWasShown) {
-                                        await _showFirstPurchaseWelcomeDialog();
+                                        final openProfileNow =
+                                            await _showFirstPurchaseWelcomeDialog();
                                         if (!mounted) return;
+                                        if (openProfileNow) {
+                                          if (!context.mounted) return;
+                                          Navigator.of(context).pop();
+                                          _scrollController.animateTo(
+                                            0,
+                                            duration: const Duration(milliseconds: 280),
+                                            curve: Curves.easeOutCubic,
+                                          );
+                                        }
                                       }
                                       await Future<void>.delayed(
                                         const Duration(milliseconds: 260),
@@ -657,9 +667,9 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  Future<void> _showFirstPurchaseWelcomeDialog() async {
-    if (!mounted) return;
-    await showDialog<void>(
+  Future<bool> _showFirstPurchaseWelcomeDialog() async {
+    if (!mounted) return false;
+    final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Добро пожаловать в магазин'),
@@ -667,13 +677,18 @@ class _ProfileTabState extends State<ProfileTab> {
           'Ты сделал первую покупку! Теперь можешь менять стиль профиля и экранов через экипировку.',
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Позже'),
+          ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Понятно'),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Перейти в профиль'),
           ),
         ],
       ),
     );
+    return result == true;
   }
 
   @override
