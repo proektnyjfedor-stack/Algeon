@@ -27,6 +27,40 @@ class _ProfileTabState extends State<ProfileTab> {
   static const Color _blueDeep = Color(0xFF1E40AF);
   static const Color _blueSoft = Color(0xFFEAF2FF);
 
+  ({Color primary, Color secondary, Color soft, String? label}) _equippedPalette() {
+    final equipped = ProgressService.getEquippedBetaItem();
+    switch (equipped) {
+      case 'skin_gold_star':
+        return (
+          primary: const Color(0xFFD4A017),
+          secondary: const Color(0xFFB8860B),
+          soft: const Color(0xFFFFF7D6),
+          label: 'Экипировано: Золотая Звезда',
+        );
+      case 'theme_space':
+        return (
+          primary: const Color(0xFF312E81),
+          secondary: const Color(0xFF1E1B4B),
+          soft: const Color(0xFFEDE9FE),
+          label: 'Экипировано: Космос',
+        );
+      case 'skin_neon_blue':
+        return (
+          primary: _bluePrimary,
+          secondary: _blueDeep,
+          soft: _blueSoft,
+          label: 'Экипировано: Неон Синий',
+        );
+      default:
+        return (
+          primary: _bluePrimary,
+          secondary: _blueDeep,
+          soft: _blueSoft,
+          label: null,
+        );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -519,10 +553,15 @@ class _ProfileTabState extends State<ProfileTab> {
     final isGuest = AuthService.isAnonymous();
     final themeProvider = context.watch<ThemeProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final palette = _equippedPalette();
+    final skinPrimary = palette.primary;
+    final skinSecondary = palette.secondary;
+    final skinSoft = palette.soft;
+    final equippedLabel = palette.label;
     final bgColor = isDark ? AppThemeColors.background(context) : Colors.white;
     final cardBg = isDark ? AppThemeColors.surface(context) : Colors.white;
-    final blueCard = isDark ? const Color(0xFF1E3A8A) : _bluePrimary;
-    final blueCardAlt = isDark ? const Color(0xFF1D4ED8) : _blueDeep;
+    final blueCard = isDark ? skinSecondary : skinPrimary;
+    final blueCardAlt = isDark ? skinPrimary : skinSecondary;
     final ratio = achievementsTotal == 0 ? 0.0 : achievementsUnlocked / achievementsTotal;
 
     return Scaffold(
@@ -552,6 +591,13 @@ class _ProfileTabState extends State<ProfileTab> {
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: skinPrimary.withValues(alpha: 0.24),
+                    blurRadius: 18,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -613,6 +659,24 @@ class _ProfileTabState extends State<ProfileTab> {
                       color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
+                  if (equippedLabel != null) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        equippedLabel,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                   if (isGuest) ...[
                     const SizedBox(height: 10),
                     Container(
@@ -696,7 +760,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       Text(
                         '${(ratio * 100).toStringAsFixed(0)}%',
                         style: TextStyle(
-                          color: _bluePrimary,
+                          color: skinPrimary,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -708,8 +772,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     child: LinearProgressIndicator(
                       minHeight: 10,
                       value: ratio.clamp(0, 1),
-                      backgroundColor: _blueSoft,
-                      valueColor: const AlwaysStoppedAnimation<Color>(_bluePrimary),
+                      backgroundColor: skinSoft,
+                      valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
                     ),
                   ),
                 ],
