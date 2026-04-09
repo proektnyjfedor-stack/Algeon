@@ -17,6 +17,31 @@ class AchievementsTab extends StatefulWidget {
 }
 
 class _AchievementsTabState extends State<AchievementsTab> {
+  ({Color primary, Color secondary, Color soft}) _equippedPalette() {
+    final equipped = ProgressService.getEquippedBetaItem();
+    switch (equipped) {
+      case 'skin_gold_star':
+        return (
+          primary: const Color(0xFFD4A017),
+          secondary: const Color(0xFFB8860B),
+          soft: const Color(0xFFFFF7D6),
+        );
+      case 'theme_space':
+        return (
+          primary: const Color(0xFF312E81),
+          secondary: const Color(0xFF1E1B4B),
+          soft: const Color(0xFFEDE9FE),
+        );
+      case 'skin_neon_blue':
+      default:
+        return (
+          primary: AppColors.accent,
+          secondary: const Color(0xFF1E40AF),
+          soft: const Color(0xFFEAF2FF),
+        );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -144,6 +169,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final progress = AchievementsService.getProgress();
     final coins = ProgressService.getCoins();
     final columns = _getGridColumns(context);
+    final palette = _equippedPalette();
 
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
@@ -164,7 +190,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                         Row(
                           children: [
                             Icon(Icons.emoji_events_rounded,
-                                color: AppColors.accent, size: 32),
+                                color: palette.primary, size: 32),
                             const SizedBox(width: 12),
                             Text('Награды',
                                 style: AppTypography.h1.copyWith(
@@ -186,7 +212,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: AppThemeColors.accentLight(context),
+                            color: palette.soft,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -200,7 +226,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.accent,
+                                  color: Colors.black87,
                                 ),
                               ),
                             ],
@@ -219,7 +245,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: AppColors.gold,
+                      gradient: LinearGradient(
+                        colors: [palette.primary, palette.secondary],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Row(
@@ -365,7 +395,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          _buildAchievementCard(unlocked[index], true),
+                          _buildAchievementCard(unlocked[index], true, palette.primary),
                       childCount: unlocked.length,
                     ),
                   ),
@@ -424,7 +454,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _buildAchievementCard(
-                          locked[index], false),
+                          locked[index], false, palette.primary),
                       childCount: locked.length,
                     ),
                   ),
@@ -438,7 +468,10 @@ class _AchievementsTabState extends State<AchievementsTab> {
   }
 
   Widget _buildAchievementCard(
-      Achievement achievement, bool isUnlocked) {
+    Achievement achievement,
+    bool isUnlocked,
+    Color accent,
+  ) {
     final pd = _getAchievementProgress(achievement);
 
     return GestureDetector(
@@ -452,7 +485,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isUnlocked
-                ? AppColors.gold
+                ? accent
                 : AppThemeColors.border(context),
             width: isUnlocked ? 2 : 1,
           ),
@@ -467,7 +500,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 height: 52,
                 decoration: BoxDecoration(
                   color: isUnlocked
-                      ? AppColors.gold
+                      ? accent
                       : AppThemeColors.borderLight(context),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -519,7 +552,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       valueColor: AlwaysStoppedAnimation(
                         pd.progress >= 1.0
                             ? AppColors.success
-                            : AppColors.accent,
+                            : accent,
                       ),
                     ),
                   ),

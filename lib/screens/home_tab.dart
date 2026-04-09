@@ -24,6 +24,31 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   late AnimationController _listAnim;
   bool _dailyBonusChecked = false;
 
+  ({Color primary, Color secondary, Color soft}) _equippedPalette() {
+    final equipped = ProgressService.getEquippedBetaItem();
+    switch (equipped) {
+      case 'skin_gold_star':
+        return (
+          primary: const Color(0xFFD4A017),
+          secondary: const Color(0xFFB8860B),
+          soft: const Color(0xFFFFF7D6),
+        );
+      case 'theme_space':
+        return (
+          primary: const Color(0xFF312E81),
+          secondary: const Color(0xFF1E1B4B),
+          soft: const Color(0xFFEDE9FE),
+        );
+      case 'skin_neon_blue':
+      default:
+        return (
+          primary: AppColors.accent,
+          secondary: const Color(0xFF1E40AF),
+          soft: const Color(0xFFEAF2FF),
+        );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +105,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     final userName = ProgressService.getUserName();
     final coins = ProgressService.getCoins();
     final overallProgress = totalTasks > 0 ? totalSolved / totalTasks : 0.0;
+    final palette = _equippedPalette();
 
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
@@ -148,6 +174,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   topic: topics[index],
                   index: index,
                   allTopics: topics,
+                  accent: palette.primary,
                 ),
                 childCount: topics.length,
               ),
@@ -158,14 +185,26 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildHeroHeader(String userName, int todayCompleted, int solved, int total, double progress, int coins) {
+  Widget _buildHeroHeader(
+    String userName,
+    int todayCompleted,
+    int solved,
+    int total,
+    double progress,
+    int coins,
+  ) {
+    final palette = _equippedPalette();
     return SafeArea(
       bottom: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
         child: Container(
       decoration: BoxDecoration(
-        color: AppColors.accent,
+        gradient: LinearGradient(
+          colors: [palette.primary, palette.secondary],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(28),
       ),
       child: Padding(
@@ -359,6 +398,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   }
 
   Widget _buildDailyGoal(int todayCompleted) {
+    final palette = _equippedPalette();
     const int dailyGoal = 10;
     final int done = todayCompleted.clamp(0, dailyGoal);
     final double progress = done / dailyGoal;
@@ -429,7 +469,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           fontWeight: FontWeight.w700,
                           color: goalReached
                               ? AppColors.success
-                              : AppColors.accent,
+                              : palette.primary,
                         ),
                       ),
                     ],
@@ -442,7 +482,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       minHeight: 5,
                       backgroundColor: AppThemeColors.border(context),
                       valueColor: AlwaysStoppedAnimation(
-                        goalReached ? AppColors.success : AppColors.accent,
+                        goalReached ? AppColors.success : palette.primary,
                       ),
                     ),
                   ),
@@ -467,6 +507,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     required TopicInfo topic,
     required int index,
     required List<TopicInfo> allTopics,
+    required Color accent,
   }) {
     final tasks = getTasksByGradeAndTopic(_grade, topic.name);
     final taskIds = tasks.map((t) => t.id).toList();
@@ -532,7 +573,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     color: isComplete
                         ? AppColors.success
                         : isUnlocked
-                            ? AppColors.accent
+                            ? accent
                             : AppThemeColors.borderLight(context),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -589,7 +630,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           minHeight: 4,
                           backgroundColor: AppThemeColors.borderLight(context),
                           valueColor: AlwaysStoppedAnimation(
-                            isComplete ? AppColors.success : AppColors.accent,
+                            isComplete ? AppColors.success : accent,
                           ),
                         ),
                       ),
