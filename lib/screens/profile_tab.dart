@@ -23,6 +23,9 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab> {
   late final ScrollController _scrollController;
   final ImagePicker _imagePicker = ImagePicker();
+  static const Color _bluePrimary = Color(0xFF1D4ED8);
+  static const Color _blueDeep = Color(0xFF1E40AF);
+  static const Color _blueSoft = Color(0xFFEAF2FF);
 
   @override
   void initState() {
@@ -90,6 +93,85 @@ class _ProfileTabState extends State<ProfileTab> {
       _showSnack('Фото аватарки обновлено');
     } catch (e) {
       _showSnack('Не удалось выбрать фото: $e');
+    }
+  }
+
+  Future<void> _changeGrade() async {
+    final current = ProgressService.getCurrentGrade();
+    int selected = current;
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+              decoration: BoxDecoration(
+                color: AppThemeColors.surface(context),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Выбери класс',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: AppThemeColors.textPrimary(context),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(11, (i) {
+                        final grade = i + 1;
+                        final isSelected = selected == grade;
+                        return ChoiceChip(
+                          label: Text('$grade класс'),
+                          selected: isSelected,
+                          onSelected: (_) => setModalState(() => selected = grade),
+                          selectedColor: _bluePrimary.withValues(alpha: 0.18),
+                          labelStyle: TextStyle(
+                            color: isSelected ? _blueDeep : AppThemeColors.textPrimary(context),
+                            fontWeight: FontWeight.w700,
+                          ),
+                          side: BorderSide(
+                            color: isSelected ? _bluePrimary : AppThemeColors.border(context),
+                          ),
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _bluePrimary,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Сохранить класс'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    if (saved == true) {
+      await ProgressService.setCurrentGrade(selected);
+      if (!mounted) return;
+      setState(() {});
+      _showSnack('Класс обновлён');
     }
   }
 
@@ -265,9 +347,14 @@ class _ProfileTabState extends State<ProfileTab> {
     final isGuest = AuthService.isAnonymous();
     final themeProvider = context.watch<ThemeProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppThemeColors.background(context) : Colors.white;
+    final cardBg = isDark ? AppThemeColors.surface(context) : Colors.white;
+    final blueCard = isDark ? const Color(0xFF1E3A8A) : _bluePrimary;
+    final blueCardAlt = isDark ? const Color(0xFF1D4ED8) : _blueDeep;
+    final ratio = achievementsTotal == 0 ? 0.0 : achievementsUnlocked / achievementsTotal;
 
     return Scaffold(
-      backgroundColor: AppThemeColors.background(context),
+      backgroundColor: bgColor,
       body: SafeArea(
         child: ListView(
           controller: _scrollController,
@@ -287,9 +374,12 @@ class _ProfileTabState extends State<ProfileTab> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppThemeColors.surface(context),
+                gradient: LinearGradient(
+                  colors: [blueCard, blueCardAlt],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppThemeColors.border(context)),
               ),
               child: Column(
                 children: [
@@ -306,14 +396,14 @@ class _ProfileTabState extends State<ProfileTab> {
                             width: 28,
                             height: 28,
                             decoration: BoxDecoration(
-                              color: AppColors.accent,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(color: _bluePrimary, width: 2),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.edit_rounded,
                               size: 14,
-                              color: Colors.white,
+                              color: _bluePrimary,
                             ),
                           ),
                         ),
@@ -332,14 +422,14 @@ class _ProfileTabState extends State<ProfileTab> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w800,
-                            color: AppThemeColors.textPrimary(context),
+                            color: Colors.white,
                           ),
                         ),
                       ),
                       IconButton(
                         onPressed: _editName,
                         icon: const Icon(Icons.edit_outlined),
-                        color: AppColors.accent,
+                        color: Colors.white,
                         tooltip: 'Изменить имя',
                       ),
                     ],
@@ -348,7 +438,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     '$currentGrade класс',
                     style: TextStyle(
                       fontSize: 14,
-                      color: AppThemeColors.textSecondary(context),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                   if (isGuest) ...[
@@ -359,7 +449,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: AppThemeColors.accentLight(context),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -367,7 +457,7 @@ class _ProfileTabState extends State<ProfileTab> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.accent,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -385,24 +475,73 @@ class _ProfileTabState extends State<ProfileTab> {
                 _StatCard(
                   label: 'Решено',
                   value: '$solved',
-                  accent: AppColors.accent,
+                  accent: Colors.white,
+                  background: blueCard,
                 ),
                 _StatCard(
                   label: 'Точность',
                   value: '${accuracy.toStringAsFixed(0)}%',
-                  accent: AppColors.success,
+                  accent: Colors.white,
+                  background: blueCardAlt,
                 ),
                 _StatCard(
                   label: 'Серия',
                   value: '$streak дн.',
-                  accent: AppColors.orange,
+                  accent: Colors.white,
+                  background: blueCard,
                 ),
                 _StatCard(
                   label: 'Награды',
                   value: '$achievementsUnlocked/$achievementsTotal',
-                  accent: AppColors.purple,
+                  accent: Colors.white,
+                  background: blueCardAlt,
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
+            const _SectionTitle(title: 'Прогресс по наградам'),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: cardBg,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppThemeColors.border(context)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'До следующего уровня',
+                        style: TextStyle(
+                          color: AppThemeColors.textSecondary(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        '${(ratio * 100).toStringAsFixed(0)}%',
+                        style: TextStyle(
+                          color: _bluePrimary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(999),
+                    child: LinearProgressIndicator(
+                      minHeight: 10,
+                      value: ratio.clamp(0, 1),
+                      backgroundColor: _blueSoft,
+                      valueColor: const AlwaysStoppedAnimation<Color>(_bluePrimary),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             const _SectionTitle(title: 'Быстрые действия'),
@@ -414,20 +553,26 @@ class _ProfileTabState extends State<ProfileTab> {
                 _QuickActionButton(
                   title: 'Изменить имя',
                   icon: Icons.badge_outlined,
-                  color: AppColors.accent,
+                  color: _bluePrimary,
                   onTap: _editName,
                 ),
                 _QuickActionButton(
                   title: 'Сменить аватар',
                   icon: Icons.face_rounded,
-                  color: AppColors.purple,
+                  color: _bluePrimary,
                   onTap: _showAvatarActions,
                 ),
                 _QuickActionButton(
                   title: 'Фото из галереи',
                   icon: Icons.photo_library_rounded,
-                  color: AppColors.orange,
+                  color: _bluePrimary,
                   onTap: _pickPhotoFromGallery,
+                ),
+                _QuickActionButton(
+                  title: 'Сменить класс',
+                  icon: Icons.school_rounded,
+                  color: _bluePrimary,
+                  onTap: _changeGrade,
                 ),
               ],
             ),
@@ -436,7 +581,7 @@ class _ProfileTabState extends State<ProfileTab> {
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
-                color: AppThemeColors.surface(context),
+                color: cardBg,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppThemeColors.border(context)),
               ),
@@ -446,7 +591,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     title: 'Имя',
                     subtitle: userName,
                     icon: Icons.person_outline_rounded,
-                    iconColor: AppColors.accent,
+                    iconColor: _bluePrimary,
                     trailing: TextButton(
                       onPressed: _editName,
                       child: const Text('Изменить'),
@@ -457,7 +602,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     title: 'Аватарка',
                     subtitle: 'Выбрать из готовых, конструктор или фото',
                     icon: Icons.face_rounded,
-                    iconColor: AppColors.purple,
+                    iconColor: _bluePrimary,
                     trailing: TextButton(
                       onPressed: _showAvatarActions,
                       child: const Text('Открыть'),
@@ -468,7 +613,11 @@ class _ProfileTabState extends State<ProfileTab> {
                     title: 'Класс',
                     subtitle: '$currentGrade класс',
                     icon: Icons.school_outlined,
-                    iconColor: AppColors.success,
+                    iconColor: _bluePrimary,
+                    trailing: TextButton(
+                      onPressed: _changeGrade,
+                      child: const Text('Изменить'),
+                    ),
                   ),
                   const _DividerLine(),
                   SwitchListTile(
@@ -489,9 +638,9 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                     secondary: Icon(
                       isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-                      color: AppColors.orange,
+                      color: _bluePrimary,
                     ),
-                    activeThumbColor: AppColors.accent,
+                    activeThumbColor: _bluePrimary,
                   ),
                 ],
               ),
@@ -526,11 +675,13 @@ class _StatCard extends StatelessWidget {
   final String label;
   final String value;
   final Color accent;
+  final Color background;
 
   const _StatCard({
     required this.label,
     required this.value,
     required this.accent,
+    required this.background,
   });
 
   @override
@@ -540,9 +691,8 @@ class _StatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppThemeColors.surface(context),
+          color: background,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppThemeColors.border(context)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -560,7 +710,7 @@ class _StatCard extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 13,
-                color: AppThemeColors.textSecondary(context),
+                color: Colors.white.withValues(alpha: 0.85),
               ),
             ),
           ],
@@ -593,20 +743,19 @@ class _QuickActionButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
-            color: AppThemeColors.surface(context),
+            color: _ProfileTabState._bluePrimary,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppThemeColors.border(context)),
           ),
           child: Row(
             children: [
-              Icon(icon, color: color, size: 20),
+              Icon(icon, color: Colors.white, size: 20),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   title,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    color: AppThemeColors.textPrimary(context),
+                    color: Colors.white,
                   ),
                 ),
               ),
