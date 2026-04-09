@@ -363,6 +363,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   Future<void> _openBetaShop() async {
+    const firstPurchaseFxKey = 'shop_first_purchase_confetti_shown';
     final items = [
       ('skin_neon_blue', 'Скин: Неон Синий', 120),
       ('skin_gold_star', 'Скин: Золотая Звезда', 180),
@@ -370,6 +371,7 @@ class _ProfileTabState extends State<ProfileTab> {
     ];
     String? equippingItemId;
     String? sparkleItemId;
+    bool showFirstPurchaseFx = false;
 
     await showModalBottomSheet<void>(
       context: context,
@@ -421,6 +423,42 @@ class _ProfileTabState extends State<ProfileTab> {
                       ],
                     ),
                     const SizedBox(height: 12),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 260),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      child: showFirstPurchaseFx
+                          ? Container(
+                              key: const ValueKey('first_purchase_fx'),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppThemeColors.accentLight(context),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('🎉', style: TextStyle(fontSize: 14)),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'Первая покупка!',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.accent,
+                                    ),
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text('✨', style: TextStyle(fontSize: 14)),
+                                ],
+                              ),
+                            )
+                          : const SizedBox.shrink(key: ValueKey('no_first_purchase_fx')),
+                    ),
                     ...items.map((item) {
                       final id = item.$1;
                       final title = item.$2;
@@ -546,11 +584,19 @@ class _ProfileTabState extends State<ProfileTab> {
                                         _showSnack('Недостаточно монет');
                                         return;
                                       }
+                                      final firstPurchaseFxWasShown =
+                                          ProgressService.getBool(firstPurchaseFxKey);
                                       setModalState(() => equippingItemId = id);
                                       await ProgressService.setBool('shop_item_$id', true);
                                       await ProgressService.setEquippedBetaItem(id);
+                                      if (!firstPurchaseFxWasShown) {
+                                        await ProgressService.setBool(firstPurchaseFxKey, true);
+                                      }
                                       if (!mounted) return;
                                       setModalState(() => sparkleItemId = id);
+                                      if (!firstPurchaseFxWasShown) {
+                                        setModalState(() => showFirstPurchaseFx = true);
+                                      }
                                       setModalState(() {});
                                       setState(() {});
                                       _showSnack('Покупка: $title (экипировано)');
@@ -564,6 +610,13 @@ class _ProfileTabState extends State<ProfileTab> {
                                       );
                                       if (!mounted) return;
                                       setModalState(() => sparkleItemId = null);
+                                      if (!firstPurchaseFxWasShown) {
+                                        await Future<void>.delayed(
+                                          const Duration(milliseconds: 800),
+                                        );
+                                        if (!mounted) return;
+                                        setModalState(() => showFirstPurchaseFx = false);
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: _bluePrimary,
