@@ -342,6 +342,7 @@ class _ProfileTabState extends State<ProfileTab> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             final coins = ProgressService.getCoins();
+            final equipped = ProgressService.getEquippedBetaItem();
             return Container(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
               decoration: BoxDecoration(
@@ -389,6 +390,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       final title = item.$2;
                       final price = item.$3;
                       final owned = ProgressService.getBool('shop_item_$id');
+                      final isEquipped = equipped == id;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: ListTile(
@@ -396,22 +398,80 @@ class _ProfileTabState extends State<ProfileTab> {
                             borderRadius: BorderRadius.circular(12),
                             side: BorderSide(color: AppThemeColors.border(context)),
                           ),
-                          title: Text(title),
+                          title: Row(
+                            children: [
+                              Expanded(child: Text(title)),
+                              if (isEquipped)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: AppThemeColors.accentLight(context),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Text(
+                                    'Экипировано',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.accent,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                           subtitle: Text(owned ? 'Куплено' : '$price монет'),
                           trailing: owned
-                              ? const Icon(Icons.check_circle_rounded, color: AppColors.success)
+                              ? ElevatedButton(
+                                  onPressed: isEquipped
+                                      ? null
+                                      : () async {
+                                          await ProgressService.setEquippedBetaItem(id);
+                                          if (!mounted) return;
+                                          setModalState(() {});
+                                          setState(() {});
+                                          _showSnack('Экипировано: $title');
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isEquipped
+                                        ? AppThemeColors.disabled(context)
+                                        : _bluePrimary,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: Text(isEquipped ? 'Надето' : 'Надеть'),
+                                )
                               : ElevatedButton(
                                   onPressed: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: const Text('Подтвердить покупку'),
+                                        content: Text('Купить "$title" за $price монет?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(ctx, false),
+                                            child: const Text('Отмена'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => Navigator.pop(ctx, true),
+                                            child: const Text('Купить'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (confirm != true) return;
+
                                     final ok = await ProgressService.spendCoins(price);
                                     if (!ok) {
                                       _showSnack('Недостаточно монет');
                                       return;
                                     }
                                     await ProgressService.setBool('shop_item_$id', true);
+                                    await ProgressService.setEquippedBetaItem(id);
                                     if (!mounted) return;
                                     setModalState(() {});
                                     setState(() {});
-                                    _showSnack('Покупка: $title');
+                                    _showSnack('Покупка: $title (экипировано)');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: _bluePrimary,

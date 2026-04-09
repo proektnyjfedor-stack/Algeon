@@ -22,6 +22,7 @@ class ProgressService {
   static const String _keyTodayCompleted = 'today_completed';
   static const String _keyCoins = 'coins_balance';
   static const String _keyDailyBonusDate = 'daily_bonus_date';
+  static const String _keyEquippedBetaItem = 'equipped_beta_item';
   
   static SharedPreferences? _prefs;
   static Set<String> _solvedTaskIds = {};
@@ -296,6 +297,15 @@ class ProgressService {
     await addCoins(bonus);
     await _prefs?.setString(_keyDailyBonusDate, today);
     return bonus;
+  }
+
+  static String? getEquippedBetaItem() {
+    return _prefs?.getString(_keyEquippedBetaItem);
+  }
+
+  static Future<void> setEquippedBetaItem(String itemId) async {
+    await _prefs?.setString(_keyEquippedBetaItem, itemId);
+    _log('Equipped beta item: $itemId');
   }
 
   /// Generic bool getter (for exam pass flags etc.)
