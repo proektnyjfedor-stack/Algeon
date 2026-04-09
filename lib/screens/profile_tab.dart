@@ -600,6 +600,10 @@ class _ProfileTabState extends State<ProfileTab> {
                                       setModalState(() {});
                                       setState(() {});
                                       _showSnack('Покупка: $title (экипировано)');
+                                      if (!firstPurchaseFxWasShown) {
+                                        await _showFirstPurchaseWelcomeDialog();
+                                        if (!mounted) return;
+                                      }
                                       await Future<void>.delayed(
                                         const Duration(milliseconds: 260),
                                       );
@@ -650,6 +654,25 @@ class _ProfileTabState extends State<ProfileTab> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(text)),
+    );
+  }
+
+  Future<void> _showFirstPurchaseWelcomeDialog() async {
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Добро пожаловать в магазин'),
+        content: const Text(
+          'Ты сделал первую покупку! Теперь можешь менять стиль профиля и экранов через экипировку.',
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Понятно'),
+          ),
+        ],
+      ),
     );
   }
 
