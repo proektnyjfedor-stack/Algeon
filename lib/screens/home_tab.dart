@@ -539,12 +539,11 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         position: slideAnim,
         child: Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: GestureDetector(
+      child: _PressableScale(
         onTap: () {
           HapticFeedback.lightImpact();
           _openTopic(topic.name, tasks);
         },
-        behavior: HitTestBehavior.opaque,
         child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -664,9 +663,8 @@ class _QuickHomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return _PressableScale(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
@@ -711,6 +709,46 @@ class _QuickHomeButton extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PressableScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _PressableScale({
+    required this.child,
+    required this.onTap,
+  });
+
+  @override
+  State<_PressableScale> createState() => _PressableScaleState();
+}
+
+class _PressableScaleState extends State<_PressableScale> {
+  bool _pressed = false;
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _pressed ? 0.985 : (_hovered ? 1.01 : 1.0);
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapCancel: () => setState(() => _pressed = false),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTap: widget.onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 120),
+          curve: Curves.easeOutCubic,
+          scale: scale,
+          child: widget.child,
         ),
       ),
     );

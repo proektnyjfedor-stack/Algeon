@@ -724,339 +724,369 @@ class _ProfileTabState extends State<ProfileTab> {
           key: const ValueKey('profile_list'),
           padding: const EdgeInsets.all(20),
           children: [
-            Text(
-              'Профиль',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: AppThemeColors.textPrimary(context),
+            _EntranceSection(
+              delayMs: 0,
+              child: Text(
+                'Профиль',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                  color: AppThemeColors.textPrimary(context),
+                ),
               ),
             ),
             const SizedBox(height: 14),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 320),
-              curve: Curves.easeOutCubic,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: blueCard,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: skinPrimary.withValues(alpha: 0.24),
-                    blurRadius: 18,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: _showAvatarActions,
-                    behavior: HitTestBehavior.opaque,
-                    child: Stack(
-                      children: [
-                        const UserAvatarDisplay(size: 92, showBorder: true),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: _bluePrimary, width: 2),
+            _EntranceSection(
+              delayMs: 40,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 320),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: blueCard,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: skinPrimary.withValues(alpha: 0.24),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _showAvatarActions,
+                      behavior: HitTestBehavior.opaque,
+                      child: Stack(
+                        children: [
+                          const UserAvatarDisplay(size: 92, showBorder: true),
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              width: 28,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(color: _bluePrimary, width: 2),
+                              ),
+                              child: Icon(
+                                Icons.edit_rounded,
+                                size: 14,
+                                color: _bluePrimary,
+                              ),
                             ),
-                            child: Icon(
-                              Icons.edit_rounded,
-                              size: 14,
-                              color: _bluePrimary,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            userName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
                             ),
                           ),
                         ),
+                        IconButton(
+                          onPressed: _editName,
+                          icon: const Icon(Icons.edit_outlined),
+                          color: Colors.white,
+                          tooltip: 'Изменить имя',
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
+                    Text(
+                      '$currentGrade класс',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
+                    if (equippedLabel != null) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Text(
-                          userName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
+                          equippedLabel,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: _editName,
-                        icon: const Icon(Icons.edit_outlined),
-                        color: Colors.white,
-                        tooltip: 'Изменить имя',
+                    ],
+                    if (isGuest) ...[
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Гостевой режим',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
-                  ),
-                  Text(
-                    '$currentGrade класс',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                  ),
-                  if (equippedLabel != null) ...[
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        equippedLabel,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                   ],
-                  if (isGuest) ...[
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        'Гостевой режим',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
+                ),
               ),
             ),
             const SizedBox(height: 20),
-            const _SectionTitle(title: 'Статистика'),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                _StatCard(
-                  label: 'Решено',
-                  value: '$solved',
-                  accent: Colors.white,
-                  background: blueCard,
-                ),
-                _StatCard(
-                  label: 'Точность',
-                  value: '${accuracy.toStringAsFixed(0)}%',
-                  accent: Colors.white,
-                  background: blueCardAlt,
-                ),
-                _StatCard(
-                  label: 'Серия',
-                  value: '$streak дн.',
-                  accent: Colors.white,
-                  background: blueCard,
-                ),
-                _StatCard(
-                  label: 'Награды',
-                  value: '$achievementsUnlocked/$achievementsTotal',
-                  accent: Colors.white,
-                  background: blueCardAlt,
-                ),
-              ],
+            const _EntranceSection(
+              delayMs: 80,
+              child: _SectionTitle(title: 'Статистика'),
             ),
-            const SizedBox(height: 20),
-            const _SectionTitle(title: 'Прогресс по наградам'),
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: cardBg,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: AppThemeColors.border(context)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            _EntranceSection(
+              delayMs: 110,
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'До следующего уровня',
-                        style: TextStyle(
-                          color: AppThemeColors.textSecondary(context),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        '${(ratio * 100).toStringAsFixed(0)}%',
-                        style: TextStyle(
-                          color: skinPrimary,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
+                  _StatCard(
+                    label: 'Решено',
+                    value: '$solved',
+                    accent: Colors.white,
+                    background: blueCard,
                   ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
-                    child: LinearProgressIndicator(
-                      minHeight: 10,
-                      value: ratio.clamp(0, 1),
-                      backgroundColor: skinSoft,
-                      valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
-                    ),
+                  _StatCard(
+                    label: 'Точность',
+                    value: '${accuracy.toStringAsFixed(0)}%',
+                    accent: Colors.white,
+                    background: blueCardAlt,
+                  ),
+                  _StatCard(
+                    label: 'Серия',
+                    value: '$streak дн.',
+                    accent: Colors.white,
+                    background: blueCard,
+                  ),
+                  _StatCard(
+                    label: 'Награды',
+                    value: '$achievementsUnlocked/$achievementsTotal',
+                    accent: Colors.white,
+                    background: blueCardAlt,
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 20),
-            const _SectionTitle(title: 'Быстрые действия'),
+            const _EntranceSection(
+              delayMs: 140,
+              child: _SectionTitle(title: 'Прогресс по наградам'),
+            ),
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                _QuickActionButton(
-                  title: 'Изменить имя',
-                  icon: Icons.badge_outlined,
-                  color: _bluePrimary,
-                  onTap: _editName,
+            _EntranceSection(
+              delayMs: 170,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: AppThemeColors.border(context)),
                 ),
-                _QuickActionButton(
-                  title: 'Сменить аватар',
-                  icon: Icons.face_rounded,
-                  color: _bluePrimary,
-                  onTap: _showAvatarActions,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'До следующего уровня',
+                          style: TextStyle(
+                            color: AppThemeColors.textSecondary(context),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '${(ratio * 100).toStringAsFixed(0)}%',
+                          style: TextStyle(
+                            color: skinPrimary,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(999),
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
+                        value: ratio.clamp(0, 1),
+                        backgroundColor: skinSoft,
+                        valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
+                      ),
+                    ),
+                  ],
                 ),
-                _QuickActionButton(
-                  title: 'Фото из галереи',
-                  icon: Icons.photo_library_rounded,
-                  color: _bluePrimary,
-                  onTap: _pickPhotoFromGallery,
-                ),
-                _QuickActionButton(
-                  title: 'Сменить класс',
-                  icon: Icons.school_rounded,
-                  color: _bluePrimary,
-                  onTap: _changeGrade,
-                ),
-              ],
+              ),
             ),
             const SizedBox(height: 20),
-            const _SectionTitle(title: 'Настройки'),
+            const _EntranceSection(
+              delayMs: 200,
+              child: _SectionTitle(title: 'Быстрые действия'),
+            ),
             const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: cardBg,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppThemeColors.border(context)),
-              ),
-              child: Column(
+            _EntranceSection(
+              delayMs: 230,
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
                 children: [
-                  _SettingsTile(
-                    title: 'Имя',
-                    subtitle: userName,
-                    icon: Icons.person_outline_rounded,
-                    iconColor: _bluePrimary,
-                    trailing: TextButton(
-                      onPressed: _editName,
-                      child: const Text('Изменить'),
-                    ),
+                  _QuickActionButton(
+                    title: 'Изменить имя',
+                    icon: Icons.badge_outlined,
+                    color: _bluePrimary,
+                    onTap: _editName,
                   ),
-                  const _DividerLine(),
-                  _SettingsTile(
-                    title: 'Аватарка',
-                    subtitle: 'Выбрать из готовых, конструктор или фото',
+                  _QuickActionButton(
+                    title: 'Сменить аватар',
                     icon: Icons.face_rounded,
-                    iconColor: _bluePrimary,
-                    trailing: TextButton(
-                      onPressed: _showAvatarActions,
-                      child: const Text('Открыть'),
-                    ),
+                    color: _bluePrimary,
+                    onTap: _showAvatarActions,
                   ),
-                  const _DividerLine(),
-                  _SettingsTile(
-                    title: 'Класс',
-                    subtitle: '$currentGrade класс',
-                    icon: Icons.school_outlined,
-                    iconColor: _bluePrimary,
-                    trailing: TextButton(
-                      onPressed: _changeGrade,
-                      child: const Text('Изменить'),
-                    ),
+                  _QuickActionButton(
+                    title: 'Фото из галереи',
+                    icon: Icons.photo_library_rounded,
+                    color: _bluePrimary,
+                    onTap: _pickPhotoFromGallery,
                   ),
-                  const _DividerLine(),
-                  SwitchListTile(
-                    value: themeProvider.autoByTime,
-                    onChanged: (value) => themeProvider.setAutoByTime(value),
-                    title: Text(
-                      'Авто-тема (день/ночь)',
-                      style: TextStyle(
-                        color: AppThemeColors.textPrimary(context),
-                        fontWeight: FontWeight.w600,
+                  _QuickActionButton(
+                    title: 'Сменить класс',
+                    icon: Icons.school_rounded,
+                    color: _bluePrimary,
+                    onTap: _changeGrade,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            const _EntranceSection(
+              delayMs: 260,
+              child: _SectionTitle(title: 'Настройки'),
+            ),
+            const SizedBox(height: 12),
+            _EntranceSection(
+              delayMs: 290,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: cardBg,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppThemeColors.border(context)),
+                ),
+                child: Column(
+                  children: [
+                    _SettingsTile(
+                      title: 'Имя',
+                      subtitle: userName,
+                      icon: Icons.person_outline_rounded,
+                      iconColor: _bluePrimary,
+                      trailing: TextButton(
+                        onPressed: _editName,
+                        child: const Text('Изменить'),
                       ),
                     ),
-                    subtitle: Text(
-                      themeProvider.autoByTime
-                          ? 'Включена: тема меняется по времени'
-                          : 'Выключена: ручной выбор',
-                      style: TextStyle(
-                        color: AppThemeColors.textSecondary(context),
+                    const _DividerLine(),
+                    _SettingsTile(
+                      title: 'Аватарка',
+                      subtitle: 'Выбрать из готовых, конструктор или фото',
+                      icon: Icons.face_rounded,
+                      iconColor: _bluePrimary,
+                      trailing: TextButton(
+                        onPressed: _showAvatarActions,
+                        child: const Text('Открыть'),
                       ),
                     ),
-                    secondary: Icon(
-                      themeProvider.autoByTime
-                          ? Icons.brightness_auto_rounded
-                          : (isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded),
-                      color: _bluePrimary,
+                    const _DividerLine(),
+                    _SettingsTile(
+                      title: 'Класс',
+                      subtitle: '$currentGrade класс',
+                      icon: Icons.school_outlined,
+                      iconColor: _bluePrimary,
+                      trailing: TextButton(
+                        onPressed: _changeGrade,
+                        child: const Text('Изменить'),
+                      ),
                     ),
-                    activeThumbColor: _bluePrimary,
-                  ),
-                  if (!themeProvider.autoByTime) ...[
                     const _DividerLine(),
                     SwitchListTile(
-                      value: isDark,
-                      onChanged: (_) => themeProvider.toggleTheme(),
+                      value: themeProvider.autoByTime,
+                      onChanged: (value) => themeProvider.setAutoByTime(value),
                       title: Text(
-                        'Тёмная тема',
+                        'Авто-тема (день/ночь)',
                         style: TextStyle(
                           color: AppThemeColors.textPrimary(context),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       subtitle: Text(
-                        isDark ? 'Включена' : 'Выключена',
+                        themeProvider.autoByTime
+                            ? 'Включена: тема меняется по времени'
+                            : 'Выключена: ручной выбор',
                         style: TextStyle(
                           color: AppThemeColors.textSecondary(context),
                         ),
                       ),
                       secondary: Icon(
-                        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                        themeProvider.autoByTime
+                            ? Icons.brightness_auto_rounded
+                            : (isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded),
                         color: _bluePrimary,
                       ),
                       activeThumbColor: _bluePrimary,
                     ),
+                    if (!themeProvider.autoByTime) ...[
+                      const _DividerLine(),
+                      SwitchListTile(
+                        value: isDark,
+                        onChanged: (_) => themeProvider.toggleTheme(),
+                        title: Text(
+                          'Тёмная тема',
+                          style: TextStyle(
+                            color: AppThemeColors.textPrimary(context),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          isDark ? 'Включена' : 'Выключена',
+                          style: TextStyle(
+                            color: AppThemeColors.textSecondary(context),
+                          ),
+                        ),
+                        secondary: Icon(
+                          isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                          color: _bluePrimary,
+                        ),
+                        activeThumbColor: _bluePrimary,
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
             const SizedBox(height: 96),
@@ -1080,6 +1110,47 @@ class _SectionTitle extends StatelessWidget {
         fontSize: 18,
         fontWeight: FontWeight.w800,
         color: AppThemeColors.textPrimary(context),
+      ),
+    );
+  }
+}
+
+class _EntranceSection extends StatefulWidget {
+  final Widget child;
+  final int delayMs;
+
+  const _EntranceSection({
+    required this.child,
+    this.delayMs = 0,
+  });
+
+  @override
+  State<_EntranceSection> createState() => _EntranceSectionState();
+}
+
+class _EntranceSectionState extends State<_EntranceSection> {
+  bool _visible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(Duration(milliseconds: widget.delayMs), () {
+      if (!mounted) return;
+      setState(() => _visible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      opacity: _visible ? 1 : 0,
+      child: AnimatedSlide(
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutCubic,
+        offset: _visible ? Offset.zero : const Offset(0, 0.03),
+        child: widget.child,
       ),
     );
   }
@@ -1151,9 +1222,8 @@ class _QuickActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 180,
-      child: InkWell(
+      child: _PressableTile(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
@@ -1175,6 +1245,46 @@ class _QuickActionButton extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PressableTile extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+
+  const _PressableTile({
+    required this.child,
+    required this.onTap,
+  });
+
+  @override
+  State<_PressableTile> createState() => _PressableTileState();
+}
+
+class _PressableTileState extends State<_PressableTile> {
+  bool _pressed = false;
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _pressed ? 0.985 : (_hovered ? 1.01 : 1.0);
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapUp: (_) => setState(() => _pressed = false),
+        onTapCancel: () => setState(() => _pressed = false),
+        onTap: widget.onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 120),
+          curve: Curves.easeOutCubic,
+          scale: scale,
+          child: widget.child,
         ),
       ),
     );
