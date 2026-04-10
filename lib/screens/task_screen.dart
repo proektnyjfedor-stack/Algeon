@@ -773,43 +773,21 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             ],
 
             // Кнопка действия
-            if (_isChecked && (_isCorrect || !_hasExplanation))
-              _buildActionButton(
-                label: _currentIndex < widget.tasks.length - 1
-                    ? 'Продолжить'
-                    : 'Завершить',
-                color: _isCorrect ? AppColors.success : AppColors.accent,
-                onTap: _goNext,
-              )
-            else if (_isChecked && _hasExplanation)
-              _buildActionButton(
-                label: _explanationStep < _task.explanationSteps.length - 1
-                    ? 'Далее'
-                    : 'Понятно',
-                color: AppColors.accent,
-                onTap: () {
-                  if (_explanationStep < _task.explanationSteps.length - 1) {
-                    setState(() => _explanationStep++);
-                  } else {
-                    _goNext();
-                  }
-                },
-              )
-            else if (!_isChecked && _task.type == TaskType.textInput)
-              _buildActionButton(
-                label: 'Проверить',
-                color: _textIsNotEmpty
-                    ? AppColors.accent
-                    : AppThemeColors.disabled(context),
-                onTap: _textIsNotEmpty ? _checkAnswer : null,
-              ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 220),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              child: _buildPrimaryAction(),
+            ),
             if (!_isChecked) ...[
               const SizedBox(height: 8),
               // После 2 ошибок на одной задаче — показываем «Не знаю»
-              if (_wrongAttemptsOnCurrentTask >= 2)
-                _buildDontKnowButton()
-              else
-                _buildSkipButton(),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: _wrongAttemptsOnCurrentTask >= 2
+                    ? _buildDontKnowButton()
+                    : _buildSkipButton(),
+              ),
             ],
           ],
         ),
@@ -817,12 +795,48 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildPrimaryAction() {
+    if (_isChecked && (_isCorrect || !_hasExplanation)) {
+      return _buildActionButton(
+        key: const ValueKey('primary_continue'),
+        label: _currentIndex < widget.tasks.length - 1 ? 'Продолжить' : 'Завершить',
+        color: _isCorrect ? AppColors.success : AppColors.accent,
+        onTap: _goNext,
+      );
+    }
+    if (_isChecked && _hasExplanation) {
+      return _buildActionButton(
+        key: const ValueKey('primary_explain'),
+        label: _explanationStep < _task.explanationSteps.length - 1 ? 'Далее' : 'Понятно',
+        color: AppColors.accent,
+        onTap: () {
+          if (_explanationStep < _task.explanationSteps.length - 1) {
+            setState(() => _explanationStep++);
+          } else {
+            _goNext();
+          }
+        },
+      );
+    }
+    if (!_isChecked && _task.type == TaskType.textInput) {
+      return _buildActionButton(
+        key: const ValueKey('primary_check'),
+        label: 'Проверить',
+        color: _textIsNotEmpty ? AppColors.accent : AppThemeColors.disabled(context),
+        onTap: _textIsNotEmpty ? _checkAnswer : null,
+      );
+    }
+    return const SizedBox.shrink(key: ValueKey('primary_empty'));
+  }
+
   Widget _buildActionButton({
+    Key? key,
     required String label,
     required Color color,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
+      key: key,
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -848,6 +862,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   Widget _buildSkipButton() {
     return GestureDetector(
+      key: const ValueKey('secondary_skip'),
       onTap: _skipTask,
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -877,6 +892,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   Widget _buildDontKnowButton() {
     return GestureDetector(
+      key: const ValueKey('secondary_dontknow'),
       onTap: _revealAnswer,
       behavior: HitTestBehavior.opaque,
       child: Container(

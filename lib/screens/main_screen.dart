@@ -91,7 +91,7 @@ class MainScreen extends StatelessWidget {
           children: [
             _buildNavigationRail(context, extended: true),
             VerticalDivider(width: 1, thickness: 1, color: AppThemeColors.border(context)),
-            Expanded(child: child),
+            Expanded(child: _buildAnimatedChild()),
           ],
         ),
       ),
@@ -107,7 +107,7 @@ class MainScreen extends StatelessWidget {
           children: [
             _buildNavigationRail(context, extended: false),
             VerticalDivider(width: 1, thickness: 1, color: AppThemeColors.border(context)),
-            Expanded(child: child),
+            Expanded(child: _buildAnimatedChild()),
           ],
         ),
       ),
@@ -121,7 +121,7 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       extendBody: true,
-      body: child,
+      body: _buildAnimatedChild(),
       bottomNavigationBar: SizedBox(
         height: navHeight,
         child: _LiquidGlassNav(
@@ -177,6 +177,28 @@ class MainScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAnimatedChild() {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (child, animation) {
+        final offset = Tween<Offset>(
+          begin: const Offset(0.02, 0),
+          end: Offset.zero,
+        ).animate(animation);
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(position: offset, child: child),
+        );
+      },
+      child: KeyedSubtree(
+        key: ValueKey(currentIndex),
+        child: child,
       ),
     );
   }

@@ -17,6 +17,8 @@ class AchievementsTab extends StatefulWidget {
 }
 
 class _AchievementsTabState extends State<AchievementsTab> {
+  bool _isSyncing = true;
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +48,8 @@ class _AchievementsTabState extends State<AchievementsTab> {
       gradeProgress: gradeProgress,
     );
 
-    if (mounted) setState(() {});
+    if (!mounted) return;
+    setState(() => _isSyncing = false);
   }
 
   int _getGridColumns(BuildContext context) {
@@ -134,6 +137,34 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isSyncing) {
+      return Scaffold(
+        backgroundColor: AppThemeColors.background(context),
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 24),
+              children: [
+                _skeletonBox(context, height: 34, width: 180),
+                const SizedBox(height: 14),
+                _skeletonBox(context, height: 14, width: 240),
+                const SizedBox(height: 20),
+                _skeletonBox(context, height: 160),
+                const SizedBox(height: 16),
+                _skeletonBox(context, height: 18, width: 150),
+                const SizedBox(height: 12),
+                ...List.generate(6, (_) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _skeletonBox(context, height: 86),
+                    )),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     final achievements = AchievementsService.getAll();
     final unlocked = achievements.where((a) => a.isUnlocked).toList();
     final locked = achievements.where((a) => !a.isUnlocked).toList();
@@ -404,6 +435,23 @@ class _AchievementsTabState extends State<AchievementsTab> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _skeletonBox(
+    BuildContext context, {
+    required double height,
+    double? width,
+  }) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.easeInOut,
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: AppThemeColors.borderLight(context),
+        borderRadius: BorderRadius.circular(14),
       ),
     );
   }
