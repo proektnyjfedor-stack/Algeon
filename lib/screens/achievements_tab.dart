@@ -17,31 +17,6 @@ class AchievementsTab extends StatefulWidget {
 }
 
 class _AchievementsTabState extends State<AchievementsTab> {
-  ({Color primary, Color secondary, Color soft}) _equippedPalette() {
-    final equipped = ProgressService.getEquippedBetaItem();
-    switch (equipped) {
-      case 'skin_gold_star':
-        return (
-          primary: const Color(0xFFD4A017),
-          secondary: const Color(0xFFB8860B),
-          soft: const Color(0xFFFFF7D6),
-        );
-      case 'theme_space':
-        return (
-          primary: const Color(0xFF312E81),
-          secondary: const Color(0xFF1E1B4B),
-          soft: const Color(0xFFEDE9FE),
-        );
-      case 'skin_neon_blue':
-      default:
-        return (
-          primary: AppColors.accent,
-          secondary: const Color(0xFF1E40AF),
-          soft: const Color(0xFFEAF2FF),
-        );
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -169,7 +144,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final progress = AchievementsService.getProgress();
     final coins = ProgressService.getCoins();
     final columns = _getGridColumns(context);
-    final palette = _equippedPalette();
 
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
@@ -190,7 +164,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                         Row(
                           children: [
                             Icon(Icons.emoji_events_rounded,
-                                color: palette.primary, size: 32),
+                                color: AppColors.gold, size: 32),
                             const SizedBox(width: 12),
                             Text('Награды',
                                 style: AppTypography.h1.copyWith(
@@ -212,7 +186,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: palette.soft,
+                            color: AppColors.gold.withValues(alpha: 0.16),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
@@ -226,7 +200,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
+                                  color: AppColors.gold,
                                 ),
                               ),
                             ],
@@ -247,7 +221,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     curve: Curves.easeOutCubic,
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: palette.primary,
+                      color: AppColors.gold,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Row(
@@ -356,21 +330,19 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color:
-                                AppThemeColors.successLight(context),
+                            color: AppColors.gold.withValues(alpha: 0.16),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.check_circle,
-                                  color: AppColors.success, size: 18),
+                              const Icon(Icons.check_circle, color: AppColors.gold, size: 18),
                               const SizedBox(width: 6),
                               Text(
                                 'Получено (${unlocked.length})',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.success,
+                                  color: AppColors.gold,
                                 ),
                               ),
                             ],
@@ -393,7 +365,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          _buildAchievementCard(unlocked[index], true, palette.primary),
+                          _buildAchievementCard(unlocked[index], true, AppColors.accent),
                       childCount: unlocked.length,
                     ),
                   ),
@@ -452,7 +424,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _buildAchievementCard(
-                          locked[index], false, palette.primary),
+                          locked[index], false, AppColors.accent),
                       childCount: locked.length,
                     ),
                   ),
@@ -471,6 +443,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     Color accent,
   ) {
     final pd = _getAchievementProgress(achievement);
+    final rewardColor = isUnlocked ? AppColors.gold : accent;
 
     return GestureDetector(
       onTap: () {
@@ -483,7 +456,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isUnlocked
-                ? accent
+                ? rewardColor
                 : AppThemeColors.border(context),
             width: isUnlocked ? 2 : 1,
           ),
@@ -498,7 +471,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 height: 52,
                 decoration: BoxDecoration(
                   color: isUnlocked
-                      ? accent
+                      ? rewardColor
                       : AppThemeColors.borderLight(context),
                   borderRadius: BorderRadius.circular(16),
                 ),
