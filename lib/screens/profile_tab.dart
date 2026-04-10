@@ -1233,10 +1233,11 @@ class _QuickActionButton extends StatelessWidget {
       child: _PressableTile(
         onTap: onTap,
         child: Container(
+          constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
             color: _ProfileTabState._bluePrimary,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           child: Row(
             children: [
@@ -1368,7 +1369,7 @@ class _ActionTile extends StatelessWidget {
         trailing: const Icon(Icons.chevron_right_rounded),
         onTap: onTap,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
       ),
     );

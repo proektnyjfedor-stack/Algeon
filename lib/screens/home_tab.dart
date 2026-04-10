@@ -689,11 +689,12 @@ class _QuickHomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _PressableScale(
       onTap: onTap,
-      child: Container(
+        child: Container(
+        constraints: const BoxConstraints(minHeight: 56),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: AppThemeColors.surface(context),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppThemeColors.border(context)),
         ),
         child: Row(
@@ -703,7 +704,7 @@ class _QuickHomeButton extends StatelessWidget {
               height: 34,
               decoration: BoxDecoration(
                 color: AppThemeColors.accentLight(context),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Icon(icon, color: AppColors.accent, size: 18),
             ),

@@ -480,9 +480,9 @@ class _ExamsTabState extends State<ExamsTab> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.accent,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      minimumSize: const Size.fromHeight(52),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                       elevation: 0,
                     ),
@@ -1064,9 +1064,9 @@ class _ExamScreenState extends State<ExamScreen> {
                                       ? AppColors.accent
                                       : AppThemeColors.borderLight(context),
                                   foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  minimumSize: const Size.fromHeight(52),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(AppRadius.md),
                                   ),
                                   elevation: 0,
                                 ),
