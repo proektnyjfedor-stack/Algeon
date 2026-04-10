@@ -54,6 +54,8 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
   int _getGridColumns(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    if (width <= 430) return 1;
+    if (width < 700) return 2;
     if (width > 900) return 4;
     return 3;
   }

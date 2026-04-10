@@ -1179,8 +1179,10 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availableWidth = MediaQuery.of(context).size.width - 40;
+    final cardWidth = (availableWidth - 12) / 2;
     return SizedBox(
-      width: 180,
+      width: cardWidth.clamp(140.0, 220.0),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -1228,8 +1230,10 @@ class _QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final availableWidth = MediaQuery.of(context).size.width - 40;
+    final cardWidth = (availableWidth - 12) / 2;
     return SizedBox(
-      width: 180,
+      width: cardWidth.clamp(140.0, 220.0),
       child: _PressableTile(
         onTap: onTap,
         child: Container(
