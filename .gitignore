@@ -36,6 +36,7 @@ web/.dart_tool/
 node_modules/
 functions/node_modules/
 functions/.firebase/
+.firebase/
 
 # Python backend
 ai-backend/.env
