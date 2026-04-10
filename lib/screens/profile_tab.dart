@@ -78,15 +78,23 @@ class _ProfileTabState extends State<ProfileTab> {
     final saved = await showDialog<bool>(
       context: context,
       builder: (context) {
+        final isLandscape =
+            MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
         return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: isLandscape ? 24 : 40,
+            vertical: isLandscape ? 16 : 24,
+          ),
           title: const Text('Изменить имя'),
-          content: TextField(
-            controller: controller,
-            textCapitalization: TextCapitalization.words,
-            maxLength: 20,
-            decoration: const InputDecoration(
-              hintText: 'Например: Маша',
-              counterText: '',
+          content: SingleChildScrollView(
+            child: TextField(
+              controller: controller,
+              textCapitalization: TextCapitalization.words,
+              maxLength: 20,
+              decoration: const InputDecoration(
+                hintText: 'Например: Маша',
+                counterText: '',
+              ),
             ),
           ),
           actions: [
@@ -135,30 +143,39 @@ class _ProfileTabState extends State<ProfileTab> {
     int selected = current;
     final saved = await showModalBottomSheet<bool>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
+        final isLandscape =
+            MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Container(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+              constraints: BoxConstraints(
+                maxHeight: isLandscape
+                    ? MediaQuery.of(context).size.height * 0.86
+                    : MediaQuery.of(context).size.height * 0.72,
+              ),
+              padding: EdgeInsets.fromLTRB(20, isLandscape ? 12 : 16, 20, 20),
               decoration: BoxDecoration(
                 color: AppThemeColors.surface(context),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: SafeArea(
                 top: false,
-                child: Column(
+                child: SingleChildScrollView(
+                  child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'Выбери класс',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: isLandscape ? 16 : 18,
                         fontWeight: FontWeight.w800,
                         color: AppThemeColors.textPrimary(context),
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: isLandscape ? 10 : 14),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
@@ -193,6 +210,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       ),
                     ),
                   ],
+                ),
                 ),
               ),
             );
@@ -236,11 +254,17 @@ class _ProfileTabState extends State<ProfileTab> {
   Future<void> _openPresetAvatars() async {
     await showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
+        final isLandscape =
+            MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
+        final maxHeight = isLandscape
+            ? MediaQuery.of(context).size.height * 0.9
+            : 420.0;
         return Container(
-          height: 420,
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+          constraints: BoxConstraints(maxHeight: maxHeight),
+          padding: EdgeInsets.fromLTRB(20, isLandscape ? 12 : 16, 20, 20),
           decoration: BoxDecoration(
             color: AppThemeColors.surface(context),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -250,19 +274,19 @@ class _ProfileTabState extends State<ProfileTab> {
               Text(
                 'Выбери аватарку',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: isLandscape ? 16 : 18,
                   fontWeight: FontWeight.w800,
                   color: AppThemeColors.textPrimary(context),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: isLandscape ? 10 : 14),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 12,
-                    childAspectRatio: 0.9,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isLandscape ? 5 : 4,
+                    mainAxisSpacing: isLandscape ? 10 : 12,
+                    crossAxisSpacing: isLandscape ? 10 : 12,
+                    childAspectRatio: isLandscape ? 0.85 : 0.9,
                   ),
                   itemCount: allAvatars.length,
                   itemBuilder: (_, i) {
@@ -563,20 +587,35 @@ class _ProfileTabState extends State<ProfileTab> {
                                     onPressed: () async {
                                       final confirm = await showDialog<bool>(
                                         context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          title: const Text('Подтвердить покупку'),
-                                          content: Text('Купить "$title" за $price монет?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(ctx, false),
-                                              child: const Text('Отмена'),
+                                        builder: (ctx) {
+                                          final isLandscape = MediaQuery.of(ctx).size.width >
+                                              MediaQuery.of(ctx).size.height;
+                                          return AlertDialog(
+                                            insetPadding: EdgeInsets.symmetric(
+                                              horizontal: isLandscape ? 24 : 40,
+                                              vertical: isLandscape ? 16 : 24,
                                             ),
-                                            ElevatedButton(
-                                              onPressed: () => Navigator.pop(ctx, true),
-                                              child: const Text('Купить'),
+                                            title: const Text('Подтвердить покупку'),
+                                            content: SingleChildScrollView(
+                                              child: Text('Купить "$title" за $price монет?'),
                                             ),
-                                          ],
-                                        ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(ctx, false),
+                                                child: const Text('Отмена'),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () => Navigator.pop(ctx, true),
+                                                child: Text(
+                                                  'Купить',
+                                                  style: TextStyle(
+                                                    fontSize: isLandscape ? 13 : 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
                                       );
                                       if (confirm != true) return;
 
@@ -672,22 +711,35 @@ class _ProfileTabState extends State<ProfileTab> {
     if (!mounted) return false;
     final result = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Добро пожаловать в магазин'),
-        content: const Text(
-          'Ты сделал первую покупку! Теперь можешь менять стиль профиля и экранов через экипировку.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Позже'),
+      builder: (ctx) {
+        final isLandscape =
+            MediaQuery.of(ctx).size.width > MediaQuery.of(ctx).size.height;
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: isLandscape ? 24 : 40,
+            vertical: isLandscape ? 16 : 24,
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Перейти в профиль'),
+          title: const Text('Добро пожаловать в магазин'),
+          content: const SingleChildScrollView(
+            child: Text(
+              'Ты сделал первую покупку! Теперь можешь менять стиль профиля и экранов через экипировку.',
+            ),
           ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Позже'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: Text(
+                'Перейти в профиль',
+                style: TextStyle(fontSize: isLandscape ? 13 : 14),
+              ),
+            ),
+          ],
+        );
+      },
     );
     return result == true;
   }
@@ -709,8 +761,8 @@ class _ProfileTabState extends State<ProfileTab> {
     final skinSecondary = palette.secondary;
     final skinSoft = palette.soft;
     final equippedLabel = palette.label;
-    final bgColor = isDark ? const Color(0xFFF4F7FF) : Colors.white;
-    final cardBg = isDark ? const Color(0xFFFAFCFF) : Colors.white;
+    final bgColor = AppThemeColors.background(context);
+    final cardBg = AppThemeColors.surface(context);
     final blueCard = isDark ? skinSecondary : skinPrimary;
     final blueCardAlt = isDark ? skinPrimary : skinSecondary;
     final ratio = achievementsTotal == 0 ? 0.0 : achievementsUnlocked / achievementsTotal;
@@ -746,11 +798,15 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: blueCard,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.18),
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.14)
+                        : Colors.white.withValues(alpha: 0.18),
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: skinPrimary.withValues(alpha: 0.24),
+                      color: isDark
+                          ? Colors.black.withValues(alpha: 0.45)
+                          : skinPrimary.withValues(alpha: 0.24),
                       blurRadius: 18,
                       offset: const Offset(0, 8),
                     ),
@@ -771,7 +827,9 @@ class _ProfileTabState extends State<ProfileTab> {
                               width: 28,
                               height: 28,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: isDark
+                                    ? AppThemeColors.surface(context)
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(color: _bluePrimary, width: 2),
                               ),
@@ -948,7 +1006,9 @@ class _ProfileTabState extends State<ProfileTab> {
                           return LinearProgressIndicator(
                             minHeight: 10,
                             value: animatedRatio,
-                            backgroundColor: skinSoft,
+                            backgroundColor: isDark
+                                ? AppThemeColors.border(context)
+                                : skinSoft,
                             valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
                           );
                         },
@@ -1184,6 +1244,7 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final availableWidth = MediaQuery.of(context).size.width - 40;
     final cardWidth = (availableWidth - 12) / 2;
     return SizedBox(
@@ -1194,7 +1255,7 @@ class _StatCard extends StatelessWidget {
           color: background,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.22),
+            color: Colors.white.withValues(alpha: isDark ? 0.16 : 0.22),
           ),
         ),
         child: Column(
