@@ -439,7 +439,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             else
               Column(
                 children: [
-                  _buildTextInput(),
+                  if (!(_showMathKeyboard && !_isChecked))
+                    _buildTextInput(),
                   if (_isInequalityTask) ...[
                     const SizedBox(height: 10),
                     Container(
