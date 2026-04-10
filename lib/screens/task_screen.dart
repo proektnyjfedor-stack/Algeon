@@ -320,7 +320,13 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   Widget _buildTopBar() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      margin: const EdgeInsets.fromLTRB(12, 10, 12, 8),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: AppThemeColors.surface(context),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppThemeColors.border(context)),
+      ),
       child: Row(
         children: [
           // Close
@@ -335,11 +341,19 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.xs),
-                  child: LinearProgressIndicator(
-                    value: _progress,
-                    backgroundColor: AppThemeColors.border(context),
-                    valueColor: AlwaysStoppedAnimation(AppColors.accent),
-                    minHeight: 8,
+                  child: TweenAnimationBuilder<double>(
+                    key: ValueKey('task_progress_${_progress.toStringAsFixed(3)}'),
+                    tween: Tween(begin: 0, end: _progress),
+                    duration: const Duration(milliseconds: 420),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, animatedProgress, _) {
+                      return LinearProgressIndicator(
+                        value: animatedProgress,
+                        backgroundColor: AppThemeColors.border(context),
+                        valueColor: AlwaysStoppedAnimation(AppColors.accent),
+                        minHeight: 8,
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -373,6 +387,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           color: AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(AppRadius.sm),
+          border: Border.all(color: AppThemeColors.border(context)),
         ),
         child: Icon(
           icon,
@@ -396,6 +411,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: AppThemeColors.accentLight(context),
                 borderRadius: BorderRadius.circular(AppRadius.xl),
+                border: Border.all(
+                  color: AppColors.accent.withValues(alpha: 0.25),
+                ),
               ),
               child: Text(
                 widget.topicName,
@@ -804,6 +822,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       padding: EdgeInsets.fromLTRB(16, keyboardMode ? 4 : 16, 16, keyboardMode ? 8 : 20),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
+        border: Border(
+          top: BorderSide(color: AppThemeColors.border(context)),
+        ),
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(24),
         ),
