@@ -1,8 +1,11 @@
-/// Логотип приложения — минималистичная белая лестница
+/// Логотип приложения — лестница (силуэт), по умолчанию синий акцент
 
 import 'package:flutter/material.dart';
 
-/// Логотип: синий фон + белая лестница (для светлых экранов)
+/// Цвет лестницы по умолчанию (как в теме Algeon).
+const Color kAppLogoStairBlue = Color(0xFF2563EB);
+
+/// Логотип: силуэт лестницы; на светлом фоне обычно синий, в квадрате [AppLogoIcon] — белый на синем
 class AppLogo extends StatelessWidget {
   final double size;
   final Color? color;
@@ -15,7 +18,7 @@ class AppLogo extends StatelessWidget {
       width: size,
       height: size,
       child: CustomPaint(
-        painter: _StairsPainter(color: color ?? Colors.white),
+        painter: _StairsPainter(color: color ?? kAppLogoStairBlue),
         size: Size(size, size),
       ),
     );
@@ -45,7 +48,7 @@ class AppLogoIcon extends StatelessWidget {
   }
 }
 
-/// Лестница — единый силуэт без зазоров
+/// Лестница — единый силуэт, только прямые углы (без скруглений)
 class _StairsPainter extends CustomPainter {
   final Color color;
 
@@ -60,26 +63,20 @@ class _StairsPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
 
-    final pad  = w * 0.06;
+    final pad = w * 0.06;
     final step = (w - pad * 2) / 3;
     final base = h - pad;
-    final rr   = step * 0.18;
 
     final path = Path()
-      ..moveTo(pad + rr, base)
-      ..lineTo(w - pad - rr, base)
-      ..arcToPoint(Offset(w - pad, base - rr),   radius: Radius.circular(rr))
-      ..lineTo(w - pad, pad + rr)
-      ..arcToPoint(Offset(w - pad - rr, pad),     radius: Radius.circular(rr))
-      ..lineTo(pad + step * 2 + rr, pad)
-      ..arcToPoint(Offset(pad + step * 2, pad + rr), radius: Radius.circular(rr))
+      ..moveTo(pad, base)
+      ..lineTo(w - pad, base)
+      ..lineTo(w - pad, pad)
+      ..lineTo(pad + step * 2, pad)
       ..lineTo(pad + step * 2, base - step * 2)
-      ..lineTo(pad + step,     base - step * 2)
-      ..lineTo(pad + step,     base - step)
-      ..lineTo(pad + rr,       base - step)
-      ..arcToPoint(Offset(pad, base - step + rr), radius: Radius.circular(rr))
-      ..lineTo(pad, base - rr)
-      ..arcToPoint(Offset(pad + rr, base),        radius: Radius.circular(rr))
+      ..lineTo(pad + step, base - step * 2)
+      ..lineTo(pad + step, base - step)
+      ..lineTo(pad, base - step)
+      ..lineTo(pad, base)
       ..close();
 
     canvas.drawPath(path, paint);

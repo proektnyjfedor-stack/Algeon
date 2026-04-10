@@ -200,7 +200,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               // Top row: logo + grade / avatar + greeting
               Row(
                 children: [
-                  const AppLogo(size: 36),
+                  const AppLogo(size: 36, color: Colors.white),
                   SizedBox(width: narrow ? 6 : 10),
                   Text(
                     'Algeon',

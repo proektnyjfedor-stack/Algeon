@@ -98,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? Colors.black : Colors.white;
-    final stairColor = isDark ? Colors.white : const Color(0xFF2563EB);
+    const stairColor = Color(0xFF2563EB);
     final titleColor = isDark ? Colors.white : const Color(0xFF1E3A8A);
     final subtitleColor = isDark ? const Color(0xFFB0B0B0) : const Color(0xFF6B7280);
     final progressBg = isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE2E8F0);
