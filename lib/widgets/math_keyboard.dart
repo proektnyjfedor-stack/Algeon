@@ -268,7 +268,7 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
             SizedBox(width: keyGap),
             _tabButton(context, 1, 'x,y'),
             SizedBox(width: keyGap),
-            _tabButton(context, 2, '><'),
+            _tabButton(context, 2, 'ineq'),
           ],
         ),
         SizedBox(height: rowGap),
@@ -299,9 +299,9 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
     if (_tab == 2) {
       return const [
         ['>', '<', '≥', '≤', '='],
-        ['+', '-', '±', '(', ')'],
-        ['*', '/', '^', '√', '%'],
-        ['x', 'y', 'space', ',', '.'],
+        ['x', 'y', '(', ')', ','],
+        ['0', '1', '2', '3', '.'],
+        ['4', '5', '6', '7', 'space'],
       ];
     }
     return const [
