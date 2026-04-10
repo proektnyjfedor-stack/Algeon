@@ -60,11 +60,14 @@
 
     /* Только надпись Algeon — градиент как во Flutter */
     .loading-brand {
+      display: inline-block;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: clamp(44px, 12vmin, 58px);
+      font-size: clamp(56px, 16vmin, 92px);
       font-weight: 900;
       letter-spacing: -0.06em;
-      line-height: 1;
+      /* line-height: 1 обрезает хвосты у g, y, p */
+      line-height: 1.22;
+      padding: 0.12em 0.04em 0.2em;
       background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
       -webkit-background-clip: text;
       background-clip: text;

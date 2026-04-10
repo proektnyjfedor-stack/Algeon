@@ -69,29 +69,35 @@ class _SplashScreenState extends State<SplashScreen>
           child: AnimatedBuilder(
             animation: _ctrl,
             builder: (ctx, _) {
+              final w = MediaQuery.sizeOf(ctx).width;
+              final fontSize = (w * 0.19).clamp(64.0, 96.0);
               return Opacity(
                 opacity: _fade.value,
                 child: Transform.translate(
                   offset: Offset(0, _slide.value),
                   child: Transform.scale(
                     scale: _scale.value,
-                    child: ShaderMask(
-                      blendMode: BlendMode.srcIn,
-                      shaderCallback: (bounds) => const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [_blueA, _blueB],
-                      ).createShader(bounds),
-                      child: const Text(
-                        'Algeon',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 56,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -2.5,
-                          height: 1,
-                          color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                      child: ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (bounds) => const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [_blueA, _blueB],
+                        ).createShader(bounds),
+                        child: Text(
+                          'Algeon',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: fontSize * -0.045,
+                            height: 1.22,
+                            leadingDistribution: TextLeadingDistribution.even,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
