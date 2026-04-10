@@ -8,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="description" content="Algeon — математический тренажёр для учеников 1-4 классов">
 
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,27 +40,59 @@
       background: #ffffff;
     }
 
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #000000; }
+    }
+
     .loading-screen {
       position: fixed;
       inset: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      align-items: stretch;
       background: #ffffff;
       z-index: 9999;
     }
 
-    /* Лого — поднимается снизу вверх, квадратное, не больше 62vmin */
+    @media (prefers-color-scheme: dark) {
+      .loading-screen { background: #000000; }
+    }
+
+    /* Верхняя половина — крупная лестница, подъём снизу вверх */
+    .loading-top {
+      flex: 1;
+      min-height: 45vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: visible;
+    }
+
     .loading-logo {
-      width: min(62vmin, 260px);
+      width: min(78vw, calc(50vh * 0.92), 480px);
+      max-width: 92%;
       aspect-ratio: 1 / 1;
-      animation: logoRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+      animation: logoRise 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
     }
 
     @keyframes logoRise {
-      from { transform: translateY(90px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
+      from {
+        transform: translateY(min(42vw, 28vh, 200px));
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .loading-bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 28px;
+      padding-top: 8px;
     }
 
     .loading-title {
@@ -68,8 +101,11 @@
       font-size: clamp(28px, 9vmin, 44px);
       font-weight: 800;
       letter-spacing: -1.5px;
-      margin-top: 28px;
-      animation: textIn 0.45s ease-out 0.75s both;
+      animation: textIn 0.5s ease-out 0.85s both;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .loading-title { color: #ffffff; }
     }
 
     .loading-sub {
@@ -77,8 +113,18 @@
       font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 15px;
       font-weight: 400;
-      margin-top: 8px;
-      animation: textIn 0.45s ease-out 0.88s both;
+      margin-top: 10px;
+      animation: textIn 0.5s ease-out 0.95s both;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .loading-sub { color: #b0b0b0; }
+    }
+
+    .loading-stair-fill { fill: #2563EB; }
+
+    @media (prefers-color-scheme: dark) {
+      .loading-stair-fill { fill: #ffffff; }
     }
 
     @keyframes textIn {
@@ -92,16 +138,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" async></script>
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Loading Screen (до первого кадра Flutter) -->
   <div class="loading-screen" id="loading">
-    <!-- Лестница: синяя на белом фоне, большая -->
-    <div class="loading-logo">
-      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-        <!-- Единый силуэт лестницы (один path, без зазоров).
-             pad=18, step=88, rOuter=14.
-             5 скруглённых внешних углов: BL, BR, TR, step3-TL, step1-left-TL.
-             3 острых внутренних вогнутых угла. -->
-        <path d="
+    <div class="loading-top">
+      <div class="loading-logo">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" aria-hidden="true">
+        <path class="loading-stair-fill" d="
           M 32,282
           L 268,282  A 14,14 0 0 1 282,268
           L 282,32   A 14,14 0 0 1 268,18
@@ -111,12 +153,14 @@
           L 106,194
           L 32,194   A 14,14 0 0 1 18,208
           L 18,268   A 14,14 0 0 1 32,282
-          Z"
-          fill="#2563EB"/>
-      </svg>
+          Z"/>
+        </svg>
+      </div>
     </div>
-    <div class="loading-title">Algeon</div>
-    <div class="loading-sub">Математика с пониманием</div>
+    <div class="loading-bottom">
+      <div class="loading-title">Algeon</div>
+      <div class="loading-sub">Математика с пониманием</div>
+    </div>
   </div>
 
   <script>

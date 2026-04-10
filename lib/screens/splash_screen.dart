@@ -1,4 +1,4 @@
-/// Splash Screen — крупная лестница (~половина экрана), движение вниз, фон по теме
+/// Splash Screen — крупная лестница (~половина экрана), подъём снизу вверх, фон по теме
 
 import 'dart:math' show min;
 
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2200),
+      duration: const Duration(milliseconds: 2600),
     );
 
     _logoOp = Tween<double>(begin: 0, end: 1).animate(
@@ -83,11 +83,12 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  /// Смещение лестницы по Y: сверху вниз (отрицательный старт → 0).
-  double _logoSlideY(double screenHeight) {
-    const slideCurve = Interval(0.0, 0.62, curve: Curves.easeOutCubic);
+  /// Смещение лестницы по Y: движение вверх — стартуем ниже (положительный Y), к 0.
+  /// В координатах Flutter положительный offset опускает отрисовку вниз; к 0 — «поднимается».
+  double _logoSlideY(double screenHeight, double halfH) {
+    const slideCurve = Interval(0.0, 0.72, curve: Curves.easeOutCubic);
     final t = slideCurve.transform(_ctrl.value);
-    final start = -screenHeight * 0.28;
+    final start = (halfH * 0.58 + screenHeight * 0.1).clamp(100.0, 320.0);
     return start * (1 - t);
   }
 
@@ -114,30 +115,34 @@ class _SplashScreenState extends State<SplashScreen>
         child: AnimatedBuilder(
           animation: _ctrl,
           builder: (ctx, _) {
-            final slideY = _logoSlideY(screen.height);
+            final slideY = _logoSlideY(screen.height, halfH);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
                   height: halfH,
-                  child: Center(
-                    child: Transform.translate(
-                      offset: Offset(0, slideY),
-                      child: Opacity(
-                        opacity: _logoOp.value,
-                        child: Transform.scale(
-                          scale: _pulse.value,
-                          child: SizedBox(
-                            width: logoSz,
-                            height: logoSz,
-                            child: AppLogo(
-                              size: logoSz,
-                              color: stairColor,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      Transform.translate(
+                        offset: Offset(0, slideY),
+                        child: Opacity(
+                          opacity: _logoOp.value,
+                          child: Transform.scale(
+                            scale: _pulse.value,
+                            child: SizedBox(
+                              width: logoSz,
+                              height: logoSz,
+                              child: AppLogo(
+                                size: logoSz,
+                                color: stairColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Expanded(
