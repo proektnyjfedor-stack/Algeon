@@ -745,6 +745,9 @@ class _ProfileTabState extends State<ProfileTab> {
                 decoration: BoxDecoration(
                   color: blueCard,
                   borderRadius: BorderRadius.circular(24),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.18),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: skinPrimary.withValues(alpha: 0.24),
@@ -909,6 +912,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: cardBg,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: AppThemeColors.border(context)),
+                  boxShadow: AppShadows.soft(context),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1006,6 +1010,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: cardBg,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppThemeColors.border(context)),
+                  boxShadow: AppShadows.soft(context),
                 ),
                 child: Column(
                   children: [
@@ -1188,6 +1193,9 @@ class _StatCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(18),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.22),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -181,6 +181,16 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       decoration: BoxDecoration(
         color: palette.primary,
         borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.14),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: palette.secondary.withValues(alpha: 0.24),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
@@ -384,6 +394,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 ? AppColors.success.withValues(alpha: 0.4)
                 : AppThemeColors.border(context),
           ),
+          boxShadow: AppShadows.soft(context),
         ),
         child: Row(
           children: [
