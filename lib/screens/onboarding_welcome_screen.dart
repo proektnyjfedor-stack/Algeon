@@ -77,7 +77,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   Future<void> _skip() async {
     await ProgressService.setUserName('Ученик');
     await ProgressService.setAvatar('boy_blue');
-    await ProgressService.setCurrentGrade(1);
+    await ProgressService.setCurrentGrade(5);
     await ProgressService.setOnboardingComplete(true);
 
     if (!mounted) return;
@@ -90,7 +90,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
       await ProgressService.setUserName(name);
     }
     await ProgressService.setCustomAvatar(_avatarData.toMap());
-    await ProgressService.setCurrentGrade(_selectedGrade ?? 1);
+    await ProgressService.setCurrentGrade(_selectedGrade ?? 5);
     await ProgressService.setOnboardingComplete(true);
 
     if (!mounted) return;
@@ -787,10 +787,6 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   // === PAGE 3: Grade ===
   Widget _buildGradePage() {
     final descriptions = {
-      1: 'Счёт, сложение, вычитание до 20',
-      2: 'Умножение, деление, время и часы',
-      3: 'Периметр, площадь, доли и дроби',
-      4: 'Дроби, уравнения, скорость',
       5: 'Натуральные числа, дроби, проценты',
       6: 'Рациональные числа, пропорции',
       7: 'Алгебра, функции, геометрия',
@@ -824,7 +820,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
 
           Expanded(
             child: ListView(
-              children: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((grade) {
+              children: [5, 6, 7, 8, 9, 10, 11].map((grade) {
                 final isSelected = _selectedGrade == grade;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),

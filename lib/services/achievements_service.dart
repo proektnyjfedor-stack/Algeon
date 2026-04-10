@@ -25,10 +25,10 @@ enum AchievementType {
   accuracy100,
 
   // Классы
-  grade1Complete,
-  grade2Complete,
-  grade3Complete,
-  grade4Complete,
+  grade5Complete,
+  grade7Complete,
+  grade9Complete,
+  grade11Complete,
 
   // Специальные
   firstTask,
@@ -166,32 +166,32 @@ class AchievementsService {
 
       // Классы
       Achievement(
-        type: AchievementType.grade1Complete,
-        title: 'Первоклассник',
-        description: 'Заверши 1 класс',
-        icon: Icons.looks_one_rounded,
-        target: 1,
+        type: AchievementType.grade5Complete,
+        title: 'Старт средней школы',
+        description: 'Заверши 5 класс',
+        icon: Icons.looks_5_rounded,
+        target: 5,
       ),
       Achievement(
-        type: AchievementType.grade2Complete,
-        title: 'Второклассник',
-        description: 'Заверши 2 класс',
-        icon: Icons.looks_two_rounded,
-        target: 2,
+        type: AchievementType.grade7Complete,
+        title: 'Алгебра освоена',
+        description: 'Заверши 7 класс',
+        icon: Icons.auto_graph_rounded,
+        target: 7,
       ),
       Achievement(
-        type: AchievementType.grade3Complete,
-        title: 'Третьеклассник',
-        description: 'Заверши 3 класс',
-        icon: Icons.looks_3_rounded,
-        target: 3,
+        type: AchievementType.grade9Complete,
+        title: 'ОГЭ-база',
+        description: 'Заверши 9 класс',
+        icon: Icons.school_rounded,
+        target: 9,
       ),
       Achievement(
-        type: AchievementType.grade4Complete,
-        title: 'Четвероклассник',
-        description: 'Заверши 4 класс',
-        icon: Icons.looks_4_rounded,
-        target: 4,
+        type: AchievementType.grade11Complete,
+        title: 'Финальный уровень',
+        description: 'Заверши 11 класс',
+        icon: Icons.workspace_premium_rounded,
+        target: 11,
       ),
 
       // Специальные
@@ -350,14 +350,14 @@ class AchievementsService {
     if (progress < 1.0) return null;
     
     switch (grade) {
-      case 1:
-        return unlock(AchievementType.grade1Complete);
-      case 2:
-        return unlock(AchievementType.grade2Complete);
-      case 3:
-        return unlock(AchievementType.grade3Complete);
-      case 4:
-        return unlock(AchievementType.grade4Complete);
+      case 5:
+        return unlock(AchievementType.grade5Complete);
+      case 7:
+        return unlock(AchievementType.grade7Complete);
+      case 9:
+        return unlock(AchievementType.grade9Complete);
+      case 11:
+        return unlock(AchievementType.grade11Complete);
       default:
         return null;
     }

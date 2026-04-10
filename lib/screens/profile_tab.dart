@@ -162,8 +162,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
-                      children: List.generate(11, (i) {
-                        final grade = i + 1;
+                      children: List.generate(7, (i) {
+                        final grade = i + 5;
                         final isSelected = selected == grade;
                         return ChoiceChip(
                           label: Text('$grade класс'),

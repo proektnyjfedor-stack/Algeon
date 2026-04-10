@@ -102,10 +102,10 @@ class _AchievementsTabState extends State<AchievementsTab> {
           progressText: '${accuracy.toStringAsFixed(0)}% / ${a.target}%$extra'
         );
 
-      case AchievementType.grade1Complete:
-      case AchievementType.grade2Complete:
-      case AchievementType.grade3Complete:
-      case AchievementType.grade4Complete:
+      case AchievementType.grade5Complete:
+      case AchievementType.grade7Complete:
+      case AchievementType.grade9Complete:
+      case AchievementType.grade11Complete:
         final grade = _gradeFromType(a.type);
         final tasks = getTasksByGrade(grade);
         final solved = ProgressService.getSolvedCountForGrade(
@@ -124,16 +124,16 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
   int _gradeFromType(AchievementType type) {
     switch (type) {
-      case AchievementType.grade1Complete:
-        return 1;
-      case AchievementType.grade2Complete:
-        return 2;
-      case AchievementType.grade3Complete:
-        return 3;
-      case AchievementType.grade4Complete:
-        return 4;
+      case AchievementType.grade5Complete:
+        return 5;
+      case AchievementType.grade7Complete:
+        return 7;
+      case AchievementType.grade9Complete:
+        return 9;
+      case AchievementType.grade11Complete:
+        return 11;
       default:
-        return 1;
+        return 5;
     }
   }
 

@@ -193,7 +193,7 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       pageBuilder: (BuildContext context, GoRouterState state) {
         final data = state.extra as Map<String, dynamic>? ?? {};
-        final grade = data['grade'] as int? ?? 1;
+        final grade = data['grade'] as int? ?? 5;
         final tasks = data['tasks'] as List<Task>? ?? [];
         final timeMinutes = data['timeMinutes'] as int? ?? 20;
         final variantId = data['variantId'] as String?;

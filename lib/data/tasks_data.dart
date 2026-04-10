@@ -11950,7 +11950,7 @@ final List<Task> _grade11Tasks = [
 
 /// Все задачи
 List<Task> getAllTasks() {
-  return [
+  final all = <Task>[
     ..._grade1Tasks,
     ..._grade2Tasks,
     ..._grade3Tasks,
@@ -11965,6 +11965,7 @@ List<Task> getAllTasks() {
     ..._grade11Tasks,
     ...curriculumTasks,
   ];
+  return all.where((t) => t.grade >= 5 && t.grade <= 11).toList();
 }
 
 /// Задачи по классу

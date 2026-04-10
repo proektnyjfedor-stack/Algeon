@@ -58,12 +58,14 @@ class ProgressService {
   }
   
   static int getCurrentGrade() {
-    return _prefs?.getInt(_keyGrade) ?? 1;
+    final grade = _prefs?.getInt(_keyGrade) ?? 5;
+    return grade.clamp(5, 11);
   }
   
   static Future<void> setCurrentGrade(int grade) async {
-    await _prefs?.setInt(_keyGrade, grade);
-    _log('Grade: $grade');
+    final normalized = grade.clamp(5, 11);
+    await _prefs?.setInt(_keyGrade, normalized);
+    _log('Grade: $normalized');
   }
   
   // ============================================================
