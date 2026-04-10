@@ -121,7 +121,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             child: _buildDailyGoal(todayCompleted),
           ),
           SliverToBoxAdapter(
-            child: _buildQuickActions(),
+            child: _buildQuickActions(topics),
           ),
 
           // Section title
@@ -504,31 +504,60 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildQuickActions() {
+  Widget _buildQuickActions(List<TopicInfo> topics) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-      child: Row(
+      child: Wrap(
+        spacing: 10,
+        runSpacing: 10,
         children: [
-          Expanded(
-            child: _QuickHomeButton(
-              icon: Icons.bolt_rounded,
-              title: 'Практика',
-              subtitle: 'Быстрые задания',
-              onTap: () => context.go('/practice'),
-            ),
+          _QuickHomeButton(
+            icon: Icons.play_arrow_rounded,
+            title: 'Продолжить',
+            subtitle: 'С текущего места',
+            onTap: () => _continueLearning(topics),
           ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _QuickHomeButton(
-              icon: Icons.assignment_rounded,
-              title: 'Экзамен',
-              subtitle: 'Режим ОГЭ/ЕГЭ',
-              onTap: () => context.go('/exams'),
-            ),
+          _QuickHomeButton(
+            icon: Icons.bolt_rounded,
+            title: 'Практика',
+            subtitle: 'Быстрые задания',
+            onTap: () => context.go('/practice'),
+          ),
+          _QuickHomeButton(
+            icon: Icons.assignment_rounded,
+            title: 'Экзамен',
+            subtitle: 'Режим ОГЭ/ЕГЭ',
+            onTap: () => context.go('/exams'),
           ),
         ],
       ),
     );
+  }
+
+  void _continueLearning(List<TopicInfo> topics) {
+    TopicInfo? target;
+    List<Task> targetTasks = const [];
+
+    for (final topic in topics) {
+      final tasks = getTasksByGradeAndTopic(_grade, topic.name);
+      final solved = ProgressService.getSolvedCountForTopic(
+        topic.name,
+        tasks.map((t) => t.id).toList(),
+      );
+      if (solved < tasks.length) {
+        target = topic;
+        targetTasks = tasks;
+        break;
+      }
+    }
+
+    if (target == null && topics.isNotEmpty) {
+      target = topics.first;
+      targetTasks = getTasksByGradeAndTopic(_grade, target.name);
+    }
+
+    if (target == null || targetTasks.isEmpty) return;
+    _openTopic(target.name, targetTasks);
   }
 
   Widget _buildTopicCard({
@@ -541,15 +570,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     final taskIds = tasks.map((t) => t.id).toList();
     final solved = ProgressService.getSolvedCountForTopic(topic.name, taskIds);
     final total = topic.taskCount;
-
-    bool isUnlocked = index == 0;
-    if (index > 0) {
-      final prevTopic = allTopics[index - 1];
-      final prevTasks = getTasksByGradeAndTopic(_grade, prevTopic.name);
-      final prevIds = prevTasks.map((t) => t.id).toList();
-      final prevSolved = ProgressService.getSolvedCountForTopic(prevTopic.name, prevIds);
-      isUnlocked = prevSolved >= (prevTopic.taskCount * 0.5);
-    }
 
     final isComplete = solved >= total && total > 0;
     final progress = total > 0 ? solved / total : 0.0;
@@ -570,12 +590,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
         child: Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
-        onTap: isUnlocked
-            ? () {
-                HapticFeedback.lightImpact();
-                _openTopic(topic.name, tasks);
-              }
-            : null,
+        onTap: () {
+          HapticFeedback.lightImpact();
+          _openTopic(topic.name, tasks);
+        },
         behavior: HitTestBehavior.opaque,
         child: Container(
             padding: const EdgeInsets.all(14),
@@ -585,9 +603,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               border: Border.all(
                 color: isComplete
                     ? AppColors.success.withValues(alpha: 0.5)
-                    : isUnlocked
-                        ? AppThemeColors.border(context)
-                        : AppThemeColors.borderLight(context),
+                    : AppThemeColors.border(context),
                 width: isComplete ? 1.5 : 1,
               ),
             ),
@@ -600,20 +616,16 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   decoration: BoxDecoration(
                     color: isComplete
                         ? AppColors.success
-                        : isUnlocked
-                            ? accent
-                            : AppThemeColors.borderLight(context),
+                        : accent,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     isComplete
                         ? Icons.check_rounded
-                        : isUnlocked
-                            ? topic.icon
-                            : Icons.lock_rounded,
-                    color: isComplete || isUnlocked
+                        : topic.icon,
+                    color: isComplete
                         ? Colors.white
-                        : AppThemeColors.textHint(context),
+                        : Colors.white,
                     size: 22,
                   ),
                 ),
@@ -632,9 +644,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: isUnlocked
-                                    ? AppThemeColors.textPrimary(context)
-                                    : AppThemeColors.textHint(context),
+                                color: AppThemeColors.textPrimary(context),
                               ),
                             ),
                           ),
@@ -667,12 +677,11 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 ),
 
                 const SizedBox(width: 10),
-                if (isUnlocked)
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: AppThemeColors.textHint(context),
-                    size: 20,
-                  ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppThemeColors.textHint(context),
+                  size: 20,
+                ),
               ],
             ),
           ),
