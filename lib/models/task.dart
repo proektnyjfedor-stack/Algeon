@@ -49,7 +49,13 @@ class Task {
     return text
         .trim()
         .toLowerCase()
+        .replaceAll('≤', '<=')
+        .replaceAll('≥', '>=')
+        .replaceAll('–', '-')
+        .replaceAll('−', '-')
         .replaceAll(',', '.')
+        .replaceAllMapped(RegExp(r'([<>])\s*='), (m) => '${m.group(1)}=')
+        .replaceAllMapped(RegExp(r'([<>])\s+'), (m) => m.group(1)!)
         .replaceAll(RegExp(r'\s+'), ' ');
   }
 

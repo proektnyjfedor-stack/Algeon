@@ -172,7 +172,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         return KeyEventResult.handled;
       }
 
-      if (key == LogicalKeyboardKey.period ||
+      if ((key == LogicalKeyboardKey.period &&
+              !HardwareKeyboard.instance.isShiftPressed) ||
           key == LogicalKeyboardKey.numpadDecimal) {
         if (!_textController.text.contains('.')) {
           _textController.text += '.';
@@ -193,6 +194,30 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         _textController.selection =
             TextSelection.collapsed(offset: _textController.text.length);
         return KeyEventResult.handled;
+      }
+
+      if (key == LogicalKeyboardKey.equal ||
+          key == LogicalKeyboardKey.numpadEqual) {
+        _textController.text += '=';
+        _textController.selection =
+            TextSelection.collapsed(offset: _textController.text.length);
+        return KeyEventResult.handled;
+      }
+
+      if (key == LogicalKeyboardKey.comma) {
+        _textController.text += '<';
+        _textController.selection =
+            TextSelection.collapsed(offset: _textController.text.length);
+        return KeyEventResult.handled;
+      }
+
+      if (key == LogicalKeyboardKey.period) {
+        if (HardwareKeyboard.instance.isShiftPressed) {
+          _textController.text += '>';
+          _textController.selection =
+              TextSelection.collapsed(offset: _textController.text.length);
+          return KeyEventResult.handled;
+        }
       }
     }
 

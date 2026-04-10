@@ -59,6 +59,26 @@ class MathKeyboard extends StatelessWidget {
             TextSelection.collapsed(offset: controller.text.length);
         return;
 
+      case '>':
+      case '<':
+      case '=':
+        controller.text = '$text$key';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
+      case '≥':
+        controller.text = '$text>=';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
+      case '≤':
+        controller.text = '$text<=';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
       default:
         // Digit
         controller.text = text + key;
@@ -78,10 +98,11 @@ class MathKeyboard extends StatelessWidget {
         const SizedBox(height: 8),
         _buildRow(context, ['1', '2', '3', '/']),
         const SizedBox(height: 8),
-        // Нижняя строка: ±, широкий 0, .
+        _buildRow(context, ['>', '<', '≥', '≤']),
+        const SizedBox(height: 8),
         Row(
           children: [
-            Expanded(child: _buildKey(context, '±')),
+            Expanded(child: _buildKey(context, '=')),
             const SizedBox(width: 8),
             Expanded(flex: 2, child: _buildKey(context, '0')),
             const SizedBox(width: 8),
@@ -105,7 +126,8 @@ class MathKeyboard extends StatelessWidget {
 
   Widget _buildKey(BuildContext context, String key) {
     final isBackspace = key == 'backspace';
-    final isSpecial = key == '-' || key == '/' || key == '±';
+    final isSpecial =
+        key == '-' || key == '/' || key == '=' || key == '>' || key == '<' || key == '≥' || key == '≤';
 
     Color bgColor;
     Color borderColor;
@@ -118,7 +140,6 @@ class MathKeyboard extends StatelessWidget {
     } else if (isSpecial) {
       bgColor = AppThemeColors.accentLight(context);
       borderColor = AppColors.accent.withValues(alpha: 0.3);
-      // Отображаем красивый символ, но вставляем ASCII
       final display = key == '-' ? '−' : key;
       child = Text(
         display,

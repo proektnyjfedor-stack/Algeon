@@ -1015,27 +1015,56 @@ class _ProfileTabState extends State<ProfileTab> {
                   ),
                   const _DividerLine(),
                   SwitchListTile(
-                    value: isDark,
-                    onChanged: (_) => themeProvider.toggleTheme(),
+                    value: themeProvider.autoByTime,
+                    onChanged: (value) => themeProvider.setAutoByTime(value),
                     title: Text(
-                      'Тёмная тема',
+                      'Авто-тема (день/ночь)',
                       style: TextStyle(
                         color: AppThemeColors.textPrimary(context),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     subtitle: Text(
-                      isDark ? 'Включена' : 'Выключена',
+                      themeProvider.autoByTime
+                          ? 'Включена: тема меняется по времени'
+                          : 'Выключена: ручной выбор',
                       style: TextStyle(
                         color: AppThemeColors.textSecondary(context),
                       ),
                     ),
                     secondary: Icon(
-                      isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                      themeProvider.autoByTime
+                          ? Icons.brightness_auto_rounded
+                          : (isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded),
                       color: _bluePrimary,
                     ),
                     activeThumbColor: _bluePrimary,
                   ),
+                  if (!themeProvider.autoByTime) ...[
+                    const _DividerLine(),
+                    SwitchListTile(
+                      value: isDark,
+                      onChanged: (_) => themeProvider.toggleTheme(),
+                      title: Text(
+                        'Тёмная тема',
+                        style: TextStyle(
+                          color: AppThemeColors.textPrimary(context),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        isDark ? 'Включена' : 'Выключена',
+                        style: TextStyle(
+                          color: AppThemeColors.textSecondary(context),
+                        ),
+                      ),
+                      secondary: Icon(
+                        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                        color: _bluePrimary,
+                      ),
+                      activeThumbColor: _bluePrimary,
+                    ),
+                  ],
                 ],
               ),
             ),
