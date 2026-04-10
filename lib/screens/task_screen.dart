@@ -270,22 +270,30 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         focusNode: _focusNode,
         autofocus: false,
         onKeyEvent: _onKeyEvent,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildTopBar(),
-              Expanded(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: _isChecked && !_isCorrect && _hasExplanation
-                        ? _buildExplanation()
-                        : _buildTaskCard(),
+        child: GestureDetector(
+          onTap: () {
+            if (_showMathKeyboard) {
+              setState(() => _showMathKeyboard = false);
+            }
+          },
+          behavior: HitTestBehavior.translucent,
+          child: SafeArea(
+            child: Column(
+              children: [
+                _buildTopBar(),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: _isChecked && !_isCorrect && _hasExplanation
+                          ? _buildExplanation()
+                          : _buildTaskCard(),
+                    ),
                   ),
                 ),
-              ),
-              _buildBottomBar(),
-            ],
+                _buildBottomBar(),
+              ],
+            ),
           ),
         ),
       ),
@@ -771,9 +779,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildBottomBar() {
-    final compactBottomBar = _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
+    final keyboardMode =
+        _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
     return Container(
-      padding: EdgeInsets.fromLTRB(16, compactBottomBar ? 8 : 16, 16, compactBottomBar ? 10 : 20),
+      padding: EdgeInsets.fromLTRB(16, keyboardMode ? 4 : 16, 16, keyboardMode ? 8 : 20),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: const BorderRadius.vertical(
@@ -785,28 +794,38 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Математическая клавиатура для textInput (пока не проверено)
-            if (!_isChecked && _task.type == TaskType.textInput && _showMathKeyboard) ...[
+            if (keyboardMode) ...[
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () => setState(() => _showMathKeyboard = false),
+                  icon: const Icon(Icons.keyboard_hide_rounded, size: 20),
+                  tooltip: 'Свернуть клавиатуру',
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
               MathKeyboard(controller: _textController),
-              const SizedBox(height: 12),
+              const SizedBox(height: 2),
             ],
 
-            // Кнопка действия
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 220),
-              switchInCurve: Curves.easeOutCubic,
-              switchOutCurve: Curves.easeInCubic,
-              child: _buildPrimaryAction(),
-            ),
-            if (!_isChecked) ...[
-              const SizedBox(height: 8),
-              // После 2 ошибок на одной задаче — показываем «Не знаю»
+            if (!keyboardMode) ...[
+              // Кнопка действия
               AnimatedSwitcher(
+                duration: const Duration(milliseconds: 220),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                child: _buildPrimaryAction(),
+              ),
+              if (!_isChecked) ...[
+                const SizedBox(height: 8),
+                // После 2 ошибок на одной задаче — показываем «Не знаю»
+                AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
                 child: _wrongAttemptsOnCurrentTask >= 2
                     ? _buildDontKnowButton()
                     : _buildSkipButton(),
-              ),
+                ),
+              ],
             ],
           ],
         ),
