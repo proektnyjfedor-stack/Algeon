@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../router/app_router.dart';
 import '../services/progress_service.dart';
+import '../widgets/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _textOp;
   late Animation<double> _subOp;
   late Animation<double> _subSlide;
+  late Animation<double> _pulse;
 
   @override
   void initState() {
@@ -67,6 +69,12 @@ class _SplashScreenState extends State<SplashScreen>
         curve: const Interval(0.65, 0.85, curve: Curves.easeOut),
       ),
     );
+    _pulse = Tween<double>(begin: 0.96, end: 1.04).animate(
+      CurvedAnimation(
+        parent: _ctrl,
+        curve: const Interval(0.0, 0.9, curve: Curves.easeInOut),
+      ),
+    );
 
     _ctrl.forward().whenComplete(_navigate);
   }
@@ -94,70 +102,112 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Scaffold снаружи — не блокирует касания следующего экрана
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF8FAFF),
       body: GestureDetector(
         onTap: _navigate,
         behavior: HitTestBehavior.opaque,
         child: AnimatedBuilder(
           animation: _ctrl,
           builder: (ctx, _) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 2),
+            return Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFFF8FAFF), Color(0xFFEFF4FF)],
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 2),
 
                   // Лого — поднимается целиком снизу вверх
-                  Transform.translate(
-                    offset: Offset(0, _logoY.value),
-                    child: Opacity(
-                      opacity: _logoOp.value,
-                      child: SizedBox(
-                        width: logoSz,
-                        height: logoSz,
-                        child: const CustomPaint(painter: _StairsPainter()),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 28),
-
-                  // Название
-                  Opacity(
-                    opacity: _textOp.value,
-                    child: const Text(
-                      'Algeon',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 42,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF1E3A8A),
-                        letterSpacing: -1.5,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Субтитр
-                  Transform.translate(
-                    offset: Offset(0, _subSlide.value),
-                    child: Opacity(
-                      opacity: _subOp.value,
-                      child: const Text(
-                        'Математика с пониманием',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF6B7280),
-                          letterSpacing: 0.1,
+                    Transform.translate(
+                      offset: Offset(0, _logoY.value),
+                      child: Opacity(
+                        opacity: _logoOp.value,
+                        child: Transform.scale(
+                          scale: _pulse.value,
+                          child: Container(
+                            width: logoSz,
+                            height: logoSz,
+                            padding: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(logoSz * 0.18),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x332563EB),
+                                  blurRadius: 26,
+                                  offset: Offset(0, 14),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(logoSz * 0.12),
+                              child: const AppLogo(size: 220, color: Color(0xFF2563EB)),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  const Spacer(flex: 3),
-                ],
+                    const SizedBox(height: 28),
+
+                  // Название
+                    Opacity(
+                      opacity: _textOp.value,
+                      child: const Text(
+                        'Algeon',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 42,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1E3A8A),
+                          letterSpacing: -1.5,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                  // Субтитр
+                    Transform.translate(
+                      offset: Offset(0, _subSlide.value),
+                      child: Opacity(
+                        opacity: _subOp.value,
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Математика с пониманием',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFF6B7280),
+                                letterSpacing: 0.1,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            SizedBox(
+                              width: 84,
+                              child: LinearProgressIndicator(
+                                minHeight: 5,
+                                borderRadius: BorderRadius.circular(999),
+                                value: _ctrl.value.clamp(0.08, 1.0),
+                                backgroundColor: const Color(0xFFE2E8F0),
+                                valueColor: const AlwaysStoppedAnimation(Color(0xFF2563EB)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const Spacer(flex: 3),
+                  ],
+                ),
               ),
             );
           },
@@ -165,58 +215,4 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-}
-
-/// Рисует лестницу как ЕДИНЫЙ силуэт (один Path, без зазоров).
-/// Форма: три ступени — левый профиль образует «лесенку» снизу-слева вверх-вправо.
-/// Внешние углы скруглены, внутренние (вогнутые) — острые.
-class _StairsPainter extends CustomPainter {
-  const _StairsPainter();
-
-  static const _blue = Color(0xFF2563EB);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-    final paint = Paint()
-      ..color = _blue
-      ..style = PaintingStyle.fill;
-
-    final pad  = w * 0.06;
-    final inner = w - pad * 2;
-    final step  = inner / 3;   // размер одной ступени
-    final base  = h - pad;     // нижняя граница
-    final rr    = step * 0.16; // радиус скругления внешних углов
-
-    // Единый силуэт лестницы (обход по часовой стрелке):
-    //   - 5 выпуклых (скруглённых) углов: BL, BR, TR, step3-TL, step1-left-TL
-    //   - 3 вогнутых (острых) угла внутри ступеней
-    final path = Path()
-      ..moveTo(pad + rr, base)                              // старт на нижней кромке (после BL)
-      ..lineTo(w - pad - rr, base)                          // нижняя кромка →
-      ..arcToPoint(Offset(w - pad, base - rr),             // BR скруглённый угол
-          radius: Radius.circular(rr))
-      ..lineTo(w - pad, pad + rr)                           // правая кромка ↑
-      ..arcToPoint(Offset(w - pad - rr, pad),              // TR скруглённый угол
-          radius: Radius.circular(rr))
-      ..lineTo(pad + step * 2 + rr, pad)                   // верх ступени 3 ←
-      ..arcToPoint(Offset(pad + step * 2, pad + rr),       // TL ступени 3 скруглённый
-          radius: Radius.circular(rr))
-      ..lineTo(pad + step * 2, base - step * 2)            // левая кромка ступени 3 ↓ (острый)
-      ..lineTo(pad + step,     base - step * 2)            // внутренний уступ ←      (острый)
-      ..lineTo(pad + step,     base - step)                // левая кромка ступени 2 ↓ (острый)
-      ..lineTo(pad + rr,       base - step)                // верх ступени 1 ← (к TL-left)
-      ..arcToPoint(Offset(pad, base - step + rr),          // TL-left скруглённый угол
-          radius: Radius.circular(rr))
-      ..lineTo(pad, base - rr)                             // левая кромка ↓
-      ..arcToPoint(Offset(pad + rr, base),                 // BL скруглённый угол
-          radius: Radius.circular(rr))
-      ..close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(_StairsPainter old) => false;
 }

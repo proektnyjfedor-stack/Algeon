@@ -708,8 +708,8 @@ class _ProfileTabState extends State<ProfileTab> {
     final skinSecondary = palette.secondary;
     final skinSoft = palette.soft;
     final equippedLabel = palette.label;
-    final bgColor = isDark ? AppThemeColors.background(context) : Colors.white;
-    final cardBg = isDark ? AppThemeColors.surface(context) : Colors.white;
+    final bgColor = isDark ? const Color(0xFFF4F7FF) : Colors.white;
+    final cardBg = isDark ? const Color(0xFFFAFCFF) : Colors.white;
     final blueCard = isDark ? skinSecondary : skinPrimary;
     final blueCardAlt = isDark ? skinPrimary : skinSecondary;
     final ratio = achievementsTotal == 0 ? 0.0 : achievementsUnlocked / achievementsTotal;

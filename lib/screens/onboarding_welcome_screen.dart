@@ -26,6 +26,36 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   // Кастомизация персонажа
   AvatarData _avatarData = defaultCustomAvatar;
 
+  void _applyPreset(AvatarData preset) {
+    setState(() {
+      _avatarData = _avatarData.copyWith(
+        skinColor: preset.skinColor,
+        hairStyle: preset.hairStyle,
+        hairColor: preset.hairColor,
+        shirtColor: preset.shirtColor,
+        accessory: preset.accessory,
+        expression: preset.expression,
+        bgColor: preset.bgColor,
+      );
+    });
+  }
+
+  void _randomizeAvatar() {
+    HapticFeedback.lightImpact();
+    final time = DateTime.now().microsecondsSinceEpoch;
+    setState(() {
+      _avatarData = _avatarData.copyWith(
+        skinColor: avatarSkinColors[time % avatarSkinColors.length],
+        hairStyle: avatarHairStyles[(time ~/ 3) % avatarHairStyles.length],
+        hairColor: avatarHairColors[(time ~/ 5) % avatarHairColors.length],
+        shirtColor: avatarShirtColors[(time ~/ 7) % avatarShirtColors.length],
+        accessory: avatarAccessories[(time ~/ 11) % avatarAccessories.length],
+        expression: avatarExpressions[(time ~/ 13) % avatarExpressions.length],
+        bgColor: avatarBgColors[(time ~/ 17) % avatarBgColors.length],
+      );
+    });
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -194,9 +224,30 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           const SizedBox(height: 20),
 
           // Avatar preview
-          AvatarWidget(avatarData: _avatarData, size: 90),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppThemeColors.surface(context),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: AppThemeColors.border(context)),
+              boxShadow: AppShadows.soft(context),
+            ),
+            child: AvatarWidget(avatarData: _avatarData, size: 96),
+          ),
 
           const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _randomizeAvatar,
+                  icon: const Icon(Icons.auto_fix_high_rounded, size: 18),
+                  label: const Text('Случайный'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
 
           // Customization options
           Expanded(
@@ -209,6 +260,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     'Причёска',
                     Icons.content_cut_rounded,
                     _buildHairStyleRow(),
+                  ),
+
+                  _buildCustomizeSection(
+                    'Эмоция',
+                    Icons.emoji_emotions_rounded,
+                    _buildExpressionRow(),
                   ),
 
                   // Цвет кожи
@@ -249,6 +306,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     'Аксессуар',
                     Icons.auto_awesome_rounded,
                     _buildAccessoryRow(),
+                  ),
+
+                  _buildCustomizeSection(
+                    'Готовый стиль',
+                    Icons.style_rounded,
+                    _buildPresetRow(),
                   ),
 
                   // Фон
@@ -449,6 +512,101 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             for (int i = 0; i < avatarAccessories.length; i++) ...[
               if (i > 0) const SizedBox(width: 8),
               _buildAccessoryItem(avatarAccessories[i]),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpressionRow() {
+    return SizedBox(
+      height: 48,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (int i = 0; i < avatarExpressions.length; i++) ...[
+              if (i > 0) const SizedBox(width: 8),
+              _buildExpressionItem(avatarExpressions[i]),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpressionItem(String expression) {
+    final isSelected = _avatarData.expression == expression;
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        setState(() => _avatarData = _avatarData.copyWith(expression: expression));
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.accent.withValues(alpha: 0.15)
+              : AppThemeColors.surface(context),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? AppColors.accent : AppThemeColors.border(context),
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Text(
+          expressionNames[expression] ?? expression,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            color: isSelected ? AppColors.accent : AppThemeColors.textSecondary(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPresetRow() {
+    return SizedBox(
+      height: 72,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            for (int i = 0; i < allAvatars.length; i++) ...[
+              if (i > 0) const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  _applyPreset(allAvatars[i]);
+                },
+                child: Container(
+                  width: 62,
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppThemeColors.surface(context),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppThemeColors.border(context)),
+                  ),
+                  child: Column(
+                    children: [
+                      AvatarWidget(avatarData: allAvatars[i], size: 36),
+                      const SizedBox(height: 3),
+                      Text(
+                        allAvatars[i].name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: AppThemeColors.textSecondary(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ],
         ),
