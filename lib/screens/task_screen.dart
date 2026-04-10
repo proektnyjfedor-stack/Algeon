@@ -58,6 +58,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   bool _aiHintLoading = false;
   String? _aiHintText;
   Color? _answerFlashColor;
+  bool _showMathKeyboard = false;
 
   late AnimationController _cardAnimController;
   late Animation<double> _cardScaleAnim;
@@ -124,6 +125,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     _aiHintText = null;
     _wrongAttemptsOnCurrentTask = 0;
     _answerFlashColor = null;
+    _showMathKeyboard = false;
     _cardAnimController.forward(from: 0);
   }
 
@@ -632,25 +634,31 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final text = _textController.text;
     final isEmpty = text.isEmpty;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: borderColor, width: 2),
-      ),
-      child: Text(
-        isEmpty ? 'Введи ответ' : text,
-        style: TextStyle(
-          fontSize: 30,
-          fontWeight: isEmpty ? FontWeight.w400 : FontWeight.w700,
-          color: isEmpty
-              ? AppThemeColors.textHint(context)
-              : AppThemeColors.textPrimary(context),
+    return GestureDetector(
+      onTap: _isChecked
+          ? null
+          : () => setState(() => _showMathKeyboard = true),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: borderColor, width: 2),
         ),
-        textAlign: TextAlign.center,
+        child: Text(
+          isEmpty ? 'Введи ответ' : text,
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: isEmpty ? FontWeight.w400 : FontWeight.w700,
+            color: isEmpty
+                ? AppThemeColors.textHint(context)
+                : AppThemeColors.textPrimary(context),
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -777,7 +785,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Математическая клавиатура для textInput (пока не проверено)
-            if (!_isChecked && _task.type == TaskType.textInput) ...[
+            if (!_isChecked && _task.type == TaskType.textInput && _showMathKeyboard) ...[
               MathKeyboard(controller: _textController),
               const SizedBox(height: 12),
             ],
@@ -951,6 +959,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     setState(() {
       _isChecked = true;
       _isCorrect = correct;
+      _showMathKeyboard = false;
     });
     _triggerAnswerFlash(correct);
 
@@ -1015,6 +1024,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     setState(() {
       _isChecked = true;
       _isCorrect = false;
+      _showMathKeyboard = false;
       _skippedCount++;
       if (!_wrongTasks.contains(_task)) {
         _wrongCount++;
@@ -1034,6 +1044,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _skipTask() {
     setState(() {
+      _showMathKeyboard = false;
       _skippedCount++;
       _wrongCount++;
       _wrongTasks.add(_task);
