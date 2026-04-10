@@ -247,11 +247,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     curve: Curves.easeOutCubic,
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [palette.primary, palette.secondary],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      color: palette.primary,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Row(

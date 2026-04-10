@@ -737,11 +737,7 @@ class _ProfileTabState extends State<ProfileTab> {
               curve: Curves.easeOutCubic,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [blueCard, blueCardAlt],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: blueCard,
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(

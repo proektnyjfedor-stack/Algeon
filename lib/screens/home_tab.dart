@@ -202,11 +202,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 320),
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [palette.primary, palette.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: palette.primary,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Padding(

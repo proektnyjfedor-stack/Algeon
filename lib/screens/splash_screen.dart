@@ -102,23 +102,15 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Scaffold снаружи — не блокирует касания следующего экрана
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFF),
+      backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: _navigate,
         behavior: HitTestBehavior.opaque,
         child: AnimatedBuilder(
           animation: _ctrl,
           builder: (ctx, _) {
-            return Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFFF8FAFF), Color(0xFFEFF4FF)],
-                ),
-              ),
-              child: Center(
-                child: Column(
+            return Center(
+              child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Spacer(flex: 2),
@@ -208,7 +200,6 @@ class _SplashScreenState extends State<SplashScreen>
                     const Spacer(flex: 3),
                   ],
                 ),
-              ),
             );
           },
         ),

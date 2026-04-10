@@ -1,7 +1,5 @@
 /// Логотип приложения — минималистичная белая лестница
 
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 /// Логотип: синий фон + белая лестница (для светлых экранов)
@@ -16,12 +14,9 @@ class AppLogo extends StatelessWidget {
     return SizedBox(
       width: size,
       height: size,
-      child: Transform.rotate(
-        angle: math.pi,
-        child: CustomPaint(
-          painter: _StairsPainter(color: color ?? Colors.white),
-          size: Size(size, size),
-        ),
+      child: CustomPaint(
+        painter: _StairsPainter(color: color ?? Colors.white),
+        size: Size(size, size),
       ),
     );
   }
@@ -42,12 +37,9 @@ class AppLogoIcon extends StatelessWidget {
         color: const Color(0xFF2563EB),
         borderRadius: BorderRadius.circular(size * 0.22),
       ),
-      child: Transform.rotate(
-        angle: math.pi,
-        child: CustomPaint(
-          painter: _StairsPainter(color: Colors.white),
-          size: Size(size, size),
-        ),
+      child: CustomPaint(
+        painter: _StairsPainter(color: Colors.white),
+        size: Size(size, size),
       ),
     );
   }
