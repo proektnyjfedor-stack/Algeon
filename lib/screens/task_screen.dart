@@ -796,6 +796,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (keyboardMode) ...[
+              _buildKeyboardInputPreview(),
+              const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
@@ -866,6 +868,39 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       );
     }
     return const SizedBox.shrink(key: ValueKey('primary_empty'));
+  }
+
+  Widget _buildKeyboardInputPreview() {
+    final text = _textController.text;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: AppThemeColors.background(context),
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        border: Border.all(color: AppThemeColors.border(context)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.edit_rounded, size: 14, color: AppThemeColors.textHint(context)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text.isEmpty ? 'Ввод...' : text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: text.isEmpty ? FontWeight.w500 : FontWeight.w700,
+                color: text.isEmpty
+                    ? AppThemeColors.textHint(context)
+                    : AppThemeColors.textPrimary(context),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildActionButton({
