@@ -40,9 +40,11 @@ class _ExamsTabState extends State<ExamsTab> {
               slivers: [
                 // Header
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                    child: Row(
+                  child: _StaggeredReveal(
+                    delayMs: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                      child: Row(
                       children: [
                         Icon(Icons.assignment_rounded, color: AppColors.accent, size: 28),
                         const SizedBox(width: 12),
@@ -55,6 +57,7 @@ class _ExamsTabState extends State<ExamsTab> {
                           ),
                         ),
                       ],
+                      ),
                     ),
                   ),
                 ),
@@ -63,19 +66,25 @@ class _ExamsTabState extends State<ExamsTab> {
                 SliverPadding(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, showOge || showEge ? 0 : 100),
                   sliver: SliverToBoxAdapter(
-                    child: _buildExamCard(context, grade),
+                    child: _StaggeredReveal(
+                      delayMs: 40,
+                      child: _buildExamCard(context, grade),
+                    ),
                   ),
                 ),
 
                 // ── ОГЭ (только для 9 класса) ───────────────────────────
                 if (showOge) ...[
                   SliverToBoxAdapter(
-                    child: _buildSectionHeader(
-                      context,
-                      icon: Icons.school_rounded,
-                      title: 'ОГЭ — Математика',
-                      subtitle: '9 класс • ${ogeVariants.length} варианта • 235 мин',
-                      color: const Color(0xFF7C3AED),
+                    child: _StaggeredReveal(
+                      delayMs: 80,
+                      child: _buildSectionHeader(
+                        context,
+                        icon: Icons.school_rounded,
+                        title: 'ОГЭ — Математика',
+                        subtitle: '9 класс • ${ogeVariants.length} варианта • 235 мин',
+                        color: const Color(0xFF7C3AED),
+                      ),
                     ),
                   ),
                   SliverPadding(
@@ -83,7 +92,7 @@ class _ExamsTabState extends State<ExamsTab> {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (ctx, i) => _buildVariantCard(ctx, ogeVariants[i],
-                            color: const Color(0xFF7C3AED)),
+                            color: const Color(0xFF7C3AED), index: i),
                         childCount: ogeVariants.length,
                       ),
                     ),
@@ -93,12 +102,15 @@ class _ExamsTabState extends State<ExamsTab> {
                 // ── ЕГЭ (только для 11 класса) ──────────────────────────
                 if (showEge) ...[
                   SliverToBoxAdapter(
-                    child: _buildSectionHeader(
-                      context,
-                      icon: Icons.workspace_premium_rounded,
-                      title: 'ЕГЭ — Профильная математика',
-                      subtitle: '11 класс • ${egeVariants.length} варианта • 235 мин',
-                      color: const Color(0xFFDC2626),
+                    child: _StaggeredReveal(
+                      delayMs: 80,
+                      child: _buildSectionHeader(
+                        context,
+                        icon: Icons.workspace_premium_rounded,
+                        title: 'ЕГЭ — Профильная математика',
+                        subtitle: '11 класс • ${egeVariants.length} варианта • 235 мин',
+                        color: const Color(0xFFDC2626),
+                      ),
                     ),
                   ),
                   SliverPadding(
@@ -106,7 +118,7 @@ class _ExamsTabState extends State<ExamsTab> {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (ctx, i) => _buildVariantCard(ctx, egeVariants[i],
-                            color: const Color(0xFFDC2626)),
+                            color: const Color(0xFFDC2626), index: i),
                         childCount: egeVariants.length,
                       ),
                     ),
@@ -116,9 +128,11 @@ class _ExamsTabState extends State<ExamsTab> {
                 // ── Подсказка для других классов ────────────────────────
                 if (!showOge && !showEge)
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
-                      child: Container(
+                    child: _StaggeredReveal(
+                      delayMs: 120,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+                        child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: AppThemeColors.surface(context),
@@ -140,6 +154,7 @@ class _ExamsTabState extends State<ExamsTab> {
                               ),
                             ),
                           ],
+                        ),
                         ),
                       ),
                     ),
@@ -200,11 +215,13 @@ class _ExamsTabState extends State<ExamsTab> {
     );
   }
 
-  Widget _buildVariantCard(BuildContext context, ExamVariant variant, {required Color color}) {
+  Widget _buildVariantCard(BuildContext context, ExamVariant variant, {required Color color, required int index}) {
     final isPassed = ProgressService.getBool('exam_${variant.id}_passed');
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Material(
+    return _StaggeredReveal(
+      delayMs: 120 + (index * 35).clamp(0, 280),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
@@ -288,6 +305,7 @@ class _ExamsTabState extends State<ExamsTab> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );
@@ -560,6 +578,47 @@ class _ExamsTabState extends State<ExamsTab> {
       'tasks': examTasks,
       'timeMinutes': timeMinutes,
     });
+  }
+}
+
+class _StaggeredReveal extends StatefulWidget {
+  final Widget child;
+  final int delayMs;
+
+  const _StaggeredReveal({
+    required this.child,
+    this.delayMs = 0,
+  });
+
+  @override
+  State<_StaggeredReveal> createState() => _StaggeredRevealState();
+}
+
+class _StaggeredRevealState extends State<_StaggeredReveal> {
+  bool _visible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(Duration(milliseconds: widget.delayMs), () {
+      if (!mounted) return;
+      setState(() => _visible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOutCubic,
+      opacity: _visible ? 1 : 0,
+      child: AnimatedSlide(
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutCubic,
+        offset: _visible ? Offset.zero : const Offset(0, 0.03),
+        child: widget.child,
+      ),
+    );
   }
 }
 

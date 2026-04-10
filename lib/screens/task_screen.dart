@@ -3,6 +3,8 @@
 /// Минималистичный игровой стиль Algeon
 /// Чистый дизайн, мягкие закругления
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -55,6 +57,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   bool _textIsNotEmpty = false;
   bool _aiHintLoading = false;
   String? _aiHintText;
+  Color? _answerFlashColor;
 
   late AnimationController _cardAnimController;
   late Animation<double> _cardScaleAnim;
@@ -120,6 +123,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     _aiHintLoading = false;
     _aiHintText = null;
     _wrongAttemptsOnCurrentTask = 0;
+    _answerFlashColor = null;
     _cardAnimController.forward(from: 0);
   }
 
@@ -381,13 +385,19 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               duration: const Duration(milliseconds: 260),
               switchInCurve: Curves.easeOutCubic,
               switchOutCurve: Curves.easeInCubic,
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
                 key: ValueKey('${_task.id}_${_isChecked}_$_explanationStep'),
                 width: double.infinity,
                 padding: const EdgeInsets.all(28),
                 decoration: BoxDecoration(
                   color: AppThemeColors.surface(context),
                   borderRadius: BorderRadius.circular(AppRadius.xl),
+                  border: Border.all(
+                    color: (_answerFlashColor ?? Colors.transparent).withValues(alpha: 0.85),
+                    width: _answerFlashColor == null ? 0 : 2,
+                  ),
                   boxShadow: AppShadows.soft(context),
                 ),
                 child: Column(
@@ -942,6 +952,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       _isChecked = true;
       _isCorrect = correct;
     });
+    _triggerAnswerFlash(correct);
 
     if (correct) {
       _correctCount++;
@@ -958,6 +969,15 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       await ProgressService.recordAttempt(false);
       SoundService.playWrong();
     }
+  }
+
+  void _triggerAnswerFlash(bool correct) {
+    final flash = correct ? AppColors.success : AppColors.error;
+    setState(() => _answerFlashColor = flash);
+    Timer(const Duration(milliseconds: 520), () {
+      if (!mounted) return;
+      setState(() => _answerFlashColor = null);
+    });
   }
 
   Future<List<Achievement>> _checkProgressAchievements({
@@ -1008,6 +1028,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       // Для multipleChoice убираем выделение — только зелёный правильный ответ
       _selectedOption = null;
     });
+    _triggerAnswerFlash(false);
     SoundService.playWrong();
   }
 

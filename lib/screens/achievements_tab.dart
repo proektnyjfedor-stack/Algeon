@@ -180,11 +180,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
             slivers: [
               // Header
               SliverToBoxAdapter(
-                child: SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-                    child: Column(
+                child: _StaggeredReveal(
+                  delayMs: 0,
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                      child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
@@ -209,6 +211,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                         ),
                         const SizedBox(height: 8),
                       ],
+                      ),
                     ),
                   ),
                 ),
@@ -216,9 +219,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
               // Progress Card
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                  child: AnimatedContainer(
+                child: _StaggeredReveal(
+                  delayMs: 40,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                    child: AnimatedContainer(
                     duration: const Duration(milliseconds: 320),
                     curve: Curves.easeOutCubic,
                     padding: const EdgeInsets.all(24),
@@ -316,6 +321,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                         ),
                       ],
                     ),
+                    ),
                   ),
                 ),
               ),
@@ -323,10 +329,12 @@ class _AchievementsTabState extends State<AchievementsTab> {
               // Unlocked Section
               if (unlocked.isNotEmpty) ...[
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(20, 24, 20, 12),
-                    child: Row(
+                  child: _StaggeredReveal(
+                    delayMs: 80,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                      child: Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -351,6 +359,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           ),
                         ),
                       ],
+                      ),
                     ),
                   ),
                 ),
@@ -367,7 +376,10 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) =>
-                          _buildAchievementCard(unlocked[index], true, AppColors.accent),
+                          _StaggeredReveal(
+                            delayMs: 100 + (index * 26).clamp(0, 240),
+                            child: _buildAchievementCard(unlocked[index], true, AppColors.accent),
+                          ),
                       childCount: unlocked.length,
                     ),
                   ),
@@ -377,10 +389,12 @@ class _AchievementsTabState extends State<AchievementsTab> {
               // Locked Section
               if (locked.isNotEmpty) ...[
                 SliverToBoxAdapter(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(20, 24, 20, 12),
-                    child: Row(
+                  child: _StaggeredReveal(
+                    delayMs: 90,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                      child: Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -410,6 +424,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           ),
                         ),
                       ],
+                      ),
                     ),
                   ),
                 ),
@@ -425,8 +440,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       childAspectRatio: 0.75,
                     ),
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildAchievementCard(
-                          locked[index], false, AppColors.accent),
+                      (context, index) => _StaggeredReveal(
+                        delayMs: 120 + (index * 22).clamp(0, 240),
+                        child: _buildAchievementCard(
+                            locked[index], false, AppColors.accent),
+                      ),
                       childCount: locked.length,
                     ),
                   ),
@@ -730,5 +748,46 @@ class _AchievementsTabState extends State<AchievementsTab> {
       'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
     ];
     return '${date.day} ${months[date.month - 1]}';
+  }
+}
+
+class _StaggeredReveal extends StatefulWidget {
+  final Widget child;
+  final int delayMs;
+
+  const _StaggeredReveal({
+    required this.child,
+    this.delayMs = 0,
+  });
+
+  @override
+  State<_StaggeredReveal> createState() => _StaggeredRevealState();
+}
+
+class _StaggeredRevealState extends State<_StaggeredReveal> {
+  bool _visible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(Duration(milliseconds: widget.delayMs), () {
+      if (!mounted) return;
+      setState(() => _visible = true);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 260),
+      curve: Curves.easeOutCubic,
+      opacity: _visible ? 1 : 0,
+      child: AnimatedSlide(
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOutCubic,
+        offset: _visible ? Offset.zero : const Offset(0, 0.03),
+        child: widget.child,
+      ),
+    );
   }
 }
