@@ -63,6 +63,18 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   Task get _task => widget.tasks[_currentIndex];
   bool get _hasExplanation => _task.explanationSteps.isNotEmpty;
   double get _progress => (_currentIndex + 1) / widget.tasks.length;
+  bool get _isInequalityTask {
+    final q = _task.question;
+    final a = _task.answer;
+    return q.contains('>') ||
+        q.contains('<') ||
+        q.contains('≥') ||
+        q.contains('≤') ||
+        a.contains('>=') ||
+        a.contains('<=') ||
+        a.contains('≥') ||
+        a.contains('≤');
+  }
 
   @override
   void initState() {
@@ -400,7 +412,30 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             if (_task.type == TaskType.multipleChoice)
               _buildOptions()
             else
-              _buildTextInput(),
+              Column(
+                children: [
+                  _buildTextInput(),
+                  if (_isInequalityTask) ...[
+                    const SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppThemeColors.accentLight(context),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      child: Text(
+                        'Подсказка: для неравенств используй >= и <= (или кнопки ≥ и ≤).',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppThemeColors.textSecondary(context),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
           ],
         ),
       ),

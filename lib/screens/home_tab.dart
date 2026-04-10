@@ -120,6 +120,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
           SliverToBoxAdapter(
             child: _buildDailyGoal(todayCompleted),
           ),
+          SliverToBoxAdapter(
+            child: _buildQuickActions(),
+          ),
 
           // Section title
           SliverToBoxAdapter(
@@ -501,6 +504,33 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
+  Widget _buildQuickActions() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+      child: Row(
+        children: [
+          Expanded(
+            child: _QuickHomeButton(
+              icon: Icons.bolt_rounded,
+              title: 'Практика',
+              subtitle: 'Быстрые задания',
+              onTap: () => context.go('/practice'),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: _QuickHomeButton(
+              icon: Icons.assignment_rounded,
+              title: 'Экзамен',
+              subtitle: 'Режим ОГЭ/ЕГЭ',
+              onTap: () => context.go('/exams'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTopicCard({
     required TopicInfo topic,
     required int index,
@@ -657,5 +687,73 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     context
         .push('/learn/intro', extra: {'name': topicName, 'tasks': tasks})
         .then((_) => _refresh());
+  }
+}
+
+class _QuickHomeButton extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _QuickHomeButton({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppThemeColors.surface(context),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppThemeColors.border(context)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: AppThemeColors.accentLight(context),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: AppColors.accent, size: 18),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppThemeColors.textPrimary(context),
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppThemeColors.textSecondary(context),
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
