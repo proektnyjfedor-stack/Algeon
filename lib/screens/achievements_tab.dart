@@ -489,110 +489,114 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final pd = _getAchievementProgress(achievement);
     final rewardColor = isUnlocked ? AppColors.gold : accent;
 
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        _showAchievementDetail(achievement);
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppThemeColors.surface(context),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isUnlocked
-                ? rewardColor
-                : AppThemeColors.border(context),
-            width: isUnlocked ? 2 : 1,
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          _showAchievementDetail(achievement);
+        },
+        child: Ink(
+          decoration: BoxDecoration(
+            color: AppThemeColors.surface(context),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isUnlocked
+                  ? rewardColor
+                  : AppThemeColors.border(context),
+              width: isUnlocked ? 2 : 1,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: isUnlocked
-                      ? rewardColor
-                      : AppThemeColors.borderLight(context),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Icon(
-                    isUnlocked ? achievement.icon : Icons.lock_rounded,
-                    color: isUnlocked ? Colors.white : AppThemeColors.textHint(context),
-                    size: isUnlocked ? 28 : 24,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: isUnlocked
+                        ? rewardColor
+                        : AppThemeColors.borderLight(context),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                achievement.title,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: isUnlocked
-                      ? AppThemeColors.textPrimary(context)
-                      : AppThemeColors.textHint(context),
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 4),
-              // Прогресс текст
-              if (!isUnlocked) ...[
-                Text(
-                  pd.progressText,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: AppThemeColors.textHint(context),
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                // Мини прогресс-бар
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(3),
-                    child: TweenAnimationBuilder<double>(
-                      key: ValueKey('ach_card_${achievement.key}_${pd.progress.toStringAsFixed(3)}'),
-                      tween: Tween(begin: 0, end: pd.progress),
-                      duration: const Duration(milliseconds: 520),
-                      curve: Curves.easeOutCubic,
-                      builder: (context, animatedProgress, _) {
-                        return LinearProgressIndicator(
-                          value: animatedProgress,
-                          minHeight: 4,
-                          backgroundColor: AppThemeColors.borderLight(context),
-                          valueColor: AlwaysStoppedAnimation(
-                            pd.progress >= 1.0
-                                ? AppColors.success
-                                : accent,
-                          ),
-                        );
-                      },
+                  child: Center(
+                    child: Icon(
+                      isUnlocked ? achievement.icon : Icons.lock_rounded,
+                      color: isUnlocked ? Colors.white : AppThemeColors.textHint(context),
+                      size: isUnlocked ? 28 : 24,
                     ),
                   ),
                 ),
-              ] else ...[
                 Text(
-                  achievement.description,
+                  achievement.title,
                   style: TextStyle(
-                    fontSize: 10,
-                    color: AppThemeColors.textSecondary(context),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: isUnlocked
+                        ? AppThemeColors.textPrimary(context)
+                        : AppThemeColors.textHint(context),
                   ),
                   textAlign: TextAlign.center,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 4),
+                // Прогресс текст
+                if (!isUnlocked) ...[
+                  Text(
+                    pd.progressText,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppThemeColors.textHint(context),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  // Мини прогресс-бар
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(3),
+                      child: TweenAnimationBuilder<double>(
+                        key: ValueKey('ach_card_${achievement.key}_${pd.progress.toStringAsFixed(3)}'),
+                        tween: Tween(begin: 0, end: pd.progress),
+                        duration: const Duration(milliseconds: 520),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, animatedProgress, _) {
+                          return LinearProgressIndicator(
+                            value: animatedProgress,
+                            minHeight: 4,
+                            backgroundColor: AppThemeColors.borderLight(context),
+                            valueColor: AlwaysStoppedAnimation(
+                              pd.progress >= 1.0
+                                  ? AppColors.success
+                                  : accent,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  Text(
+                    achievement.description,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: AppThemeColors.textSecondary(context),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

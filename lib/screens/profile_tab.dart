@@ -1316,22 +1316,25 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: iconColor),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: AppThemeColors.textPrimary(context),
-          fontWeight: FontWeight.w600,
+    return _InteractiveListTileShell(
+      onTap: trailing == null ? null : () {},
+      child: ListTile(
+        leading: Icon(icon, color: iconColor),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: AppThemeColors.textPrimary(context),
+            fontWeight: FontWeight.w600,
+          ),
         ),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: TextStyle(
-          color: AppThemeColors.textSecondary(context),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(
+            color: AppThemeColors.textSecondary(context),
+          ),
         ),
+        trailing: trailing,
       ),
-      trailing: trailing,
     );
   }
 }
@@ -1351,19 +1354,22 @@ class _ActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: iconColor),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: AppThemeColors.textPrimary(context),
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      trailing: const Icon(Icons.chevron_right_rounded),
+    return _InteractiveListTileShell(
       onTap: onTap,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
+      child: ListTile(
+        leading: Icon(icon, color: iconColor),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: AppThemeColors.textPrimary(context),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right_rounded),
+        onTap: onTap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
       ),
     );
   }
@@ -1378,6 +1384,45 @@ class _DividerLine extends StatelessWidget {
       height: 1,
       thickness: 1,
       color: AppThemeColors.border(context),
+    );
+  }
+}
+
+class _InteractiveListTileShell extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _InteractiveListTileShell({
+    required this.child,
+    this.onTap,
+  });
+
+  @override
+  State<_InteractiveListTileShell> createState() => _InteractiveListTileShellState();
+}
+
+class _InteractiveListTileShellState extends State<_InteractiveListTileShell> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 140),
+        curve: Curves.easeOutCubic,
+        color: _hovered
+            ? AppThemeColors.accentLight(context).withValues(alpha: 0.35)
+            : Colors.transparent,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.onTap,
+            child: widget.child,
+          ),
+        ),
+      ),
     );
   }
 }
