@@ -48,12 +48,16 @@ class _ExamsTabState extends State<ExamsTab> {
                       children: [
                         Icon(Icons.assignment_rounded, color: AppColors.accent, size: 28),
                         const SizedBox(width: 12),
-                        Text(
-                          'Экзамен',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                            color: AppThemeColors.textPrimary(context),
+                        Expanded(
+                          child: Text(
+                            'Экзамен',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: AppThemeColors.textPrimary(context),
+                            ),
                           ),
                         ),
                       ],

@@ -171,6 +171,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     double progress,
   ) {
     final palette = _equippedPalette();
+    final narrow = MediaQuery.of(context).size.width < 390;
     return SafeArea(
       bottom: false,
       child: Padding(
@@ -200,12 +201,12 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               Row(
                 children: [
                   const AppLogo(size: 36),
-                  const SizedBox(width: 10),
-                  const Text(
+                  SizedBox(width: narrow ? 6 : 10),
+                  Text(
                     'Algeon',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 20,
+                      fontSize: narrow ? 17 : 20,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                       letterSpacing: -0.5,

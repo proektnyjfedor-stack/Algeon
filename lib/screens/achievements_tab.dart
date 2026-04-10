@@ -233,102 +233,101 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       color: AppColors.gold,
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.military_tech_rounded,
-                                color: Colors.white, size: 36),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final compact = constraints.maxWidth < 430;
+                        if (compact) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Прогресс',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      Colors.white.withValues(alpha: 0.9),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  Text(
-                                    '${unlocked.length}',
-                                    style: const TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    ' / ${achievements.length}',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white
-                                          .withValues(alpha: 0.8),
+                                  _buildProgressBadge(progress),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Прогресс',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white.withValues(alpha: 0.9),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          '${unlocked.length} / ${achievements.length}',
+                                          style: const TextStyle(
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w900,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
                             ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 72,
-                          height: 72,
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: SizedBox(
-                                  width: 64,
-                                  height: 64,
-                                  child: TweenAnimationBuilder<double>(
-                                    key: ValueKey('ach_progress_${progress.toStringAsFixed(3)}'),
-                                    tween: Tween(begin: 0, end: progress),
-                                    duration: const Duration(milliseconds: 700),
-                                    curve: Curves.easeOutCubic,
-                                    builder: (context, animatedProgress, _) {
-                                      return CircularProgressIndicator(
-                                        value: animatedProgress,
-                                        strokeWidth: 6,
-                                        backgroundColor: Colors.white
-                                            .withValues(alpha: 0.3),
-                                        valueColor:
-                                            const AlwaysStoppedAnimation(
-                                                Colors.white),
-                                      );
-                                    },
-                                  ),
-                                ),
+                          );
+                        }
+                        return Row(
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.3),
+                                borderRadius: BorderRadius.circular(18),
                               ),
-                              Center(
-                                child: Text(
-                                  '${(progress * 100).toInt()}%',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                              child: const Center(
+                                child: Icon(Icons.military_tech_rounded,
+                                    color: Colors.white, size: 36),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Прогресс',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white.withValues(alpha: 0.9),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${unlocked.length}',
+                                        style: const TextStyle(
+                                          fontSize: 36,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Text(
+                                        ' / ${achievements.length}',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white.withValues(alpha: 0.8),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _buildProgressBadge(progress),
+                          ],
+                        );
+                      },
                     ),
                     ),
                   ),
@@ -479,6 +478,47 @@ class _AchievementsTabState extends State<AchievementsTab> {
       decoration: BoxDecoration(
         color: AppThemeColors.borderLight(context),
         borderRadius: BorderRadius.circular(14),
+      ),
+    );
+  }
+
+  Widget _buildProgressBadge(double progress) {
+    return SizedBox(
+      width: 72,
+      height: 72,
+      child: Stack(
+        children: [
+          Center(
+            child: SizedBox(
+              width: 64,
+              height: 64,
+              child: TweenAnimationBuilder<double>(
+                key: ValueKey('ach_progress_${progress.toStringAsFixed(3)}'),
+                tween: Tween(begin: 0, end: progress),
+                duration: const Duration(milliseconds: 700),
+                curve: Curves.easeOutCubic,
+                builder: (context, animatedProgress, _) {
+                  return CircularProgressIndicator(
+                    value: animatedProgress,
+                    strokeWidth: 6,
+                    backgroundColor: Colors.white.withValues(alpha: 0.3),
+                    valueColor: const AlwaysStoppedAnimation(Colors.white),
+                  );
+                },
+              ),
+            ),
+          ),
+          Center(
+            child: Text(
+              '${(progress * 100).toInt()}%',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
