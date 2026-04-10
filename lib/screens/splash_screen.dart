@@ -1,13 +1,10 @@
-/// Splash Screen — крупная лестница (~половина экрана), подъём снизу вверх, фон по теме
-
-import 'dart:math' show min;
+/// Splash Screen — только стильная синяя надпись Algeon
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../router/app_router.dart';
 import '../services/progress_service.dart';
-import '../widgets/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,52 +16,27 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _ctrl;
+  late Animation<double> _fade;
+  late Animation<double> _slide;
+  late Animation<double> _scale;
 
-  late Animation<double> _logoOp;
-  late Animation<double> _textOp;
-  late Animation<double> _subOp;
-  late Animation<double> _subSlide;
-  late Animation<double> _pulse;
+  static const Color _blueA = Color(0xFF3B82F6);
+  static const Color _blueB = Color(0xFF1D4ED8);
 
   @override
   void initState() {
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2600),
+      duration: const Duration(milliseconds: 1800),
     );
-
-    _logoOp = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
-      ),
+    _fade = CurvedAnimation(parent: _ctrl, curve: const Interval(0.0, 0.55, curve: Curves.easeOut));
+    _slide = Tween<double>(begin: 28, end: 0).animate(
+      CurvedAnimation(parent: _ctrl, curve: const Interval(0.0, 0.65, curve: Curves.easeOutCubic)),
     );
-    _textOp = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.52, 0.76, curve: Curves.easeOut),
-      ),
+    _scale = Tween<double>(begin: 0.94, end: 1).animate(
+      CurvedAnimation(parent: _ctrl, curve: const Interval(0.0, 0.7, curve: Curves.easeOutCubic)),
     );
-    _subOp = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.62, 0.86, curve: Curves.easeOut),
-      ),
-    );
-    _subSlide = Tween<double>(begin: 14, end: 0).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.62, 0.86, curve: Curves.easeOut),
-      ),
-    );
-    _pulse = Tween<double>(begin: 0.985, end: 1.015).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.0, 0.92, curve: Curves.easeInOut),
-      ),
-    );
-
     _ctrl.forward().whenComplete(_navigate);
   }
 
@@ -83,127 +55,51 @@ class _SplashScreenState extends State<SplashScreen>
     super.dispose();
   }
 
-  /// Смещение лестницы по Y: движение вверх — стартуем ниже (положительный Y), к 0.
-  /// В координатах Flutter положительный offset опускает отрисовку вниз; к 0 — «поднимается».
-  double _logoSlideY(double screenHeight, double halfH) {
-    const slideCurve = Interval(0.0, 0.72, curve: Curves.easeOutCubic);
-    final t = slideCurve.transform(_ctrl.value);
-    final start = (halfH * 0.58 + screenHeight * 0.1).clamp(100.0, 320.0);
-    return start * (1 - t);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final screen = MediaQuery.sizeOf(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
     final bgColor = isDark ? Colors.black : Colors.white;
-    const stairColor = Color(0xFF2563EB);
-    final titleColor = isDark ? Colors.white : const Color(0xFF1E3A8A);
-    final subtitleColor = isDark ? const Color(0xFFB0B0B0) : const Color(0xFF6B7280);
-    final progressBg = isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE2E8F0);
-    const progressFg = Color(0xFF2563EB);
-
-    final halfH = screen.height * 0.5;
-    final logoSz = min(screen.width * 0.78, halfH * 0.92).clamp(200.0, 480.0);
 
     return Scaffold(
       backgroundColor: bgColor,
       body: GestureDetector(
         onTap: _navigate,
         behavior: HitTestBehavior.opaque,
-        child: AnimatedBuilder(
-          animation: _ctrl,
-          builder: (ctx, _) {
-            final slideY = _logoSlideY(screen.height, halfH);
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: halfH,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.center,
-                    children: [
-                      Transform.translate(
-                        offset: Offset(0, slideY),
-                        child: Opacity(
-                          opacity: _logoOp.value,
-                          child: Transform.scale(
-                            scale: _pulse.value,
-                            child: SizedBox(
-                              width: logoSz,
-                              height: logoSz,
-                              child: AppLogo(
-                                size: logoSz,
-                                color: stairColor,
-                              ),
-                            ),
-                          ),
+        child: Center(
+          child: AnimatedBuilder(
+            animation: _ctrl,
+            builder: (ctx, _) {
+              return Opacity(
+                opacity: _fade.value,
+                child: Transform.translate(
+                  offset: Offset(0, _slide.value),
+                  child: Transform.scale(
+                    scale: _scale.value,
+                    child: ShaderMask(
+                      blendMode: BlendMode.srcIn,
+                      shaderCallback: (bounds) => const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [_blueA, _blueB],
+                      ).createShader(bounds),
+                      child: const Text(
+                        'Algeon',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 56,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -2.5,
+                          height: 1,
+                          color: Colors.white,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Opacity(
-                          opacity: _textOp.value,
-                          child: Text(
-                            'Algeon',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 40,
-                              fontWeight: FontWeight.w800,
-                              color: titleColor,
-                              letterSpacing: -1.5,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Transform.translate(
-                          offset: Offset(0, _subSlide.value),
-                          child: Opacity(
-                            opacity: _subOp.value,
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Математика с пониманием',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                    color: subtitleColor,
-                                    letterSpacing: 0.1,
-                                  ),
-                                ),
-                                const SizedBox(height: 18),
-                                SizedBox(
-                                  width: 96,
-                                  child: LinearProgressIndicator(
-                                    minHeight: 5,
-                                    borderRadius: BorderRadius.circular(999),
-                                    value: _ctrl.value.clamp(0.06, 1.0),
-                                    backgroundColor: progressBg,
-                                    valueColor: AlwaysStoppedAnimation<Color>(progressFg),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ),
-              ],
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

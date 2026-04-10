@@ -48,8 +48,8 @@
       position: fixed;
       inset: 0;
       display: flex;
-      flex-direction: column;
-      align-items: stretch;
+      align-items: center;
+      justify-content: center;
       background: #ffffff;
       z-index: 9999;
     }
@@ -58,74 +58,38 @@
       .loading-screen { background: #000000; }
     }
 
-    /* Верхняя половина — крупная лестница, подъём снизу вверх */
-    .loading-top {
-      flex: 1;
-      min-height: 45vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
+    /* Только надпись Algeon — градиент как во Flutter */
+    .loading-brand {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: clamp(44px, 12vmin, 58px);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: brandIn 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
     }
 
-    .loading-logo {
-      width: min(78vw, calc(50vh * 0.92), 480px);
-      max-width: 92%;
-      aspect-ratio: 1 / 1;
-      animation: logoRise 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+    @supports not (background-clip: text) {
+      .loading-brand {
+        color: #2563EB;
+        -webkit-text-fill-color: #2563EB;
+        background: none;
+      }
     }
 
-    @keyframes logoRise {
+    @keyframes brandIn {
       from {
-        transform: translateY(min(42vw, 28vh, 200px));
         opacity: 0;
+        transform: translateY(22px) scale(0.96);
       }
       to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0) scale(1);
       }
-    }
-
-    .loading-bottom {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 28px;
-      padding-top: 8px;
-    }
-
-    .loading-title {
-      color: #1E3A8A;
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-      font-size: clamp(28px, 9vmin, 44px);
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      animation: textIn 0.5s ease-out 0.85s both;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .loading-title { color: #ffffff; }
-    }
-
-    .loading-sub {
-      color: #6B7280;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 15px;
-      font-weight: 400;
-      margin-top: 10px;
-      animation: textIn 0.5s ease-out 0.95s both;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .loading-sub { color: #b0b0b0; }
-    }
-
-    .loading-stair-fill { fill: #2563EB; }
-
-    @keyframes textIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0);    }
     }
   </style>
 
@@ -134,20 +98,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" async></script>
 </head>
 <body>
-  <!-- Loading Screen (до первого кадра Flutter) -->
+  <!-- До первого кадра Flutter — только Algeon -->
   <div class="loading-screen" id="loading">
-    <div class="loading-top">
-      <div class="loading-logo">
-        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" aria-hidden="true">
-        <!-- Прямые углы: pad=18, step=88, base=282 (как в AppLogo) -->
-        <path class="loading-stair-fill" d="M 18,282 L 282,282 L 282,18 L 194,18 L 194,106 L 106,106 L 106,194 L 18,194 Z"/>
-        </svg>
-      </div>
-    </div>
-    <div class="loading-bottom">
-      <div class="loading-title">Algeon</div>
-      <div class="loading-sub">Математика с пониманием</div>
-    </div>
+    <div class="loading-brand">Algeon</div>
   </div>
 
   <script>
