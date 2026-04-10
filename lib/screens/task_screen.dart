@@ -819,14 +819,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 switchOutCurve: Curves.easeInCubic,
                 child: _buildPrimaryAction(),
               ),
-              if (!_isChecked) ...[
+              if (!_isChecked && _wrongAttemptsOnCurrentTask >= 2) ...[
                 const SizedBox(height: 8),
-                // После 2 ошибок на одной задаче — показываем «Не знаю»
                 AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: _wrongAttemptsOnCurrentTask >= 2
-                    ? _buildDontKnowButton()
-                    : _buildSkipButton(),
+                  duration: const Duration(milliseconds: 200),
+                  child: _buildDontKnowButton(),
                 ),
               ],
             ],
@@ -927,36 +924,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               fontSize: 17,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSkipButton() {
-    return GestureDetector(
-      key: const ValueKey('secondary_skip'),
-      onTap: _skipTask,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: double.infinity,
-        height: 56,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(
-            color: AppThemeColors.border(context),
-            width: 2,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            'Пропустить',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: AppThemeColors.textSecondary(context),
             ),
           ),
         ),
@@ -1096,25 +1063,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     });
     _triggerAnswerFlash(false);
     SoundService.playWrong();
-  }
-
-  void _skipTask() {
-    setState(() {
-      _showMathKeyboard = false;
-      _skippedCount++;
-      _wrongCount++;
-      _wrongTasks.add(_task);
-    });
-    SoundService.playWrong();
-
-    if (_currentIndex < widget.tasks.length - 1) {
-      setState(() {
-        _currentIndex++;
-        _reset();
-      });
-    } else {
-      _showSummary();
-    }
   }
 
   void _goNext() {
