@@ -79,6 +79,24 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         a.contains('≤');
   }
 
+  int get _keyboardInitialTab {
+    final combined = '${_task.question} ${_task.answer}'.toLowerCase();
+    final hasIneq = _isInequalityTask ||
+        combined.contains('>=') ||
+        combined.contains('<=') ||
+        combined.contains('>') ||
+        combined.contains('<');
+    if (hasIneq) return 2;
+    final hasVars = combined.contains('x') ||
+        combined.contains('y') ||
+        combined.contains('z') ||
+        combined.contains('π') ||
+        combined.contains('sqrt') ||
+        combined.contains('корень');
+    if (hasVars) return 1;
+    return 0;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -807,7 +825,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                   visualDensity: VisualDensity.compact,
                 ),
               ),
-              MathKeyboard(controller: _textController),
+              MathKeyboard(
+                controller: _textController,
+                initialTab: _keyboardInitialTab,
+              ),
               const SizedBox(height: 2),
             ],
 

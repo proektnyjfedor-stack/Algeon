@@ -8,11 +8,13 @@ import '../theme/app_theme.dart';
 class MathKeyboard extends StatelessWidget {
   final TextEditingController controller;
   final bool enabled;
+  final int initialTab;
 
   const MathKeyboard({
     super.key,
     required this.controller,
     this.enabled = true,
+    this.initialTab = 0,
   });
 
   void _press(String key) {
@@ -119,6 +121,7 @@ class MathKeyboard extends StatelessWidget {
     return _MathKeyboardBody(
       controller: controller,
       enabled: enabled,
+      initialTab: initialTab,
       onPress: _press,
     );
   }
@@ -237,11 +240,13 @@ class MathKeyboard extends StatelessWidget {
 class _MathKeyboardBody extends StatefulWidget {
   final TextEditingController controller;
   final bool enabled;
+  final int initialTab;
   final void Function(String key) onPress;
 
   const _MathKeyboardBody({
     required this.controller,
     required this.enabled,
+    required this.initialTab,
     required this.onPress,
   });
 
@@ -251,6 +256,21 @@ class _MathKeyboardBody extends StatefulWidget {
 
 class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
   int _tab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _tab = widget.initialTab.clamp(0, 2);
+  }
+
+  @override
+  void didUpdateWidget(covariant _MathKeyboardBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final next = widget.initialTab.clamp(0, 2);
+    if (next != oldWidget.initialTab && next != _tab) {
+      setState(() => _tab = next);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
