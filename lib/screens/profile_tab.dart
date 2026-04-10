@@ -23,9 +23,9 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab> {
   late final ScrollController _scrollController;
   final ImagePicker _imagePicker = ImagePicker();
-  static const Color _bluePrimary = Color(0xFF1D4ED8);
-  static const Color _blueDeep = Color(0xFF1E40AF);
-  static const Color _blueSoft = Color(0xFFEAF2FF);
+  static const Color _bluePrimary = Color(0xFF3B82F6);
+  static const Color _blueDeep = Color(0xFF2563EB);
+  static const Color _blueSoft = Color(0xFFF0F7FF);
 
   ({Color primary, Color secondary, Color soft, String? label}) _equippedPalette() {
     final equipped = ProgressService.getEquippedBetaItem();
