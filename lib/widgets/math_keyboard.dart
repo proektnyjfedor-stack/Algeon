@@ -108,34 +108,34 @@ class MathKeyboard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildRow(context, ['7', '8', '9', '(', ')']),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         _buildRow(context, ['4', '5', '6', '+', '-']),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         _buildRow(context, ['1', '2', '3', '*', '/']),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         _buildRow(context, ['0', '.', 'x', '^', '=']),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Row(
           children: [
             Expanded(child: _buildKey(context, '±')),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Expanded(child: _buildKey(context, '>')),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Expanded(child: _buildKey(context, '<')),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Expanded(child: _buildKey(context, '≥')),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Expanded(child: _buildKey(context, '≤')),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Row(
           children: [
             Expanded(
               flex: 2,
               child: _buildKey(context, 'clear'),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 6),
             Expanded(
               flex: 3,
               child: _buildKey(context, 'backspace'),
@@ -150,7 +150,7 @@ class MathKeyboard extends StatelessWidget {
     return Row(
       children: [
         for (int i = 0; i < keys.length; i++) ...[
-          if (i > 0) const SizedBox(width: 8),
+          if (i > 0) const SizedBox(width: 6),
           Expanded(child: _buildKey(context, keys[i])),
         ],
       ],
@@ -182,14 +182,14 @@ class MathKeyboard extends StatelessWidget {
     if (isBackspace) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
-      child = Icon(Icons.backspace_rounded, color: AppColors.error, size: 22);
+      child = Icon(Icons.backspace_rounded, color: AppColors.error, size: 20);
     } else if (isClear) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
       child = Text(
         'Очистить',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: 13,
           fontWeight: FontWeight.w700,
           color: AppColors.error,
         ),
@@ -206,7 +206,7 @@ class MathKeyboard extends StatelessWidget {
       child = Text(
         display,
         style: TextStyle(
-          fontSize: display.length > 1 ? 18 : 22,
+          fontSize: display.length > 1 ? 16 : 20,
           fontWeight: FontWeight.w700,
           color: AppColors.accent,
         ),
@@ -217,7 +217,7 @@ class MathKeyboard extends StatelessWidget {
       child = Text(
         key,
         style: TextStyle(
-          fontSize: 24,
+          fontSize: 22,
           fontWeight: FontWeight.w600,
           color: AppThemeColors.textPrimary(context),
         ),
@@ -228,10 +228,10 @@ class MathKeyboard extends StatelessWidget {
       onTap: enabled ? () => _press(key) : null,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 46,
+        height: 40,
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: borderColor, width: 1.5),
           boxShadow: [
             BoxShadow(
