@@ -294,15 +294,22 @@ class _AchievementsTabState extends State<AchievementsTab> {
                                 child: SizedBox(
                                   width: 64,
                                   height: 64,
-                                  child:
-                                      CircularProgressIndicator(
-                                    value: progress,
-                                    strokeWidth: 6,
-                                    backgroundColor: Colors.white
-                                        .withValues(alpha: 0.3),
-                                    valueColor:
-                                        const AlwaysStoppedAnimation(
-                                            Colors.white),
+                                  child: TweenAnimationBuilder<double>(
+                                    key: ValueKey('ach_progress_${progress.toStringAsFixed(3)}'),
+                                    tween: Tween(begin: 0, end: progress),
+                                    duration: const Duration(milliseconds: 700),
+                                    curve: Curves.easeOutCubic,
+                                    builder: (context, animatedProgress, _) {
+                                      return CircularProgressIndicator(
+                                        value: animatedProgress,
+                                        strokeWidth: 6,
+                                        backgroundColor: Colors.white
+                                            .withValues(alpha: 0.3),
+                                        valueColor:
+                                            const AlwaysStoppedAnimation(
+                                                Colors.white),
+                                      );
+                                    },
                                   ),
                                 ),
                               ),
@@ -553,15 +560,23 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(3),
-                    child: LinearProgressIndicator(
-                      value: pd.progress,
-                      minHeight: 4,
-                      backgroundColor: AppThemeColors.borderLight(context),
-                      valueColor: AlwaysStoppedAnimation(
-                        pd.progress >= 1.0
-                            ? AppColors.success
-                            : accent,
-                      ),
+                    child: TweenAnimationBuilder<double>(
+                      key: ValueKey('ach_card_${achievement.key}_${pd.progress.toStringAsFixed(3)}'),
+                      tween: Tween(begin: 0, end: pd.progress),
+                      duration: const Duration(milliseconds: 520),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, animatedProgress, _) {
+                        return LinearProgressIndicator(
+                          value: animatedProgress,
+                          minHeight: 4,
+                          backgroundColor: AppThemeColors.borderLight(context),
+                          valueColor: AlwaysStoppedAnimation(
+                            pd.progress >= 1.0
+                                ? AppColors.success
+                                : accent,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -643,15 +658,23 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 const SizedBox(height: 20),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: LinearProgressIndicator(
-                    value: pd.progress,
-                    minHeight: 10,
-                    backgroundColor: AppThemeColors.borderLight(context),
-                    valueColor: AlwaysStoppedAnimation(
-                      pd.progress >= 1.0
-                          ? AppColors.success
-                          : AppColors.accent,
-                    ),
+                  child: TweenAnimationBuilder<double>(
+                    key: ValueKey('ach_detail_${achievement.key}_${pd.progress.toStringAsFixed(3)}'),
+                    tween: Tween(begin: 0, end: pd.progress),
+                    duration: const Duration(milliseconds: 560),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, animatedProgress, _) {
+                      return LinearProgressIndicator(
+                        value: animatedProgress,
+                        minHeight: 10,
+                        backgroundColor: AppThemeColors.borderLight(context),
+                        valueColor: AlwaysStoppedAnimation(
+                          pd.progress >= 1.0
+                              ? AppColors.success
+                              : AppColors.accent,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 10),

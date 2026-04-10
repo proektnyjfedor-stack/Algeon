@@ -256,12 +256,20 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           SizedBox(
                             width: 56,
                             height: 56,
-                            child: CircularProgressIndicator(
-                              value: progress,
-                              strokeWidth: 4,
-                              backgroundColor: Colors.white.withValues(alpha: 0.25),
-                              valueColor: const AlwaysStoppedAnimation(Colors.white),
-                              strokeCap: StrokeCap.round,
+                            child: TweenAnimationBuilder<double>(
+                              key: ValueKey('hero_progress_${progress.toStringAsFixed(3)}'),
+                              tween: Tween(begin: 0, end: progress),
+                              duration: const Duration(milliseconds: 650),
+                              curve: Curves.easeOutCubic,
+                              builder: (context, animatedProgress, _) {
+                                return CircularProgressIndicator(
+                                  value: animatedProgress,
+                                  strokeWidth: 4,
+                                  backgroundColor: Colors.white.withValues(alpha: 0.25),
+                                  valueColor: const AlwaysStoppedAnimation(Colors.white),
+                                  strokeCap: StrokeCap.round,
+                                );
+                              },
                             ),
                           ),
                           Center(
@@ -428,13 +436,21 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   const SizedBox(height: 6),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      minHeight: 5,
-                      backgroundColor: AppThemeColors.border(context),
-                      valueColor: AlwaysStoppedAnimation(
-                        goalReached ? AppColors.success : palette.primary,
-                      ),
+                    child: TweenAnimationBuilder<double>(
+                      key: ValueKey('daily_goal_${progress.toStringAsFixed(3)}'),
+                      tween: Tween(begin: 0, end: progress),
+                      duration: const Duration(milliseconds: 560),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, animatedProgress, _) {
+                        return LinearProgressIndicator(
+                          value: animatedProgress,
+                          minHeight: 5,
+                          backgroundColor: AppThemeColors.border(context),
+                          valueColor: AlwaysStoppedAnimation(
+                            goalReached ? AppColors.success : palette.primary,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -612,13 +628,21 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       const SizedBox(height: 8),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(3),
-                        child: LinearProgressIndicator(
-                          value: progress,
-                          minHeight: 4,
-                          backgroundColor: AppThemeColors.borderLight(context),
-                          valueColor: AlwaysStoppedAnimation(
-                            isComplete ? AppColors.success : accent,
-                          ),
+                        child: TweenAnimationBuilder<double>(
+                          key: ValueKey('topic_${topic.name}_${progress.toStringAsFixed(3)}'),
+                          tween: Tween(begin: 0, end: progress),
+                          duration: const Duration(milliseconds: 520),
+                          curve: Curves.easeOutCubic,
+                          builder: (context, animatedProgress, _) {
+                            return LinearProgressIndicator(
+                              value: animatedProgress,
+                              minHeight: 4,
+                              backgroundColor: AppThemeColors.borderLight(context),
+                              valueColor: AlwaysStoppedAnimation(
+                                isComplete ? AppColors.success : accent,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

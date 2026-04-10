@@ -935,11 +935,19 @@ class _ProfileTabState extends State<ProfileTab> {
                     const SizedBox(height: 10),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(999),
-                      child: LinearProgressIndicator(
-                        minHeight: 10,
-                        value: ratio.clamp(0, 1),
-                        backgroundColor: skinSoft,
-                        valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
+                      child: TweenAnimationBuilder<double>(
+                        key: ValueKey('profile_ratio_${ratio.toStringAsFixed(3)}'),
+                        tween: Tween(begin: 0, end: ratio.clamp(0, 1)),
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, animatedRatio, _) {
+                          return LinearProgressIndicator(
+                            minHeight: 10,
+                            value: animatedRatio,
+                            backgroundColor: skinSoft,
+                            valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
+                          );
+                        },
                       ),
                     ),
                   ],

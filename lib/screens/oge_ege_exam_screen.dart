@@ -160,102 +160,124 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   // ── Диалог итогов ────────────────────────────────────────────
   void _showResultDialog(int correct, int total, bool passed) {
     final pct = ((correct / total) * 100).toInt();
-    showDialog(
+    showGeneralDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppThemeColors.surface(ctx),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        contentPadding: const EdgeInsets.all(28),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              passed ? Icons.emoji_events_rounded : Icons.refresh_rounded,
-              size: 56,
-              color: passed ? AppColors.success : AppColors.error,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              passed ? 'Отлично! Сдано!' : 'Попробуй ещё раз',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: AppThemeColors.textPrimary(ctx),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '$pct%',
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.w900,
-                color: passed ? AppColors.success : AppColors.error,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '$correct из $total заданий верно',
-              style: TextStyle(
-                fontSize: 15,
-                color: AppThemeColors.textSecondary(ctx),
-              ),
-            ),
-            const SizedBox(height: 24),
-            if (_newAchievements.isNotEmpty) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.gold.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  'Новых достижений: ${_newAchievements.length}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.gold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-            Row(
+      barrierLabel: 'exam_result',
+      transitionDuration: const Duration(milliseconds: 260),
+      pageBuilder: (ctx, animation, secondaryAnimation) => Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 420),
+          child: AlertDialog(
+            backgroundColor: AppThemeColors.surface(ctx),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            contentPadding: const EdgeInsets.all(28),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                      // Остаться — посмотреть разбор
-                    },
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                    ),
-                    child: const Text('Разбор'),
+                Icon(
+                  passed ? Icons.emoji_events_rounded : Icons.refresh_rounded,
+                  size: 56,
+                  color: passed ? AppColors.success : AppColors.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  passed ? 'Отлично! Сдано!' : 'Попробуй ещё раз',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: AppThemeColors.textPrimary(ctx),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                      context.pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
+                const SizedBox(height: 8),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: pct / 100),
+                  duration: const Duration(milliseconds: 700),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, _) => Text(
+                    '${(value * 100).toInt()}%',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w900,
+                      color: passed ? AppColors.success : AppColors.error,
                     ),
-                    child: const Text('Готово'),
                   ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$correct из $total заданий верно',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: AppThemeColors.textSecondary(ctx),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                if (_newAchievements.isNotEmpty) ...[
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.gold.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'Новых достижений: ${_newAchievements.length}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          // Остаться — посмотреть разбор
+                        },
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(vertical: 13),
+                        ),
+                        child: const Text('Разбор'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop();
+                          context.pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(vertical: 13),
+                        ),
+                        child: const Text('Готово'),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
+      transitionBuilder: (ctx, anim, _, child) {
+        final curved = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1).animate(curved),
+            child: child,
+          ),
+        );
+      },
     );
   }
 
