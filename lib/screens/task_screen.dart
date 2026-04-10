@@ -771,8 +771,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildBottomBar() {
+    final compactBottomBar = _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+      padding: EdgeInsets.fromLTRB(16, compactBottomBar ? 8 : 16, 16, compactBottomBar ? 10 : 20),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: const BorderRadius.vertical(

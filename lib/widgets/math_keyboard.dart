@@ -104,41 +104,46 @@ class MathKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    final isUltraCompact = h < 780;
+    final rowGap = isUltraCompact ? 4.0 : 6.0;
+    final keyGap = isUltraCompact ? 4.0 : 6.0;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildRow(context, ['7', '8', '9', '(', ')']),
-        const SizedBox(height: 6),
-        _buildRow(context, ['4', '5', '6', '+', '-']),
-        const SizedBox(height: 6),
-        _buildRow(context, ['1', '2', '3', '*', '/']),
-        const SizedBox(height: 6),
-        _buildRow(context, ['0', '.', 'x', '^', '=']),
-        const SizedBox(height: 6),
+        _buildRow(context, ['7', '8', '9', '(', ')'], keyGap),
+        SizedBox(height: rowGap),
+        _buildRow(context, ['4', '5', '6', '+', '-'], keyGap),
+        SizedBox(height: rowGap),
+        _buildRow(context, ['1', '2', '3', '*', '/'], keyGap),
+        SizedBox(height: rowGap),
+        _buildRow(context, ['0', '.', 'x', '^', '='], keyGap),
+        SizedBox(height: rowGap),
         Row(
           children: [
-            Expanded(child: _buildKey(context, '±')),
-            const SizedBox(width: 6),
-            Expanded(child: _buildKey(context, '>')),
-            const SizedBox(width: 6),
-            Expanded(child: _buildKey(context, '<')),
-            const SizedBox(width: 6),
-            Expanded(child: _buildKey(context, '≥')),
-            const SizedBox(width: 6),
-            Expanded(child: _buildKey(context, '≤')),
+            Expanded(child: _buildKey(context, '±', isUltraCompact)),
+            SizedBox(width: keyGap),
+            Expanded(child: _buildKey(context, '>', isUltraCompact)),
+            SizedBox(width: keyGap),
+            Expanded(child: _buildKey(context, '<', isUltraCompact)),
+            SizedBox(width: keyGap),
+            Expanded(child: _buildKey(context, '≥', isUltraCompact)),
+            SizedBox(width: keyGap),
+            Expanded(child: _buildKey(context, '≤', isUltraCompact)),
           ],
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: rowGap),
         Row(
           children: [
             Expanded(
               flex: 2,
-              child: _buildKey(context, 'clear'),
+              child: _buildKey(context, 'clear', isUltraCompact),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: keyGap),
             Expanded(
               flex: 3,
-              child: _buildKey(context, 'backspace'),
+              child: _buildKey(context, 'backspace', isUltraCompact),
             ),
           ],
         ),
@@ -146,18 +151,19 @@ class MathKeyboard extends StatelessWidget {
     );
   }
 
-  Widget _buildRow(BuildContext context, List<String> keys) {
+  Widget _buildRow(BuildContext context, List<String> keys, double keyGap) {
+    final isUltraCompact = MediaQuery.of(context).size.height < 780;
     return Row(
       children: [
         for (int i = 0; i < keys.length; i++) ...[
-          if (i > 0) const SizedBox(width: 6),
-          Expanded(child: _buildKey(context, keys[i])),
+          if (i > 0) SizedBox(width: keyGap),
+          Expanded(child: _buildKey(context, keys[i], isUltraCompact)),
         ],
       ],
     );
   }
 
-  Widget _buildKey(BuildContext context, String key) {
+  Widget _buildKey(BuildContext context, String key, bool isUltraCompact) {
     final isBackspace = key == 'backspace';
     final isClear = key == 'clear';
     final isSpecial = key == '-' ||
@@ -182,14 +188,14 @@ class MathKeyboard extends StatelessWidget {
     if (isBackspace) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
-      child = Icon(Icons.backspace_rounded, color: AppColors.error, size: 20);
+      child = Icon(Icons.backspace_rounded, color: AppColors.error, size: isUltraCompact ? 18 : 20);
     } else if (isClear) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
       child = Text(
         'Очистить',
         style: TextStyle(
-          fontSize: 13,
+          fontSize: isUltraCompact ? 12 : 13,
           fontWeight: FontWeight.w700,
           color: AppColors.error,
         ),
@@ -206,7 +212,7 @@ class MathKeyboard extends StatelessWidget {
       child = Text(
         display,
         style: TextStyle(
-          fontSize: display.length > 1 ? 16 : 20,
+          fontSize: display.length > 1 ? (isUltraCompact ? 14 : 16) : (isUltraCompact ? 18 : 20),
           fontWeight: FontWeight.w700,
           color: AppColors.accent,
         ),
@@ -217,7 +223,7 @@ class MathKeyboard extends StatelessWidget {
       child = Text(
         key,
         style: TextStyle(
-          fontSize: 22,
+          fontSize: isUltraCompact ? 19 : 22,
           fontWeight: FontWeight.w600,
           color: AppThemeColors.textPrimary(context),
         ),
@@ -228,10 +234,10 @@ class MathKeyboard extends StatelessWidget {
       onTap: enabled ? () => _press(key) : null,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: 40,
+        height: isUltraCompact ? 34 : 40,
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(isUltraCompact ? 10 : 12),
           border: Border.all(color: borderColor, width: 1.5),
           boxShadow: [
             BoxShadow(
