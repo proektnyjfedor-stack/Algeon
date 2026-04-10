@@ -79,6 +79,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         a.contains('≤');
   }
 
+  bool get _isLandscape {
+    final size = MediaQuery.of(context).size;
+    return size.width > size.height;
+  }
+
   int get _keyboardInitialTab {
     final combined = '${_task.question} ${_task.answer}'.toLowerCase();
     final hasIneq = _isInequalityTask ||
@@ -125,7 +130,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _onTextChanged() {
     final notEmpty = _textController.text.isNotEmpty;
-    if (notEmpty != _textIsNotEmpty) {
+    // Для текстовых задач поле и превью рисуются через Text(controller.text), без
+    // TextField — поэтому нужен setState на каждое изменение, иначе после 1-го символа
+    // экран не перерисовывается (раньше setState был только при смене пусто↔не пусто).
+    if (_task.type == TaskType.textInput) {
+      setState(() => _textIsNotEmpty = notEmpty);
+    } else if (notEmpty != _textIsNotEmpty) {
       setState(() => _textIsNotEmpty = notEmpty);
     }
   }
@@ -319,9 +329,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTopBar() {
+    final landscape = _isLandscape;
     return Container(
-      margin: const EdgeInsets.fromLTRB(12, 10, 12, 8),
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      margin: EdgeInsets.fromLTRB(12, landscape ? 6 : 10, 12, landscape ? 4 : 8),
+      padding: EdgeInsets.fromLTRB(12, landscape ? 8 : 10, 12, landscape ? 8 : 10),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -334,7 +345,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             icon: Icons.close_rounded,
             onTap: _showExitConfirmation,
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: landscape ? 10 : 16),
           // Progress indicator
           Expanded(
             child: Column(
@@ -360,7 +371,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 Text(
                   '${_currentIndex + 1} / ${widget.tasks.length}',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: landscape ? 12 : 13,
                     fontWeight: FontWeight.w500,
                     color: AppThemeColors.textSecondary(context),
                   ),
@@ -378,12 +389,13 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     required VoidCallback onTap,
     Color? color,
   }) {
+    final landscape = _isLandscape;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         width: 44,
-        height: 44,
+        height: landscape ? 40 : 44,
         decoration: BoxDecoration(
           color: AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -392,17 +404,18 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         child: Icon(
           icon,
           color: color ?? AppThemeColors.textSecondary(context),
-          size: 22,
+          size: landscape ? 20 : 22,
         ),
       ),
     );
   }
 
   Widget _buildTaskCard() {
+    final landscape = _isLandscape;
     return ScaleTransition(
       scale: _cardScaleAnim,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(landscape ? 14 : 24),
         child: Column(
           children: [
             // Topic label
@@ -424,7 +437,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: landscape ? 14 : 32),
 
             // Question card
             AnimatedSwitcher(
@@ -436,7 +449,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 curve: Curves.easeOutCubic,
                 key: ValueKey('${_task.id}_${_isChecked}_$_explanationStep'),
                 width: double.infinity,
-                padding: const EdgeInsets.all(28),
+                padding: EdgeInsets.all(landscape ? 18 : 28),
                 decoration: BoxDecoration(
                   color: AppThemeColors.surface(context),
                   borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -451,7 +464,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                     MathText(
                       _task.question,
                       style: TextStyle(
-                        fontSize: _task.type == TaskType.multipleChoice ? 36 : 20,
+                        fontSize: _task.type == TaskType.multipleChoice
+                            ? (landscape ? 28 : 36)
+                            : (landscape ? 18 : 20),
                         fontWeight: FontWeight.w700,
                         color: AppThemeColors.textPrimary(context),
                         height: 1.3,
@@ -467,7 +482,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               ),
             ),
 
-            const SizedBox(height: 28),
+            SizedBox(height: landscape ? 14 : 28),
 
             // Answer section
             if (_task.type == TaskType.multipleChoice)
@@ -600,6 +615,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildOptions() {
+    final landscape = _isLandscape;
     final options = _task.options ?? [];
 
     return Wrap(
@@ -641,8 +657,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              constraints: const BoxConstraints(minWidth: 80, minHeight: 56),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              constraints: BoxConstraints(minWidth: 80, minHeight: landscape ? 48 : 56),
+              padding: EdgeInsets.symmetric(horizontal: landscape ? 16 : 20, vertical: landscape ? 10 : 14),
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(AppRadius.md),
@@ -652,7 +668,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 child: Text(
                   option,
                   style: TextStyle(
-                    fontSize: 17,
+                    fontSize: landscape ? 16 : 17,
                     fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
@@ -666,6 +682,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTextInput() {
+    final landscape = _isLandscape;
     Color borderColor = AppThemeColors.border(context);
     Color bgColor = AppThemeColors.surface(context);
 
@@ -687,7 +704,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
+        padding: EdgeInsets.symmetric(horizontal: landscape ? 18 : 24, vertical: landscape ? 14 : 22),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -696,7 +713,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         child: Text(
           isEmpty ? 'Введи ответ' : text,
           style: TextStyle(
-            fontSize: 30,
+            fontSize: landscape ? 24 : 30,
             fontWeight: isEmpty ? FontWeight.w400 : FontWeight.w700,
             color: isEmpty
                 ? AppThemeColors.textHint(context)
@@ -816,10 +833,16 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildBottomBar() {
+    final landscape = _isLandscape;
     final keyboardMode =
         _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
     return Container(
-      padding: EdgeInsets.fromLTRB(16, keyboardMode ? 4 : 16, 16, keyboardMode ? 8 : 20),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        keyboardMode ? (landscape ? 2 : 4) : (landscape ? 10 : 16),
+        16,
+        keyboardMode ? (landscape ? 4 : 8) : (landscape ? 10 : 20),
+      ),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         border: Border(
@@ -836,7 +859,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           children: [
             if (keyboardMode) ...[
               _buildKeyboardInputPreview(),
-              const SizedBox(height: 4),
+              SizedBox(height: landscape ? 2 : 4),
               Align(
                 alignment: Alignment.centerRight,
                 child: IconButton(
