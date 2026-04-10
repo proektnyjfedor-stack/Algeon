@@ -30,6 +30,10 @@ class MathKeyboard extends StatelessWidget {
         }
         return;
 
+      case 'clear':
+        controller.clear();
+        return;
+
       case '±':
         if (text.startsWith('-')) {
           controller.text = text.substring(1);
@@ -55,6 +59,17 @@ class MathKeyboard extends StatelessWidget {
         if (text.contains('/')) return;
         if (text.isEmpty || text == '-') return;
         controller.text = '$text/';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
+      case '*':
+      case '^':
+      case '(':
+      case ')':
+      case 'x':
+      case '+':
+        controller.text = '$text$key';
         controller.selection =
             TextSelection.collapsed(offset: controller.text.length);
         return;
@@ -92,21 +107,39 @@ class MathKeyboard extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildRow(context, ['7', '8', '9', 'backspace']),
+        _buildRow(context, ['7', '8', '9', '(', ')']),
         const SizedBox(height: 8),
-        _buildRow(context, ['4', '5', '6', '-']),
+        _buildRow(context, ['4', '5', '6', '+', '-']),
         const SizedBox(height: 8),
-        _buildRow(context, ['1', '2', '3', '/']),
+        _buildRow(context, ['1', '2', '3', '*', '/']),
         const SizedBox(height: 8),
-        _buildRow(context, ['>', '<', '≥', '≤']),
+        _buildRow(context, ['0', '.', 'x', '^', '=']),
         const SizedBox(height: 8),
         Row(
           children: [
-            Expanded(child: _buildKey(context, '=')),
+            Expanded(child: _buildKey(context, '±')),
             const SizedBox(width: 8),
-            Expanded(flex: 2, child: _buildKey(context, '0')),
+            Expanded(child: _buildKey(context, '>')),
             const SizedBox(width: 8),
-            Expanded(child: _buildKey(context, '.')),
+            Expanded(child: _buildKey(context, '<')),
+            const SizedBox(width: 8),
+            Expanded(child: _buildKey(context, '≥')),
+            const SizedBox(width: 8),
+            Expanded(child: _buildKey(context, '≤')),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: _buildKey(context, 'clear'),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 3,
+              child: _buildKey(context, 'backspace'),
+            ),
           ],
         ),
       ],
@@ -126,8 +159,21 @@ class MathKeyboard extends StatelessWidget {
 
   Widget _buildKey(BuildContext context, String key) {
     final isBackspace = key == 'backspace';
-    final isSpecial =
-        key == '-' || key == '/' || key == '=' || key == '>' || key == '<' || key == '≥' || key == '≤';
+    final isClear = key == 'clear';
+    final isSpecial = key == '-' ||
+        key == '+' ||
+        key == '/' ||
+        key == '*' ||
+        key == '=' ||
+        key == '>' ||
+        key == '<' ||
+        key == '≥' ||
+        key == '≤' ||
+        key == '^' ||
+        key == '(' ||
+        key == ')' ||
+        key == 'x' ||
+        key == '±';
 
     Color bgColor;
     Color borderColor;
@@ -137,14 +183,30 @@ class MathKeyboard extends StatelessWidget {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
       child = Icon(Icons.backspace_rounded, color: AppColors.error, size: 22);
+    } else if (isClear) {
+      bgColor = AppColors.error.withValues(alpha: 0.08);
+      borderColor = AppColors.error.withValues(alpha: 0.25);
+      child = Text(
+        'Очистить',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: AppColors.error,
+        ),
+      );
     } else if (isSpecial) {
       bgColor = AppThemeColors.accentLight(context);
       borderColor = AppColors.accent.withValues(alpha: 0.3);
-      final display = key == '-' ? '−' : key;
+      final display = switch (key) {
+        '-' => '−',
+        '*' => '×',
+        '/' => '÷',
+        _ => key,
+      };
       child = Text(
         display,
         style: TextStyle(
-          fontSize: 22,
+          fontSize: display.length > 1 ? 18 : 22,
           fontWeight: FontWeight.w700,
           color: AppColors.accent,
         ),
