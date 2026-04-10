@@ -45,7 +45,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   int _wrongCount = 0;
   int _skippedCount = 0;
   final List<Task> _wrongTasks = [];
-  int _comboStreak = 0;
 
   final Stopwatch _stopwatch = Stopwatch();
 
@@ -378,31 +377,37 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             const SizedBox(height: 32),
 
             // Question card
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(28),
-              decoration: BoxDecoration(
-                color: AppThemeColors.surface(context),
-                borderRadius: BorderRadius.circular(AppRadius.xl),
-                boxShadow: AppShadows.soft(context),
-              ),
-              child: Column(
-                children: [
-                  MathText(
-                    _task.question,
-                    style: TextStyle(
-                      fontSize: _task.type == TaskType.multipleChoice ? 36 : 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppThemeColors.textPrimary(context),
-                      height: 1.3,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 260),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              child: Container(
+                key: ValueKey('${_task.id}_${_isChecked}_$_explanationStep'),
+                width: double.infinity,
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  color: AppThemeColors.surface(context),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                  boxShadow: AppShadows.soft(context),
+                ),
+                child: Column(
+                  children: [
+                    MathText(
+                      _task.question,
+                      style: TextStyle(
+                        fontSize: _task.type == TaskType.multipleChoice ? 36 : 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppThemeColors.textPrimary(context),
+                        height: 1.3,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  if (!_isChecked) ...[
-                    const SizedBox(height: 20),
-                    _buildHintSection(),
+                    if (!_isChecked) ...[
+                      const SizedBox(height: 20),
+                      _buildHintSection(),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
 
@@ -924,22 +929,14 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
     if (correct) {
       _correctCount++;
-      _comboStreak++;
       await ProgressService.markSolved(_task.id);
-      final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
-      await ProgressService.addCoins(coins);
-      _showCoinsToast(coins, combo: _comboStreak);
       final newAchievements = await _checkProgressAchievements();
       if (newAchievements.isNotEmpty) {
-        final bonus = newAchievements.length * 50;
-        await ProgressService.addCoins(bonus);
-        _showCoinsToast(bonus);
         await _showAchievementsUnlockedDialog(newAchievements);
       }
       SoundService.playCorrect();
     } else {
       _wrongCount++;
-      _comboStreak = 0;
       _wrongAttemptsOnCurrentTask++;
       _wrongTasks.add(_task);
       await ProgressService.recordAttempt(false);
@@ -982,7 +979,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     setState(() {
       _isChecked = true;
       _isCorrect = false;
-      _comboStreak = 0;
       _skippedCount++;
       if (!_wrongTasks.contains(_task)) {
         _wrongCount++;
@@ -1001,7 +997,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _skipTask() {
     setState(() {
-      _comboStreak = 0;
       _skippedCount++;
       _wrongCount++;
       _wrongTasks.add(_task);
@@ -1080,24 +1075,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             child: const Text('Выйти'),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showCoinsToast(int amount, {int? combo}) {
-    if (!mounted) return;
-    final comboText = (combo != null && combo > 1) ? ' • Комбо x$combo' : '';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(milliseconds: 1300),
-        behavior: SnackBarBehavior.floating,
-        content: Row(
-          children: [
-            const Icon(Icons.monetization_on_rounded, color: AppColors.gold),
-            const SizedBox(width: 8),
-            Text('+$amount монет$comboText'),
-          ],
-        ),
       ),
     );
   }

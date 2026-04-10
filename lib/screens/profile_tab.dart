@@ -362,6 +362,7 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
+  // ignore: unused_element
   Future<void> _openBetaShop() async {
     const firstPurchaseFxKey = 'shop_first_purchase_confetti_shown';
     final items = [
@@ -957,12 +958,6 @@ class _ProfileTabState extends State<ProfileTab> {
                   icon: Icons.school_rounded,
                   color: _bluePrimary,
                   onTap: _changeGrade,
-                ),
-                _QuickActionButton(
-                  title: 'Бета-магазин',
-                  icon: Icons.storefront_rounded,
-                  color: _bluePrimary,
-                  onTap: _openBetaShop,
                 ),
               ],
             ),

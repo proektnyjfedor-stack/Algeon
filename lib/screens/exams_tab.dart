@@ -598,8 +598,6 @@ class _ExamScreenState extends State<ExamScreen> {
   bool _textIsNotEmpty = false;
   final Set<String> _solvedInExam = <String>{};
   List<Achievement> _newAchievements = const [];
-  int _coinsEarned = 0;
-  int _comboStreak = 0;
 
   @override
   void initState() {
@@ -660,17 +658,12 @@ class _ExamScreenState extends State<ExamScreen> {
     });
 
     if (isCorrect) {
-      _comboStreak++;
       if (_solvedInExam.add(_currentTask.id)) {
         await ProgressService.markSolved(_currentTask.id);
-        final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
-        await ProgressService.addCoins(coins);
-        _coinsEarned += coins;
       } else {
         await ProgressService.recordAttempt(true);
       }
     } else {
-      _comboStreak = 0;
       await ProgressService.recordAttempt(false);
     }
 
@@ -737,12 +730,6 @@ class _ExamScreenState extends State<ExamScreen> {
       grade: widget.grade,
       gradeProgress: gradeProgress,
     );
-    if (_newAchievements.isNotEmpty) {
-      final bonus = _newAchievements.length * 50;
-      await ProgressService.addCoins(bonus);
-      _coinsEarned += bonus;
-    }
-
     _showResultsDialog();
   }
 
@@ -819,26 +806,6 @@ class _ExamScreenState extends State<ExamScreen> {
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.gold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-            ],
-            if (_coinsEarned > 0) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  'Награда за экзамен: +$_coinsEarned монет',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.accent,
                   ),
                 ),
               ),

@@ -37,7 +37,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final gradeProgress =
         gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
 
-    final unlockedNow = await AchievementsService.evaluateProgress(
+    await AchievementsService.evaluateProgress(
       totalSolved: totalSolved,
       streak: streak,
       accuracy: accuracy,
@@ -45,10 +45,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
       grade: grade,
       gradeProgress: gradeProgress,
     );
-
-    if (unlockedNow.isNotEmpty) {
-      await ProgressService.addCoins(unlockedNow.length * 50);
-    }
 
     if (mounted) setState(() {});
   }
@@ -142,7 +138,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final unlocked = achievements.where((a) => a.isUnlocked).toList();
     final locked = achievements.where((a) => !a.isUnlocked).toList();
     final progress = AchievementsService.getProgress();
-    final coins = ProgressService.getCoins();
     final columns = _getGridColumns(context);
 
     return Scaffold(
@@ -182,30 +177,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppColors.gold.withValues(alpha: 0.16),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.monetization_on_rounded,
-                                  size: 18, color: AppColors.accent),
-                              const SizedBox(width: 6),
-                              Text(
-                                '$coins монет (бета-приз)',
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.gold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

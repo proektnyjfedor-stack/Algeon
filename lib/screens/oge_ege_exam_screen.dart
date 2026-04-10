@@ -33,8 +33,6 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
   bool _finished = false;
   bool _submitted = false;
   List<Achievement> _newAchievements = const [];
-  int _coinsEarned = 0;
-  int _comboStreak = 0;
 
   // Контроллеры текстовых полей — один на задачу
   late List<TextEditingController> _textControllers;
@@ -120,13 +118,8 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       final isCorrect = given == right;
       _results[i] = isCorrect;
       if (isCorrect) {
-        _comboStreak++;
         await ProgressService.markSolved(task.id);
-        final coins = ProgressService.coinsForCorrectAnswer(_comboStreak);
-        await ProgressService.addCoins(coins);
-        _coinsEarned += coins;
       } else {
-        _comboStreak = 0;
         await ProgressService.recordAttempt(false);
       }
     }
@@ -161,12 +154,6 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
       grade: grade,
       gradeProgress: gradeProgress,
     );
-    if (_newAchievements.isNotEmpty) {
-      final bonus = _newAchievements.length * 50;
-      await ProgressService.addCoins(bonus);
-      _coinsEarned += bonus;
-    }
-
     _showResultDialog(correct, widget.variant.tasks.length, passed);
   }
 
@@ -230,26 +217,6 @@ class _OgeEgeExamScreenState extends State<OgeEgeExamScreen> {
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.gold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-            ],
-            if (_coinsEarned > 0) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  'Награда за экзамен: +$_coinsEarned монет',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.accent,
                   ),
                 ),
               ),
