@@ -1,4 +1,5 @@
 /// Логотип приложения — лестница (силуэт), по умолчанию синий акцент
+library;
 
 import 'package:flutter/material.dart';
 
@@ -7,10 +8,10 @@ const Color kAppLogoStairBlue = Color(0xFF2563EB);
 
 /// Логотип: силуэт лестницы; на светлом фоне обычно синий, в квадрате [AppLogoIcon] — белый на синем
 class AppLogo extends StatelessWidget {
-  final double size;
-  final Color? color;
 
   const AppLogo({super.key, this.size = 80, this.color});
+  final double size;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,9 @@ class AppLogo extends StatelessWidget {
 
 /// Логотип в синем квадрате — иконка приложения
 class AppLogoIcon extends StatelessWidget {
-  final double size;
 
   const AppLogoIcon({super.key, this.size = 80});
+  final double size;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class AppLogoIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(size * 0.22),
       ),
       child: CustomPaint(
-        painter: _StairsPainter(color: Colors.white),
+        painter: const _StairsPainter(color: Colors.white),
         size: Size(size, size),
       ),
     );
@@ -50,9 +51,9 @@ class AppLogoIcon extends StatelessWidget {
 
 /// Лестница — единый силуэт, только прямые углы (без скруглений)
 class _StairsPainter extends CustomPainter {
-  final Color color;
 
   const _StairsPainter({required this.color});
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -88,10 +89,10 @@ class _StairsPainter extends CustomPainter {
 
 /// Логотип с названием (для онбординга и др.)
 class AppLogoWithText extends StatelessWidget {
-  final double logoSize;
-  final Color? textColor;
 
   const AppLogoWithText({super.key, this.logoSize = 80, this.textColor});
+  final double logoSize;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {

@@ -1,24 +1,17 @@
 /// Summary Screen — итоги сессии
 /// Величественный дизайн Algeon
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../models/task.dart';
 import '../services/progress_service.dart';
 import '../services/achievements_service.dart';
 import '../services/ai_service.dart';
+import '../services/sound_service.dart';
 
 class SummaryScreen extends StatefulWidget {
-  final String topicName;
-  final int totalCount;
-  final int correctCount;
-  final int wrongCount;
-  final int skippedCount;
-  final List<Task> wrongTasks;
-  final Duration? elapsedTime;
-  final List<Achievement> newAchievements;
 
   const SummaryScreen({
     super.key,
@@ -45,6 +38,14 @@ class SummaryScreen extends StatefulWidget {
           (map['newAchievements'] as List?)?.cast<Achievement>() ?? [],
     );
   }
+  final String topicName;
+  final int totalCount;
+  final int correctCount;
+  final int wrongCount;
+  final int skippedCount;
+  final List<Task> wrongTasks;
+  final Duration? elapsedTime;
+  final List<Achievement> newAchievements;
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
@@ -173,7 +174,8 @@ class _SummaryScreenState extends State<SummaryScreen>
             alignment: Alignment.topRight,
             child: IconButton(
               onPressed: () {
-                HapticFeedback.lightImpact();
+                SoundService.hapticLight();
+                SoundService.playTap();
                 context.go('/learn');
               },
               icon: Container(
@@ -278,22 +280,20 @@ class _SummaryScreenState extends State<SummaryScreen>
 
             const SizedBox(height: 20),
 
-            // Stats row
-            Row(
+            // Stats chips (адаптивно, чтобы не ломалось на узких экранах)
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                _buildScoreStat('${widget.correctCount}', 'Верно', AppColors.success),
-                _buildDividerV(),
-                _buildScoreStat('${widget.wrongCount}', 'Ошибок', AppColors.error),
-                _buildDividerV(),
-                _buildScoreStat('${widget.totalCount}', 'Задач', AppColors.accent),
-                if (widget.elapsedTime != null) ...[
-                  _buildDividerV(),
-                  _buildScoreStat(
+                _buildScoreStatChip('${widget.correctCount}', 'Верно', AppColors.success),
+                _buildScoreStatChip('${widget.wrongCount}', 'Ошибок', AppColors.error),
+                _buildScoreStatChip('${widget.totalCount}', 'Задач', AppColors.accent),
+                if (widget.elapsedTime != null)
+                  _buildScoreStatChip(
                     _formatDuration(widget.elapsedTime!),
                     'Время',
                     AppThemeColors.textSecondary(context),
                   ),
-                ],
               ],
             ),
           ],
@@ -302,22 +302,22 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildDividerV() {
+  Widget _buildScoreStatChip(String value, String label, Color color) {
     return Container(
-      width: 1,
-      height: 40,
-      color: AppThemeColors.border(context),
-    );
-  }
-
-  Widget _buildScoreStat(String value, String label, Color color) {
-    return Expanded(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppThemeColors.borderLight(context),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppThemeColors.border(context)),
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             value,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 18,
               fontWeight: FontWeight.w800,
               color: color,
             ),
@@ -406,7 +406,7 @@ class _SummaryScreenState extends State<SummaryScreen>
           children: [
             Row(
               children: [
-                Icon(Icons.emoji_events_rounded, color: AppColors.gold, size: 20),
+                const Icon(Icons.emoji_events_rounded, color: AppColors.gold, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   'Новые достижения!',
@@ -470,7 +470,8 @@ class _SummaryScreenState extends State<SummaryScreen>
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
         child: GestureDetector(
           onTap: () {
-            HapticFeedback.lightImpact();
+            SoundService.hapticLight();
+            SoundService.playTap();
             _requestAnalysis();
           },
           behavior: HitTestBehavior.opaque,
@@ -490,7 +491,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                     color: AppThemeColors.accentLight(context),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(Icons.auto_awesome_rounded,
+                  child: const Icon(Icons.auto_awesome_rounded,
                       color: AppColors.accent, size: 22),
                 ),
                 const SizedBox(width: 14),
@@ -572,7 +573,7 @@ class _SummaryScreenState extends State<SummaryScreen>
           children: [
             Row(
               children: [
-                Icon(Icons.auto_awesome_rounded,
+                const Icon(Icons.auto_awesome_rounded,
                     color: AppColors.accent, size: 20),
                 const SizedBox(width: 8),
                 Text(
@@ -612,7 +613,10 @@ class _SummaryScreenState extends State<SummaryScreen>
                 width: double.infinity,
                 height: 54,
                 child: OutlinedButton.icon(
-                  onPressed: () => _retryWrong(context),
+                  onPressed: () {
+                    SoundService.playStart();
+                    _retryWrong(context);
+                  },
                   icon: const Icon(Icons.replay_rounded, size: 20),
                   label: Text(
                     'Повторить ошибки (${widget.wrongTasks.length})',
@@ -633,7 +637,8 @@ class _SummaryScreenState extends State<SummaryScreen>
             height: 54,
             child: ElevatedButton.icon(
               onPressed: () {
-                HapticFeedback.mediumImpact();
+                SoundService.hapticMedium();
+                SoundService.playNavigate();
                 context.go('/learn');
               },
               icon: const Icon(Icons.home_rounded, size: 20),

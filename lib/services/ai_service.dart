@@ -3,6 +3,7 @@
 /// Функции:
 /// 1. Генерация новых задач
 /// 2. Анализ ошибок ученика
+library;
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';

@@ -1,6 +1,7 @@
 /// Аватарки с полной кастомизацией
 ///
 /// CustomPaint персонажи: волосы, кожа, одежда, аксессуары, выражение лица, фон
+library;
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -67,15 +68,6 @@ const Map<String, String> expressionNames = {
 
 /// Данные аватарки
 class AvatarData {
-  final String id;
-  final String name;
-  final Color bgColor;
-  final Color skinColor;
-  final String hairStyle;
-  final Color hairColor;
-  final Color shirtColor;
-  final String accessory;
-  final String expression;
 
   const AvatarData({
     required this.id,
@@ -88,6 +80,32 @@ class AvatarData {
     this.accessory = 'none',
     this.expression = 'smile',
   });
+
+  factory AvatarData.fromMap(Map<String, dynamic> map) {
+    return AvatarData(
+      id: map['id'] as String? ?? 'custom',
+      name: map['name'] as String? ?? 'Персонаж',
+      bgColor: Color(map['bgColor'] as int? ?? 0xFFDDF4FF),
+      skinColor: Color(map['skinColor'] as int? ?? 0xFFFFDBAC),
+      hairStyle: map['hairStyle'] as String? ?? 'boy_short',
+      hairColor: Color(map['hairColor'] as int? ?? 0xFF5C4033),
+      shirtColor: Color(map['shirtColor'] as int? ?? 0xFF1CB0F6),
+      accessory: map['accessory'] as String? ?? 'none',
+      expression: map['expression'] as String? ?? 'smile',
+    );
+  }
+
+  factory AvatarData.fromJson(String json) =>
+      AvatarData.fromMap(jsonDecode(json) as Map<String, dynamic>);
+  final String id;
+  final String name;
+  final Color bgColor;
+  final Color skinColor;
+  final String hairStyle;
+  final Color hairColor;
+  final Color shirtColor;
+  final String accessory;
+  final String expression;
 
   bool get isBoy => hairStyle.startsWith('boy') || hairStyle == 'bald';
 
@@ -128,23 +146,6 @@ class AvatarData {
       };
 
   String toJson() => jsonEncode(toMap());
-
-  factory AvatarData.fromMap(Map<String, dynamic> map) {
-    return AvatarData(
-      id: map['id'] as String? ?? 'custom',
-      name: map['name'] as String? ?? 'Персонаж',
-      bgColor: Color(map['bgColor'] as int? ?? 0xFFDDF4FF),
-      skinColor: Color(map['skinColor'] as int? ?? 0xFFFFDBAC),
-      hairStyle: map['hairStyle'] as String? ?? 'boy_short',
-      hairColor: Color(map['hairColor'] as int? ?? 0xFF5C4033),
-      shirtColor: Color(map['shirtColor'] as int? ?? 0xFF1CB0F6),
-      accessory: map['accessory'] as String? ?? 'none',
-      expression: map['expression'] as String? ?? 'smile',
-    );
-  }
-
-  factory AvatarData.fromJson(String json) =>
-      AvatarData.fromMap(jsonDecode(json) as Map<String, dynamic>);
 }
 
 /// Пресетные аватарки
@@ -176,10 +177,6 @@ AvatarData defaultCustomAvatar = const AvatarData(
 
 /// Виджет аватарки
 class AvatarWidget extends StatelessWidget {
-  final String? avatarId;
-  final AvatarData? avatarData;
-  final double size;
-  final bool showBorder;
 
   const AvatarWidget({
     super.key,
@@ -188,6 +185,10 @@ class AvatarWidget extends StatelessWidget {
     this.size = 80,
     this.showBorder = false,
   });
+  final String? avatarId;
+  final AvatarData? avatarData;
+  final double size;
+  final bool showBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -219,8 +220,8 @@ class AvatarWidget extends StatelessWidget {
 }
 
 class _AvatarPainter extends CustomPainter {
-  final AvatarData avatar;
   _AvatarPainter({required this.avatar});
+  final AvatarData avatar;
 
   @override
   void paint(Canvas canvas, Size size) {

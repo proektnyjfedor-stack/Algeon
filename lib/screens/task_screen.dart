@@ -2,6 +2,7 @@
 ///
 /// Минималистичный игровой стиль Algeon
 /// Чистый дизайн, мягкие закругления
+library;
 
 import 'dart:async';
 
@@ -19,14 +20,14 @@ import '../widgets/math_text.dart';
 import '../widgets/math_keyboard.dart';
 
 class TaskScreen extends StatefulWidget {
-  final List<Task> tasks;
-  final String topicName;
 
   const TaskScreen({
     super.key,
     required this.tasks,
     required this.topicName,
   });
+  final List<Task> tasks;
+  final String topicName;
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -157,6 +158,21 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     _cardAnimController.forward(from: 0);
   }
 
+  bool _newAchievementsIncludeStreak(List<Achievement> list) {
+    for (final a in list) {
+      switch (a.type) {
+        case AchievementType.streak3:
+        case AchievementType.streak7:
+        case AchievementType.streak14:
+        case AchievementType.streak30:
+          return true;
+        default:
+          break;
+      }
+    }
+    return false;
+  }
+
   KeyEventResult _onKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
 
@@ -271,13 +287,21 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       final options = _task.options ?? [];
       int? index;
       if (key == LogicalKeyboardKey.digit1 ||
-          key == LogicalKeyboardKey.numpad1) index = 0;
+          key == LogicalKeyboardKey.numpad1) {
+        index = 0;
+      }
       if (key == LogicalKeyboardKey.digit2 ||
-          key == LogicalKeyboardKey.numpad2) index = 1;
+          key == LogicalKeyboardKey.numpad2) {
+        index = 1;
+      }
       if (key == LogicalKeyboardKey.digit3 ||
-          key == LogicalKeyboardKey.numpad3) index = 2;
+          key == LogicalKeyboardKey.numpad3) {
+        index = 2;
+      }
       if (key == LogicalKeyboardKey.digit4 ||
-          key == LogicalKeyboardKey.numpad4) index = 3;
+          key == LogicalKeyboardKey.numpad4) {
+        index = 3;
+      }
 
       if (index != null && index < options.length) {
         setState(() => _selectedOption = options[index!]);
@@ -361,7 +385,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                       return LinearProgressIndicator(
                         value: animatedProgress,
                         backgroundColor: AppThemeColors.border(context),
-                        valueColor: AlwaysStoppedAnimation(AppColors.accent),
+                        valueColor: const AlwaysStoppedAnimation(AppColors.accent),
                         minHeight: 8,
                       );
                     },
@@ -414,25 +438,30 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final landscape = _isLandscape;
     return ScaleTransition(
       scale: _cardScaleAnim,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.all(landscape ? 14 : 24),
-        child: Column(
-          children: [
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (notification) {
+          notification.disallowIndicator();
+          return true;
+        },
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(landscape ? 14 : 24),
+          child: Column(
+            children: [
             // Topic label
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
               decoration: BoxDecoration(
                 color: AppThemeColors.accentLight(context),
-                borderRadius: BorderRadius.circular(AppRadius.xl),
+                borderRadius: BorderRadius.circular(999),
                 border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.25),
+                  color: AppColors.accent.withValues(alpha: 0.32),
                 ),
               ),
               child: Text(
                 widget.topicName,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   color: AppColors.accent,
                 ),
               ),
@@ -449,13 +478,15 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 curve: Curves.easeOutCubic,
                 key: ValueKey('${_task.id}_${_isChecked}_$_explanationStep'),
                 width: double.infinity,
-                padding: EdgeInsets.all(landscape ? 18 : 28),
+                padding: EdgeInsets.all(landscape ? 18 : 26),
                 decoration: BoxDecoration(
                   color: AppThemeColors.surface(context),
                   borderRadius: BorderRadius.circular(AppRadius.xl),
                   border: Border.all(
-                    color: (_answerFlashColor ?? Colors.transparent).withValues(alpha: 0.85),
-                    width: _answerFlashColor == null ? 0 : 2,
+                    color: _answerFlashColor != null
+                        ? _answerFlashColor!.withValues(alpha: 0.9)
+                        : AppThemeColors.border(context),
+                    width: _answerFlashColor == null ? 1 : 2,
                   ),
                   boxShadow: AppShadows.soft(context),
                 ),
@@ -513,7 +544,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                   ],
                 ],
               ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -544,9 +576,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             }
           }
         },
-        icon: Icon(Icons.auto_awesome_rounded,
+        icon: const Icon(Icons.auto_awesome_rounded,
             size: 18, color: AppColors.gold),
-        label: Text(
+        label: const Text(
           'Подсказка от ИИ',
           style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w500),
         ),
@@ -597,7 +629,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.auto_awesome_rounded, size: 20, color: AppColors.gold),
+          const Icon(Icons.auto_awesome_rounded, size: 20, color: AppColors.gold),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -650,7 +682,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           onTap: _isChecked
               ? null
               : () {
-                  HapticFeedback.lightImpact();
+                  SoundService.hapticLight();
                   setState(() => _selectedOption = option);
                   _checkAnswer();
                 },
@@ -662,7 +694,14 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               decoration: BoxDecoration(
                 color: bgColor,
                 borderRadius: BorderRadius.circular(AppRadius.md),
-                border: Border.all(color: borderColor, width: 2),
+                border: Border.all(color: borderColor, width: 1.8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Center(
                 child: Text(
@@ -729,22 +768,27 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final steps = _task.explanationSteps;
     final visible = steps.take(_explanationStep + 1).toList();
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (notification) {
+        notification.disallowIndicator();
+        return true;
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
               color: AppColors.errorLight,
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.school_rounded, color: AppColors.error, size: 20),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Text(
                   'Разберём вместе',
                   style: TextStyle(
@@ -789,7 +833,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                       child: Center(
                         child: Text(
                           '${e.key + 1}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppColors.accent,
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -823,11 +867,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             Center(
               child: TextButton.icon(
                 onPressed: () => setState(() => _explanationStep++),
-                icon: Icon(Icons.arrow_downward_rounded, size: 18),
+                icon: const Icon(Icons.arrow_downward_rounded, size: 18),
                 label: const Text('Следующий шаг'),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -913,6 +958,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         label: _explanationStep < _task.explanationSteps.length - 1 ? 'Далее' : 'Понятно',
         color: AppColors.accent,
         onTap: () {
+          SoundService.playTap();
           if (_explanationStep < _task.explanationSteps.length - 1) {
             setState(() => _explanationStep++);
           } else {
@@ -971,6 +1017,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     required Color color,
     VoidCallback? onTap,
   }) {
+    final enabled = onTap != null;
     return GestureDetector(
       key: key,
       onTap: onTap,
@@ -979,16 +1026,27 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: color,
+          color: enabled ? color : color.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(AppRadius.md),
+          boxShadow: enabled
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.28),
+                    blurRadius: 14,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
+              : null,
         ),
         child: Center(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              color: enabled
+                  ? Colors.white
+                  : Colors.white.withValues(alpha: 0.75),
             ),
           ),
         ),
@@ -1009,21 +1067,33 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: AppColors.error.withValues(alpha: 0.4),
-            width: 2,
+            width: 1.8,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.error.withValues(alpha: 0.14),
+              blurRadius: 12,
+              offset: const Offset(0, 5),
+            ),
+          ],
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.help_outline_rounded,
                 size: 20, color: AppColors.error),
-            const SizedBox(width: 8),
-            Text(
-              'Не знаю — покажи ответ',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.error,
+            SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                'Не знаю — покажи ответ',
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.error,
+                ),
               ),
             ),
           ],
@@ -1033,6 +1103,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _checkAnswer() async {
+    SoundService.playTap();
     String answer;
     if (_task.type == TaskType.multipleChoice) {
       if (_selectedOption == null) return;
@@ -1056,9 +1127,14 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       await ProgressService.markSolved(_task.id);
       final newAchievements = await _checkProgressAchievements();
       if (newAchievements.isNotEmpty) {
+        if (_newAchievementsIncludeStreak(newAchievements)) {
+          unawaited(SoundService.playStreak());
+        } else {
+          unawaited(SoundService.playAchievement());
+        }
         await _showAchievementsUnlockedDialog(newAchievements);
       }
-      SoundService.playCorrect();
+      await SoundService.playCorrect();
     } else {
       _wrongCount++;
       _wrongAttemptsOnCurrentTask++;
@@ -1108,7 +1184,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   /// «Не знаю» — раскрываем правильный ответ без перехода к следующей задаче
   void _revealAnswer() {
-    HapticFeedback.mediumImpact();
+    SoundService.hapticMedium();
+    SoundService.playTap();
     setState(() {
       _isChecked = true;
       _isCorrect = false;
@@ -1132,6 +1209,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _goNext() {
     if (_currentIndex < widget.tasks.length - 1) {
+      SoundService.playNext();
       setState(() {
         _currentIndex++;
         _reset();
@@ -1143,6 +1221,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   void _showSummary() async {
     _stopwatch.stop();
+    await SoundService.playComplete();
     final newAchievements = await _checkProgressAchievements(
       sessionCorrect: _correctCount,
       sessionTotal: widget.tasks.length,
@@ -1177,6 +1256,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         backgroundColor: AppThemeColors.surface(context),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         title: Text('Выйти?', style: TextStyle(color: AppThemeColors.textPrimary(context))),
         content: Text('Твой прогресс будет сохранён.', style: TextStyle(color: AppThemeColors.textSecondary(context))),
         actions: [
@@ -1204,34 +1284,44 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       barrierDismissible: true,
       builder: (ctx) {
         return AlertDialog(
+          backgroundColor: AppThemeColors.surface(ctx),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+          ),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           title: const Text('Новое достижение!'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: achievements
-                .take(3)
-                .map(
-                  (a) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Icon(a.icon, color: AppColors.gold, size: 18),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            a.title,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: achievements
+                  .take(3)
+                  .map(
+                    (a) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Icon(a.icon, color: AppColors.gold, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              a.title,
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(ctx).pop(),
+              onPressed: () {
+                SoundService.playTap();
+                Navigator.of(ctx).pop();
+              },
               child: const Text('Круто'),
             ),
           ],

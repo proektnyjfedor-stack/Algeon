@@ -2,6 +2,7 @@
 /// 
 /// Хранит: профиль, прогресс, streak, статистику
 /// Локальное хранение через SharedPreferences
+library;
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';

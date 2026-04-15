@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="description" content="Algeon — математический тренажёр для учеников 1-4 классов">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Algeon — математический тренажёр: задачи и практика для 5–11 класса">
 
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Algeon — математика с пониманием">
+  <meta property="og:description" content="Задачи по темам, практика и прогресс для средней и старшей школы.">
+  <meta name="twitter:card" content="summary">
+
+  <meta name="theme-color" content="#2563EB" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
 
   <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +34,6 @@
   <title>Algeon</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Loading Screen Styles -->
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -37,104 +41,34 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #ffffff;
+      background: #F0F4FF;
     }
 
     @media (prefers-color-scheme: dark) {
-      html, body { background: #000000; }
-    }
-
-    .loading-screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;
-      z-index: 9999;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .loading-screen { background: #000000; }
-    }
-
-    /* Только надпись Algeon — градиент как во Flutter */
-    .loading-brand {
-      display: inline-block;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: clamp(56px, 16vmin, 92px);
-      font-weight: 900;
-      letter-spacing: -0.06em;
-      /* line-height: 1 обрезает хвосты у g, y, p */
-      line-height: 1.22;
-      padding: 0.12em 0.04em 0.2em;
-      background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      animation: brandIn 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
-    }
-
-    @supports not (background-clip: text) {
-      .loading-brand {
-        color: #2563EB;
-        -webkit-text-fill-color: #2563EB;
-        background: none;
-      }
-    }
-
-    @keyframes brandIn {
-      from {
-        opacity: 0;
-        transform: translateY(22px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      html, body { background: #111111; }
     }
   </style>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js" async></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js" async></script>
 </head>
 <body>
-  <!-- До первого кадра Flutter — только Algeon -->
-  <div class="loading-screen" id="loading">
-    <div class="loading-brand">Algeon</div>
-  </div>
-
   <script>
-    // Принудительно обновляем сервис-воркер при каждом запуске
+    // Жестко сбрасываем старые service workers, чтобы после деплоя
+    // всегда подтягивалась актуальная web-версия приложения.
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(regs) {
-        regs.forEach(function(reg) { reg.update(); });
-      });
-
-      // If a new service worker takes control, reload to pick up new JS/CSS.
-      // This prevents "nothing changed" reports after redeploy.
-      navigator.serviceWorker.addEventListener('controllerchange', function() {
-        window.location.reload();
+        if (!regs.length) return;
+        Promise.all(regs.map(function(reg) { return reg.unregister(); }))
+          .then(function() {
+            if (!sessionStorage.getItem('sw_reset_done')) {
+              sessionStorage.setItem('sw_reset_done', '1');
+              window.location.reload();
+            }
+          });
       });
     }
-
-    // Скрываем загрузочный экран когда Flutter готов
-    window.addEventListener('flutter-first-frame', function() {
-      const loading = document.getElementById('loading');
-      if (loading) {
-        // ВАЖНО: сразу убираем pointer-events чтобы невидимый div
-        // не перехватывал тач-события пока идёт анимация исчезновения
-        loading.style.pointerEvents = 'none';
-        loading.style.transition = 'opacity 0.4s ease-out';
-        loading.style.opacity = '0';
-        // Удаляем из DOM после анимации
-        setTimeout(() => { if (loading.parentNode) loading.remove(); }, 500);
-      }
-    });
   </script>
 
-  <script src="flutter_bootstrap.js" async></script>
+  <script src="flutter_bootstrap.js" async
+    onerror="(function(){var p=document.createElement('p');p.style.cssText='padding:2rem;font-family:system-ui,sans-serif;text-align:center;max-width:28rem;margin:2rem auto;';p.textContent='Не удалось загрузить приложение (flutter_bootstrap.js). Проверьте сеть или откройте сайт в режиме инкогнито / с жёстким обновлением страницы (Ctrl+Shift+R).';document.body.appendChild(p);})();"></script>
 </body>
 </html>

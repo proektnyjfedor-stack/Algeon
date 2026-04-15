@@ -1,7 +1,8 @@
 /// App Router -- GoRouter configuration for Algeon
 ///
 /// Declarative routing with ShellRoute for tab navigation,
-/// redirect logic for onboarding/auth, and deep link support.
+/// redirect logic for onboarding, and deep link support.
+library;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -10,13 +11,11 @@ import '../screens/main_screen.dart';
 import '../theme/app_theme.dart';
 import '../screens/home_tab.dart';
 import '../screens/practice_tab.dart';
-import '../screens/exams_tab.dart';
 import '../screens/achievements_tab.dart';
 import '../screens/profile_tab.dart';
 import '../screens/task_screen.dart';
 import '../screens/topic_intro_screen.dart';
 import '../screens/summary_screen.dart';
-import '../screens/auth_screen.dart';
 import '../screens/onboarding_welcome_screen.dart';
 import '../screens/splash_screen.dart';
 import '../models/task.dart';
@@ -28,14 +27,11 @@ class AppRoutes {
 
   static const String learn = '/learn';
   static const String practice = '/practice';
-  static const String exams = '/exams';
   static const String achievements = '/achievements';
   static const String profile = '/profile';
   static const String topicIntro = '/learn/intro';
   static const String task = '/learn/topic';
-  static const String exam = '/exam';
   static const String summary = '/summary';
-  static const String auth = '/auth';
   static const String onboarding = '/onboarding';
   static const String splash = '/splash';
 }
@@ -43,9 +39,8 @@ class AppRoutes {
 /// Resolves the bottom-nav / rail index from the current location.
 int _indexFromLocation(String path) {
   if (path.startsWith(AppRoutes.practice)) return 1;
-  if (path.startsWith(AppRoutes.exams)) return 2;
-  if (path.startsWith(AppRoutes.achievements)) return 3;
-  if (path.startsWith(AppRoutes.profile)) return 4;
+  if (path.startsWith(AppRoutes.achievements)) return 2;
+  if (path.startsWith(AppRoutes.profile)) return 3;
   return 0; // /learn or fallback
 }
 
@@ -80,14 +75,9 @@ final GoRouter appRouter = GoRouter(
     // Already heading to onboarding -- allow.
     if (path == AppRoutes.onboarding) return null;
 
-    // Already heading to auth -- allow.
-    if (path == AppRoutes.auth) return null;
-
-    // On web, Firebase is not configured yet -- skip auth entirely.
+    // Optional placeholder for platform-specific branch.
     if (!kIsWeb) {
-      // Native: auth check would go here when AuthService is
-      // integrated with GoRouter. For now we rely on the initial
-      // screen logic in main.dart and only guard onboarding.
+      // Platform-specific redirect rules can be added here.
     }
 
     // Onboarding guard: redirect if not complete.
@@ -125,12 +115,6 @@ final GoRouter appRouter = GoRouter(
           ),
         ),
         GoRoute(
-          path: AppRoutes.exams,
-          pageBuilder: (context, state) => const NoTransitionPage(
-            child: ExamsTab(),
-          ),
-        ),
-        GoRoute(
           path: AppRoutes.achievements,
           pageBuilder: (context, state) => const NoTransitionPage(
             child: AchievementsTab(),
@@ -138,14 +122,6 @@ final GoRouter appRouter = GoRouter(
         ),
         GoRoute(
           path: AppRoutes.profile,
-          pageBuilder: (context, state) => const NoTransitionPage(
-            child: ProfileTab(),
-          ),
-        ),
-        // Some hosts/redirects may keep a trailing slash; keep a route alias
-        // to ensure the profile tab always renders.
-        GoRoute(
-          path: '${AppRoutes.profile}/',
           pageBuilder: (context, state) => const NoTransitionPage(
             child: ProfileTab(),
           ),
@@ -187,27 +163,6 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Exam screen -- full-screen, no shell.
-    GoRoute(
-      path: AppRoutes.exam,
-      parentNavigatorKey: _rootNavigatorKey,
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        final data = state.extra as Map<String, dynamic>? ?? {};
-        final grade = data['grade'] as int? ?? 5;
-        final tasks = data['tasks'] as List<Task>? ?? [];
-        final timeMinutes = data['timeMinutes'] as int? ?? 20;
-        final variantId = data['variantId'] as String?;
-        return NoTransitionPage(
-          child: ExamScreen(
-            grade: grade,
-            tasks: tasks,
-            timeMinutes: timeMinutes,
-            variantId: variantId,
-          ),
-        );
-      },
-    ),
-
     // Summary screen -- receives a map of results via `extra`.
     GoRoute(
       path: AppRoutes.summary,
@@ -215,14 +170,6 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (BuildContext context, GoRouterState state) {
         final data = state.extra as Map<String, dynamic>? ?? {};
         return NoTransitionPage(child: SummaryScreen.fromMap(data));
-      },
-    ),
-
-    // Auth screen (standalone, no shell).
-    GoRoute(
-      path: AppRoutes.auth,
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return const NoTransitionPage(child: AuthScreen());
       },
     ),
 
@@ -243,19 +190,47 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
   errorBuilder: (context, state) {
-    // Make routing issues visible instead of showing an empty tab.
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(
-            'Страница не найдена: ${state.uri}',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppThemeColors.textPrimary(context),
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.travel_explore_rounded,
+                  size: 56,
+                  color: AppThemeColors.textHint(context),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Страница не найдена',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppThemeColors.textPrimary(context),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${state.uri}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppThemeColors.textSecondary(context),
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                FilledButton.icon(
+                  onPressed: () => context.go(AppRoutes.learn),
+                  icon: const Icon(Icons.home_rounded),
+                  label: const Text('На главную'),
+                ),
+              ],
             ),
           ),
         ),

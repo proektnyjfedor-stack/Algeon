@@ -2,8 +2,10 @@
 ///
 /// Секции: определение, правило/формула, разбор примера,
 /// важное замечание.
+library;
 
 import 'package:flutter/material.dart';
+import 'tasks_data.dart';
 
 enum TheorySectionType {
   definition,
@@ -16,12 +18,6 @@ enum TheorySectionType {
 }
 
 class TheorySection {
-  final TheorySectionType type;
-  final String? title;
-  final String content;
-  final String? emoji;
-  final List<String>? items;
-  final Color? accentColor;
 
   const TheorySection({
     required this.type,
@@ -31,21 +27,106 @@ class TheorySection {
     this.items,
     this.accentColor,
   });
+  final TheorySectionType type;
+  final String? title;
+  final String content;
+  final String? emoji;
+  final List<String>? items;
+  final Color? accentColor;
 }
 
 class TopicTheory {
-  final String topicName;
-  final String subtitle;
-  final List<TheorySection> sections;
 
   const TopicTheory({
     required this.topicName,
     required this.subtitle,
     required this.sections,
   });
+  final String topicName;
+  final String subtitle;
+  final List<TheorySection> sections;
 }
 
-TopicTheory? getTopicTheory(String topicName) => _theoryMap[topicName];
+TopicTheory? getTopicTheory(String topicName) {
+  final predefined = _theoryMap[topicName];
+  if (predefined != null) return predefined;
+  final description = getTopicDescription(topicName);
+  if (description == null || description.trim().isEmpty) return null;
+  return _buildGeneratedTheory(topicName, description);
+}
+
+TopicTheory _buildGeneratedTheory(String topicName, String description) {
+  final clean = description.trim();
+  final lines = clean
+      .split('\n')
+      .map((e) => e.trim())
+      .where((e) => e.isNotEmpty)
+      .toList(growable: false);
+
+  final bulletLines = lines
+      .where((e) => e.startsWith('•') || e.startsWith('-'))
+      .map((e) => e.replaceFirst(RegExp(r'^[•\-]\s*'), ''))
+      .toList(growable: false);
+
+  final shortPoints = bulletLines.isNotEmpty
+      ? bulletLines.take(4).toList(growable: false)
+      : lines.take(4).toList(growable: false);
+
+  final subtitle = lines.isNotEmpty
+      ? lines.first
+      : 'Подробная теория по теме';
+
+  final formulaBlock = lines.length >= 3
+      ? lines.take(3).join('\n')
+      : clean;
+
+  return TopicTheory(
+    topicName: topicName,
+    subtitle: subtitle,
+    sections: [
+      TheorySection(
+        type: TheorySectionType.definition,
+        title: 'Что важно знать',
+        content: clean,
+      ),
+      TheorySection(
+        type: TheorySectionType.formula,
+        title: 'Ключевые записи',
+        content: formulaBlock,
+      ),
+      const TheorySection(
+        type: TheorySectionType.visual,
+        title: 'Схема и образ',
+        emoji: '🧩',
+        content:
+            'Ниже — визуальная карточка темы. Используй её как опору: сначала пойми идею, затем переходи к формулам и задачам.',
+      ),
+      const TheorySection(
+        type: TheorySectionType.steps,
+        title: 'Как решать задания по теме',
+        content: 'Универсальный алгоритм:',
+        items: [
+          'Прочитай условие и выпиши, что дано.',
+          'Определи правило/формулу из темы.',
+          'Решай по шагам без пропусков.',
+          'Проверь ответ: подстановка, оценка, здравый смысл.',
+        ],
+      ),
+      TheorySection(
+        type: TheorySectionType.table,
+        title: 'Коротко по пунктам',
+        content: '',
+        items: shortPoints,
+      ),
+      const TheorySection(
+        type: TheorySectionType.tip,
+        title: 'Совет',
+        content:
+            'Если задача кажется сложной, разбей её на 2-3 маленьких шага и решай по одному. Так ошибок заметно меньше.',
+      ),
+    ],
+  );
+}
 
 // ============================================================
 // ДАННЫЕ ТЕОРИИ
@@ -55,7 +136,7 @@ final Map<String, TopicTheory> _theoryMap = {
 
   // ==================== 1 КЛАСС ====================
 
-  'Счёт до 10': TopicTheory(
+  'Счёт до 10': const TopicTheory(
     topicName: 'Счёт до 10',
     subtitle: 'Основы сложения в пределах 10',
     sections: [
@@ -93,7 +174,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Счёт до 20': TopicTheory(
+  'Счёт до 20': const TopicTheory(
     topicName: 'Счёт до 20',
     subtitle: 'Сложение с переходом через десяток',
     sections: [
@@ -137,7 +218,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Вычитание до 10': TopicTheory(
+  'Вычитание до 10': const TopicTheory(
     topicName: 'Вычитание до 10',
     subtitle: 'Основы вычитания',
     sections: [
@@ -170,7 +251,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Сравнение чисел': TopicTheory(
+  'Сравнение чисел': const TopicTheory(
     topicName: 'Сравнение чисел',
     subtitle: 'Знаки сравнения: >, <, =',
     sections: [
@@ -203,7 +284,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Фигуры': TopicTheory(
+  'Фигуры': const TopicTheory(
     topicName: 'Фигуры',
     subtitle: 'Основные геометрические фигуры',
     sections: [
@@ -236,7 +317,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Задачи на сложение': TopicTheory(
+  'Задачи на сложение': const TopicTheory(
     topicName: 'Задачи на сложение',
     subtitle: 'Решение текстовых задач',
     sections: [
@@ -277,7 +358,7 @@ final Map<String, TopicTheory> _theoryMap = {
 
   // ==================== 2 КЛАСС ====================
 
-  'Умножение на 2': TopicTheory(
+  'Умножение на 2': const TopicTheory(
     topicName: 'Умножение на 2',
     subtitle: 'Понятие умножения, таблица на 2',
     sections: [
@@ -311,7 +392,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Умножение на 3': TopicTheory(
+  'Умножение на 3': const TopicTheory(
     topicName: 'Умножение на 3',
     subtitle: 'Таблица умножения на 3',
     sections: [
@@ -345,7 +426,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Умножение на 4 и 5': TopicTheory(
+  'Умножение на 4 и 5': const TopicTheory(
     topicName: 'Умножение на 4 и 5',
     subtitle: 'Приёмы быстрого умножения',
     sections: [
@@ -383,7 +464,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Деление': TopicTheory(
+  'Деление': const TopicTheory(
     topicName: 'Деление',
     subtitle: 'Действие, обратное умножению',
     sections: [
@@ -410,7 +491,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Текстовые задачи': TopicTheory(
+  'Текстовые задачи': const TopicTheory(
     topicName: 'Текстовые задачи',
     subtitle: 'Выбор действия по условию задачи',
     sections: [
@@ -450,7 +531,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Время': TopicTheory(
+  'Время': const TopicTheory(
     topicName: 'Время',
     subtitle: 'Единицы измерения времени',
     sections: [
@@ -491,7 +572,7 @@ final Map<String, TopicTheory> _theoryMap = {
 
   // ==================== 3 КЛАСС ====================
 
-  'Умножение на 6-9': TopicTheory(
+  'Умножение на 6-9': const TopicTheory(
     topicName: 'Умножение на 6-9',
     subtitle: 'Полная таблица умножения',
     sections: [
@@ -525,7 +606,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Деление с остатком': TopicTheory(
+  'Деление с остатком': const TopicTheory(
     topicName: 'Деление с остатком',
     subtitle: 'Когда число не делится нацело',
     sections: [
@@ -557,7 +638,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Периметр': TopicTheory(
+  'Периметр': const TopicTheory(
     topicName: 'Периметр',
     subtitle: 'Сумма длин всех сторон фигуры',
     sections: [
@@ -589,7 +670,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Площадь': TopicTheory(
+  'Площадь': const TopicTheory(
     topicName: 'Площадь',
     subtitle: 'Измерение поверхности фигур',
     sections: [
@@ -616,7 +697,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Единицы длины': TopicTheory(
+  'Единицы длины': const TopicTheory(
     topicName: 'Единицы длины',
     subtitle: 'Перевод единиц измерения длины',
     sections: [
@@ -660,7 +741,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Единицы массы': TopicTheory(
+  'Единицы массы': const TopicTheory(
     topicName: 'Единицы массы',
     subtitle: 'Граммы, килограммы, центнеры, тонны',
     sections: [
@@ -700,7 +781,7 @@ final Map<String, TopicTheory> _theoryMap = {
 
   // ==================== 4 КЛАСС ====================
 
-  'Многозначные числа': TopicTheory(
+  'Многозначные числа': const TopicTheory(
     topicName: 'Многозначные числа',
     subtitle: 'Разряды и арифметика больших чисел',
     sections: [
@@ -735,7 +816,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Дроби': TopicTheory(
+  'Дроби': const TopicTheory(
     topicName: 'Дроби',
     subtitle: 'Понятие дроби, сравнение дробей',
     sections: [
@@ -768,7 +849,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Уравнения': TopicTheory(
+  'Уравнения': const TopicTheory(
     topicName: 'Уравнения',
     subtitle: 'Нахождение неизвестного компонента',
     sections: [
@@ -802,7 +883,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Скорость, время, расстояние': TopicTheory(
+  'Скорость, время, расстояние': const TopicTheory(
     topicName: 'Скорость, время, расстояние',
     subtitle: 'Задачи на движение',
     sections: [
@@ -829,7 +910,7 @@ final Map<String, TopicTheory> _theoryMap = {
     ],
   ),
 
-  'Порядок действий': TopicTheory(
+  'Порядок действий': const TopicTheory(
     topicName: 'Порядок действий',
     subtitle: 'Правила выполнения арифметических действий',
     sections: [

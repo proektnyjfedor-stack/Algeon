@@ -1,5 +1,6 @@
 /// Тема Algeon — Минималистичный чистый дизайн
 /// БЕЗ ГРАДИЕНТОВ — только чистые цвета
+library;
 
 import 'package:flutter/material.dart';
 

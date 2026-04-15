@@ -1,14 +1,12 @@
 /// MathKeyboard — кастомная математическая клавиатура
 /// Заменяет системную клавиатуру для ввода числовых ответов
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
+import '../services/sound_service.dart';
 
 class MathKeyboard extends StatelessWidget {
-  final TextEditingController controller;
-  final bool enabled;
-  final int initialTab;
 
   const MathKeyboard({
     super.key,
@@ -16,10 +14,14 @@ class MathKeyboard extends StatelessWidget {
     this.enabled = true,
     this.initialTab = 0,
   });
+  final TextEditingController controller;
+  final bool enabled;
+  final int initialTab;
 
   void _press(String key) {
     if (!enabled) return;
-    HapticFeedback.lightImpact();
+    SoundService.hapticSelection();
+    SoundService.playKey();
 
     final text = controller.text;
 
@@ -238,10 +240,6 @@ class MathKeyboard extends StatelessWidget {
 }
 
 class _MathKeyboardBody extends StatefulWidget {
-  final TextEditingController controller;
-  final bool enabled;
-  final int initialTab;
-  final void Function(String key) onPress;
 
   const _MathKeyboardBody({
     required this.controller,
@@ -249,6 +247,10 @@ class _MathKeyboardBody extends StatefulWidget {
     required this.initialTab,
     required this.onPress,
   });
+  final TextEditingController controller;
+  final bool enabled;
+  final int initialTab;
+  final void Function(String key) onPress;
 
   @override
   State<_MathKeyboardBody> createState() => _MathKeyboardBodyState();
@@ -275,9 +277,11 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
-    final isUltraCompact = h < 780;
-    final rowGap = isUltraCompact ? 4.0 : 6.0;
-    final keyGap = isUltraCompact ? 4.0 : 6.0;
+    final size = MediaQuery.of(context).size;
+    final isLandscape = size.width > size.height;
+    final isUltraCompact = h < 780 || isLandscape;
+    final rowGap = isUltraCompact ? 3.0 : 6.0;
+    final keyGap = isUltraCompact ? 3.0 : 6.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -355,13 +359,16 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
   }
 
   Widget _tabButton(BuildContext context, int index, String label) {
+    final h = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
+    final isUltraCompact = h < 780 || size.width > size.height;
     final active = _tab == index;
     return Expanded(
       child: GestureDetector(
         onTap: () => setState(() => _tab = index),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
-          padding: const EdgeInsets.symmetric(vertical: 6),
+          padding: EdgeInsets.symmetric(vertical: isUltraCompact ? 4 : 6),
           decoration: BoxDecoration(
             color: active ? AppThemeColors.accentLight(context) : AppThemeColors.surface(context),
             borderRadius: BorderRadius.circular(10),
@@ -373,7 +380,7 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
             child: Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: isUltraCompact ? 11 : 12,
                 fontWeight: FontWeight.w700,
                 color: active ? AppColors.accent : AppThemeColors.textSecondary(context),
               ),

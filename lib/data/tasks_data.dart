@@ -2,6 +2,7 @@
 ///
 /// 4 класса × 5-6 тем × 20 заданий = ~460 задач
 /// Объяснения только для текстовых задач!
+library;
 
 import 'package:flutter/material.dart';
 import '../models/task.dart';
@@ -13,7 +14,7 @@ import 'curriculum_tasks.dart';
 
 final List<Task> _grade1Tasks = [
   // --- Тема: Счёт до 10 ---
-  Task(
+  const Task(
     id: 'g1_count_1',
     grade: 1,
     topic: 'Счёт до 10',
@@ -22,7 +23,7 @@ final List<Task> _grade1Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_count_2',
     grade: 1,
     topic: 'Счёт до 10',
@@ -31,7 +32,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_count_3',
     grade: 1,
     topic: 'Счёт до 10',
@@ -40,7 +41,7 @@ final List<Task> _grade1Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_count_4',
     grade: 1,
     topic: 'Счёт до 10',
@@ -49,7 +50,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_5',
     grade: 1,
     topic: 'Счёт до 10',
@@ -58,7 +59,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '6', '7', '4'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g1_count_6',
     grade: 1,
     topic: 'Счёт до 10',
@@ -67,7 +68,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '11'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_7',
     grade: 1,
     topic: 'Счёт до 10',
@@ -76,7 +77,7 @@ final List<Task> _grade1Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_count_8',
     grade: 1,
     topic: 'Счёт до 10',
@@ -85,7 +86,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_9',
     grade: 1,
     topic: 'Счёт до 10',
@@ -94,7 +95,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '11'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g1_count_10',
     grade: 1,
     topic: 'Счёт до 10',
@@ -103,7 +104,7 @@ final List<Task> _grade1Tasks = [
     options: ['7', '8', '9', '6'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_count_11',
     grade: 1,
     topic: 'Счёт до 10',
@@ -112,7 +113,7 @@ final List<Task> _grade1Tasks = [
     options: ['7', '8', '9', '6'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_count_12',
     grade: 1,
     topic: 'Счёт до 10',
@@ -121,7 +122,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_13',
     grade: 1,
     topic: 'Счёт до 10',
@@ -130,7 +131,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_count_14',
     grade: 1,
     topic: 'Счёт до 10',
@@ -139,7 +140,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_15',
     grade: 1,
     topic: 'Счёт до 10',
@@ -148,7 +149,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_16',
     grade: 1,
     topic: 'Счёт до 10',
@@ -157,7 +158,7 @@ final List<Task> _grade1Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g1_count_17',
     grade: 1,
     topic: 'Счёт до 10',
@@ -166,7 +167,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_count_18',
     grade: 1,
     topic: 'Счёт до 10',
@@ -175,7 +176,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '9', '10', '7'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g1_count_19',
     grade: 1,
     topic: 'Счёт до 10',
@@ -184,7 +185,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_count_20',
     grade: 1,
     topic: 'Счёт до 10',
@@ -195,7 +196,7 @@ final List<Task> _grade1Tasks = [
   ),
 
   // --- Тема: Счёт до 20 ---
-  Task(
+  const Task(
     id: 'g1_count20_1',
     grade: 1,
     topic: 'Счёт до 20',
@@ -204,7 +205,7 @@ final List<Task> _grade1Tasks = [
     options: ['14', '15', '16', '17'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_2',
     grade: 1,
     topic: 'Счёт до 20',
@@ -213,7 +214,7 @@ final List<Task> _grade1Tasks = [
     options: ['14', '15', '16', '13'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_3',
     grade: 1,
     topic: 'Счёт до 20',
@@ -222,7 +223,7 @@ final List<Task> _grade1Tasks = [
     options: ['17', '18', '19', '16'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_4',
     grade: 1,
     topic: 'Счёт до 20',
@@ -231,7 +232,7 @@ final List<Task> _grade1Tasks = [
     options: ['17', '18', '19', '16'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_5',
     grade: 1,
     topic: 'Счёт до 20',
@@ -240,7 +241,7 @@ final List<Task> _grade1Tasks = [
     options: ['18', '19', '20', '17'],
     answer: '19',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_6',
     grade: 1,
     topic: 'Счёт до 20',
@@ -249,7 +250,7 @@ final List<Task> _grade1Tasks = [
     options: ['15', '16', '17', '14'],
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_7',
     grade: 1,
     topic: 'Счёт до 20',
@@ -258,7 +259,7 @@ final List<Task> _grade1Tasks = [
     options: ['18', '19', '20', '17'],
     answer: '19',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_8',
     grade: 1,
     topic: 'Счёт до 20',
@@ -267,7 +268,7 @@ final List<Task> _grade1Tasks = [
     options: ['13', '14', '15', '12'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_9',
     grade: 1,
     topic: 'Счёт до 20',
@@ -276,7 +277,7 @@ final List<Task> _grade1Tasks = [
     options: ['17', '18', '19', '16'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_10',
     grade: 1,
     topic: 'Счёт до 20',
@@ -285,7 +286,7 @@ final List<Task> _grade1Tasks = [
     options: ['15', '16', '17', '14'],
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_11',
     grade: 1,
     topic: 'Счёт до 20',
@@ -294,7 +295,7 @@ final List<Task> _grade1Tasks = [
     options: ['17', '18', '19', '16'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_12',
     grade: 1,
     topic: 'Счёт до 20',
@@ -303,7 +304,7 @@ final List<Task> _grade1Tasks = [
     options: ['18', '19', '20', '21'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_13',
     grade: 1,
     topic: 'Счёт до 20',
@@ -312,7 +313,7 @@ final List<Task> _grade1Tasks = [
     options: ['18', '19', '20', '17'],
     answer: '19',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_14',
     grade: 1,
     topic: 'Счёт до 20',
@@ -321,7 +322,7 @@ final List<Task> _grade1Tasks = [
     options: ['10', '11', '12', '13'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_15',
     grade: 1,
     topic: 'Счёт до 20',
@@ -330,7 +331,7 @@ final List<Task> _grade1Tasks = [
     options: ['18', '19', '20', '17'],
     answer: '19',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_16',
     grade: 1,
     topic: 'Счёт до 20',
@@ -339,7 +340,7 @@ final List<Task> _grade1Tasks = [
     options: ['16', '17', '18', '15'],
     answer: '17',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_17',
     grade: 1,
     topic: 'Счёт до 20',
@@ -348,7 +349,7 @@ final List<Task> _grade1Tasks = [
     options: ['16', '17', '18', '15'],
     answer: '17',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_18',
     grade: 1,
     topic: 'Счёт до 20',
@@ -357,7 +358,7 @@ final List<Task> _grade1Tasks = [
     options: ['16', '17', '18', '15'],
     answer: '17',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_19',
     grade: 1,
     topic: 'Счёт до 20',
@@ -366,7 +367,7 @@ final List<Task> _grade1Tasks = [
     options: ['12', '13', '14', '15'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g1_count20_20',
     grade: 1,
     topic: 'Счёт до 20',
@@ -377,7 +378,7 @@ final List<Task> _grade1Tasks = [
   ),
 
   // --- Тема: Вычитание до 10 ---
-  Task(
+  const Task(
     id: 'g1_sub_1',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -386,7 +387,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '2'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_2',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -395,7 +396,7 @@ final List<Task> _grade1Tasks = [
     options: ['4', '5', '6', '3'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_3',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -404,7 +405,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '2'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_4',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -413,7 +414,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '1'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_5',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -422,7 +423,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '2'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_6',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -431,7 +432,7 @@ final List<Task> _grade1Tasks = [
     options: ['6', '7', '8', '5'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_7',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -440,7 +441,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_8',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -449,7 +450,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_9',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -458,7 +459,7 @@ final List<Task> _grade1Tasks = [
     options: ['4', '5', '6', '3'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_10',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -467,7 +468,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '2'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_11',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -476,7 +477,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_12',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -485,7 +486,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '2'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_13',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -494,7 +495,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '1'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_14',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -503,7 +504,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '1'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_15',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -512,7 +513,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_16',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -521,7 +522,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '6', '7', '4'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_17',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -530,7 +531,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_18',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -539,7 +540,7 @@ final List<Task> _grade1Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_19',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -548,7 +549,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '1'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_sub_20',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -559,7 +560,7 @@ final List<Task> _grade1Tasks = [
   ),
 
   // --- Тема: Сравнение чисел ---
-  Task(
+  const Task(
     id: 'g1_cmp_1',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -568,7 +569,7 @@ final List<Task> _grade1Tasks = [
     options: ['5', '3', 'Равны', 'Не знаю'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_2',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -577,7 +578,7 @@ final List<Task> _grade1Tasks = [
     options: ['8', '6', 'Равны', 'Не знаю'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_3',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -586,7 +587,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '>',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_4',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -595,7 +596,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '<',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_5',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -604,7 +605,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '=',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_6',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -613,7 +614,7 @@ final List<Task> _grade1Tasks = [
     options: ['10', '7', 'Равны', 'Не знаю'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_7',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -622,7 +623,7 @@ final List<Task> _grade1Tasks = [
     options: ['1, 2, 3', '3, 2, 1', '2, 1, 3', '1, 3, 2'],
     answer: '1, 2, 3',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_8',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -631,7 +632,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '5', '7', '4'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_9',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -640,7 +641,7 @@ final List<Task> _grade1Tasks = [
     options: ['4', '9', 'Равны', 'Не знаю'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_10',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -649,7 +650,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '>',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_11',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -658,7 +659,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '=',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_12',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -667,7 +668,7 @@ final List<Task> _grade1Tasks = [
     options: ['6', '8', '10', '7'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_13',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -676,7 +677,7 @@ final List<Task> _grade1Tasks = [
     options: ['2, 4, 5', '5, 4, 2', '4, 2, 5', '2, 5, 4'],
     answer: '2, 4, 5',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_14',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -685,7 +686,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '8', 'Равны', 'Не знаю'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_15',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -694,7 +695,7 @@ final List<Task> _grade1Tasks = [
     options: ['>', '<', '=', '?'],
     answer: '<',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_16',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -703,7 +704,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '5', '7', 'Все равны'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_17',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -712,7 +713,7 @@ final List<Task> _grade1Tasks = [
     options: ['9', '6', '4', 'Все равны'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_18',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -721,7 +722,7 @@ final List<Task> _grade1Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_19',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -730,7 +731,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_cmp_20',
     grade: 1,
     topic: 'Сравнение чисел',
@@ -741,7 +742,7 @@ final List<Task> _grade1Tasks = [
   ),
 
   // --- Тема: Фигуры ---
-  Task(
+  const Task(
     id: 'g1_fig_1',
     grade: 1,
     topic: 'Фигуры',
@@ -750,7 +751,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_2',
     grade: 1,
     topic: 'Фигуры',
@@ -759,7 +760,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_3',
     grade: 1,
     topic: 'Фигуры',
@@ -768,7 +769,7 @@ final List<Task> _grade1Tasks = [
     options: ['Квадрат', 'Круг', 'Треугольник', 'Прямоугольник'],
     answer: 'Круг',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_4',
     grade: 1,
     topic: 'Фигуры',
@@ -777,7 +778,7 @@ final List<Task> _grade1Tasks = [
     options: ['Ромба', 'Квадрата', 'Круга', 'Овала'],
     answer: 'Квадрата',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_5',
     grade: 1,
     topic: 'Фигуры',
@@ -786,7 +787,7 @@ final List<Task> _grade1Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_6',
     grade: 1,
     topic: 'Фигуры',
@@ -795,7 +796,7 @@ final List<Task> _grade1Tasks = [
     options: ['Квадрат', 'Круг', 'Треугольник', 'Прямоугольник'],
     answer: 'Треугольник',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_7',
     grade: 1,
     topic: 'Фигуры',
@@ -804,7 +805,7 @@ final List<Task> _grade1Tasks = [
     options: ['Да, 1', 'Да, 4', 'Нет', 'Да, много'],
     answer: 'Нет',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_8',
     grade: 1,
     topic: 'Фигуры',
@@ -813,7 +814,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_9',
     grade: 1,
     topic: 'Фигуры',
@@ -822,7 +823,7 @@ final List<Task> _grade1Tasks = [
     options: ['Квадрат', 'Круг', 'Треугольник', 'Прямоугольник'],
     answer: 'Круг',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_10',
     grade: 1,
     topic: 'Фигуры',
@@ -831,7 +832,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_11',
     grade: 1,
     topic: 'Фигуры',
@@ -840,7 +841,7 @@ final List<Task> _grade1Tasks = [
     options: ['Круг', 'Ромб', 'Квадрат', 'Овал'],
     answer: 'Квадрат',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_12',
     grade: 1,
     topic: 'Фигуры',
@@ -849,7 +850,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_13',
     grade: 1,
     topic: 'Фигуры',
@@ -858,7 +859,7 @@ final List<Task> _grade1Tasks = [
     options: ['Квадрат', 'Круг', 'Ромб', 'Треугольник'],
     answer: 'Треугольник',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_14',
     grade: 1,
     topic: 'Фигуры',
@@ -867,7 +868,7 @@ final List<Task> _grade1Tasks = [
     options: ['Квадрата', 'Круга', 'Ромба', 'Куба'],
     answer: 'Круга',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_15',
     grade: 1,
     topic: 'Фигуры',
@@ -876,7 +877,7 @@ final List<Task> _grade1Tasks = [
     options: ['3 угла', '4 угла', '5 углов', '6 углов'],
     answer: '4 угла',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_16',
     grade: 1,
     topic: 'Фигуры',
@@ -885,7 +886,7 @@ final List<Task> _grade1Tasks = [
     options: ['Круг', 'Овал', 'Квадрат', 'Ромб'],
     answer: 'Овал',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_17',
     grade: 1,
     topic: 'Фигуры',
@@ -894,7 +895,7 @@ final List<Task> _grade1Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_18',
     grade: 1,
     topic: 'Фигуры',
@@ -903,7 +904,7 @@ final List<Task> _grade1Tasks = [
     options: ['Круг', 'Ромб', 'Куб', 'Овал'],
     answer: 'Куб',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_19',
     grade: 1,
     topic: 'Фигуры',
@@ -912,7 +913,7 @@ final List<Task> _grade1Tasks = [
     options: ['Ромба', 'Квадрата', 'Круга', 'Овала'],
     answer: 'Квадрата',
   ),
-  Task(
+  const Task(
     id: 'g1_fig_20',
     grade: 1,
     topic: 'Фигуры',
@@ -923,7 +924,7 @@ final List<Task> _grade1Tasks = [
   ),
 
   // --- Тема: Задачи на сложение (с объяснениями!) ---
-  Task(
+  const Task(
     id: 'g1_word_1',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -933,7 +934,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи яблоки Маши и Пети',
     explanationSteps: ['У Маши: 3 яблока', 'У Пети: 2 яблока', '3 + 2 = 5 яблок'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_2',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -943,7 +944,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи все цветы',
     explanationSteps: ['Розы: 4', 'Тюльпаны: 3', '4 + 3 = 7 цветов'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_3',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -953,7 +954,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько птиц на ветке теперь?',
     explanationSteps: ['Было: 5 птиц', 'Прилетели: 2', '5 + 2 = 7 птиц'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_4',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -963,7 +964,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько котят всего?',
     explanationSteps: ['Было: 4 котёнка', 'Родились: 3', '4 + 3 = 7 котят'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_5',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -973,7 +974,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи мальчиков и девочек',
     explanationSteps: ['Мальчики: 6', 'Девочки: 4', '6 + 4 = 10 детей'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_6',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -983,7 +984,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько машинок теперь?',
     explanationSteps: ['Было: 2', 'Подарили: 5', '2 + 5 = 7 машинок'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_7',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -993,7 +994,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи всю посуду',
     explanationSteps: ['Чашки: 3', 'Тарелки: 4', '3 + 4 = 7'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_8',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1003,7 +1004,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько грибов всего?',
     explanationSteps: ['Было: 8', 'Нашли: 2', '8 + 2 = 10 грибов'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_9',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1013,7 +1014,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи кукол',
     explanationSteps: ['У Оли: 4', 'У Лены: 5', '4 + 5 = 9 кукол'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_10',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1023,7 +1024,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько машин теперь?',
     explanationSteps: ['Было: 3', 'Приехали: 4', '3 + 4 = 7 машин'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_11',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1033,7 +1034,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи всех насекомых',
     explanationSteps: ['Бабочки: 5', 'Пчёлы: 3', '5 + 3 = 8'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_12',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1043,7 +1044,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько карандашей теперь?',
     explanationSteps: ['Было: 6', 'Купили: 3', '6 + 3 = 9'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_13',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1053,7 +1054,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи всё',
     explanationSteps: ['Ручки: 4', 'Фломастеры: 2', '4 + 2 = 6'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_14',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1063,7 +1064,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько книг теперь?',
     explanationSteps: ['Было: 7', 'Поставили: 3', '7 + 3 = 10'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_15',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1073,7 +1074,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи все деревья',
     explanationSteps: ['Яблони: 2', 'Груши: 6', '2 + 6 = 8'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_16',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1083,7 +1084,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи всех котят',
     explanationSteps: ['Белые: 3', 'Чёрные: 2', '3 + 2 = 5'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_17',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1093,7 +1094,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько конфет теперь?',
     explanationSteps: ['Было: 5', 'Добавили: 4', '5 + 4 = 9'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_18',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1103,7 +1104,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сложи всех птиц',
     explanationSteps: ['Утки: 4', 'Лебеди: 5', '4 + 5 = 9'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_19',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1113,7 +1114,7 @@ final List<Task> _grade1Tasks = [
     hint: 'Сколько мячей теперь?',
     explanationSteps: ['Было: 6', 'Положили: 2', '6 + 2 = 8'],
   ),
-  Task(
+  const Task(
     id: 'g1_word_20',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -1131,7 +1132,7 @@ final List<Task> _grade1Tasks = [
 
 final List<Task> _grade2Tasks = [
   // --- Тема: Умножение на 2 ---
-  Task(
+  const Task(
     id: 'g2_mul2_1',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1140,7 +1141,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_2',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1149,7 +1150,7 @@ final List<Task> _grade2Tasks = [
     options: ['8', '10', '12', '7'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_3',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1158,7 +1159,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '14', '16', '10'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_4',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1167,7 +1168,7 @@ final List<Task> _grade2Tasks = [
     options: ['16', '18', '20', '14'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_5',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1176,7 +1177,7 @@ final List<Task> _grade2Tasks = [
     options: ['6', '8', '10', '4'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_6',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1185,7 +1186,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '12', '14', '8'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_7',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1194,7 +1195,7 @@ final List<Task> _grade2Tasks = [
     options: ['14', '16', '18', '12'],
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_8',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1203,7 +1204,7 @@ final List<Task> _grade2Tasks = [
     options: ['18', '20', '22', '16'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_9',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1212,7 +1213,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '4', '6', '8'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_10',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1221,7 +1222,7 @@ final List<Task> _grade2Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_11',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1230,7 +1231,7 @@ final List<Task> _grade2Tasks = [
     options: ['6', '8', '10', '4'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_12',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1239,7 +1240,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '12', '14', '8'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_13',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1248,7 +1249,7 @@ final List<Task> _grade2Tasks = [
     options: ['14', '16', '18', '12'],
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_14',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1257,7 +1258,7 @@ final List<Task> _grade2Tasks = [
     options: ['8', '10', '12', '6'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_15',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1266,7 +1267,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '14', '16', '10'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_16',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1275,7 +1276,7 @@ final List<Task> _grade2Tasks = [
     options: ['16', '18', '20', '14'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_17',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1284,7 +1285,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '6', '8', '5'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_18',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1293,7 +1294,7 @@ final List<Task> _grade2Tasks = [
     options: ['18', '20', '22', '16'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_19',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1302,7 +1303,7 @@ final List<Task> _grade2Tasks = [
     options: ['1', '2', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g2_mul2_20',
     grade: 2,
     topic: 'Умножение на 2',
@@ -1313,7 +1314,7 @@ final List<Task> _grade2Tasks = [
   ),
 
   // --- Тема: Умножение на 3 ---
-  Task(
+  const Task(
     id: 'g2_mul3_1',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1322,7 +1323,7 @@ final List<Task> _grade2Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_2',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1331,7 +1332,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '12', '14', '9'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_3',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1340,7 +1341,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '15', '18', '10'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_4',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1349,7 +1350,7 @@ final List<Task> _grade2Tasks = [
     options: ['15', '18', '21', '12'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_5',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1358,7 +1359,7 @@ final List<Task> _grade2Tasks = [
     options: ['18', '21', '24', '15'],
     answer: '21',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_6',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1367,7 +1368,7 @@ final List<Task> _grade2Tasks = [
     options: ['21', '24', '27', '18'],
     answer: '24',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_7',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1376,7 +1377,7 @@ final List<Task> _grade2Tasks = [
     options: ['24', '27', '30', '21'],
     answer: '27',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_8',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1385,7 +1386,7 @@ final List<Task> _grade2Tasks = [
     options: ['6', '9', '12', '8'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_9',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1394,7 +1395,7 @@ final List<Task> _grade2Tasks = [
     options: ['27', '30', '33', '24'],
     answer: '30',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_10',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1403,7 +1404,7 @@ final List<Task> _grade2Tasks = [
     options: ['1', '3', '6', '2'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_11',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1412,7 +1413,7 @@ final List<Task> _grade2Tasks = [
     options: ['9', '12', '15', '6'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_12',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1421,7 +1422,7 @@ final List<Task> _grade2Tasks = [
     options: ['15', '18', '21', '12'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_13',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1430,7 +1431,7 @@ final List<Task> _grade2Tasks = [
     options: ['21', '24', '27', '18'],
     answer: '24',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_14',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1439,7 +1440,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '15', '18', '9'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_15',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1448,7 +1449,7 @@ final List<Task> _grade2Tasks = [
     options: ['18', '21', '24', '15'],
     answer: '21',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_16',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1457,7 +1458,7 @@ final List<Task> _grade2Tasks = [
     options: ['24', '27', '30', '21'],
     answer: '27',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_17',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1466,7 +1467,7 @@ final List<Task> _grade2Tasks = [
     options: ['3', '6', '9', '5'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_18',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1475,7 +1476,7 @@ final List<Task> _grade2Tasks = [
     options: ['27', '30', '33', '24'],
     answer: '30',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_19',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1484,7 +1485,7 @@ final List<Task> _grade2Tasks = [
     options: ['1', '3', '6', '2'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_mul3_20',
     grade: 2,
     topic: 'Умножение на 3',
@@ -1495,7 +1496,7 @@ final List<Task> _grade2Tasks = [
   ),
 
   // --- Тема: Умножение на 4 и 5 ---
-  Task(
+  const Task(
     id: 'g2_mul45_1',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1504,7 +1505,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '12', '14', '8'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_2',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1513,7 +1514,7 @@ final List<Task> _grade2Tasks = [
     options: ['16', '20', '24', '15'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_3',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1522,7 +1523,7 @@ final List<Task> _grade2Tasks = [
     options: ['20', '25', '30', '15'],
     answer: '25',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_4',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1531,7 +1532,7 @@ final List<Task> _grade2Tasks = [
     options: ['25', '30', '35', '20'],
     answer: '30',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_5',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1540,7 +1541,7 @@ final List<Task> _grade2Tasks = [
     options: ['24', '28', '32', '21'],
     answer: '28',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_6',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1549,7 +1550,7 @@ final List<Task> _grade2Tasks = [
     options: ['35', '40', '45', '30'],
     answer: '40',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_7',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1558,7 +1559,7 @@ final List<Task> _grade2Tasks = [
     options: ['32', '36', '40', '28'],
     answer: '36',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_8',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1567,7 +1568,7 @@ final List<Task> _grade2Tasks = [
     options: ['40', '45', '50', '35'],
     answer: '45',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_9',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1576,7 +1577,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '16', '20', '8'],
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_10',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1585,7 +1586,7 @@ final List<Task> _grade2Tasks = [
     options: ['30', '35', '40', '25'],
     answer: '35',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_11',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1594,7 +1595,7 @@ final List<Task> _grade2Tasks = [
     options: ['20', '24', '28', '16'],
     answer: '24',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_12',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1603,7 +1604,7 @@ final List<Task> _grade2Tasks = [
     options: ['45', '50', '55', '40'],
     answer: '50',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_13',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1612,7 +1613,7 @@ final List<Task> _grade2Tasks = [
     options: ['28', '32', '36', '24'],
     answer: '32',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_14',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1621,7 +1622,7 @@ final List<Task> _grade2Tasks = [
     options: ['15', '20', '25', '10'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_15',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1630,7 +1631,7 @@ final List<Task> _grade2Tasks = [
     options: ['36', '40', '44', '32'],
     answer: '40',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_16',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1639,7 +1640,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '15', '20', '12'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_17',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1648,7 +1649,7 @@ final List<Task> _grade2Tasks = [
     options: ['6', '8', '10', '4'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_18',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1657,7 +1658,7 @@ final List<Task> _grade2Tasks = [
     options: ['8', '10', '12', '6'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_19',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1666,7 +1667,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '4', '6', '1'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_mul45_20',
     grade: 2,
     topic: 'Умножение на 4 и 5',
@@ -1677,7 +1678,7 @@ final List<Task> _grade2Tasks = [
   ),
 
   // --- Тема: Деление ---
-  Task(
+  const Task(
     id: 'g2_div_1',
     grade: 2,
     topic: 'Деление',
@@ -1686,7 +1687,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_div_2',
     grade: 2,
     topic: 'Деление',
@@ -1695,7 +1696,7 @@ final List<Task> _grade2Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_div_3',
     grade: 2,
     topic: 'Деление',
@@ -1704,7 +1705,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g2_div_4',
     grade: 2,
     topic: 'Деление',
@@ -1713,7 +1714,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_div_5',
     grade: 2,
     topic: 'Деление',
@@ -1722,7 +1723,7 @@ final List<Task> _grade2Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g2_div_6',
     grade: 2,
     topic: 'Деление',
@@ -1731,7 +1732,7 @@ final List<Task> _grade2Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_div_7',
     grade: 2,
     topic: 'Деление',
@@ -1740,7 +1741,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_div_8',
     grade: 2,
     topic: 'Деление',
@@ -1749,7 +1750,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g2_div_9',
     grade: 2,
     topic: 'Деление',
@@ -1758,7 +1759,7 @@ final List<Task> _grade2Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g2_div_10',
     grade: 2,
     topic: 'Деление',
@@ -1767,7 +1768,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '3',
   ),
-  Task(
+  const Task(
     id: 'g2_div_11',
     grade: 2,
     topic: 'Деление',
@@ -1776,7 +1777,7 @@ final List<Task> _grade2Tasks = [
     options: ['3', '4', '5', '6'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_div_12',
     grade: 2,
     topic: 'Деление',
@@ -1785,7 +1786,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g2_div_13',
     grade: 2,
     topic: 'Деление',
@@ -1794,7 +1795,7 @@ final List<Task> _grade2Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g2_div_14',
     grade: 2,
     topic: 'Деление',
@@ -1803,7 +1804,7 @@ final List<Task> _grade2Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g2_div_15',
     grade: 2,
     topic: 'Деление',
@@ -1812,7 +1813,7 @@ final List<Task> _grade2Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g2_div_16',
     grade: 2,
     topic: 'Деление',
@@ -1821,7 +1822,7 @@ final List<Task> _grade2Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_div_17',
     grade: 2,
     topic: 'Деление',
@@ -1830,7 +1831,7 @@ final List<Task> _grade2Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g2_div_18',
     grade: 2,
     topic: 'Деление',
@@ -1839,7 +1840,7 @@ final List<Task> _grade2Tasks = [
     options: ['4', '5', '6', '7'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g2_div_19',
     grade: 2,
     topic: 'Деление',
@@ -1848,7 +1849,7 @@ final List<Task> _grade2Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g2_div_20',
     grade: 2,
     topic: 'Деление',
@@ -1859,7 +1860,7 @@ final List<Task> _grade2Tasks = [
   ),
 
   // --- Тема: Текстовые задачи (с объяснениями!) ---
-  Task(
+  const Task(
     id: 'g2_word_1',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1869,7 +1870,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь количество коробок на карандаши',
     explanationSteps: ['3 коробки × 4 карандаша', '3 × 4 = 12 карандашей'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_2',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1879,7 +1880,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели конфеты на детей',
     explanationSteps: ['15 конфет ÷ 5 детей', '15 ÷ 5 = 3 конфеты'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_3',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1889,7 +1890,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь пакеты на литры',
     explanationSteps: ['4 пакета × 2 литра', '4 × 2 = 8 литров'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_4',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1899,7 +1900,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели яблоки на корзины',
     explanationSteps: ['18 яблок ÷ 3 корзины', '18 ÷ 3 = 6 яблок'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_5',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1909,7 +1910,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь ряды на стулья',
     explanationSteps: ['5 рядов × 6 стульев', '5 × 6 = 30 стульев'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_6',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1919,7 +1920,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели книги на полки',
     explanationSteps: ['24 книги ÷ 4 полки', '24 ÷ 4 = 6 книг'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_7',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1929,7 +1930,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь альбомы на наклейки',
     explanationSteps: ['3 альбома × 8 наклеек', '3 × 8 = 24 наклейки'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_8',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1939,7 +1940,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели учеников на группы',
     explanationSteps: ['32 ученика ÷ 4 группы', '32 ÷ 4 = 8 учеников'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_9',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1949,7 +1950,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь кур на яйца',
     explanationSteps: ['5 кур × 2 яйца', '5 × 2 = 10 яиц'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_10',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1959,7 +1960,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели пирожки',
     explanationSteps: ['20 пирожков ÷ 5 детей', '20 ÷ 5 = 4 пирожка'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_11',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1969,7 +1970,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь вазы на цветы',
     explanationSteps: ['4 вазы × 6 цветов', '4 × 6 = 24 цветка'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_12',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1979,7 +1980,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели орехи',
     explanationSteps: ['27 орехов ÷ 3 пакета', '27 ÷ 3 = 9 орехов'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_13',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1989,7 +1990,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь тарелки на пирожные',
     explanationSteps: ['6 тарелок × 5 пирожных', '6 × 5 = 30'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_14',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -1999,7 +2000,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели тетради',
     explanationSteps: ['36 тетрадей ÷ 6 учеников', '36 ÷ 6 = 6 тетрадей'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_15',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2009,7 +2010,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь детей на шарики',
     explanationSteps: ['7 детей × 3 шарика', '7 × 3 = 21 шарик'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_16',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2019,7 +2020,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели конфеты',
     explanationSteps: ['40 конфет ÷ 8 детей', '40 ÷ 8 = 5 конфет'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_17',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2029,7 +2030,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь ряды на парты',
     explanationSteps: ['8 рядов × 4 парты', '8 × 4 = 32 парты'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_18',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2039,7 +2040,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Раздели яблоки',
     explanationSteps: ['45 яблок ÷ 9 корзин', '45 ÷ 9 = 5 яблок'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_19',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2049,7 +2050,7 @@ final List<Task> _grade2Tasks = [
     hint: 'Умножь детей на игрушки',
     explanationSteps: ['9 детей × 2 игрушки', '9 × 2 = 18 игрушек'],
   ),
-  Task(
+  const Task(
     id: 'g2_word_20',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -2061,7 +2062,7 @@ final List<Task> _grade2Tasks = [
   ),
 
   // --- Тема: Время ---
-  Task(
+  const Task(
     id: 'g2_time_1',
     grade: 2,
     topic: 'Время',
@@ -2070,7 +2071,7 @@ final List<Task> _grade2Tasks = [
     options: ['30', '60', '100', '45'],
     answer: '60',
   ),
-  Task(
+  const Task(
     id: 'g2_time_2',
     grade: 2,
     topic: 'Время',
@@ -2079,7 +2080,7 @@ final List<Task> _grade2Tasks = [
     options: ['12', '20', '24', '30'],
     answer: '24',
   ),
-  Task(
+  const Task(
     id: 'g2_time_3',
     grade: 2,
     topic: 'Время',
@@ -2088,7 +2089,7 @@ final List<Task> _grade2Tasks = [
     options: ['60', '90', '120', '100'],
     answer: '120',
   ),
-  Task(
+  const Task(
     id: 'g2_time_4',
     grade: 2,
     topic: 'Время',
@@ -2097,7 +2098,7 @@ final List<Task> _grade2Tasks = [
     options: ['1 ч 20 мин', '1 ч 30 мин', '1 ч 40 мин', '2 ч'],
     answer: '1 ч 30 мин',
   ),
-  Task(
+  const Task(
     id: 'g2_time_5',
     grade: 2,
     topic: 'Время',
@@ -2106,7 +2107,7 @@ final List<Task> _grade2Tasks = [
     options: ['15', '20', '30', '45'],
     answer: '30',
   ),
-  Task(
+  const Task(
     id: 'g2_time_6',
     grade: 2,
     topic: 'Время',
@@ -2115,7 +2116,7 @@ final List<Task> _grade2Tasks = [
     options: ['Меньше часа', 'Ровно час', 'Больше часа', '2 часа'],
     answer: 'Меньше часа',
   ),
-  Task(
+  const Task(
     id: 'g2_time_7',
     grade: 2,
     topic: 'Время',
@@ -2124,7 +2125,7 @@ final List<Task> _grade2Tasks = [
     options: ['120', '150', '180', '200'],
     answer: '180',
   ),
-  Task(
+  const Task(
     id: 'g2_time_8',
     grade: 2,
     topic: 'Время',
@@ -2133,7 +2134,7 @@ final List<Task> _grade2Tasks = [
     options: ['5 часов', '6 часов', '7 часов', '8 часов'],
     answer: '7 часов',
   ),
-  Task(
+  const Task(
     id: 'g2_time_9',
     grade: 2,
     topic: 'Время',
@@ -2142,7 +2143,7 @@ final List<Task> _grade2Tasks = [
     options: ['80', '90', '100', '130'],
     answer: '90',
   ),
-  Task(
+  const Task(
     id: 'g2_time_10',
     grade: 2,
     topic: 'Время',
@@ -2151,7 +2152,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '15', '20', '25'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g2_time_11',
     grade: 2,
     topic: 'Время',
@@ -2160,7 +2161,7 @@ final List<Task> _grade2Tasks = [
     options: ['200', '220', '240', '260'],
     answer: '240',
   ),
-  Task(
+  const Task(
     id: 'g2_time_12',
     grade: 2,
     topic: 'Время',
@@ -2169,7 +2170,7 @@ final List<Task> _grade2Tasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g2_time_13',
     grade: 2,
     topic: 'Время',
@@ -2178,7 +2179,7 @@ final List<Task> _grade2Tasks = [
     options: ['250', '280', '300', '320'],
     answer: '300',
   ),
-  Task(
+  const Task(
     id: 'g2_time_14',
     grade: 2,
     topic: 'Время',
@@ -2187,7 +2188,7 @@ final List<Task> _grade2Tasks = [
     options: ['1 ч 5 мин', '1 ч 15 мин', '1 ч 25 мин', '1 ч 35 мин'],
     answer: '1 ч 15 мин',
   ),
-  Task(
+  const Task(
     id: 'g2_time_15',
     grade: 2,
     topic: 'Время',
@@ -2196,7 +2197,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '11', '12', '13'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_time_16',
     grade: 2,
     topic: 'Время',
@@ -2205,7 +2206,7 @@ final List<Task> _grade2Tasks = [
     options: ['125', '135', '145', '155'],
     answer: '135',
   ),
-  Task(
+  const Task(
     id: 'g2_time_17',
     grade: 2,
     topic: 'Время',
@@ -2214,7 +2215,7 @@ final List<Task> _grade2Tasks = [
     options: ['2 часа', '3 часа', '4 часа', 'Половина 4'],
     answer: '3 часа',
   ),
-  Task(
+  const Task(
     id: 'g2_time_18',
     grade: 2,
     topic: 'Время',
@@ -2223,7 +2224,7 @@ final List<Task> _grade2Tasks = [
     options: ['1 ч 30 мин', '1 ч 40 мин', '1 ч 50 мин', '2 ч'],
     answer: '1 ч 40 мин',
   ),
-  Task(
+  const Task(
     id: 'g2_time_19',
     grade: 2,
     topic: 'Время',
@@ -2232,7 +2233,7 @@ final List<Task> _grade2Tasks = [
     options: ['10', '12', '14', '16'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g2_time_20',
     grade: 2,
     topic: 'Время',
@@ -2249,7 +2250,7 @@ final List<Task> _grade2Tasks = [
 
 final List<Task> _grade3Tasks = [
   // --- Тема: Умножение на 6-9 ---
-  Task(
+  const Task(
     id: 'g3_mul_1',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2258,7 +2259,7 @@ final List<Task> _grade3Tasks = [
     options: ['36', '42', '48', '35'],
     answer: '42',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_2',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2267,7 +2268,7 @@ final List<Task> _grade3Tasks = [
     options: ['54', '56', '58', '49'],
     answer: '56',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_3',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2276,7 +2277,7 @@ final List<Task> _grade3Tasks = [
     options: ['63', '72', '81', '64'],
     answer: '72',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_4',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2285,7 +2286,7 @@ final List<Task> _grade3Tasks = [
     options: ['72', '81', '90', '63'],
     answer: '81',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_5',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2294,7 +2295,7 @@ final List<Task> _grade3Tasks = [
     options: ['42', '48', '54', '36'],
     answer: '48',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_6',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2303,7 +2304,7 @@ final List<Task> _grade3Tasks = [
     options: ['56', '63', '72', '49'],
     answer: '63',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_7',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2312,7 +2313,7 @@ final List<Task> _grade3Tasks = [
     options: ['30', '36', '42', '48'],
     answer: '36',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_8',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2321,7 +2322,7 @@ final List<Task> _grade3Tasks = [
     options: ['56', '64', '72', '48'],
     answer: '64',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_9',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2330,7 +2331,7 @@ final List<Task> _grade3Tasks = [
     options: ['42', '49', '56', '35'],
     answer: '49',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_10',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2339,7 +2340,7 @@ final List<Task> _grade3Tasks = [
     options: ['48', '54', '60', '42'],
     answer: '54',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_11',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2348,7 +2349,7 @@ final List<Task> _grade3Tasks = [
     options: ['48', '54', '60', '42'],
     answer: '54',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_12',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2357,7 +2358,7 @@ final List<Task> _grade3Tasks = [
     options: ['42', '48', '54', '36'],
     answer: '48',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_13',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2366,7 +2367,7 @@ final List<Task> _grade3Tasks = [
     options: ['36', '42', '48', '35'],
     answer: '42',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_14',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2375,7 +2376,7 @@ final List<Task> _grade3Tasks = [
     options: ['56', '63', '70', '49'],
     answer: '63',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_15',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2384,7 +2385,7 @@ final List<Task> _grade3Tasks = [
     options: ['49', '56', '63', '42'],
     answer: '56',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_16',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2393,7 +2394,7 @@ final List<Task> _grade3Tasks = [
     options: ['63', '72', '81', '56'],
     answer: '72',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_17',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2402,7 +2403,7 @@ final List<Task> _grade3Tasks = [
     options: ['25', '30', '35', '24'],
     answer: '30',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_18',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2411,7 +2412,7 @@ final List<Task> _grade3Tasks = [
     options: ['30', '35', '40', '28'],
     answer: '35',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_19',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2420,7 +2421,7 @@ final List<Task> _grade3Tasks = [
     options: ['35', '40', '45', '32'],
     answer: '40',
   ),
-  Task(
+  const Task(
     id: 'g3_mul_20',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -2431,7 +2432,7 @@ final List<Task> _grade3Tasks = [
   ),
 
   // --- Тема: Деление с остатком ---
-  Task(
+  const Task(
     id: 'g3_divr_1',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2440,7 +2441,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 ост. 1', '3 ост. 2', '2 ост. 5', '4 ост. 1'],
     answer: '3 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_2',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2449,7 +2450,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 ост. 2', '3 ост. 3', '2 ост. 7', '4 ост. 2'],
     answer: '3 ост. 2',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_3',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2458,7 +2459,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 ост. 5', '4 ост. 1', '3 ост. 4', '4 ост. 2'],
     answer: '3 ост. 5',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_4',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2467,7 +2468,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 ост. 1', '4 ост. 2', '3 ост. 8', '5 ост. 1'],
     answer: '4 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_5',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2476,7 +2477,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 1', '6 ост. 2', '5 ост. 4', '7 ост. 1'],
     answer: '6 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_6',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2485,7 +2486,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 1', '5 ост. 5', '6 ост. 2', '7 ост. 1'],
     answer: '6 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_7',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2494,7 +2495,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 4', '7 ост. 1', '6 ост. 3', '5 ост. 9'],
     answer: '6 ост. 4',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_8',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2503,7 +2504,7 @@ final List<Task> _grade3Tasks = [
     options: ['5 ост. 2', '5 ост. 3', '4 ост. 11', '6 ост. 1'],
     answer: '5 ост. 2',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_9',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2512,7 +2513,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 ост. 2', '4 ост. 3', '5 ост. 2', '3 ост. 7'],
     answer: '4 ост. 2',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_10',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2521,7 +2522,7 @@ final List<Task> _grade3Tasks = [
     options: ['5 ост. 1', '5 ост. 2', '4 ост. 7', '6 ост. 1'],
     answer: '5 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_11',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2530,7 +2531,7 @@ final List<Task> _grade3Tasks = [
     options: ['5 ост. 3', '5 ост. 4', '6 ост. 2', '4 ост. 10'],
     answer: '5 ост. 3',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_12',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2539,7 +2540,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 ост. 2', '3 ост. 3', '2 ост. 10', '4 ост. 2'],
     answer: '3 ост. 2',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_13',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2548,7 +2549,7 @@ final List<Task> _grade3Tasks = [
     options: ['7 ост. 1', '7 ост. 2', '6 ост. 7', '8 ост. 1'],
     answer: '7 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_14',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2557,7 +2558,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 2', '6 ост. 3', '5 ост. 10', '7 ост. 1'],
     answer: '6 ост. 2',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_15',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2566,7 +2567,7 @@ final List<Task> _grade3Tasks = [
     options: ['9 ост. 1', '9 ост. 2', '8 ост. 5', '10 ост. 1'],
     answer: '9 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_16',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2575,7 +2576,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 1', '6 ост. 2', '5 ост. 10', '7 ост. 1'],
     answer: '6 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_17',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2584,7 +2585,7 @@ final List<Task> _grade3Tasks = [
     options: ['7 ост. 1', '7 ост. 2', '6 ост. 5', '8 ост. 1'],
     answer: '7 ост. 1',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_18',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2593,7 +2594,7 @@ final List<Task> _grade3Tasks = [
     options: ['5 ост. 6', '5 ост. 5', '6 ост. 1', '4 ост. 13'],
     answer: '5 ост. 6',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_19',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2602,7 +2603,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 ост. 3', '6 ост. 4', '7 ост. 2', '5 ост. 8'],
     answer: '6 ост. 3',
   ),
-  Task(
+  const Task(
     id: 'g3_divr_20',
     grade: 3,
     topic: 'Деление с остатком',
@@ -2613,7 +2614,7 @@ final List<Task> _grade3Tasks = [
   ),
 
   // --- Тема: Периметр ---
-  Task(
+  const Task(
     id: 'g3_per_1',
     grade: 3,
     topic: 'Периметр',
@@ -2622,7 +2623,7 @@ final List<Task> _grade3Tasks = [
     options: ['15 см', '20 см', '25 см', '10 см'],
     answer: '20 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_2',
     grade: 3,
     topic: 'Периметр',
@@ -2631,7 +2632,7 @@ final List<Task> _grade3Tasks = [
     options: ['10 см', '20 см', '24 см', '16 см'],
     answer: '20 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_3',
     grade: 3,
     topic: 'Периметр',
@@ -2640,7 +2641,7 @@ final List<Task> _grade3Tasks = [
     answer: '28',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_4',
     grade: 3,
     topic: 'Периметр',
@@ -2649,7 +2650,7 @@ final List<Task> _grade3Tasks = [
     answer: '22',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_5',
     grade: 3,
     topic: 'Периметр',
@@ -2658,7 +2659,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 см', '8 см', '9 см', '12 см'],
     answer: '9 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_6',
     grade: 3,
     topic: 'Периметр',
@@ -2667,7 +2668,7 @@ final List<Task> _grade3Tasks = [
     answer: '12',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_7',
     grade: 3,
     topic: 'Периметр',
@@ -2676,7 +2677,7 @@ final List<Task> _grade3Tasks = [
     options: ['25 см', '30 см', '50 см', '15 см'],
     answer: '30 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_8',
     grade: 3,
     topic: 'Периметр',
@@ -2685,7 +2686,7 @@ final List<Task> _grade3Tasks = [
     answer: '48',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_9',
     grade: 3,
     topic: 'Периметр',
@@ -2694,7 +2695,7 @@ final List<Task> _grade3Tasks = [
     options: ['21 см', '28 см', '35 см', '14 см'],
     answer: '28 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_10',
     grade: 3,
     topic: 'Периметр',
@@ -2703,7 +2704,7 @@ final List<Task> _grade3Tasks = [
     options: ['14 см', '28 см', '45 см', '23 см'],
     answer: '28 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_11',
     grade: 3,
     topic: 'Периметр',
@@ -2712,7 +2713,7 @@ final List<Task> _grade3Tasks = [
     answer: '30',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_12',
     grade: 3,
     topic: 'Периметр',
@@ -2721,7 +2722,7 @@ final List<Task> _grade3Tasks = [
     options: ['45 см', '60 см', '30 см', '75 см'],
     answer: '60 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_13',
     grade: 3,
     topic: 'Периметр',
@@ -2730,7 +2731,7 @@ final List<Task> _grade3Tasks = [
     options: ['20 см', '40 см', '96 см', '32 см'],
     answer: '40 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_14',
     grade: 3,
     topic: 'Периметр',
@@ -2739,7 +2740,7 @@ final List<Task> _grade3Tasks = [
     answer: '36',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_15',
     grade: 3,
     topic: 'Периметр',
@@ -2748,7 +2749,7 @@ final List<Task> _grade3Tasks = [
     options: ['10 см', '20 см', '21 см', '14 см'],
     answer: '20 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_16',
     grade: 3,
     topic: 'Периметр',
@@ -2757,7 +2758,7 @@ final List<Task> _grade3Tasks = [
     options: ['8 см', '10 см', '12 см', '20 см'],
     answer: '10 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_17',
     grade: 3,
     topic: 'Периметр',
@@ -2766,7 +2767,7 @@ final List<Task> _grade3Tasks = [
     answer: '40',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_18',
     grade: 3,
     topic: 'Периметр',
@@ -2775,7 +2776,7 @@ final List<Task> _grade3Tasks = [
     options: ['75 см', '100 см', '50 см', '125 см'],
     answer: '100 см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_19',
     grade: 3,
     topic: 'Периметр',
@@ -2784,7 +2785,7 @@ final List<Task> _grade3Tasks = [
     answer: '50',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_per_20',
     grade: 3,
     topic: 'Периметр',
@@ -2795,7 +2796,7 @@ final List<Task> _grade3Tasks = [
   ),
 
   // --- Тема: Площадь ---
-  Task(
+  const Task(
     id: 'g3_area_1',
     grade: 3,
     topic: 'Площадь',
@@ -2804,7 +2805,7 @@ final List<Task> _grade3Tasks = [
     options: ['8 см²', '12 см²', '16 см²', '20 см²'],
     answer: '16 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_2',
     grade: 3,
     topic: 'Площадь',
@@ -2813,7 +2814,7 @@ final List<Task> _grade3Tasks = [
     options: ['8 см²', '15 см²', '16 см²', '12 см²'],
     answer: '15 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_3',
     grade: 3,
     topic: 'Площадь',
@@ -2822,7 +2823,7 @@ final List<Task> _grade3Tasks = [
     answer: '28',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_4',
     grade: 3,
     topic: 'Площадь',
@@ -2831,7 +2832,7 @@ final List<Task> _grade3Tasks = [
     answer: '81',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_5',
     grade: 3,
     topic: 'Площадь',
@@ -2840,7 +2841,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 см', '6 см', '8 см', '9 см'],
     answer: '6 см',
   ),
-  Task(
+  const Task(
     id: 'g3_area_6',
     grade: 3,
     topic: 'Площадь',
@@ -2849,7 +2850,7 @@ final List<Task> _grade3Tasks = [
     answer: '48',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_7',
     grade: 3,
     topic: 'Площадь',
@@ -2858,7 +2859,7 @@ final List<Task> _grade3Tasks = [
     options: ['9 м²', '18 м²', '20 м²', '25 м²'],
     answer: '20 м²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_8',
     grade: 3,
     topic: 'Площадь',
@@ -2867,7 +2868,7 @@ final List<Task> _grade3Tasks = [
     answer: '100',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_9',
     grade: 3,
     topic: 'Площадь',
@@ -2876,7 +2877,7 @@ final List<Task> _grade3Tasks = [
     options: ['26 см²', '36 см²', '13 см²', '32 см²'],
     answer: '36 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_10',
     grade: 3,
     topic: 'Площадь',
@@ -2885,7 +2886,7 @@ final List<Task> _grade3Tasks = [
     options: ['28 см²', '49 см²', '14 см²', '56 см²'],
     answer: '49 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_11',
     grade: 3,
     topic: 'Площадь',
@@ -2894,7 +2895,7 @@ final List<Task> _grade3Tasks = [
     answer: '60',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_12',
     grade: 3,
     topic: 'Площадь',
@@ -2903,7 +2904,7 @@ final List<Task> _grade3Tasks = [
     options: ['32 см²', '64 см²', '16 см²', '48 см²'],
     answer: '64 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_13',
     grade: 3,
     topic: 'Площадь',
@@ -2912,7 +2913,7 @@ final List<Task> _grade3Tasks = [
     options: ['14 см²', '33 см²', '28 см²', '44 см²'],
     answer: '33 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_14',
     grade: 3,
     topic: 'Площадь',
@@ -2921,7 +2922,7 @@ final List<Task> _grade3Tasks = [
     answer: '81',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_15',
     grade: 3,
     topic: 'Площадь',
@@ -2930,7 +2931,7 @@ final List<Task> _grade3Tasks = [
     options: ['38 см²', '60 см²', '19 см²', '44 см²'],
     answer: '60 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_16',
     grade: 3,
     topic: 'Площадь',
@@ -2939,7 +2940,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 см', '6 см', '9 см', '12 см'],
     answer: '6 см',
   ),
-  Task(
+  const Task(
     id: 'g3_area_17',
     grade: 3,
     topic: 'Площадь',
@@ -2948,7 +2949,7 @@ final List<Task> _grade3Tasks = [
     answer: '56',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_18',
     grade: 3,
     topic: 'Площадь',
@@ -2957,7 +2958,7 @@ final List<Task> _grade3Tasks = [
     options: ['50 см²', '100 см²', '25 см²', '80 см²'],
     answer: '100 см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_19',
     grade: 3,
     topic: 'Площадь',
@@ -2966,7 +2967,7 @@ final List<Task> _grade3Tasks = [
     answer: '121',
     unit: 'см²',
   ),
-  Task(
+  const Task(
     id: 'g3_area_20',
     grade: 3,
     topic: 'Площадь',
@@ -2977,7 +2978,7 @@ final List<Task> _grade3Tasks = [
   ),
 
   // --- Тема: Единицы длины ---
-  Task(
+  const Task(
     id: 'g3_len_1',
     grade: 3,
     topic: 'Единицы длины',
@@ -2986,7 +2987,7 @@ final List<Task> _grade3Tasks = [
     options: ['10', '100', '1000', '50'],
     answer: '100',
   ),
-  Task(
+  const Task(
     id: 'g3_len_2',
     grade: 3,
     topic: 'Единицы длины',
@@ -2995,7 +2996,7 @@ final List<Task> _grade3Tasks = [
     options: ['30', '300', '3000', '33'],
     answer: '300',
   ),
-  Task(
+  const Task(
     id: 'g3_len_3',
     grade: 3,
     topic: 'Единицы длины',
@@ -3004,7 +3005,7 @@ final List<Task> _grade3Tasks = [
     options: ['2 м 5 см', '2 м 50 см', '25 м', '2 м 25 см'],
     answer: '2 м 50 см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_4',
     grade: 3,
     topic: 'Единицы длины',
@@ -3013,7 +3014,7 @@ final List<Task> _grade3Tasks = [
     options: ['100', '1000', '10000', '500'],
     answer: '1000',
   ),
-  Task(
+  const Task(
     id: 'g3_len_5',
     grade: 3,
     topic: 'Единицы длины',
@@ -3022,7 +3023,7 @@ final List<Task> _grade3Tasks = [
     answer: '5000',
     unit: 'м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_6',
     grade: 3,
     topic: 'Единицы длины',
@@ -3031,7 +3032,7 @@ final List<Task> _grade3Tasks = [
     options: ['1', '10', '100', '5'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g3_len_7',
     grade: 3,
     topic: 'Единицы длины',
@@ -3040,7 +3041,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 дм 5 см', '45 дм', '5 дм 4 см', '4 дм 50 см'],
     answer: '4 дм 5 см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_8',
     grade: 3,
     topic: 'Единицы длины',
@@ -3049,7 +3050,7 @@ final List<Task> _grade3Tasks = [
     answer: '230',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_9',
     grade: 3,
     topic: 'Единицы длины',
@@ -3058,7 +3059,7 @@ final List<Task> _grade3Tasks = [
     options: ['30 см', '300 см', '3000 см', '3 см'],
     answer: '300 см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_10',
     grade: 3,
     topic: 'Единицы длины',
@@ -3067,7 +3068,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 м 50 см', '45 м', '4 м 5 см', '40 м 50 см'],
     answer: '4 м 50 см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_11',
     grade: 3,
     topic: 'Единицы длины',
@@ -3076,7 +3077,7 @@ final List<Task> _grade3Tasks = [
     options: ['100 м', '1000 м', '10000 м', '10 м'],
     answer: '1000 м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_12',
     grade: 3,
     topic: 'Единицы длины',
@@ -3085,7 +3086,7 @@ final List<Task> _grade3Tasks = [
     answer: '515',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_13',
     grade: 3,
     topic: 'Единицы длины',
@@ -3094,7 +3095,7 @@ final List<Task> _grade3Tasks = [
     options: ['200 м', '2000 м', '20 м', '20000 м'],
     answer: '2000 м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_14',
     grade: 3,
     topic: 'Единицы длины',
@@ -3103,7 +3104,7 @@ final List<Task> _grade3Tasks = [
     options: ['7 м 20 см', '72 м', '7 м 2 см', '70 м 20 см'],
     answer: '7 м 20 см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_15',
     grade: 3,
     topic: 'Единицы длины',
@@ -3112,7 +3113,7 @@ final List<Task> _grade3Tasks = [
     answer: '800',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_16',
     grade: 3,
     topic: 'Единицы длины',
@@ -3121,7 +3122,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 км 500 м', '35 км', '3 км 50 м', '350 км'],
     answer: '3 км 500 м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_17',
     grade: 3,
     topic: 'Единицы длины',
@@ -3130,7 +3131,7 @@ final List<Task> _grade3Tasks = [
     answer: '680',
     unit: 'см',
   ),
-  Task(
+  const Task(
     id: 'g3_len_18',
     grade: 3,
     topic: 'Единицы длины',
@@ -3139,7 +3140,7 @@ final List<Task> _grade3Tasks = [
     options: ['1 км 200 м', '12 км', '1 км 20 м', '120 км'],
     answer: '1 км 200 м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_19',
     grade: 3,
     topic: 'Единицы длины',
@@ -3148,7 +3149,7 @@ final List<Task> _grade3Tasks = [
     answer: '4300',
     unit: 'м',
   ),
-  Task(
+  const Task(
     id: 'g3_len_20',
     grade: 3,
     topic: 'Единицы длины',
@@ -3159,7 +3160,7 @@ final List<Task> _grade3Tasks = [
   ),
 
   // --- Тема: Единицы массы ---
-  Task(
+  const Task(
     id: 'g3_mass_1',
     grade: 3,
     topic: 'Единицы массы',
@@ -3168,7 +3169,7 @@ final List<Task> _grade3Tasks = [
     options: ['100', '500', '1000', '10'],
     answer: '1000',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_2',
     grade: 3,
     topic: 'Единицы массы',
@@ -3177,7 +3178,7 @@ final List<Task> _grade3Tasks = [
     answer: '3000',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_3',
     grade: 3,
     topic: 'Единицы массы',
@@ -3186,7 +3187,7 @@ final List<Task> _grade3Tasks = [
     options: ['2 кг 5 г', '2 кг 500 г', '25 кг', '2 кг 50 г'],
     answer: '2 кг 500 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_4',
     grade: 3,
     topic: 'Единицы массы',
@@ -3195,7 +3196,7 @@ final List<Task> _grade3Tasks = [
     options: ['100', '500', '1000', '10000'],
     answer: '1000',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_5',
     grade: 3,
     topic: 'Единицы массы',
@@ -3204,7 +3205,7 @@ final List<Task> _grade3Tasks = [
     answer: '5200',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_6',
     grade: 3,
     topic: 'Единицы массы',
@@ -3213,7 +3214,7 @@ final List<Task> _grade3Tasks = [
     answer: '4500',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_7',
     grade: 3,
     topic: 'Единицы массы',
@@ -3222,7 +3223,7 @@ final List<Task> _grade3Tasks = [
     options: ['1 кг 500 г', '1 кг 400 г', '1 кг 600 г', '15 кг'],
     answer: '1 кг 500 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_8',
     grade: 3,
     topic: 'Единицы массы',
@@ -3231,7 +3232,7 @@ final List<Task> _grade3Tasks = [
     options: ['2 кг 500 г', '2 кг', '2 кг 50 г', '25 кг'],
     answer: '2 кг 500 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_9',
     grade: 3,
     topic: 'Единицы массы',
@@ -3240,7 +3241,7 @@ final List<Task> _grade3Tasks = [
     options: ['300 г', '3000 г', '30 г', '30000 г'],
     answer: '3000 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_10',
     grade: 3,
     topic: 'Единицы массы',
@@ -3249,7 +3250,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 кг 500 г', '45 кг', '4 кг 50 г', '450 кг'],
     answer: '4 кг 500 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_11',
     grade: 3,
     topic: 'Единицы массы',
@@ -3258,7 +3259,7 @@ final List<Task> _grade3Tasks = [
     answer: '2300',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_12',
     grade: 3,
     topic: 'Единицы массы',
@@ -3267,7 +3268,7 @@ final List<Task> _grade3Tasks = [
     options: ['500 г', '5000 г', '50 г', '50000 г'],
     answer: '5000 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_13',
     grade: 3,
     topic: 'Единицы массы',
@@ -3276,7 +3277,7 @@ final List<Task> _grade3Tasks = [
     options: ['6 кг 200 г', '62 кг', '6 кг 20 г', '620 кг'],
     answer: '6 кг 200 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_14',
     grade: 3,
     topic: 'Единицы массы',
@@ -3285,7 +3286,7 @@ final List<Task> _grade3Tasks = [
     answer: '1750',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_15',
     grade: 3,
     topic: 'Единицы массы',
@@ -3294,7 +3295,7 @@ final List<Task> _grade3Tasks = [
     options: ['8 кг', '80 кг', '800 кг', '0.8 кг'],
     answer: '8 кг',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_16',
     grade: 3,
     topic: 'Единицы массы',
@@ -3303,7 +3304,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 кг 500 г', '3 кг 50 г', '2 кг 150 г', '35 кг'],
     answer: '3 кг 500 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_17',
     grade: 3,
     topic: 'Единицы массы',
@@ -3312,7 +3313,7 @@ final List<Task> _grade3Tasks = [
     answer: '7400',
     unit: 'г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_18',
     grade: 3,
     topic: 'Единицы массы',
@@ -3321,7 +3322,7 @@ final List<Task> _grade3Tasks = [
     options: ['4 кг 200 г', '4 кг 800 г', '4 кг 20 г', '42 кг'],
     answer: '4 кг 200 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_19',
     grade: 3,
     topic: 'Единицы массы',
@@ -3330,7 +3331,7 @@ final List<Task> _grade3Tasks = [
     options: ['3 кг 800 г', '38 кг', '3 кг 80 г', '380 кг'],
     answer: '3 кг 800 г',
   ),
-  Task(
+  const Task(
     id: 'g3_mass_20',
     grade: 3,
     topic: 'Единицы массы',
@@ -3347,7 +3348,7 @@ final List<Task> _grade3Tasks = [
 
 final List<Task> _grade4Tasks = [
   // --- Тема: Многозначные числа ---
-  Task(
+  const Task(
     id: 'g4_big_1',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3356,7 +3357,7 @@ final List<Task> _grade4Tasks = [
     options: ['701', '801', '791', '811'],
     answer: '801',
   ),
-  Task(
+  const Task(
     id: 'g4_big_2',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3365,7 +3366,7 @@ final List<Task> _grade4Tasks = [
     options: ['635', '645', '735', '535'],
     answer: '635',
   ),
-  Task(
+  const Task(
     id: 'g4_big_3',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3374,7 +3375,7 @@ final List<Task> _grade4Tasks = [
     options: ['400', '500', '450', '520'],
     answer: '500',
   ),
-  Task(
+  const Task(
     id: 'g4_big_4',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3383,7 +3384,7 @@ final List<Task> _grade4Tasks = [
     options: ['206', '216', '226', '196'],
     answer: '216',
   ),
-  Task(
+  const Task(
     id: 'g4_big_5',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3391,7 +3392,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '830',
   ),
-  Task(
+  const Task(
     id: 'g4_big_6',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3399,7 +3400,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '750',
   ),
-  Task(
+  const Task(
     id: 'g4_big_7',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3408,7 +3409,7 @@ final List<Task> _grade4Tasks = [
     options: ['800', '900', '850', '950'],
     answer: '900',
   ),
-  Task(
+  const Task(
     id: 'g4_big_8',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3416,7 +3417,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '90',
   ),
-  Task(
+  const Task(
     id: 'g4_big_9',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3425,7 +3426,7 @@ final List<Task> _grade4Tasks = [
     options: ['1235', '1245', '1345', '1145'],
     answer: '1245',
   ),
-  Task(
+  const Task(
     id: 'g4_big_10',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3434,7 +3435,7 @@ final List<Task> _grade4Tasks = [
     options: ['653', '663', '753', '647'],
     answer: '653',
   ),
-  Task(
+  const Task(
     id: 'g4_big_11',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3442,7 +3443,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '540',
   ),
-  Task(
+  const Task(
     id: 'g4_big_12',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3451,7 +3452,7 @@ final List<Task> _grade4Tasks = [
     options: ['4121', '4221', '4211', '4231'],
     answer: '4221',
   ),
-  Task(
+  const Task(
     id: 'g4_big_13',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3460,7 +3461,7 @@ final List<Task> _grade4Tasks = [
     options: ['3766', '3866', '3666', '3776'],
     answer: '3766',
   ),
-  Task(
+  const Task(
     id: 'g4_big_14',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3468,7 +3469,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '1000',
   ),
-  Task(
+  const Task(
     id: 'g4_big_15',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3477,7 +3478,7 @@ final List<Task> _grade4Tasks = [
     options: ['104', '114', '94', '124'],
     answer: '104',
   ),
-  Task(
+  const Task(
     id: 'g4_big_16',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3486,7 +3487,7 @@ final List<Task> _grade4Tasks = [
     options: ['1221', '1121', '1211', '1231'],
     answer: '1221',
   ),
-  Task(
+  const Task(
     id: 'g4_big_17',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3494,7 +3495,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '1544',
   ),
-  Task(
+  const Task(
     id: 'g4_big_18',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3503,7 +3504,7 @@ final List<Task> _grade4Tasks = [
     options: ['800', '900', '850', '950'],
     answer: '900',
   ),
-  Task(
+  const Task(
     id: 'g4_big_19',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3511,7 +3512,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '312',
   ),
-  Task(
+  const Task(
     id: 'g4_big_20',
     grade: 4,
     topic: 'Многозначные числа',
@@ -3522,7 +3523,7 @@ final List<Task> _grade4Tasks = [
   ),
 
   // --- Тема: Дроби ---
-  Task(
+  const Task(
     id: 'g4_frac_1',
     grade: 4,
     topic: 'Дроби',
@@ -3531,7 +3532,7 @@ final List<Task> _grade4Tasks = [
     options: ['1/4', '2/4', '3/4', '4/4'],
     answer: '3/4',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_2',
     grade: 4,
     topic: 'Дроби',
@@ -3540,7 +3541,7 @@ final List<Task> _grade4Tasks = [
     options: ['1/4', '2/4', '1', '2'],
     answer: '1',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_3',
     grade: 4,
     topic: 'Дроби',
@@ -3549,7 +3550,7 @@ final List<Task> _grade4Tasks = [
     options: ['1/3', '1/4', 'Равны', 'Нельзя сравнить'],
     answer: '1/3',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_4',
     grade: 4,
     topic: 'Дроби',
@@ -3558,7 +3559,7 @@ final List<Task> _grade4Tasks = [
     options: ['1/4', '2/4', '3/4', '4/4'],
     answer: '2/4',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_5',
     grade: 4,
     topic: 'Дроби',
@@ -3567,7 +3568,7 @@ final List<Task> _grade4Tasks = [
     options: ['2', '5', '10', '20'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_6',
     grade: 4,
     topic: 'Дроби',
@@ -3576,7 +3577,7 @@ final List<Task> _grade4Tasks = [
     options: ['4', '5', '10', '15'],
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_7',
     grade: 4,
     topic: 'Дроби',
@@ -3585,7 +3586,7 @@ final List<Task> _grade4Tasks = [
     options: ['2/5', '4/5', '4/10', '1'],
     answer: '4/5',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_8',
     grade: 4,
     topic: 'Дроби',
@@ -3593,7 +3594,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_9',
     grade: 4,
     topic: 'Дроби',
@@ -3602,7 +3603,7 @@ final List<Task> _grade4Tasks = [
     options: ['1/3', '2/3', '2/6', '1/6'],
     answer: '2/3',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_10',
     grade: 4,
     topic: 'Дроби',
@@ -3611,7 +3612,7 @@ final List<Task> _grade4Tasks = [
     options: ['3/6', '3/12', '7/6', '2/6'],
     answer: '3/6',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_11',
     grade: 4,
     topic: 'Дроби',
@@ -3620,7 +3621,7 @@ final List<Task> _grade4Tasks = [
     options: ['3/5', '2/5', 'Равны', 'Нельзя сравнить'],
     answer: '3/5',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_12',
     grade: 4,
     topic: 'Дроби',
@@ -3628,7 +3629,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '5',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_13',
     grade: 4,
     topic: 'Дроби',
@@ -3637,7 +3638,7 @@ final List<Task> _grade4Tasks = [
     options: ['5/7', '5/14', '6/7', '1/7'],
     answer: '5/7',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_14',
     grade: 4,
     topic: 'Дроби',
@@ -3646,7 +3647,7 @@ final List<Task> _grade4Tasks = [
     options: ['4/8', '4/16', '10/8', '3/8'],
     answer: '4/8',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_15',
     grade: 4,
     topic: 'Дроби',
@@ -3654,7 +3655,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_16',
     grade: 4,
     topic: 'Дроби',
@@ -3663,7 +3664,7 @@ final List<Task> _grade4Tasks = [
     options: ['2', '3', '4', '5'],
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_17',
     grade: 4,
     topic: 'Дроби',
@@ -3672,7 +3673,7 @@ final List<Task> _grade4Tasks = [
     options: ['3/4', '3/8', '1/2', '2/4'],
     answer: '3/4',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_18',
     grade: 4,
     topic: 'Дроби',
@@ -3680,7 +3681,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '16',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_19',
     grade: 4,
     topic: 'Дроби',
@@ -3689,7 +3690,7 @@ final List<Task> _grade4Tasks = [
     options: ['5/10', '5/20', '13/10', '4/10'],
     answer: '5/10',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_20',
     grade: 4,
     topic: 'Дроби',
@@ -3700,7 +3701,7 @@ final List<Task> _grade4Tasks = [
   ),
 
   // --- Тема: Уравнения ---
-  Task(
+  const Task(
     id: 'g4_eq_1',
     grade: 4,
     topic: 'Уравнения',
@@ -3709,7 +3710,7 @@ final List<Task> _grade4Tasks = [
     options: ['15', '25', '35', '55'],
     answer: '25',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_2',
     grade: 4,
     topic: 'Уравнения',
@@ -3718,7 +3719,7 @@ final List<Task> _grade4Tasks = [
     options: ['14', '50', '40', '46'],
     answer: '50',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_3',
     grade: 4,
     topic: 'Уравнения',
@@ -3727,7 +3728,7 @@ final List<Task> _grade4Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_4',
     grade: 4,
     topic: 'Уравнения',
@@ -3736,7 +3737,7 @@ final List<Task> _grade4Tasks = [
     options: ['1', '15', '56', '48'],
     answer: '56',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_5',
     grade: 4,
     topic: 'Уравнения',
@@ -3744,7 +3745,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '63',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_6',
     grade: 4,
     topic: 'Уравнения',
@@ -3752,7 +3753,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_7',
     grade: 4,
     topic: 'Уравнения',
@@ -3761,7 +3762,7 @@ final List<Task> _grade4Tasks = [
     options: ['10', '11', '12', '14'],
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_8',
     grade: 4,
     topic: 'Уравнения',
@@ -3770,7 +3771,7 @@ final List<Task> _grade4Tasks = [
     options: ['20', '25', '30', '50'],
     answer: '25',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_9',
     grade: 4,
     topic: 'Уравнения',
@@ -3779,7 +3780,7 @@ final List<Task> _grade4Tasks = [
     options: ['14', '40', '50', '46'],
     answer: '50',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_10',
     grade: 4,
     topic: 'Уравнения',
@@ -3788,7 +3789,7 @@ final List<Task> _grade4Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '8',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_11',
     grade: 4,
     topic: 'Уравнения',
@@ -3796,7 +3797,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '60',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_12',
     grade: 4,
     topic: 'Уравнения',
@@ -3805,7 +3806,7 @@ final List<Task> _grade4Tasks = [
     options: ['28', '62', '38', '18'],
     answer: '28',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_13',
     grade: 4,
     topic: 'Уравнения',
@@ -3814,7 +3815,7 @@ final List<Task> _grade4Tasks = [
     options: ['7', '8', '9', '10'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_14',
     grade: 4,
     topic: 'Уравнения',
@@ -3822,7 +3823,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '4',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_15',
     grade: 4,
     topic: 'Уравнения',
@@ -3831,7 +3832,7 @@ final List<Task> _grade4Tasks = [
     options: ['48', '58', '42', '52'],
     answer: '48',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_16',
     grade: 4,
     topic: 'Уравнения',
@@ -3840,7 +3841,7 @@ final List<Task> _grade4Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_17',
     grade: 4,
     topic: 'Уравнения',
@@ -3848,7 +3849,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '100',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_18',
     grade: 4,
     topic: 'Уравнения',
@@ -3857,7 +3858,7 @@ final List<Task> _grade4Tasks = [
     options: ['8', '9', '7', '6'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_19',
     grade: 4,
     topic: 'Уравнения',
@@ -3866,7 +3867,7 @@ final List<Task> _grade4Tasks = [
     options: ['5', '10', '15', '20'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_20',
     grade: 4,
     topic: 'Уравнения',
@@ -3876,7 +3877,7 @@ final List<Task> _grade4Tasks = [
   ),
 
   // --- Тема: Скорость, время, расстояние (с объяснениями!) ---
-  Task(
+  const Task(
     id: 'g4_speed_1',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3886,7 +3887,7 @@ final List<Task> _grade4Tasks = [
     answer: '120 км',
     explanationSteps: ['Формула: S = V × t', 'S = 60 × 2 = 120 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_2',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3896,7 +3897,7 @@ final List<Task> _grade4Tasks = [
     answer: '50 км/ч',
     explanationSteps: ['Формула: V = S ÷ t', 'V = 150 ÷ 3 = 50 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_3',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3906,7 +3907,7 @@ final List<Task> _grade4Tasks = [
     answer: '4 ч',
     explanationSteps: ['Формула: t = S ÷ V', 't = 200 ÷ 50 = 4 ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_4',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3916,7 +3917,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км',
     explanationSteps: ['S = V × t', 'S = 15 × 4 = 60 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_5',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3926,7 +3927,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км/ч',
     explanationSteps: ['V = S ÷ t', 'V = 360 ÷ 6 = 60 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_6',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3936,7 +3937,7 @@ final List<Task> _grade4Tasks = [
     answer: '4 ч',
     explanationSteps: ['t = S ÷ V', 't = 20 ÷ 5 = 4 ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_7',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3946,7 +3947,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км',
     explanationSteps: ['S = V × t', 'S = 80 × 3 = 240 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_8',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3956,7 +3957,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км/ч',
     explanationSteps: ['V = S ÷ t', 'V = 180 ÷ 3 = 60 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_9',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3966,7 +3967,7 @@ final List<Task> _grade4Tasks = [
     answer: '200 км',
     explanationSteps: ['S = V × t', 'S = 50 × 4 = 200 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_10',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3976,7 +3977,7 @@ final List<Task> _grade4Tasks = [
     answer: '3 ч',
     explanationSteps: ['t = S ÷ V', 't = 240 ÷ 80 = 3 ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_11',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3986,7 +3987,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км',
     explanationSteps: ['S = V × t', 'S = 15 × 3 = 45 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_12',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -3996,7 +3997,7 @@ final List<Task> _grade4Tasks = [
     answer: '90 км/ч',
     explanationSteps: ['V = S ÷ t', 'V = 450 ÷ 5 = 90 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_13',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4006,7 +4007,7 @@ final List<Task> _grade4Tasks = [
     answer: '4 ч',
     explanationSteps: ['t = S ÷ V', 't = 280 ÷ 70 = 4 ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_14',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4016,7 +4017,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км',
     explanationSteps: ['S = V × t', 'S = 5 × 2 = 10 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_15',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4026,7 +4027,7 @@ final List<Task> _grade4Tasks = [
     answer: '60 км/ч',
     explanationSteps: ['V = S ÷ t', 'V = 360 ÷ 6 = 60 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_16',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4036,7 +4037,7 @@ final List<Task> _grade4Tasks = [
     answer: '300 км',
     explanationSteps: ['S = V × t', 'S = 100 × 3 = 300 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_17',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4046,7 +4047,7 @@ final List<Task> _grade4Tasks = [
     unit: 'ч',
     explanationSteps: ['t = S ÷ V', 't = 150 ÷ 50 = 3 ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_18',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4056,7 +4057,7 @@ final List<Task> _grade4Tasks = [
     answer: '1000 км',
     explanationSteps: ['S = V × t', 'S = 500 × 2 = 1000 км'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_19',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4066,7 +4067,7 @@ final List<Task> _grade4Tasks = [
     unit: 'км/ч',
     explanationSteps: ['V = S ÷ t', 'V = 120 ÷ 4 = 30 км/ч'],
   ),
-  Task(
+  const Task(
     id: 'g4_speed_20',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4078,7 +4079,7 @@ final List<Task> _grade4Tasks = [
   ),
 
   // --- Тема: Порядок действий ---
-  Task(
+  const Task(
     id: 'g4_order_1',
     grade: 4,
     topic: 'Порядок действий',
@@ -4087,7 +4088,7 @@ final List<Task> _grade4Tasks = [
     options: ['20', '14', '24', '11'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g4_order_2',
     grade: 4,
     topic: 'Порядок действий',
@@ -4096,7 +4097,7 @@ final List<Task> _grade4Tasks = [
     options: ['14', '20', '24', '11'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g4_order_3',
     grade: 4,
     topic: 'Порядок действий',
@@ -4105,7 +4106,7 @@ final List<Task> _grade4Tasks = [
     options: ['2', '17', '8', '14'],
     answer: '17',
   ),
-  Task(
+  const Task(
     id: 'g4_order_4',
     grade: 4,
     topic: 'Порядок действий',
@@ -4114,7 +4115,7 @@ final List<Task> _grade4Tasks = [
     options: ['2', '17', '8', '14'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g4_order_5',
     grade: 4,
     topic: 'Порядок действий',
@@ -4122,7 +4123,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '42',
   ),
-  Task(
+  const Task(
     id: 'g4_order_6',
     grade: 4,
     topic: 'Порядок действий',
@@ -4130,7 +4131,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '50',
   ),
-  Task(
+  const Task(
     id: 'g4_order_7',
     grade: 4,
     topic: 'Порядок действий',
@@ -4139,7 +4140,7 @@ final List<Task> _grade4Tasks = [
     options: ['20', '40', '30', '50'],
     answer: '40',
   ),
-  Task(
+  const Task(
     id: 'g4_order_8',
     grade: 4,
     topic: 'Порядок действий',
@@ -4147,7 +4148,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '12',
   ),
-  Task(
+  const Task(
     id: 'g4_order_9',
     grade: 4,
     topic: 'Порядок действий',
@@ -4156,7 +4157,7 @@ final List<Task> _grade4Tasks = [
     options: ['20', '25', '30', '15'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g4_order_10',
     grade: 4,
     topic: 'Порядок действий',
@@ -4165,7 +4166,7 @@ final List<Task> _grade4Tasks = [
     options: ['25', '40', '35', '50'],
     answer: '40',
   ),
-  Task(
+  const Task(
     id: 'g4_order_11',
     grade: 4,
     topic: 'Порядок действий',
@@ -4173,7 +4174,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g4_order_12',
     grade: 4,
     topic: 'Порядок действий',
@@ -4182,7 +4183,7 @@ final List<Task> _grade4Tasks = [
     options: ['18', '50', '28', '38'],
     answer: '18',
   ),
-  Task(
+  const Task(
     id: 'g4_order_13',
     grade: 4,
     topic: 'Порядок действий',
@@ -4191,7 +4192,7 @@ final List<Task> _grade4Tasks = [
     options: ['4', '5', '6', '8'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g4_order_14',
     grade: 4,
     topic: 'Порядок действий',
@@ -4199,7 +4200,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '39',
   ),
-  Task(
+  const Task(
     id: 'g4_order_15',
     grade: 4,
     topic: 'Порядок действий',
@@ -4208,7 +4209,7 @@ final List<Task> _grade4Tasks = [
     options: ['950', '50', '500', '45'],
     answer: '50',
   ),
-  Task(
+  const Task(
     id: 'g4_order_16',
     grade: 4,
     topic: 'Порядок действий',
@@ -4217,7 +4218,7 @@ final List<Task> _grade4Tasks = [
     options: ['80', '100', '120', '60'],
     answer: '100',
   ),
-  Task(
+  const Task(
     id: 'g4_order_17',
     grade: 4,
     topic: 'Порядок действий',
@@ -4225,7 +4226,7 @@ final List<Task> _grade4Tasks = [
     type: TaskType.textInput,
     answer: '27',
   ),
-  Task(
+  const Task(
     id: 'g4_order_18',
     grade: 4,
     topic: 'Порядок действий',
@@ -4234,7 +4235,7 @@ final List<Task> _grade4Tasks = [
     options: ['8', '10', '12', '14'],
     answer: '10',
   ),
-  Task(
+  const Task(
     id: 'g4_order_19',
     grade: 4,
     topic: 'Порядок действий',
@@ -4243,7 +4244,7 @@ final List<Task> _grade4Tasks = [
     options: ['32', '36', '28', '30'],
     answer: '32',
   ),
-  Task(
+  const Task(
     id: 'g4_order_20',
     grade: 4,
     topic: 'Порядок действий',
@@ -4253,7 +4254,7 @@ final List<Task> _grade4Tasks = [
   ),
 
   // --- Дополнительные интересные задачи 4 класс ---
-  Task(
+  const Task(
     id: 'g4_order_21',
     grade: 4,
     topic: 'Порядок действий',
@@ -4262,7 +4263,7 @@ final List<Task> _grade4Tasks = [
     options: ['12', '14', '16', '18'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g4_order_22',
     grade: 4,
     topic: 'Порядок действий',
@@ -4271,7 +4272,7 @@ final List<Task> _grade4Tasks = [
     options: ['10', '15', '20', '25'],
     answer: '20',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_21',
     grade: 4,
     topic: 'Дроби',
@@ -4280,7 +4281,7 @@ final List<Task> _grade4Tasks = [
     options: ['3/8', '5/8', '4/8', '6/8'],
     answer: '5/8',
   ),
-  Task(
+  const Task(
     id: 'g4_frac_22',
     grade: 4,
     topic: 'Дроби',
@@ -4289,7 +4290,7 @@ final List<Task> _grade4Tasks = [
     options: ['5', '10', '15', '12'],
     answer: '15',
   ),
-  Task(
+  const Task(
     id: 'g4_speed_21',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4298,7 +4299,7 @@ final List<Task> _grade4Tasks = [
     options: ['3 ч', '4 ч', '5 ч', '6 ч'],
     answer: '4 ч',
   ),
-  Task(
+  const Task(
     id: 'g4_speed_22',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4307,7 +4308,7 @@ final List<Task> _grade4Tasks = [
     options: ['10 км/ч', '12 км/ч', '15 км/ч', '18 км/ч'],
     answer: '15 км/ч',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_21',
     grade: 4,
     topic: 'Уравнения',
@@ -4316,7 +4317,7 @@ final List<Task> _grade4Tasks = [
     options: ['35', '40', '45', '50'],
     answer: '45',
   ),
-  Task(
+  const Task(
     id: 'g4_eq_22',
     grade: 4,
     topic: 'Уравнения',
@@ -4325,7 +4326,7 @@ final List<Task> _grade4Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '9',
   ),
-  Task(
+  const Task(
     id: 'g4_big_21',
     grade: 4,
     topic: 'Многозначные числа',
@@ -4334,7 +4335,7 @@ final List<Task> _grade4Tasks = [
     options: ['4500', '4600', '4570', '5000'],
     answer: '4600',
   ),
-  Task(
+  const Task(
     id: 'g4_big_22',
     grade: 4,
     topic: 'Многозначные числа',
@@ -4351,7 +4352,7 @@ final List<Task> _grade4Tasks = [
 
 final List<Task> _extraTasks = [
   // 1 класс - Логика
-  Task(
+  const Task(
     id: 'g1_logic_1',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -4361,7 +4362,7 @@ final List<Task> _extraTasks = [
     answer: '5',
     explanationSteps: ['У Кати: 2 куклы', 'У Маши больше на 3', '2 + 3 = 5 кукол'],
   ),
-  Task(
+  const Task(
     id: 'g1_logic_2',
     grade: 1,
     topic: 'Задачи на сложение',
@@ -4371,7 +4372,7 @@ final List<Task> _extraTasks = [
     answer: '9',
     explanationSteps: ['Было: 5 человек', 'Вошли: 4', '5 + 4 = 9 человек'],
   ),
-  Task(
+  const Task(
     id: 'g1_logic_3',
     grade: 1,
     topic: 'Счёт до 10',
@@ -4380,7 +4381,7 @@ final List<Task> _extraTasks = [
     options: ['5', '6', '7', '8'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g1_logic_4',
     grade: 1,
     topic: 'Счёт до 20',
@@ -4389,7 +4390,7 @@ final List<Task> _extraTasks = [
     options: ['15', '16', '17', '18'],
     answer: '17',
   ),
-  Task(
+  const Task(
     id: 'g1_logic_5',
     grade: 1,
     topic: 'Вычитание до 10',
@@ -4401,7 +4402,7 @@ final List<Task> _extraTasks = [
   ),
 
   // 2 класс - Логика
-  Task(
+  const Task(
     id: 'g2_logic_1',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -4411,7 +4412,7 @@ final List<Task> _extraTasks = [
     answer: '8',
     explanationSteps: ['Карандашей: 24', 'Это в 3 раза больше ручек', '24 ÷ 3 = 8 ручек'],
   ),
-  Task(
+  const Task(
     id: 'g2_logic_2',
     grade: 2,
     topic: 'Текстовые задачи',
@@ -4421,7 +4422,7 @@ final List<Task> _extraTasks = [
     answer: '6',
     explanationSteps: ['Книга: 30 руб', 'Ручка в 5 раз дешевле', '30 ÷ 5 = 6 руб'],
   ),
-  Task(
+  const Task(
     id: 'g2_logic_3',
     grade: 2,
     topic: 'Умножение на 2',
@@ -4430,7 +4431,7 @@ final List<Task> _extraTasks = [
     options: ['12', '14', '16', '18'],
     answer: '14',
   ),
-  Task(
+  const Task(
     id: 'g2_logic_4',
     grade: 2,
     topic: 'Умножение на 3',
@@ -4439,7 +4440,7 @@ final List<Task> _extraTasks = [
     options: ['24', '27', '30', '33'],
     answer: '27',
   ),
-  Task(
+  const Task(
     id: 'g2_logic_5',
     grade: 2,
     topic: 'Время',
@@ -4448,7 +4449,7 @@ final List<Task> _extraTasks = [
     options: ['55', '60', '65', '70'],
     answer: '60',
   ),
-  Task(
+  const Task(
     id: 'g2_logic_6',
     grade: 2,
     topic: 'Деление',
@@ -4459,7 +4460,7 @@ final List<Task> _extraTasks = [
   ),
 
   // 3 класс - Логика
-  Task(
+  const Task(
     id: 'g3_logic_1',
     grade: 3,
     topic: 'Периметр',
@@ -4469,7 +4470,7 @@ final List<Task> _extraTasks = [
     answer: '9 см',
     explanationSteps: ['P = 4 × сторона', '36 = 4 × сторона', 'Сторона = 36 ÷ 4 = 9 см'],
   ),
-  Task(
+  const Task(
     id: 'g3_logic_2',
     grade: 3,
     topic: 'Площадь',
@@ -4479,7 +4480,7 @@ final List<Task> _extraTasks = [
     answer: '8 см',
     explanationSteps: ['S = длина × ширина', '48 = длина × 6', 'Длина = 48 ÷ 6 = 8 см'],
   ),
-  Task(
+  const Task(
     id: 'g3_logic_3',
     grade: 3,
     topic: 'Деление с остатком',
@@ -4489,7 +4490,7 @@ final List<Task> _extraTasks = [
     answer: '1',
     explanationSteps: ['50 ÷ 7 = 7 (остаток 1)', 'Каждому по 7 конфет', 'Осталось: 50 - 49 = 1'],
   ),
-  Task(
+  const Task(
     id: 'g3_logic_4',
     grade: 3,
     topic: 'Умножение на 6-9',
@@ -4498,7 +4499,7 @@ final List<Task> _extraTasks = [
     options: ['48', '54', '56', '64'],
     answer: '56',
   ),
-  Task(
+  const Task(
     id: 'g3_logic_5',
     grade: 3,
     topic: 'Единицы длины',
@@ -4508,7 +4509,7 @@ final List<Task> _extraTasks = [
     answer: 'Катя на 10 см',
     explanationSteps: ['Петя: 1 м 35 см = 135 см', 'Катя: 145 см', '145 - 135 = 10 см'],
   ),
-  Task(
+  const Task(
     id: 'g3_logic_6',
     grade: 3,
     topic: 'Единицы массы',
@@ -4520,7 +4521,7 @@ final List<Task> _extraTasks = [
   ),
 
   // 4 класс - Логика
-  Task(
+  const Task(
     id: 'g4_logic_1',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4530,7 +4531,7 @@ final List<Task> _extraTasks = [
     answer: '2 ч',
     explanationSteps: ['Скорость сближения: 80 + 70 = 150 км/ч', 'Расстояние: 300 км', 'Время = 300 ÷ 150 = 2 часа'],
   ),
-  Task(
+  const Task(
     id: 'g4_logic_2',
     grade: 4,
     topic: 'Дроби',
@@ -4540,7 +4541,7 @@ final List<Task> _extraTasks = [
     answer: '7/12',
     explanationSteps: ['Весь торт: 12/12', 'Съели: 5/12', 'Осталось: 12/12 - 5/12 = 7/12'],
   ),
-  Task(
+  const Task(
     id: 'g4_logic_3',
     grade: 4,
     topic: 'Уравнения',
@@ -4550,7 +4551,7 @@ final List<Task> _extraTasks = [
     answer: '7',
     explanationSteps: ['x × 4 - 8 = 20', 'x × 4 = 28', 'x = 7'],
   ),
-  Task(
+  const Task(
     id: 'g4_logic_4',
     grade: 4,
     topic: 'Многозначные числа',
@@ -4560,7 +4561,7 @@ final List<Task> _extraTasks = [
     answer: '4',
     explanationSteps: ['Сумма цифр должна делиться на 3', '3 + * + 5 + 6 = 14 + *', '14 + 4 = 18, делится на 3'],
   ),
-  Task(
+  const Task(
     id: 'g4_logic_5',
     grade: 4,
     topic: 'Порядок действий',
@@ -4569,7 +4570,7 @@ final List<Task> _extraTasks = [
     options: ['998', '999', '1000', '1001'],
     answer: '1000',
   ),
-  Task(
+  const Task(
     id: 'g4_logic_6',
     grade: 4,
     topic: 'Скорость, время, расстояние',
@@ -4589,7 +4590,7 @@ final List<Task> _extraTasks = [
 
 final List<Task> _grade5Tasks = [
   // ==================== НАТУРАЛЬНЫЕ ЧИСЛА (20 задач) ====================
-  Task(
+  const Task(
     id: 'g5_nat_1',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4601,7 +4602,7 @@ final List<Task> _grade5Tasks = [
       '243506',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_2',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4616,7 +4617,7 @@ final List<Task> _grade5Tasks = [
       'Ответ: 5830',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_3',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4629,7 +4630,7 @@ final List<Task> _grade5Tasks = [
       'Ответ: 3563',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_4',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4641,7 +4642,7 @@ final List<Task> _grade5Tasks = [
       'Знаем: 125 × 8 = 1000 (мнемоника)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_5',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4653,7 +4654,7 @@ final List<Task> _grade5Tasks = [
       'Точнее: 2856 ÷ 4 = 714',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_6',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4662,7 +4663,7 @@ final List<Task> _grade5Tasks = [
     options: ['2', '4', '6', '9'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_7',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4675,7 +4676,7 @@ final List<Task> _grade5Tasks = [
       'НОК = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_8',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4687,7 +4688,7 @@ final List<Task> _grade5Tasks = [
       'Наибольшее = 999',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_9',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4696,7 +4697,7 @@ final List<Task> _grade5Tasks = [
     options: ['Да', 'Нет', 'Только на 2', 'Только на 3'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_10',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4710,7 +4711,7 @@ final List<Task> _grade5Tasks = [
       '30 = 2 × 3 × 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_11',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4721,7 +4722,7 @@ final List<Task> _grade5Tasks = [
       '5³ = 5 × 5 × 5 = 125',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_12',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4730,7 +4731,7 @@ final List<Task> _grade5Tasks = [
     options: ['6', '7', '8', '9'],
     answer: '7',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_13',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4739,7 +4740,7 @@ final List<Task> _grade5Tasks = [
     options: ['5', '6', '7', '4'],
     answer: '6',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_14',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4752,7 +4753,7 @@ final List<Task> _grade5Tasks = [
       '8 × 3 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_15',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4761,7 +4762,7 @@ final List<Task> _grade5Tasks = [
     options: ['Да', 'Нет, делится на 3', 'Нет, делится на 7', 'Нет, делится на 9'],
     answer: 'Нет, делится на 3',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_16',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4773,7 +4774,7 @@ final List<Task> _grade5Tasks = [
       'НОД = 2² × 3 = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_17',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4785,7 +4786,7 @@ final List<Task> _grade5Tasks = [
       '16 + 9 - 1 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_18',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4794,7 +4795,7 @@ final List<Task> _grade5Tasks = [
     options: ['998, 999, 1001, 1010', '999, 998, 1001, 1010', '998, 999, 1010, 1001', '1001, 1010, 999, 998'],
     answer: '998, 999, 1001, 1010',
   ),
-  Task(
+  const Task(
     id: 'g5_nat_19',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4805,7 +4806,7 @@ final List<Task> _grade5Tasks = [
       '360 ÷ 15 = 360 ÷ 5 ÷ 3 = 72 ÷ 3 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_nat_20',
     grade: 5,
     topic: 'Натуральные числа',
@@ -4818,7 +4819,7 @@ final List<Task> _grade5Tasks = [
   ),
 
   // ==================== ОБЫКНОВЕННЫЕ ДРОБИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g5_frac_1',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4827,7 +4828,7 @@ final List<Task> _grade5Tasks = [
     options: ['1/2', '3/4', '2/3', '4/6'],
     answer: '3/4',
   ),
-  Task(
+  const Task(
     id: 'g5_frac_2',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4836,7 +4837,7 @@ final List<Task> _grade5Tasks = [
     options: ['3/4 > 5/6', '3/4 < 5/6', '3/4 = 5/6', 'Нельзя сравнить'],
     answer: '3/4 < 5/6',
   ),
-  Task(
+  const Task(
     id: 'g5_frac_3',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4848,7 +4849,7 @@ final List<Task> _grade5Tasks = [
       '2/6 + 1/6 = 3/6 = 1/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_4',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4860,7 +4861,7 @@ final List<Task> _grade5Tasks = [
       '9/12 - 2/12 = 7/12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_5',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4869,7 +4870,7 @@ final List<Task> _grade5Tasks = [
     options: ['5/7', '1/2', '6/12', '2/4'],
     answer: '1/2',
   ),
-  Task(
+  const Task(
     id: 'g5_frac_6',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4881,7 +4882,7 @@ final List<Task> _grade5Tasks = [
       '5/6 × 3/5 = 15/30 = 1/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_7',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4894,7 +4895,7 @@ final List<Task> _grade5Tasks = [
       '2 3/5 = 13/5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_8',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4906,7 +4907,7 @@ final List<Task> _grade5Tasks = [
       '17/4 = 4 1/4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_9',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4919,7 +4920,7 @@ final List<Task> _grade5Tasks = [
       'Ответ: 3 5/6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_10',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4928,7 +4929,7 @@ final List<Task> _grade5Tasks = [
     options: ['7/8', '11/12', 'Равны', 'Нельзя определить'],
     answer: '11/12',
   ),
-  Task(
+  const Task(
     id: 'g5_frac_11',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4939,7 +4940,7 @@ final List<Task> _grade5Tasks = [
       '80 × 3/4 = 80 ÷ 4 × 3 = 20 × 3 = 60',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_12',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4951,7 +4952,7 @@ final List<Task> _grade5Tasks = [
       'Заимствуем: 2 5/4 - 1 3/4 = 1 2/4 = 1 1/2 = 3/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_13',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4960,7 +4961,7 @@ final List<Task> _grade5Tasks = [
     options: ['1/4', '2/5', '1/2', '3/5'],
     answer: '1/2',
   ),
-  Task(
+  const Task(
     id: 'g5_frac_14',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4971,7 +4972,7 @@ final List<Task> _grade5Tasks = [
       '4/5 × 10 = 40/5 = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_15',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4983,7 +4984,7 @@ final List<Task> _grade5Tasks = [
       'x = 12 × 4/3 = 16',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_16',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -4995,7 +4996,7 @@ final List<Task> _grade5Tasks = [
       '18/24 = 3/4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_17',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -5006,7 +5007,7 @@ final List<Task> _grade5Tasks = [
       'Знаменатели одинаковы: 2/7 + 3/7 = 5/7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_18',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -5019,7 +5020,7 @@ final List<Task> _grade5Tasks = [
       '2/3 = 8/12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_19',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -5030,7 +5031,7 @@ final List<Task> _grade5Tasks = [
       '5 ÷ 1/2 = 5 × 2 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_frac_20',
     grade: 5,
     topic: 'Обыкновенные дроби',
@@ -5043,7 +5044,7 @@ final List<Task> _grade5Tasks = [
   ),
 
   // ==================== ПРОЦЕНТЫ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g5_pct_1',
     grade: 5,
     topic: 'Проценты',
@@ -5054,7 +5055,7 @@ final List<Task> _grade5Tasks = [
       '0.35 × 100% = 35%',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_2',
     grade: 5,
     topic: 'Проценты',
@@ -5065,7 +5066,7 @@ final List<Task> _grade5Tasks = [
       '45% = 45/100 = 9/20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_3',
     grade: 5,
     topic: 'Проценты',
@@ -5076,7 +5077,7 @@ final List<Task> _grade5Tasks = [
       '150 × 0.20 = 30',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_4',
     grade: 5,
     topic: 'Проценты',
@@ -5088,7 +5089,7 @@ final List<Task> _grade5Tasks = [
       'x = 18 ÷ 0.30 = 60',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_5',
     grade: 5,
     topic: 'Проценты',
@@ -5099,7 +5100,7 @@ final List<Task> _grade5Tasks = [
       '12/48 = 0.25 = 25%',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_6',
     grade: 5,
     topic: 'Проценты',
@@ -5111,7 +5112,7 @@ final List<Task> _grade5Tasks = [
       '500 + 50 = 550 руб.',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_7',
     grade: 5,
     topic: 'Проценты',
@@ -5123,7 +5124,7 @@ final List<Task> _grade5Tasks = [
       '400 - 100 = 300 руб.',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_8',
     grade: 5,
     topic: 'Проценты',
@@ -5134,7 +5135,7 @@ final List<Task> _grade5Tasks = [
       '1% = 7500 ÷ 100 = 75',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_9',
     grade: 5,
     topic: 'Проценты',
@@ -5143,7 +5144,7 @@ final List<Task> _grade5Tasks = [
     options: ['3/5', '4/5', '3/4', '7/9'],
     answer: '3/4',
   ),
-  Task(
+  const Task(
     id: 'g5_pct_10',
     grade: 5,
     topic: 'Проценты',
@@ -5154,7 +5155,7 @@ final List<Task> _grade5Tasks = [
       '30 × 0.40 = 12 девочек',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_11',
     grade: 5,
     topic: 'Проценты',
@@ -5165,7 +5166,7 @@ final List<Task> _grade5Tasks = [
       '200 × 0.05 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_12',
     grade: 5,
     topic: 'Проценты',
@@ -5176,7 +5177,7 @@ final List<Task> _grade5Tasks = [
       '1/4 = 0.25 = 25%',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_13',
     grade: 5,
     topic: 'Проценты',
@@ -5187,7 +5188,7 @@ final List<Task> _grade5Tasks = [
       '800 × 0.15 = 120 руб.',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_14',
     grade: 5,
     topic: 'Проценты',
@@ -5199,7 +5200,7 @@ final List<Task> _grade5Tasks = [
       '100% = 0.7 × 100 = 70',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_15',
     grade: 5,
     topic: 'Проценты',
@@ -5210,7 +5211,7 @@ final List<Task> _grade5Tasks = [
       '0.07 × 100% = 7%',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_16',
     grade: 5,
     topic: 'Проценты',
@@ -5221,7 +5222,7 @@ final List<Task> _grade5Tasks = [
       '60 × 1.5 = 90',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_17',
     grade: 5,
     topic: 'Проценты',
@@ -5233,7 +5234,7 @@ final List<Task> _grade5Tasks = [
       '50/200 = 0.25 = 25%',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_18',
     grade: 5,
     topic: 'Проценты',
@@ -5244,7 +5245,7 @@ final List<Task> _grade5Tasks = [
       '1000 × 0.005 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_19',
     grade: 5,
     topic: 'Проценты',
@@ -5255,7 +5256,7 @@ final List<Task> _grade5Tasks = [
       '120 × 0.25 = 30',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_pct_20',
     grade: 5,
     topic: 'Проценты',
@@ -5268,7 +5269,7 @@ final List<Task> _grade5Tasks = [
   ),
 
   // ==================== ГЕОМЕТРИЯ: ПЕРИМЕТР И ПЛОЩАДЬ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g5_geo_1',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5279,7 +5280,7 @@ final List<Task> _grade5Tasks = [
       'P = 2(a + b) = 2(5 + 3) = 16',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_2',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5290,7 +5291,7 @@ final List<Task> _grade5Tasks = [
       'S = a × b = 7 × 4 = 28',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_3',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5301,7 +5302,7 @@ final List<Task> _grade5Tasks = [
       'S = a² = 6² = 36',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_4',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5313,7 +5314,7 @@ final List<Task> _grade5Tasks = [
       'P = 4a = 20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_5',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5324,7 +5325,7 @@ final List<Task> _grade5Tasks = [
       'S = (a × h) / 2 = (8 × 5) / 2 = 20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_6',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5335,7 +5336,7 @@ final List<Task> _grade5Tasks = [
       'P = 3 × a = 3 × 9 = 27',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_7',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5346,7 +5347,7 @@ final List<Task> _grade5Tasks = [
       'P = 4a → a = P/4 = 28/4 = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_8',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5357,7 +5358,7 @@ final List<Task> _grade5Tasks = [
       'P = 2(a + b) → 30 = 2(10 + b) → b = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_9',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5368,7 +5369,7 @@ final List<Task> _grade5Tasks = [
       '3² + 4² = 9 + 16 = 25',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_10',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5379,7 +5380,7 @@ final List<Task> _grade5Tasks = [
       'V = a³ = 4³ = 64',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_11',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5390,7 +5391,7 @@ final List<Task> _grade5Tasks = [
       'C = 2πr = 2 × 3.14 × 5 = 31.4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_12',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5401,7 +5402,7 @@ final List<Task> _grade5Tasks = [
       'S = πr² = 3.14 × 3² = 3.14 × 9 = 28.26',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_13',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5412,7 +5413,7 @@ final List<Task> _grade5Tasks = [
       'S = (a × b) / 2 = (6 × 8) / 2 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_14',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5424,7 +5425,7 @@ final List<Task> _grade5Tasks = [
       'c = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_15',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5435,7 +5436,7 @@ final List<Task> _grade5Tasks = [
       'V = a × b × c = 3 × 4 × 5 = 60',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_16',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5444,7 +5445,7 @@ final List<Task> _grade5Tasks = [
     options: ['90°', '180°', '270°', '360°'],
     answer: '180°',
   ),
-  Task(
+  const Task(
     id: 'g5_geo_17',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5453,7 +5454,7 @@ final List<Task> _grade5Tasks = [
     options: ['1', '√2', '2', '√3'],
     answer: '√2',
   ),
-  Task(
+  const Task(
     id: 'g5_geo_18',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5464,7 +5465,7 @@ final List<Task> _grade5Tasks = [
       'S = d₁ × d₂ / 2 = 6 × 8 / 2 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_19',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5475,7 +5476,7 @@ final List<Task> _grade5Tasks = [
       'S = (a + b) / 2 × h = (6 + 10) / 2 × 4 = 8 × 4 = 32',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_geo_20',
     grade: 5,
     topic: 'Геометрия: периметр и площадь',
@@ -5488,7 +5489,7 @@ final List<Task> _grade5Tasks = [
   ),
 
   // ==================== КООРДИНАТНАЯ ПРЯМАЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g5_coord_1',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5497,7 +5498,7 @@ final List<Task> _grade5Tasks = [
     options: ['-5', '-1', '2', '4'],
     answer: '-1',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_2',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5508,7 +5509,7 @@ final List<Task> _grade5Tasks = [
       '|(-4) - 3| = |-7| = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_3',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5519,7 +5520,7 @@ final List<Task> _grade5Tasks = [
       'Модуль числа — расстояние до нуля = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_4',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5528,7 +5529,7 @@ final List<Task> _grade5Tasks = [
     options: ['-3 < -7', '-3 > -7', '-3 = -7', 'Нельзя сравнить'],
     answer: '-3 > -7',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_5',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5540,7 +5541,7 @@ final List<Task> _grade5Tasks = [
       '5 → -5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_6',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5549,7 +5550,7 @@ final List<Task> _grade5Tasks = [
     options: ['-5, -2, 0, 3', '-2, -5, 0, 3', '0, -2, -5, 3', '3, 0, -2, -5'],
     answer: '-5, -2, 0, 3',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_7',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5560,7 +5561,7 @@ final List<Task> _grade5Tasks = [
       'Модуль нуля равен нулю',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_8',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5569,7 +5570,7 @@ final List<Task> _grade5Tasks = [
     options: ['-0.1', '-0.9', 'Равны', 'Нельзя сравнить'],
     answer: '-0.1',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_9',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5580,7 +5581,7 @@ final List<Task> _grade5Tasks = [
       'Середина = (-2 + 6) / 2 = 4/2 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_10',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5591,7 +5592,7 @@ final List<Task> _grade5Tasks = [
       'Противоположное = меняем знак: 3/4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_11',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5602,7 +5603,7 @@ final List<Task> _grade5Tasks = [
       '|-1.5 - 2.5| = |-4| = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_12',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5613,7 +5614,7 @@ final List<Task> _grade5Tasks = [
       '3 + 4 = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_13',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5622,7 +5623,7 @@ final List<Task> _grade5Tasks = [
     options: ['Между -3 и -2', 'Между -2 и -1', 'Между 2 и 3', 'Правее 0'],
     answer: 'Между -3 и -2',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_14',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5633,7 +5634,7 @@ final List<Task> _grade5Tasks = [
       '-3, -2, -1, 0, 1, 2 — это 6 целых чисел',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_15',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5642,7 +5643,7 @@ final List<Task> _grade5Tasks = [
     options: ['0', '-1/2', '0.1', 'Все'],
     answer: '-1/2',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_16',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5651,7 +5652,7 @@ final List<Task> _grade5Tasks = [
     options: ['Равные числа', 'Противоположные числа', 'Соседние числа', 'Взаимно обратные'],
     answer: 'Противоположные числа',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_17',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5660,7 +5661,7 @@ final List<Task> _grade5Tasks = [
     options: ['Начало координат', 'Правее начала', 'Левее начала', 'Произвольная'],
     answer: 'Начало координат',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_18',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5671,7 +5672,7 @@ final List<Task> _grade5Tasks = [
       '8 - 3 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g5_coord_19',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5680,7 +5681,7 @@ final List<Task> _grade5Tasks = [
     options: ['>', '<', '=', '≥'],
     answer: '<',
   ),
-  Task(
+  const Task(
     id: 'g5_coord_20',
     grade: 5,
     topic: 'Координатная прямая',
@@ -5699,7 +5700,7 @@ final List<Task> _grade5Tasks = [
 
 final List<Task> _grade6Tasks = [
   // ==================== РАЦИОНАЛЬНЫЕ ЧИСЛА (20 задач) ====================
-  Task(
+  const Task(
     id: 'g6_rat_1',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5711,7 +5712,7 @@ final List<Task> _grade6Tasks = [
       '-5 + (-3) = -8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_2',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5723,7 +5724,7 @@ final List<Task> _grade6Tasks = [
       '-7 + 3 = -4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_3',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5734,7 +5735,7 @@ final List<Task> _grade6Tasks = [
       '4 - (-6) = 4 + 6 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_4',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5746,7 +5747,7 @@ final List<Task> _grade6Tasks = [
       '(-3) × (-4) = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_5',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5758,7 +5759,7 @@ final List<Task> _grade6Tasks = [
       '-15 ÷ 3 = -5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_6',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5769,7 +5770,7 @@ final List<Task> _grade6Tasks = [
       '(-2)³ = (-2) × (-2) × (-2) = 4 × (-2) = -8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_7',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5780,7 +5781,7 @@ final List<Task> _grade6Tasks = [
       '(-2)⁴ = ((-2)²)² = 4² = 16',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_8',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5792,7 +5793,7 @@ final List<Task> _grade6Tasks = [
       'Ответ: -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_9',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5803,7 +5804,7 @@ final List<Task> _grade6Tasks = [
       '(-1/2) × 4 = -4/2 = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_10',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5814,7 +5815,7 @@ final List<Task> _grade6Tasks = [
       '(-3/4) × (-8/3) = 24/12 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_11',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5825,7 +5826,7 @@ final List<Task> _grade6Tasks = [
       '2.5 - 1.3 = 1.2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_12',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5836,7 +5837,7 @@ final List<Task> _grade6Tasks = [
       '(-0.4) × (-0.5) = 0.2 (минус × минус = плюс)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_13',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5845,7 +5846,7 @@ final List<Task> _grade6Tasks = [
     options: ['√2', 'π', '1/3', 'e'],
     answer: '1/3',
   ),
-  Task(
+  const Task(
     id: 'g6_rat_14',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5857,7 +5858,7 @@ final List<Task> _grade6Tasks = [
       '5 - 9 = -4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_15',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5869,7 +5870,7 @@ final List<Task> _grade6Tasks = [
       '3 × (-3) = -9',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_16',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5878,7 +5879,7 @@ final List<Task> _grade6Tasks = [
     options: ['-1', '1', '0', '100'],
     answer: '1',
   ),
-  Task(
+  const Task(
     id: 'g6_rat_17',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5889,7 +5890,7 @@ final List<Task> _grade6Tasks = [
       'Противоположные числа дают 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_18',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5898,7 +5899,7 @@ final List<Task> _grade6Tasks = [
     options: ['Положительный', 'Отрицательный', 'Ноль', 'Нет знака'],
     answer: 'Отрицательный',
   ),
-  Task(
+  const Task(
     id: 'g6_rat_19',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5910,7 +5911,7 @@ final List<Task> _grade6Tasks = [
       '|-7| = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_rat_20',
     grade: 6,
     topic: 'Рациональные числа',
@@ -5924,7 +5925,7 @@ final List<Task> _grade6Tasks = [
   ),
 
   // ==================== ПРОПОРЦИИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g6_prop_1',
     grade: 6,
     topic: 'Пропорции',
@@ -5936,7 +5937,7 @@ final List<Task> _grade6Tasks = [
       'x = 3 × 10 / 6 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_2',
     grade: 6,
     topic: 'Пропорции',
@@ -5947,7 +5948,7 @@ final List<Task> _grade6Tasks = [
       'x = 4 × 6 / 8 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_3',
     grade: 6,
     topic: 'Пропорции',
@@ -5959,7 +5960,7 @@ final List<Task> _grade6Tasks = [
       '8 кг = 30 × 8 = 240 руб.',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_4',
     grade: 6,
     topic: 'Пропорции',
@@ -5970,7 +5971,7 @@ final List<Task> _grade6Tasks = [
       '3 × 100 = 300 см = 3 м (но ответ в см = 300)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_5',
     grade: 6,
     topic: 'Пропорции',
@@ -5981,7 +5982,7 @@ final List<Task> _grade6Tasks = [
       'k = y/x = 12/3 = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_6',
     grade: 6,
     topic: 'Пропорции',
@@ -5993,7 +5994,7 @@ final List<Task> _grade6Tasks = [
       '2 × 6 = 3 × x → x = 12/3 = 4 дня',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_7',
     grade: 6,
     topic: 'Пропорции',
@@ -6002,7 +6003,7 @@ final List<Task> _grade6Tasks = [
     options: ['Да, это пропорция', 'Нет', 'Частично', 'Нельзя проверить'],
     answer: 'Да, это пропорция',
   ),
-  Task(
+  const Task(
     id: 'g6_prop_8',
     grade: 6,
     topic: 'Пропорции',
@@ -6015,7 +6016,7 @@ final List<Task> _grade6Tasks = [
       '2 части: 24, 3 части: 36',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_9',
     grade: 6,
     topic: 'Пропорции',
@@ -6027,7 +6028,7 @@ final List<Task> _grade6Tasks = [
       '80 × 5 = 400 км',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_10',
     grade: 6,
     topic: 'Пропорции',
@@ -6039,7 +6040,7 @@ final List<Task> _grade6Tasks = [
       'x = 20/2 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_11',
     grade: 6,
     topic: 'Пропорции',
@@ -6052,7 +6053,7 @@ final List<Task> _grade6Tasks = [
       '3×10=30, 2×10=20, 5×10=50',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_12',
     grade: 6,
     topic: 'Пропорции',
@@ -6063,7 +6064,7 @@ final List<Task> _grade6Tasks = [
       '3 × y = 12 → y = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_13',
     grade: 6,
     topic: 'Пропорции',
@@ -6075,7 +6076,7 @@ final List<Task> _grade6Tasks = [
       '5 × 30 = 150 руб.',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_14',
     grade: 6,
     topic: 'Пропорции',
@@ -6086,7 +6087,7 @@ final List<Task> _grade6Tasks = [
       '4 × 50000 = 200000 см = 2000 м = 2 км',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_15',
     grade: 6,
     topic: 'Пропорции',
@@ -6095,7 +6096,7 @@ final List<Task> _grade6Tasks = [
     options: ['1/3', '1/4', '2/5', '1/2'],
     answer: '1/3',
   ),
-  Task(
+  const Task(
     id: 'g6_prop_16',
     grade: 6,
     topic: 'Пропорции',
@@ -6106,7 +6107,7 @@ final List<Task> _grade6Tasks = [
       'x = 9 × 8 / 6 = 72/6 = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_17',
     grade: 6,
     topic: 'Пропорции',
@@ -6117,7 +6118,7 @@ final List<Task> _grade6Tasks = [
       't = S/v = 180/60 = 3 ч',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_18',
     grade: 6,
     topic: 'Пропорции',
@@ -6129,7 +6130,7 @@ final List<Task> _grade6Tasks = [
       'Наибольшее: 3×4=12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_19',
     grade: 6,
     topic: 'Пропорции',
@@ -6141,7 +6142,7 @@ final List<Task> _grade6Tasks = [
       'y = 24/8 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_prop_20',
     grade: 6,
     topic: 'Пропорции',
@@ -6152,7 +6153,7 @@ final List<Task> _grade6Tasks = [
   ),
 
   // ==================== УРАВНЕНИЯ 6 КЛАСС (20 задач) ====================
-  Task(
+  const Task(
     id: 'g6_eq_1',
     grade: 6,
     topic: 'Уравнения',
@@ -6164,7 +6165,7 @@ final List<Task> _grade6Tasks = [
       'x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_2',
     grade: 6,
     topic: 'Уравнения',
@@ -6176,7 +6177,7 @@ final List<Task> _grade6Tasks = [
       'x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_3',
     grade: 6,
     topic: 'Уравнения',
@@ -6187,7 +6188,7 @@ final List<Task> _grade6Tasks = [
       'x = 7 × 4 = 28',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_4',
     grade: 6,
     topic: 'Уравнения',
@@ -6200,7 +6201,7 @@ final List<Task> _grade6Tasks = [
       'x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_5',
     grade: 6,
     topic: 'Уравнения',
@@ -6211,7 +6212,7 @@ final List<Task> _grade6Tasks = [
       'x = 10 / (-2) = -5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_6',
     grade: 6,
     topic: 'Уравнения',
@@ -6223,7 +6224,7 @@ final List<Task> _grade6Tasks = [
       'x = 9',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_7',
     grade: 6,
     topic: 'Уравнения',
@@ -6235,7 +6236,7 @@ final List<Task> _grade6Tasks = [
       'x = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_8',
     grade: 6,
     topic: 'Уравнения',
@@ -6247,7 +6248,7 @@ final List<Task> _grade6Tasks = [
       '8 = x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_9',
     grade: 6,
     topic: 'Уравнения',
@@ -6258,7 +6259,7 @@ final List<Task> _grade6Tasks = [
       'x = 2.3 + 0.5 = 2.8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_10',
     grade: 6,
     topic: 'Уравнения',
@@ -6269,7 +6270,7 @@ final List<Task> _grade6Tasks = [
       'x = 9 × 2/3 = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_11',
     grade: 6,
     topic: 'Уравнения',
@@ -6281,7 +6282,7 @@ final List<Task> _grade6Tasks = [
       'x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_12',
     grade: 6,
     topic: 'Уравнения',
@@ -6293,7 +6294,7 @@ final List<Task> _grade6Tasks = [
       'x = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_13',
     grade: 6,
     topic: 'Уравнения',
@@ -6304,7 +6305,7 @@ final List<Task> _grade6Tasks = [
       'x = 4 / 0.2 = 20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_14',
     grade: 6,
     topic: 'Уравнения',
@@ -6316,7 +6317,7 @@ final List<Task> _grade6Tasks = [
       'x = 20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_15',
     grade: 6,
     topic: 'Уравнения',
@@ -6329,7 +6330,7 @@ final List<Task> _grade6Tasks = [
       'x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_16',
     grade: 6,
     topic: 'Уравнения',
@@ -6342,7 +6343,7 @@ final List<Task> _grade6Tasks = [
       'x = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_17',
     grade: 6,
     topic: 'Уравнения',
@@ -6353,7 +6354,7 @@ final List<Task> _grade6Tasks = [
       '-x = -7 → x = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_18',
     grade: 6,
     topic: 'Уравнения',
@@ -6365,7 +6366,7 @@ final List<Task> _grade6Tasks = [
       'x = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_19',
     grade: 6,
     topic: 'Уравнения',
@@ -6377,7 +6378,7 @@ final List<Task> _grade6Tasks = [
       'x = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_eq_20',
     grade: 6,
     topic: 'Уравнения',
@@ -6391,7 +6392,7 @@ final List<Task> _grade6Tasks = [
   ),
 
   // ==================== ГЕОМЕТРИЯ: КООРДИНАТЫ НА ПЛОСКОСТИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g6_plane_1',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6400,7 +6401,7 @@ final List<Task> _grade6Tasks = [
     options: ['I', 'II', 'III', 'IV'],
     answer: 'IV',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_2',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6411,7 +6412,7 @@ final List<Task> _grade6Tasks = [
       'd = √(3² + 4²) = √(9 + 16) = √25 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_3',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6420,7 +6421,7 @@ final List<Task> _grade6Tasks = [
     options: ['Оси OX', 'Оси OY', 'В начале координат', 'В третьем квадранте'],
     answer: 'Оси OX',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_4',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6429,7 +6430,7 @@ final List<Task> _grade6Tasks = [
     options: ['(3, 5)', '(4, 6)', '(8, 12)', '(4, 4)'],
     answer: '(4, 6)',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_5',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6438,7 +6439,7 @@ final List<Task> _grade6Tasks = [
     options: ['Начало координат', 'Точка на оси OX', 'Точка на оси OY', 'Точка в I квадранте'],
     answer: 'Начало координат',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_6',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6450,7 +6451,7 @@ final List<Task> _grade6Tasks = [
       '(-2, 3) → (-2, -3)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_7',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6462,7 +6463,7 @@ final List<Task> _grade6Tasks = [
       '(1, -5) → (-1, -5)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_8',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6473,7 +6474,7 @@ final List<Task> _grade6Tasks = [
       'd = √((4-1)² + (5-1)²) = √(9+16) = √25 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_9',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6482,7 +6483,7 @@ final List<Task> _grade6Tasks = [
     options: ['Да', 'Нет', 'Невозможно определить', 'Только первые две'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_10',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6491,7 +6492,7 @@ final List<Task> _grade6Tasks = [
     options: ['I', 'II', 'III', 'IV'],
     answer: 'III',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_11',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6502,7 +6503,7 @@ final List<Task> _grade6Tasks = [
       'Сторона = 2, площадь = 2² = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_12',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6511,7 +6512,7 @@ final List<Task> _grade6Tasks = [
     options: ['I', 'II', 'III', 'IV'],
     answer: 'IV',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_13',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6520,7 +6521,7 @@ final List<Task> _grade6Tasks = [
     options: ['I', 'II', 'III', 'IV'],
     answer: 'II',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_14',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6529,7 +6530,7 @@ final List<Task> _grade6Tasks = [
     options: ['(0, y)', '(x, 0)', '(x, y)', '(0, 0)'],
     answer: '(0, y)',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_15',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6542,7 +6543,7 @@ final List<Task> _grade6Tasks = [
       'M(-1, 3)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_16',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6553,7 +6554,7 @@ final List<Task> _grade6Tasks = [
       'Меняем знаки обеих координат: (-3, 2)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_17',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6562,7 +6563,7 @@ final List<Task> _grade6Tasks = [
     options: ['Только I квадрант', 'I и III квадранты', 'II и IV квадранты', 'Все квадранты'],
     answer: 'I и III квадранты',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_18',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6573,7 +6574,7 @@ final List<Task> _grade6Tasks = [
       'Расстояние до оси OX = |y| = |5| = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g6_plane_19',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6582,7 +6583,7 @@ final List<Task> _grade6Tasks = [
     options: ['Оси OY', 'Оси OX', 'Произвольном месте', 'Начале координат'],
     answer: 'Оси OX',
   ),
-  Task(
+  const Task(
     id: 'g6_plane_20',
     grade: 6,
     topic: 'Координаты на плоскости',
@@ -6598,7 +6599,7 @@ final List<Task> _grade6Tasks = [
 
 final List<Task> _grade7Tasks = [
   // ==================== ЛИНЕЙНЫЕ ФУНКЦИИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g7_lin_1',
     grade: 7,
     topic: 'Линейная функция',
@@ -6609,7 +6610,7 @@ final List<Task> _grade7Tasks = [
       'k = (y₂ - y₁)/(x₂ - x₁) = (8 - 2)/(3 - 0) = 6/3 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_2',
     grade: 7,
     topic: 'Линейная функция',
@@ -6620,7 +6621,7 @@ final List<Task> _grade7Tasks = [
       'y = 2 × 4 - 3 = 8 - 3 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_3',
     grade: 7,
     topic: 'Линейная функция',
@@ -6632,7 +6633,7 @@ final List<Task> _grade7Tasks = [
       'x = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_4',
     grade: 7,
     topic: 'Линейная функция',
@@ -6641,7 +6642,7 @@ final List<Task> _grade7Tasks = [
     options: ['Возрастает', 'Убывает', 'Постоянна', 'Зависит от x'],
     answer: 'Убывает',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_5',
     grade: 7,
     topic: 'Линейная функция',
@@ -6650,7 +6651,7 @@ final List<Task> _grade7Tasks = [
     options: ['(0, 4)', '(4, 0)', '(0, 0)', 'Не пересекает'],
     answer: '(0, 4)',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_6',
     grade: 7,
     topic: 'Линейная функция',
@@ -6659,7 +6660,7 @@ final List<Task> _grade7Tasks = [
     options: ['Параллельными', 'Пересекающимися', 'Совпадающими', 'Перпендикулярными'],
     answer: 'Параллельными',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_7',
     grade: 7,
     topic: 'Линейная функция',
@@ -6668,7 +6669,7 @@ final List<Task> _grade7Tasks = [
     options: ['Горизонтальной прямой', 'Вертикальной прямой', 'Параболой', 'Пустым'],
     answer: 'Горизонтальной прямой',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_8',
     grade: 7,
     topic: 'Линейная функция',
@@ -6680,7 +6681,7 @@ final List<Task> _grade7Tasks = [
       'b = 10 - 6 = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_9',
     grade: 7,
     topic: 'Линейная функция',
@@ -6694,7 +6695,7 @@ final List<Task> _grade7Tasks = [
       '(1, 3)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_10',
     grade: 7,
     topic: 'Линейная функция',
@@ -6703,7 +6704,7 @@ final List<Task> _grade7Tasks = [
     options: ['Да', 'Нет, это линейная функция', 'Нет, это квадратная', 'Нет, это гипербола'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_11',
     grade: 7,
     topic: 'Линейная функция',
@@ -6715,7 +6716,7 @@ final List<Task> _grade7Tasks = [
       'k = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_12',
     grade: 7,
     topic: 'Линейная функция',
@@ -6724,7 +6725,7 @@ final List<Task> _grade7Tasks = [
     options: ['[1, 7]', '[0, 2]', '[3, 7]', '[0, 7]'],
     answer: '[1, 7]',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_13',
     grade: 7,
     topic: 'Линейная функция',
@@ -6735,7 +6736,7 @@ final List<Task> _grade7Tasks = [
       'В форме y = kx + b: k = -4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_14',
     grade: 7,
     topic: 'Линейная функция',
@@ -6744,7 +6745,7 @@ final List<Task> _grade7Tasks = [
     options: ['(1, 4)', '(2, 4)', '(0, 2)', '(3, 3)'],
     answer: '(1, 4)',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_15',
     grade: 7,
     topic: 'Линейная функция',
@@ -6756,7 +6757,7 @@ final List<Task> _grade7Tasks = [
       'y = 2x + 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_16',
     grade: 7,
     topic: 'Линейная функция',
@@ -6769,7 +6770,7 @@ final List<Task> _grade7Tasks = [
       'x > 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_17',
     grade: 7,
     topic: 'Линейная функция',
@@ -6781,7 +6782,7 @@ final List<Task> _grade7Tasks = [
       'x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_18',
     grade: 7,
     topic: 'Линейная функция',
@@ -6790,7 +6791,7 @@ final List<Task> _grade7Tasks = [
     options: ['Прямая пересекает OY выше нуля', 'Прямая пересекает OY ниже нуля', 'Прямая не пересекает OY', 'Прямая горизонтальна'],
     answer: 'Прямая пересекает OY ниже нуля',
   ),
-  Task(
+  const Task(
     id: 'g7_lin_19',
     grade: 7,
     topic: 'Линейная функция',
@@ -6802,7 +6803,7 @@ final List<Task> _grade7Tasks = [
       'y = 2x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_lin_20',
     grade: 7,
     topic: 'Линейная функция',
@@ -6817,7 +6818,7 @@ final List<Task> _grade7Tasks = [
   ),
 
   // ==================== СТЕПЕНИ И ОДНОЧЛЕНЫ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g7_pow_1',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6829,7 +6830,7 @@ final List<Task> _grade7Tasks = [
       'a³ × a⁴ = a⁷',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_2',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6841,7 +6842,7 @@ final List<Task> _grade7Tasks = [
       'b⁶ ÷ b² = b⁴',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_3',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6853,7 +6854,7 @@ final List<Task> _grade7Tasks = [
       '(c²)³ = c⁶',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_4',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6864,7 +6865,7 @@ final List<Task> _grade7Tasks = [
       '2³ × 2² = 2⁵ = 32',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_5',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6876,7 +6877,7 @@ final List<Task> _grade7Tasks = [
       '6x⁵',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_6',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6885,7 +6886,7 @@ final List<Task> _grade7Tasks = [
     options: ['Произведение числа и переменных', 'Сумма одночленов', 'Любое выражение', 'Только число'],
     answer: 'Произведение числа и переменных',
   ),
-  Task(
+  const Task(
     id: 'g7_pow_7',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6896,7 +6897,7 @@ final List<Task> _grade7Tasks = [
       'Сумма показателей: 2 + 3 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_8',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6907,7 +6908,7 @@ final List<Task> _grade7Tasks = [
       '(2x)³ = 2³ × x³ = 8x³',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_9',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6918,7 +6919,7 @@ final List<Task> _grade7Tasks = [
       'Любое ненулевое число в степени 0 равно 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_10',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6932,7 +6933,7 @@ final List<Task> _grade7Tasks = [
       '15a³b²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_11',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6943,7 +6944,7 @@ final List<Task> _grade7Tasks = [
       '(-3)² = 9 (чётная степень — положительный результат)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_12',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6955,7 +6956,7 @@ final List<Task> _grade7Tasks = [
       '3x²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_13',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6966,7 +6967,7 @@ final List<Task> _grade7Tasks = [
       '(ab)³ = a³b³',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_14',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6977,7 +6978,7 @@ final List<Task> _grade7Tasks = [
       '10⁴ = 10000',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_15',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6988,7 +6989,7 @@ final List<Task> _grade7Tasks = [
       'x⁵ × x⁻³ = x^(5-3) = x²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_16',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -6999,7 +7000,7 @@ final List<Task> _grade7Tasks = [
       'Числовой множитель = -7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_17',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -7012,7 +7013,7 @@ final List<Task> _grade7Tasks = [
       '81 × 1 = 81',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_18',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -7021,7 +7022,7 @@ final List<Task> _grade7Tasks = [
     options: ['5x²', '3ab', 'x + y', '-7'],
     answer: 'x + y',
   ),
-  Task(
+  const Task(
     id: 'g7_pow_19',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -7032,7 +7033,7 @@ final List<Task> _grade7Tasks = [
       '2⁵ ÷ 2³ = 2² = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_pow_20',
     grade: 7,
     topic: 'Степени и одночлены',
@@ -7046,7 +7047,7 @@ final List<Task> _grade7Tasks = [
   ),
 
   // ==================== МНОГОЧЛЕНЫ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g7_poly_1',
     grade: 7,
     topic: 'Многочлены',
@@ -7059,7 +7060,7 @@ final List<Task> _grade7Tasks = [
       '4x - 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_2',
     grade: 7,
     topic: 'Многочлены',
@@ -7072,7 +7073,7 @@ final List<Task> _grade7Tasks = [
       '3x² - 4x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_3',
     grade: 7,
     topic: 'Многочлены',
@@ -7085,7 +7086,7 @@ final List<Task> _grade7Tasks = [
       '6x² - 8x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_4',
     grade: 7,
     topic: 'Многочлены',
@@ -7098,7 +7099,7 @@ final List<Task> _grade7Tasks = [
       'x² + 5x + 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_5',
     grade: 7,
     topic: 'Многочлены',
@@ -7109,7 +7110,7 @@ final List<Task> _grade7Tasks = [
       'Формула: (a+b)² = a² + 2ab + b²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_6',
     grade: 7,
     topic: 'Многочлены',
@@ -7120,7 +7121,7 @@ final List<Task> _grade7Tasks = [
       'Формула: (a-b)² = a² - 2ab + b²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_7',
     grade: 7,
     topic: 'Многочлены',
@@ -7131,7 +7132,7 @@ final List<Task> _grade7Tasks = [
       'Формула разности квадратов: (a+b)(a-b) = a² - b²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_8',
     grade: 7,
     topic: 'Многочлены',
@@ -7143,7 +7144,7 @@ final List<Task> _grade7Tasks = [
       'x² - 9 = (x-3)(x+3)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_9',
     grade: 7,
     topic: 'Многочлены',
@@ -7155,7 +7156,7 @@ final List<Task> _grade7Tasks = [
       '2x(x + 3)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_10',
     grade: 7,
     topic: 'Многочлены',
@@ -7166,7 +7167,7 @@ final List<Task> _grade7Tasks = [
       '(x+1)² = x² + 2×x×1 + 1 = x² + 2x + 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_11',
     grade: 7,
     topic: 'Многочлены',
@@ -7177,7 +7178,7 @@ final List<Task> _grade7Tasks = [
       '(100-1)² = 10000 - 200 + 1 = 9801',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_12',
     grade: 7,
     topic: 'Многочлены',
@@ -7188,7 +7189,7 @@ final List<Task> _grade7Tasks = [
       '(100+1)(100-1) = 100² - 1² = 10000 - 1 = 9999',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_13',
     grade: 7,
     topic: 'Многочлены',
@@ -7199,7 +7200,7 @@ final List<Task> _grade7Tasks = [
       '4x² - 1 = (2x)² - 1² = (2x-1)(2x+1)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_14',
     grade: 7,
     topic: 'Многочлены',
@@ -7210,7 +7211,7 @@ final List<Task> _grade7Tasks = [
       'Степень = наибольший показатель = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_15',
     grade: 7,
     topic: 'Многочлены',
@@ -7221,7 +7222,7 @@ final List<Task> _grade7Tasks = [
       'Меняем знаки каждого слагаемого: -x + 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_16',
     grade: 7,
     topic: 'Многочлены',
@@ -7234,7 +7235,7 @@ final List<Task> _grade7Tasks = [
       'x² - 5x + 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_17',
     grade: 7,
     topic: 'Многочлены',
@@ -7248,7 +7249,7 @@ final List<Task> _grade7Tasks = [
       '2x² + 2x + 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_18',
     grade: 7,
     topic: 'Многочлены',
@@ -7260,7 +7261,7 @@ final List<Task> _grade7Tasks = [
       'a(x + y)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_19',
     grade: 7,
     topic: 'Многочлены',
@@ -7272,7 +7273,7 @@ final List<Task> _grade7Tasks = [
       '4x² + 4xy + y²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_poly_20',
     grade: 7,
     topic: 'Многочлены',
@@ -7286,7 +7287,7 @@ final List<Task> _grade7Tasks = [
   ),
 
   // ==================== ГЕОМЕТРИЯ: ТРЕУГОЛЬНИКИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g7_tri_1',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7298,7 +7299,7 @@ final List<Task> _grade7Tasks = [
       '180 - 40 - 70 = 70°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_2',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7309,7 +7310,7 @@ final List<Task> _grade7Tasks = [
       'P = 4 + 5 + 5 = 14',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_3',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7318,7 +7319,7 @@ final List<Task> _grade7Tasks = [
     options: ['Первый (сторона-угол-сторона)', 'Второй (угол-сторона-угол)', 'Третий (три стороны)', 'Четвёртый'],
     answer: 'Второй (угол-сторона-угол)',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_4',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7330,7 +7331,7 @@ final List<Task> _grade7Tasks = [
       'Угол при вершине: 180° - 130° = 50°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_5',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7342,7 +7343,7 @@ final List<Task> _grade7Tasks = [
       '90° - 35° = 55°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_6',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7351,7 +7352,7 @@ final List<Task> _grade7Tasks = [
     options: ['Высота к основанию', 'Отрезок от вершины до середины противоположной стороны', 'Биссектриса', 'Перпендикуляр из вершины'],
     answer: 'Отрезок от вершины до середины противоположной стороны',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_7',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7360,7 +7361,7 @@ final List<Task> _grade7Tasks = [
     options: ['c = a + b', 'c² = a² + b²', 'c = a × b', 'c = √(a+b)'],
     answer: 'c² = a² + b²',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_8',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7369,7 +7370,7 @@ final List<Task> _grade7Tasks = [
     options: ['Да', 'Нет', 'Только если все углы 60°', 'Нельзя определить'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_9',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7381,7 +7382,7 @@ final List<Task> _grade7Tasks = [
       '120° = 50° + x → x = 70°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_10',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7390,7 +7391,7 @@ final List<Task> _grade7Tasks = [
     options: ['Да', 'Нет', 'Только прямоугольный', 'Зависит от углов'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_11',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7401,7 +7402,7 @@ final List<Task> _grade7Tasks = [
       'S = √3/4 × 4 = √3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_12',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7410,7 +7411,7 @@ final List<Task> _grade7Tasks = [
     options: ['1:1', 'Смежных сторон', 'Противоположных углов', 'Произвольно'],
     answer: 'Смежных сторон',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_13',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7419,7 +7420,7 @@ final List<Task> _grade7Tasks = [
     options: ['Прямоугольным', 'Тупоугольным', 'Равносторонним', 'Равнобедренным'],
     answer: 'Равносторонним',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_14',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7431,7 +7432,7 @@ final List<Task> _grade7Tasks = [
       'b = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_15',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7444,7 +7445,7 @@ final List<Task> _grade7Tasks = [
       'h = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_16',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7453,7 +7454,7 @@ final List<Task> _grade7Tasks = [
     options: ['Да', 'Нет — нарушено неравенство треугольника', 'Только при прямом угле', 'Можно, но он вырожденный'],
     answer: 'Нет — нарушено неравенство треугольника',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_17',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7462,7 +7463,7 @@ final List<Task> _grade7Tasks = [
     options: ['Равенстве одной стороны', 'Равенстве двух сторон', 'Равенстве трёх сторон', 'Равенстве всех углов'],
     answer: 'Равенстве трёх сторон',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_18',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7471,7 +7472,7 @@ final List<Task> _grade7Tasks = [
     options: ['Равное одному катету', 'Равное полугипотенузе', 'Равное сумме катетов', 'Различное для каждой вершины'],
     answer: 'Равное полугипотенузе',
   ),
-  Task(
+  const Task(
     id: 'g7_tri_19',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7482,7 +7483,7 @@ final List<Task> _grade7Tasks = [
       'S = a × b / 2 = 6 × 8 / 2 = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_tri_20',
     grade: 7,
     topic: 'Геометрия: треугольники',
@@ -7495,7 +7496,7 @@ final List<Task> _grade7Tasks = [
   ),
 
   // ==================== СИСТЕМЫ УРАВНЕНИЙ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g7_sys_1',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7507,7 +7508,7 @@ final List<Task> _grade7Tasks = [
       'y = 5 - 3 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_2',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7519,7 +7520,7 @@ final List<Task> _grade7Tasks = [
       'y = 5 - 3 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_3',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7531,7 +7532,7 @@ final List<Task> _grade7Tasks = [
       'y = 2 × 3 = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_4',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7540,7 +7541,7 @@ final List<Task> _grade7Tasks = [
     options: ['Пересекаются', 'Параллельны', 'Совпадают', 'Перпендикулярны'],
     answer: 'Параллельны',
   ),
-  Task(
+  const Task(
     id: 'g7_sys_5',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7551,7 +7552,7 @@ final List<Task> _grade7Tasks = [
       'При x=1: 3 - 2y = 5 → -2y = 2 → y = -1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_6',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7562,7 +7563,7 @@ final List<Task> _grade7Tasks = [
       'x = 4, y = 4 + 3 = 7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_7',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7574,7 +7575,7 @@ final List<Task> _grade7Tasks = [
       '2x = 4 + 2 = 6 → x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_8',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7583,7 +7584,7 @@ final List<Task> _grade7Tasks = [
     options: ['Складываем уравнения', 'Подставляем в другое', 'Умножаем оба уравнения', 'Вычитаем'],
     answer: 'Подставляем в другое',
   ),
-  Task(
+  const Task(
     id: 'g7_sys_9',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7592,7 +7593,7 @@ final List<Task> _grade7Tasks = [
     options: ['0', '1', 'Бесконечно много', '2'],
     answer: 'Бесконечно много',
   ),
-  Task(
+  const Task(
     id: 'g7_sys_10',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7605,7 +7606,7 @@ final List<Task> _grade7Tasks = [
       'x = 10 - 2×4 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_11',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7616,7 +7617,7 @@ final List<Task> _grade7Tasks = [
       'x = y, x + x = 6 → x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_12',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7625,7 +7626,7 @@ final List<Task> _grade7Tasks = [
     options: ['Коэффициенты стали равны', 'Коэффициенты стали противоположными', 'Уравнения совпали', 'Ни одно из перечисленного'],
     answer: 'Коэффициенты стали противоположными',
   ),
-  Task(
+  const Task(
     id: 'g7_sys_13',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7638,7 +7639,7 @@ final List<Task> _grade7Tasks = [
       'y = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_14',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7649,7 +7650,7 @@ final List<Task> _grade7Tasks = [
       'y = 0 → 5x = 15 → x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_15',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7660,7 +7661,7 @@ final List<Task> _grade7Tasks = [
       '12 + 2y = 20 → 2y = 8 → y = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_16',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7672,7 +7673,7 @@ final List<Task> _grade7Tasks = [
       '2x = 60 → x = 30',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_17',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7684,7 +7685,7 @@ final List<Task> _grade7Tasks = [
       'x = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_18',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7696,7 +7697,7 @@ final List<Task> _grade7Tasks = [
       'y = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g7_sys_19',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7705,7 +7706,7 @@ final List<Task> _grade7Tasks = [
     options: ['Да', 'Нет', 'Только для первого уравнения', 'Только для второго'],
     answer: 'Да',
   ),
-  Task(
+  const Task(
     id: 'g7_sys_20',
     grade: 7,
     topic: 'Системы уравнений',
@@ -7726,7 +7727,7 @@ final List<Task> _grade7Tasks = [
 
 final List<Task> _grade8Tasks = [
   // ==================== КВАДРАТНЫЕ УРАВНЕНИЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g8_quad_1',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7735,7 +7736,7 @@ final List<Task> _grade8Tasks = [
     options: ['x = 3', 'x = ±3', 'x = 9', 'x = -3'],
     answer: 'x = ±3',
   ),
-  Task(
+  const Task(
     id: 'g8_quad_2',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7748,7 +7749,7 @@ final List<Task> _grade8Tasks = [
       'x₁ = -2, x₂ = -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_3',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7761,7 +7762,7 @@ final List<Task> _grade8Tasks = [
       'x₁ = 3, x₂ = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_4',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7772,7 +7773,7 @@ final List<Task> _grade8Tasks = [
       'D = b² - 4ac = 16 - 16 = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_5',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7781,7 +7782,7 @@ final List<Task> _grade8Tasks = [
     options: ['0', '1', '2', 'Бесконечно'],
     answer: '0',
   ),
-  Task(
+  const Task(
     id: 'g8_quad_6',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7794,7 +7795,7 @@ final List<Task> _grade8Tasks = [
       'x = ±2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_7',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7803,7 +7804,7 @@ final List<Task> _grade8Tasks = [
     options: ['b² - 4ac', 'b² + 4ac', '4ac - b²', '2b - 4ac'],
     answer: 'b² - 4ac',
   ),
-  Task(
+  const Task(
     id: 'g8_quad_8',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7815,7 +7816,7 @@ final List<Task> _grade8Tasks = [
       'x = 0 или x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_9',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7826,7 +7827,7 @@ final List<Task> _grade8Tasks = [
       'x = ±√25 = ±5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_10',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7838,7 +7839,7 @@ final List<Task> _grade8Tasks = [
       'x = 6/2 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_11',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7849,7 +7850,7 @@ final List<Task> _grade8Tasks = [
       'x₁ + x₂ = -b/a = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_12',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7860,7 +7861,7 @@ final List<Task> _grade8Tasks = [
       'x₁ × x₂ = c/a = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_13',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7872,7 +7873,7 @@ final List<Task> _grade8Tasks = [
       'x₁ = 3, x₂ = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_14',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7884,7 +7885,7 @@ final List<Task> _grade8Tasks = [
       'x = 0 или x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_15',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7893,7 +7894,7 @@ final List<Task> _grade8Tasks = [
     options: ['0 корней', '1 корень', '2 корня', 'Бесконечно много'],
     answer: '2 корня',
   ),
-  Task(
+  const Task(
     id: 'g8_quad_16',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7905,7 +7906,7 @@ final List<Task> _grade8Tasks = [
       'x = -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_17',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7918,7 +7919,7 @@ final List<Task> _grade8Tasks = [
       'x₁ = -1/2, x₂ = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_18',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7927,7 +7928,7 @@ final List<Task> _grade8Tasks = [
     options: ['Дискриминант положительный', 'При подстановке уравнение обращается в тождество', 'Оно меньше дискриминанта', 'Оно положительное'],
     answer: 'При подстановке уравнение обращается в тождество',
   ),
-  Task(
+  const Task(
     id: 'g8_quad_19',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7940,7 +7941,7 @@ final List<Task> _grade8Tasks = [
       't = 4 или t = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_quad_20',
     grade: 8,
     topic: 'Квадратные уравнения',
@@ -7954,7 +7955,7 @@ final List<Task> _grade8Tasks = [
   ),
 
   // ==================== АЛГЕБРАИЧЕСКИЕ ДРОБИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g8_algfrac_1',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -7965,7 +7966,7 @@ final List<Task> _grade8Tasks = [
       'x²/x = x (при x ≠ 0)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_2',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -7977,7 +7978,7 @@ final List<Task> _grade8Tasks = [
       '(x-2)(x+2)/(x-2) = x + 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_3',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -7989,7 +7990,7 @@ final List<Task> _grade8Tasks = [
       'y/(xy) + x/(xy) = (x+y)/(xy)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_4',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8000,7 +8001,7 @@ final List<Task> _grade8Tasks = [
       'Знаменатель ≠ 0: x - 3 ≠ 0 → x ≠ 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_5',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8011,7 +8012,7 @@ final List<Task> _grade8Tasks = [
       '(a × b)/(b × c) = a/c',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_6',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8022,7 +8023,7 @@ final List<Task> _grade8Tasks = [
       '2x/3 × 6/x² = 12x/(3x²) = 4/x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_7',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8033,7 +8034,7 @@ final List<Task> _grade8Tasks = [
       '(2(x+2))/(x+2) = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_8',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8044,7 +8045,7 @@ final List<Task> _grade8Tasks = [
       'x = 3/4 × 2 = 3/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_9',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8055,7 +8056,7 @@ final List<Task> _grade8Tasks = [
       '(3-1)/(x+1) = 2/(x+1)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_10',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8066,7 +8067,7 @@ final List<Task> _grade8Tasks = [
       'x(x-1)/x = x - 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_11',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8077,7 +8078,7 @@ final List<Task> _grade8Tasks = [
       '(x + 1)/(x-1)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_12',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8088,7 +8089,7 @@ final List<Task> _grade8Tasks = [
       'Подкоренное выражение ≥ 0: x - 2 ≥ 0 → x ≥ 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_13',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8099,7 +8100,7 @@ final List<Task> _grade8Tasks = [
       '(a-b)(a+b)/(a-b)² = (a+b)/(a-b)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_14',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8110,7 +8111,7 @@ final List<Task> _grade8Tasks = [
       'x = 1/4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_15',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8122,7 +8123,7 @@ final List<Task> _grade8Tasks = [
       '(x+1)(x+2)/(x+1) = x + 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_16',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8133,7 +8134,7 @@ final List<Task> _grade8Tasks = [
       '(5-3)/(2x) = 2/(2x) = 1/x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_17',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8145,7 +8146,7 @@ final List<Task> _grade8Tasks = [
       'x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_18',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8157,7 +8158,7 @@ final List<Task> _grade8Tasks = [
       '(2(x-3) + 3(x+3))/((x+3)(x-3)) = (2x-6+3x+9)/... = (5x+3)/...',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_19',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8168,7 +8169,7 @@ final List<Task> _grade8Tasks = [
       '(x-1)(x+1)/((x+1)(x-2)) = (x-1)/(x-2)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_algfrac_20',
     grade: 8,
     topic: 'Алгебраические дроби',
@@ -8183,7 +8184,7 @@ final List<Task> _grade8Tasks = [
   ),
 
   // ==================== КВАДРАТИЧНАЯ ФУНКЦИЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g8_parab_1',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8196,7 +8197,7 @@ final List<Task> _grade8Tasks = [
       '(2, 1)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_2',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8205,7 +8206,7 @@ final List<Task> _grade8Tasks = [
     options: ['Вниз', 'Вверх', 'Вправо', 'Влево'],
     answer: 'Вверх',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_3',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8214,7 +8215,7 @@ final List<Task> _grade8Tasks = [
     options: ['a > 0', 'a < 0', 'a = 0', 'a ≠ 0'],
     answer: 'a < 0',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_4',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8225,7 +8226,7 @@ final List<Task> _grade8Tasks = [
       'Вершина при x = 3, ось симметрии x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_5',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8236,7 +8237,7 @@ final List<Task> _grade8Tasks = [
       'x² - 4 = 0 → x² = 4 → x = ±2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_6',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8248,7 +8249,7 @@ final List<Task> _grade8Tasks = [
       'y_min = 9 - 18 + 10 = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_7',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8257,7 +8258,7 @@ final List<Task> _grade8Tasks = [
     options: ['(1, 0)', '(0, 0)', '(0, 1)', '(-1, 1)'],
     answer: '(0, 0)',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_8',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8268,7 +8269,7 @@ final List<Task> _grade8Tasks = [
       'Вершина: (-1, 3) (из формы y = a(x-h)² + k)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_9',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8280,7 +8281,7 @@ final List<Task> _grade8Tasks = [
       'x = 0 → y_max = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_10',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8289,7 +8290,7 @@ final List<Task> _grade8Tasks = [
     options: ['x < -2 или x > 2', '-2 < x < 2', 'x > 2', 'x < 2'],
     answer: '-2 < x < 2',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_11',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8300,7 +8301,7 @@ final List<Task> _grade8Tasks = [
       'y = a(x-h)² + k: h=1, k=3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_12',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8311,7 +8312,7 @@ final List<Task> _grade8Tasks = [
       'x = -b/(2a) = 4/4 = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_13',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8320,7 +8321,7 @@ final List<Task> _grade8Tasks = [
     options: ['0', '1', '2', 'Бесконечно'],
     answer: '0',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_14',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8329,7 +8330,7 @@ final List<Task> _grade8Tasks = [
     options: ['0 точек', '1 точку', '2 точки', 'Зависит от a'],
     answer: '2 точки',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_15',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8338,7 +8339,7 @@ final List<Task> _grade8Tasks = [
     options: ['b', 'c', '|a|', 'Знак a'],
     answer: '|a|',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_16',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8351,7 +8352,7 @@ final List<Task> _grade8Tasks = [
       'x₁ = 3, x₂ = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_17',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8360,7 +8361,7 @@ final List<Task> _grade8Tasks = [
     options: ['Вправо на 3', 'Вверх на 3', 'Влево на 3', 'Вниз на 3'],
     answer: 'Вверх на 3',
   ),
-  Task(
+  const Task(
     id: 'g8_parab_18',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8371,7 +8372,7 @@ final List<Task> _grade8Tasks = [
       'y = 3 × 4 - 2 = 12 - 2 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_19',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8382,7 +8383,7 @@ final List<Task> _grade8Tasks = [
       'D = 0 → один нуль: x = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_parab_20',
     grade: 8,
     topic: 'Квадратичная функция',
@@ -8393,7 +8394,7 @@ final List<Task> _grade8Tasks = [
   ),
 
   // ==================== КОРНИ И СТЕПЕНИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g8_roots_1',
     grade: 8,
     topic: 'Корни и степени',
@@ -8404,7 +8405,7 @@ final List<Task> _grade8Tasks = [
       '√36 = 6, так как 6² = 36',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_2',
     grade: 8,
     topic: 'Корни и степени',
@@ -8415,7 +8416,7 @@ final List<Task> _grade8Tasks = [
       '√(a²) = |a| = a (при a ≥ 0)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_3',
     grade: 8,
     topic: 'Корни и степени',
@@ -8426,7 +8427,7 @@ final List<Task> _grade8Tasks = [
       '√50 = √(25 × 2) = 5√2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_4',
     grade: 8,
     topic: 'Корни и степени',
@@ -8438,7 +8439,7 @@ final List<Task> _grade8Tasks = [
       '2√3 + √3 = 3√3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_5',
     grade: 8,
     topic: 'Корни и степени',
@@ -8449,7 +8450,7 @@ final List<Task> _grade8Tasks = [
       '√(x⁴) = x²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_6',
     grade: 8,
     topic: 'Корни и степени',
@@ -8460,7 +8461,7 @@ final List<Task> _grade8Tasks = [
       '3³ = 27, поэтому ∛27 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_7',
     grade: 8,
     topic: 'Корни и степени',
@@ -8471,7 +8472,7 @@ final List<Task> _grade8Tasks = [
       '√a × √a = a',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_8',
     grade: 8,
     topic: 'Корни и степени',
@@ -8482,7 +8483,7 @@ final List<Task> _grade8Tasks = [
       '√(9) = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_9',
     grade: 8,
     topic: 'Корни и степени',
@@ -8493,7 +8494,7 @@ final List<Task> _grade8Tasks = [
       'a^(1/2) = √a',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_10',
     grade: 8,
     topic: 'Корни и степени',
@@ -8504,7 +8505,7 @@ final List<Task> _grade8Tasks = [
       '8^(1/3) = ∛8 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_11',
     grade: 8,
     topic: 'Корни и степени',
@@ -8515,7 +8516,7 @@ final List<Task> _grade8Tasks = [
       'Отрицательная степень: a^(-n) = 1/aⁿ',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_12',
     grade: 8,
     topic: 'Корни и степени',
@@ -8526,7 +8527,7 @@ final List<Task> _grade8Tasks = [
       '4^(-1/2) = 1/√4 = 1/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_13',
     grade: 8,
     topic: 'Корни и степени',
@@ -8537,7 +8538,7 @@ final List<Task> _grade8Tasks = [
       '√75 = √(25×3) = 5√3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_14',
     grade: 8,
     topic: 'Корни и степени',
@@ -8548,7 +8549,7 @@ final List<Task> _grade8Tasks = [
       '5 + 3 = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_15',
     grade: 8,
     topic: 'Корни и степени',
@@ -8559,7 +8560,7 @@ final List<Task> _grade8Tasks = [
       '1/√2 × √2/√2 = √2/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_16',
     grade: 8,
     topic: 'Корни и степени',
@@ -8570,7 +8571,7 @@ final List<Task> _grade8Tasks = [
       '√36 = 6 или √4 × √9 = 2 × 3 = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_17',
     grade: 8,
     topic: 'Корни и степени',
@@ -8579,7 +8580,7 @@ final List<Task> _grade8Tasks = [
     options: ['Да, всегда', 'Нет, неверно', 'Только при a=b', 'Только при a=0'],
     answer: 'Нет, неверно',
   ),
-  Task(
+  const Task(
     id: 'g8_roots_18',
     grade: 8,
     topic: 'Корни и степени',
@@ -8590,7 +8591,7 @@ final List<Task> _grade8Tasks = [
       '27^(2/3) = (∛27)² = 3² = 9',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_19',
     grade: 8,
     topic: 'Корни и степени',
@@ -8602,7 +8603,7 @@ final List<Task> _grade8Tasks = [
       'xy²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g8_roots_20',
     grade: 8,
     topic: 'Корни и степени',
@@ -8617,7 +8618,7 @@ final List<Task> _grade8Tasks = [
 
 final List<Task> _grade9Tasks = [
   // ==================== НЕРАВЕНСТВА (20 задач) ====================
-  Task(
+  const Task(
     id: 'g9_ineq_1',
     grade: 9,
     topic: 'Неравенства',
@@ -8626,7 +8627,7 @@ final List<Task> _grade9Tasks = [
     options: ['x > 3', 'x < 3', 'x > -3', 'x < -3'],
     answer: 'x > 3',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_2',
     grade: 9,
     topic: 'Неравенства',
@@ -8635,7 +8636,7 @@ final List<Task> _grade9Tasks = [
     options: ['-3 < x < 3', 'x < -3 или x > 3', 'x > 3', 'x < 3'],
     answer: '-3 < x < 3',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_3',
     grade: 9,
     topic: 'Неравенства',
@@ -8644,7 +8645,7 @@ final List<Task> _grade9Tasks = [
     options: ['x < 2 или x > 3', '2 < x < 3', 'x > 3', 'x < 2'],
     answer: 'x < 2 или x > 3',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_4',
     grade: 9,
     topic: 'Неравенства',
@@ -8656,7 +8657,7 @@ final List<Task> _grade9Tasks = [
       'Делим обе части на 3 (знак не меняется): x ≤ -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_5',
     grade: 9,
     topic: 'Неравенства',
@@ -8665,7 +8666,7 @@ final List<Task> _grade9Tasks = [
     options: ['-2 ≤ x ≤ 2', 'x ≤ -2 или x ≥ 2', 'x ≥ 2', 'x ≤ 2'],
     answer: '-2 ≤ x ≤ 2',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_6',
     grade: 9,
     topic: 'Неравенства',
@@ -8678,7 +8679,7 @@ final List<Task> _grade9Tasks = [
       'Считаем: 8 целых чисел',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_7',
     grade: 9,
     topic: 'Неравенства',
@@ -8687,7 +8688,7 @@ final List<Task> _grade9Tasks = [
     options: ['-3 < x < 1', 'x < -3 или x > 1', 'x > 1', '-1 < x < 3'],
     answer: '-3 < x < 1',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_8',
     grade: 9,
     topic: 'Неравенства',
@@ -8696,7 +8697,7 @@ final List<Task> _grade9Tasks = [
     options: ['x < -2 или x > 4', '-2 < x < 4', 'x > 4', 'x < -2'],
     answer: 'x < -2 или x > 4',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_9',
     grade: 9,
     topic: 'Неравенства',
@@ -8708,7 +8709,7 @@ final List<Task> _grade9Tasks = [
       'Делим на -2 (знак меняется!): x < 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_10',
     grade: 9,
     topic: 'Неравенства',
@@ -8717,7 +8718,7 @@ final List<Task> _grade9Tasks = [
     options: ['3 ≤ x ≤ 4', 'x ≤ 3 или x ≥ 4', 'x ≥ 4', '1 ≤ x ≤ 3'],
     answer: '3 ≤ x ≤ 4',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_11',
     grade: 9,
     topic: 'Неравенства',
@@ -8726,7 +8727,7 @@ final List<Task> _grade9Tasks = [
     options: ['x < -3 или x > 2', '-3 < x < 2', 'x > 2', 'x < -3'],
     answer: 'x < -3 или x > 2',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_12',
     grade: 9,
     topic: 'Неравенства',
@@ -8738,7 +8739,7 @@ final List<Task> _grade9Tasks = [
       'Ответ: -1 < x < 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_13',
     grade: 9,
     topic: 'Неравенства',
@@ -8747,7 +8748,7 @@ final List<Task> _grade9Tasks = [
     options: ['-1 ≤ x ≤ 3', 'x ≤ -1 или x ≥ 3', 'x ≥ 3', 'x ≤ -1'],
     answer: '-1 ≤ x ≤ 3',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_14',
     grade: 9,
     topic: 'Неравенства',
@@ -8756,7 +8757,7 @@ final List<Task> _grade9Tasks = [
     options: ['x < -4 или x > 4', '-4 < x < 4', 'x > 4', 'x < 4'],
     answer: 'x < -4 или x > 4',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_15',
     grade: 9,
     topic: 'Неравенства',
@@ -8768,7 +8769,7 @@ final List<Task> _grade9Tasks = [
       'Ответ: -5 ≤ x ≤ 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_16',
     grade: 9,
     topic: 'Неравенства',
@@ -8777,7 +8778,7 @@ final List<Task> _grade9Tasks = [
     options: ['x ≠ 2', 'x > 2', 'x < 2', 'нет решений'],
     answer: 'x ≠ 2',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_17',
     grade: 9,
     topic: 'Неравенства',
@@ -8786,7 +8787,7 @@ final List<Task> _grade9Tasks = [
     options: ['-2 < x < 4', 'x < -2 или x > 4', 'x > 4', 'x < -2'],
     answer: '-2 < x < 4',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_18',
     grade: 9,
     topic: 'Неравенства',
@@ -8795,7 +8796,7 @@ final List<Task> _grade9Tasks = [
     options: ['x > 3', 'x < 3', 'x ≠ 3', 'x > 0'],
     answer: 'x > 3',
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_19',
     grade: 9,
     topic: 'Неравенства',
@@ -8808,7 +8809,7 @@ final List<Task> _grade9Tasks = [
       'x ≥ 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_ineq_20',
     grade: 9,
     topic: 'Неравенства',
@@ -8819,7 +8820,7 @@ final List<Task> _grade9Tasks = [
   ),
 
   // ==================== ПРОГРЕССИИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g9_prog_1',
     grade: 9,
     topic: 'Прогрессии',
@@ -8831,7 +8832,7 @@ final List<Task> _grade9Tasks = [
       'a₅ = 3 + (5-1)·4 = 3 + 16 = 19',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_2',
     grade: 9,
     topic: 'Прогрессии',
@@ -8843,7 +8844,7 @@ final List<Task> _grade9Tasks = [
       'S₁₀ = 10·(2 + 29)/2 = 10·31/2 = 155',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_3',
     grade: 9,
     topic: 'Прогрессии',
@@ -8855,7 +8856,7 @@ final List<Task> _grade9Tasks = [
       'b₄ = 2·3³ = 2·27 = 54',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_4',
     grade: 9,
     topic: 'Прогрессии',
@@ -8868,7 +8869,7 @@ final List<Task> _grade9Tasks = [
       '6d = 12, d = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_5',
     grade: 9,
     topic: 'Прогрессии',
@@ -8880,7 +8881,7 @@ final List<Task> _grade9Tasks = [
       'S₁₀₀ = 100·(2 + 99)/2 = 100·101/2 = 5050',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_6',
     grade: 9,
     topic: 'Прогрессии',
@@ -8893,7 +8894,7 @@ final List<Task> _grade9Tasks = [
       'q² = 9, q = 3 (так как q > 0)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_7',
     grade: 9,
     topic: 'Прогрессии',
@@ -8902,7 +8903,7 @@ final List<Task> _grade9Tasks = [
     options: ['4n - 1', '3n + 1', '4n + 3', '3n - 1'],
     answer: '4n - 1',
   ),
-  Task(
+  const Task(
     id: 'g9_prog_8',
     grade: 9,
     topic: 'Прогрессии',
@@ -8914,7 +8915,7 @@ final List<Task> _grade9Tasks = [
       'S₅ = 1·(2⁵ - 1)/(2 - 1) = 31',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_9',
     grade: 9,
     topic: 'Прогрессии',
@@ -8926,7 +8927,7 @@ final List<Task> _grade9Tasks = [
       'a₁ = a₃ - 2d = 7 - 4 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_10',
     grade: 9,
     topic: 'Прогрессии',
@@ -8935,7 +8936,7 @@ final List<Task> _grade9Tasks = [
     options: ['Геометрическая прогрессия', 'Арифметическая прогрессия', 'Ни та, ни другая', 'Гармоническая прогрессия'],
     answer: 'Геометрическая прогрессия',
   ),
-  Task(
+  const Task(
     id: 'g9_prog_11',
     grade: 9,
     topic: 'Прогрессии',
@@ -8947,7 +8948,7 @@ final List<Task> _grade9Tasks = [
       'S = 6/(1 - 1/2) = 6/(1/2) = 12',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_12',
     grade: 9,
     topic: 'Прогрессии',
@@ -8959,7 +8960,7 @@ final List<Task> _grade9Tasks = [
       'x = (2 + 8)/2 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_13',
     grade: 9,
     topic: 'Прогрессии',
@@ -8971,7 +8972,7 @@ final List<Task> _grade9Tasks = [
       'Или по формуле: S₅ = 5·(-3 + 9)/2 = 5·3 = 15',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_14',
     grade: 9,
     topic: 'Прогрессии',
@@ -8983,7 +8984,7 @@ final List<Task> _grade9Tasks = [
       '= 81·(1/81) = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_15',
     grade: 9,
     topic: 'Прогрессии',
@@ -8992,7 +8993,7 @@ final List<Task> _grade9Tasks = [
     options: ['2', '5', '3', '4'],
     answer: '2',
   ),
-  Task(
+  const Task(
     id: 'g9_prog_16',
     grade: 9,
     topic: 'Прогрессии',
@@ -9005,7 +9006,7 @@ final List<Task> _grade9Tasks = [
       '(n-1) = 10, n = 11',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_17',
     grade: 9,
     topic: 'Прогрессии',
@@ -9017,7 +9018,7 @@ final List<Task> _grade9Tasks = [
       'Среднее = 75/5 = 15',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_18',
     grade: 9,
     topic: 'Прогрессии',
@@ -9030,7 +9031,7 @@ final List<Task> _grade9Tasks = [
       'q = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prog_19',
     grade: 9,
     topic: 'Прогрессии',
@@ -9039,7 +9040,7 @@ final List<Task> _grade9Tasks = [
     options: ['Нет, не является прогрессией', 'Арифметическая прогрессия', 'Геометрическая прогрессия', 'Обе сразу'],
     answer: 'Нет, не является прогрессией',
   ),
-  Task(
+  const Task(
     id: 'g9_prog_20',
     grade: 9,
     topic: 'Прогрессии',
@@ -9053,7 +9054,7 @@ final List<Task> _grade9Tasks = [
   ),
 
   // ==================== ТРИГОНОМЕТРИЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g9_trig_1',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9062,7 +9063,7 @@ final List<Task> _grade9Tasks = [
     options: ['1/2', '√3/2', '√2/2', '1'],
     answer: '1/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_2',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9071,7 +9072,7 @@ final List<Task> _grade9Tasks = [
     options: ['1/2', '√3/2', '√2/2', '0'],
     answer: '1/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_3',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9083,7 +9084,7 @@ final List<Task> _grade9Tasks = [
       '= (√2/2) / (√2/2) = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_4',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9095,7 +9096,7 @@ final List<Task> _grade9Tasks = [
       'sin 90° = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_5',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9107,7 +9108,7 @@ final List<Task> _grade9Tasks = [
       'cos 0° = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_6',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9119,7 +9120,7 @@ final List<Task> _grade9Tasks = [
       'sin²α + cos²α = 1 для любого α',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_7',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9128,7 +9129,7 @@ final List<Task> _grade9Tasks = [
     options: ['√3/2', '1/2', '√2/2', '1'],
     answer: '√3/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_8',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9137,7 +9138,7 @@ final List<Task> _grade9Tasks = [
     options: ['√2/2', '1/2', '√3/2', '1'],
     answer: '√2/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_9',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9146,7 +9147,7 @@ final List<Task> _grade9Tasks = [
     options: ['√3', '1', '1/√3', '√2'],
     answer: '√3',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_10',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9158,7 +9159,7 @@ final List<Task> _grade9Tasks = [
       'cos 90° = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_11',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9167,7 +9168,7 @@ final List<Task> _grade9Tasks = [
     options: ['√3/2', '1/2', '√2/2', '1'],
     answer: '√3/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_12',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9179,7 +9180,7 @@ final List<Task> _grade9Tasks = [
       'cos α = 0,8 (α острый, поэтому cos > 0)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_13',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9190,7 +9191,7 @@ final List<Task> _grade9Tasks = [
       'tg 0° = sin 0° / cos 0° = 0/1 = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_14',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9202,7 +9203,7 @@ final List<Task> _grade9Tasks = [
       'sin = 6/10 = 0,6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_15',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9214,7 +9215,7 @@ final List<Task> _grade9Tasks = [
       'sin²α + cos²α = 1 для любого α, в том числе при α = 30°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_16',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9223,7 +9224,7 @@ final List<Task> _grade9Tasks = [
     options: ['1/2', '-1/2', '√3/2', '-√3/2'],
     answer: '1/2',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_17',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9235,7 +9236,7 @@ final List<Task> _grade9Tasks = [
       'cos 180° = -1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_trig_18',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9244,7 +9245,7 @@ final List<Task> _grade9Tasks = [
     options: ['Не существует', '0', '1', '∞'],
     answer: 'Не существует',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_19',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9253,7 +9254,7 @@ final List<Task> _grade9Tasks = [
     options: ['IV', 'I', 'II', 'III'],
     answer: 'IV',
   ),
-  Task(
+  const Task(
     id: 'g9_trig_20',
     grade: 9,
     topic: 'Тригонометрия',
@@ -9268,7 +9269,7 @@ final List<Task> _grade9Tasks = [
   ),
 
   // ==================== ВЕРОЯТНОСТЬ И СТАТИСТИКА (20 задач) ====================
-  Task(
+  const Task(
     id: 'g9_prob_1',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9281,7 +9282,7 @@ final List<Task> _grade9Tasks = [
       'P = 1/2 = 0,5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_2',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9290,7 +9291,7 @@ final List<Task> _grade9Tasks = [
     options: ['1/3', '1/2', '2/3', '1/6'],
     answer: '1/3',
   ),
-  Task(
+  const Task(
     id: 'g9_prob_3',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9302,7 +9303,7 @@ final List<Task> _grade9Tasks = [
       'Среднее = 40/5 = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_4',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9314,7 +9315,7 @@ final List<Task> _grade9Tasks = [
       'Медиана - средний элемент = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_5',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9327,7 +9328,7 @@ final List<Task> _grade9Tasks = [
       'Мода = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_6',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9336,7 +9337,7 @@ final List<Task> _grade9Tasks = [
     options: ['5/8', '3/8', '1/2', '5/3'],
     answer: '5/8',
   ),
-  Task(
+  const Task(
     id: 'g9_prob_7',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9348,7 +9349,7 @@ final List<Task> _grade9Tasks = [
       'f = 30/100 = 0,3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_8',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9360,7 +9361,7 @@ final List<Task> _grade9Tasks = [
       'P(Ā) = 1 - 0,4 = 0,6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_9',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9369,7 +9370,7 @@ final List<Task> _grade9Tasks = [
     options: ['1/3', '2/3', '1/2', '0'],
     answer: '1/3',
   ),
-  Task(
+  const Task(
     id: 'g9_prob_10',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9382,7 +9383,7 @@ final List<Task> _grade9Tasks = [
       'Размах = 9 - 1 = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_11',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9391,7 +9392,7 @@ final List<Task> _grade9Tasks = [
     options: ['2/5', '3/5', '1/2', '1/3'],
     answer: '2/5',
   ),
-  Task(
+  const Task(
     id: 'g9_prob_12',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9403,7 +9404,7 @@ final List<Task> _grade9Tasks = [
       'P(A+B) = 0,3 + 0,4 = 0,7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_13',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9415,7 +9416,7 @@ final List<Task> _grade9Tasks = [
       'Медиана = (20 + 30)/2 = 25',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_14',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9424,7 +9425,7 @@ final List<Task> _grade9Tasks = [
     options: ['0,512', '0,8', '0,4', '0,24'],
     answer: '0,512',
   ),
-  Task(
+  const Task(
     id: 'g9_prob_15',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9437,7 +9438,7 @@ final List<Task> _grade9Tasks = [
       'P = 2/6 = 1/3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_16',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9449,7 +9450,7 @@ final List<Task> _grade9Tasks = [
       'Среднее = 50/5 = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_17',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9461,7 +9462,7 @@ final List<Task> _grade9Tasks = [
       'Всего: 2⁴ = 16 исходов',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_18',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9472,7 +9473,7 @@ final List<Task> _grade9Tasks = [
       'По определению: сумма вероятностей всех несовместных событий полной группы = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_19',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9485,7 +9486,7 @@ final List<Task> _grade9Tasks = [
       'Мода = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_prob_20',
     grade: 9,
     topic: 'Вероятность и статистика',
@@ -9499,7 +9500,7 @@ final List<Task> _grade9Tasks = [
   ),
 
   // ==================== ГЕОМЕТРИЯ: ОКРУЖНОСТЬ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g9_circ_1',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9511,7 +9512,7 @@ final List<Task> _grade9Tasks = [
       'C = 2π·5 = 10π см',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_2',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9523,7 +9524,7 @@ final List<Task> _grade9Tasks = [
       'S = π·4² = 16π см²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_3',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9535,7 +9536,7 @@ final List<Task> _grade9Tasks = [
       'Вписанный угол = 100°/2 = 50°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_4',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9544,7 +9545,7 @@ final List<Task> _grade9Tasks = [
     options: ['80°', '40°', '160°', '20°'],
     answer: '80°',
   ),
-  Task(
+  const Task(
     id: 'g9_circ_5',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9553,7 +9554,7 @@ final List<Task> _grade9Tasks = [
     options: ['Они равны', 'Один в два раза больше другого', 'Их сумма равна 180°', 'Они дополняют друг друга до 90°'],
     answer: 'Они равны',
   ),
-  Task(
+  const Task(
     id: 'g9_circ_6',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9565,7 +9566,7 @@ final List<Task> _grade9Tasks = [
       'R = 10/2 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_7',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9577,7 +9578,7 @@ final List<Task> _grade9Tasks = [
       'Центральный угол = 60°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_8',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9589,7 +9590,7 @@ final List<Task> _grade9Tasks = [
       'S = πr² = π·49 = 49π см²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_9',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9600,7 +9601,7 @@ final List<Task> _grade9Tasks = [
       'Теорема Фалеса: вписанный угол, опирающийся на диаметр, равен 90°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_10',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9609,7 +9610,7 @@ final List<Task> _grade9Tasks = [
     options: ['Они равны', 'Одна в два раза длиннее', 'Они перпендикулярны', 'Нельзя определить'],
     answer: 'Они равны',
   ),
-  Task(
+  const Task(
     id: 'g9_circ_11',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9622,7 +9623,7 @@ final List<Task> _grade9Tasks = [
       'r = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_12',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9634,7 +9635,7 @@ final List<Task> _grade9Tasks = [
       'r = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_13',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9643,7 +9644,7 @@ final List<Task> _grade9Tasks = [
     options: ['Верно', 'Неверно', 'Верно только для единичной окружности', 'Верно только при угле 45°'],
     answer: 'Верно',
   ),
-  Task(
+  const Task(
     id: 'g9_circ_14',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9652,7 +9653,7 @@ final List<Task> _grade9Tasks = [
     options: ['a√2/2', 'a', 'a√2', 'a/2'],
     answer: 'a√2/2',
   ),
-  Task(
+  const Task(
     id: 'g9_circ_15',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9664,7 +9665,7 @@ final List<Task> _grade9Tasks = [
       'Меньшая дуга соответствует центральному углу: 180° - 60° = 120°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_16',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9676,7 +9677,7 @@ final List<Task> _grade9Tasks = [
       'Вписанный угол, опирающийся на дугу 120° = 120°/2 = 60°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_17',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9688,7 +9689,7 @@ final List<Task> _grade9Tasks = [
       'Угол ACB = 100°/2 = 50°',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_18',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9700,7 +9701,7 @@ final List<Task> _grade9Tasks = [
       'Диаметр = 2r = 6 = меньшая сторона',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_19',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9712,7 +9713,7 @@ final List<Task> _grade9Tasks = [
       'R = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g9_circ_20',
     grade: 9,
     topic: 'Геометрия: окружность',
@@ -9727,7 +9728,7 @@ final List<Task> _grade9Tasks = [
 
 final List<Task> _grade10Tasks = [
   // ==================== ТРИГОНОМЕТРИЧЕСКИЕ ФУНКЦИИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g10_trig_1',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9739,7 +9740,7 @@ final List<Task> _grade10Tasks = [
       'Период T = 2π',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_2',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9751,7 +9752,7 @@ final List<Task> _grade10Tasks = [
       'T = 2π/2 = π',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_3',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9763,7 +9764,7 @@ final List<Task> _grade10Tasks = [
       'Для y = A·sin x амплитуда равна |A| = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_4',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9775,7 +9776,7 @@ final List<Task> _grade10Tasks = [
       'y_max = -2·(-1) + 1 = 2 + 1 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_5',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9784,7 +9785,7 @@ final List<Task> _grade10Tasks = [
     options: ['Нечётная', 'Чётная', 'Ни та, ни другая', 'Периодическая'],
     answer: 'Нечётная',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_6',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9793,7 +9794,7 @@ final List<Task> _grade10Tasks = [
     options: ['Чётная', 'Нечётная', 'Ни та, ни другая', 'Ограниченная'],
     answer: 'Чётная',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_7',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9805,7 +9806,7 @@ final List<Task> _grade10Tasks = [
       'Период T = π',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_8',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9814,7 +9815,7 @@ final List<Task> _grade10Tasks = [
     options: ['[-1; 1]', '[0; 1]', '(-∞; +∞)', '[0; 2π]'],
     answer: '[-1; 1]',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_9',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9826,7 +9827,7 @@ final List<Task> _grade10Tasks = [
       'T = 2π/ω = 2π/(1/3) = 6π',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_10',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9835,7 +9836,7 @@ final List<Task> _grade10Tasks = [
     options: ['π/2 вправо', 'π/2 влево', 'π вправо', 'Нет сдвига'],
     answer: 'π/2 вправо',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_11',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9844,7 +9845,7 @@ final List<Task> _grade10Tasks = [
     options: ['-cos x', 'cos x', '-sin x', 'sin x'],
     answer: '-cos x',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_12',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9856,7 +9857,7 @@ final List<Task> _grade10Tasks = [
       'y_min = 2·(-1) - 3 = -2 - 3 = -5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_13',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9868,7 +9869,7 @@ final List<Task> _grade10Tasks = [
       'T = 2π/3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_trig_14',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9877,7 +9878,7 @@ final List<Task> _grade10Tasks = [
     options: ['-sin x', 'sin x', 'cos x', '-cos x'],
     answer: '-sin x',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_15',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9886,7 +9887,7 @@ final List<Task> _grade10Tasks = [
     options: ['cos x', '-cos x', 'sin x', '-sin x'],
     answer: 'cos x',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_16',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9895,7 +9896,7 @@ final List<Task> _grade10Tasks = [
     options: ['A = 4, T = π', 'A = 2, T = 4π', 'A = 4, T = 2π', 'A = 2, T = π'],
     answer: 'A = 4, T = π',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_17',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9904,7 +9905,7 @@ final List<Task> _grade10Tasks = [
     options: ['x = 0 и x = π', 'x = π/2', 'x = 0 и x = 2π', 'x = π'],
     answer: 'x = 0 и x = π',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_18',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9913,7 +9914,7 @@ final List<Task> _grade10Tasks = [
     options: ['x = 0', 'x = π/2', 'x = π', 'x = 3π/2'],
     answer: 'x = 0',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_19',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9922,7 +9923,7 @@ final List<Task> _grade10Tasks = [
     options: ['sin x', '-sin x', 'cos x', '-cos x'],
     answer: 'sin x',
   ),
-  Task(
+  const Task(
     id: 'g10_trig_20',
     grade: 10,
     topic: 'Тригонометрические функции',
@@ -9937,7 +9938,7 @@ final List<Task> _grade10Tasks = [
   ),
 
   // ==================== ПОКАЗАТЕЛЬНАЯ ФУНКЦИЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g10_exp_1',
     grade: 10,
     topic: 'Показательная функция',
@@ -9949,7 +9950,7 @@ final List<Task> _grade10Tasks = [
       '2ˣ = 2³ => x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_2',
     grade: 10,
     topic: 'Показательная функция',
@@ -9961,7 +9962,7 @@ final List<Task> _grade10Tasks = [
       '3ˣ = 3⁴ => x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_3',
     grade: 10,
     topic: 'Показательная функция',
@@ -9973,7 +9974,7 @@ final List<Task> _grade10Tasks = [
       '5ˣ = 5⁰ => x = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_4',
     grade: 10,
     topic: 'Показательная функция',
@@ -9986,7 +9987,7 @@ final List<Task> _grade10Tasks = [
       '2ˣ > 2⁴ => x > 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_5',
     grade: 10,
     topic: 'Показательная функция',
@@ -9999,7 +10000,7 @@ final List<Task> _grade10Tasks = [
       '2⁻ˣ = 2² => -x = 2 => x = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_6',
     grade: 10,
     topic: 'Показательная функция',
@@ -10008,7 +10009,7 @@ final List<Task> _grade10Tasks = [
     options: ['(0; +∞)', '(-∞; +∞)', '[0; +∞)', '(-∞; 0)'],
     answer: '(0; +∞)',
   ),
-  Task(
+  const Task(
     id: 'g10_exp_7',
     grade: 10,
     topic: 'Показательная функция',
@@ -10017,7 +10018,7 @@ final List<Task> _grade10Tasks = [
     options: ['Убывающей', 'Возрастающей', 'Постоянной', 'Периодической'],
     answer: 'Убывающей',
   ),
-  Task(
+  const Task(
     id: 'g10_exp_8',
     grade: 10,
     topic: 'Показательная функция',
@@ -10030,7 +10031,7 @@ final List<Task> _grade10Tasks = [
       '2x = x + 1 => x = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_9',
     grade: 10,
     topic: 'Показательная функция',
@@ -10043,7 +10044,7 @@ final List<Task> _grade10Tasks = [
       '2x = x + 2 => x = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_10',
     grade: 10,
     topic: 'Показательная функция',
@@ -10057,7 +10058,7 @@ final List<Task> _grade10Tasks = [
       '3^(-x) < 3² => -x < 2 => x > -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_11',
     grade: 10,
     topic: 'Показательная функция',
@@ -10069,7 +10070,7 @@ final List<Task> _grade10Tasks = [
       'e⁰ = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_12',
     grade: 10,
     topic: 'Показательная функция',
@@ -10078,7 +10079,7 @@ final List<Task> _grade10Tasks = [
     options: ['x = 0 или x = 2', 'x = 1 или x = 2', 'x = 0 или x = 1', 'x = 2 или x = 3'],
     answer: 'x = 0 или x = 2',
   ),
-  Task(
+  const Task(
     id: 'g10_exp_13',
     grade: 10,
     topic: 'Показательная функция',
@@ -10090,7 +10091,7 @@ final List<Task> _grade10Tasks = [
       '2ˣ = 2⁻³ => x = -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_14',
     grade: 10,
     topic: 'Показательная функция',
@@ -10102,7 +10103,7 @@ final List<Task> _grade10Tasks = [
       'a = ∛8 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_15',
     grade: 10,
     topic: 'Показательная функция',
@@ -10114,7 +10115,7 @@ final List<Task> _grade10Tasks = [
       '2^(log₂3) = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_16',
     grade: 10,
     topic: 'Показательная функция',
@@ -10127,7 +10128,7 @@ final List<Task> _grade10Tasks = [
       'x - 1 = 2 => x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_17',
     grade: 10,
     topic: 'Показательная функция',
@@ -10136,7 +10137,7 @@ final List<Task> _grade10Tasks = [
     options: ['Возрастает', 'Убывает', 'Постоянная', 'Сначала убывает, затем возрастает'],
     answer: 'Возрастает',
   ),
-  Task(
+  const Task(
     id: 'g10_exp_18',
     grade: 10,
     topic: 'Показательная функция',
@@ -10149,7 +10150,7 @@ final List<Task> _grade10Tasks = [
       '3ˣ ≥ 3³ => x ≥ 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_19',
     grade: 10,
     topic: 'Показательная функция',
@@ -10160,7 +10161,7 @@ final List<Task> _grade10Tasks = [
       '(√2)⁸ = (2^(1/2))⁸ = 2⁴ = 16',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_exp_20',
     grade: 10,
     topic: 'Показательная функция',
@@ -10171,7 +10172,7 @@ final List<Task> _grade10Tasks = [
   ),
 
   // ==================== ЛОГАРИФМЫ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g10_log_1',
     grade: 10,
     topic: 'Логарифмы',
@@ -10183,7 +10184,7 @@ final List<Task> _grade10Tasks = [
       'x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_2',
     grade: 10,
     topic: 'Логарифмы',
@@ -10195,7 +10196,7 @@ final List<Task> _grade10Tasks = [
       'x = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_3',
     grade: 10,
     topic: 'Логарифмы',
@@ -10207,7 +10208,7 @@ final List<Task> _grade10Tasks = [
       '10² = 100 => lg 100 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_4',
     grade: 10,
     topic: 'Логарифмы',
@@ -10219,7 +10220,7 @@ final List<Task> _grade10Tasks = [
       'x = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_5',
     grade: 10,
     topic: 'Логарифмы',
@@ -10231,7 +10232,7 @@ final List<Task> _grade10Tasks = [
       'log₂8 + log₂4 = log₂(8·4) = log₂32 = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_6',
     grade: 10,
     topic: 'Логарифмы',
@@ -10244,7 +10245,7 @@ final List<Task> _grade10Tasks = [
       'Или: log₃(27/3) = log₃9 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_7',
     grade: 10,
     topic: 'Логарифмы',
@@ -10256,7 +10257,7 @@ final List<Task> _grade10Tasks = [
       'x = 32',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_8',
     grade: 10,
     topic: 'Логарифмы',
@@ -10268,7 +10269,7 @@ final List<Task> _grade10Tasks = [
       'x = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_9',
     grade: 10,
     topic: 'Логарифмы',
@@ -10280,7 +10281,7 @@ final List<Task> _grade10Tasks = [
       'log₄(4⁻²) = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_10',
     grade: 10,
     topic: 'Логарифмы',
@@ -10292,7 +10293,7 @@ final List<Task> _grade10Tasks = [
       'log₂125 - log₂125 = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_11',
     grade: 10,
     topic: 'Логарифмы',
@@ -10304,7 +10305,7 @@ final List<Task> _grade10Tasks = [
       'log₂2 = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_12',
     grade: 10,
     topic: 'Логарифмы',
@@ -10317,7 +10318,7 @@ final List<Task> _grade10Tasks = [
       'x = 13',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_13',
     grade: 10,
     topic: 'Логарифмы',
@@ -10329,7 +10330,7 @@ final List<Task> _grade10Tasks = [
       'log₆36 = log₆(6²) = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_14',
     grade: 10,
     topic: 'Логарифмы',
@@ -10338,7 +10339,7 @@ final List<Task> _grade10Tasks = [
     options: ['x > 2', 'x ≥ 2', 'x > 0', 'x < 2'],
     answer: 'x > 2',
   ),
-  Task(
+  const Task(
     id: 'g10_log_15',
     grade: 10,
     topic: 'Логарифмы',
@@ -10350,7 +10351,7 @@ final List<Task> _grade10Tasks = [
       'lg 0,001 = -3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_16',
     grade: 10,
     topic: 'Логарифмы',
@@ -10362,7 +10363,7 @@ final List<Task> _grade10Tasks = [
       'x > 2³ = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_17',
     grade: 10,
     topic: 'Логарифмы',
@@ -10374,7 +10375,7 @@ final List<Task> _grade10Tasks = [
       '8 = 2³, поэтому log₂8 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_18',
     grade: 10,
     topic: 'Логарифмы',
@@ -10387,7 +10388,7 @@ final List<Task> _grade10Tasks = [
       'x = 3² = 9',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_log_19',
     grade: 10,
     topic: 'Логарифмы',
@@ -10396,7 +10397,7 @@ final List<Task> _grade10Tasks = [
     options: ['lg b / lg a', 'lg a / lg b', 'log_b(a)', 'a/b'],
     answer: 'lg b / lg a',
   ),
-  Task(
+  const Task(
     id: 'g10_log_20',
     grade: 10,
     topic: 'Логарифмы',
@@ -10407,7 +10408,7 @@ final List<Task> _grade10Tasks = [
   ),
 
   // ==================== ПРОИЗВОДНАЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g10_der_1',
     grade: 10,
     topic: 'Производная',
@@ -10419,7 +10420,7 @@ final List<Task> _grade10Tasks = [
       '(x³)\' = 3x²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_2',
     grade: 10,
     topic: 'Производная',
@@ -10430,7 +10431,7 @@ final List<Task> _grade10Tasks = [
       '(5x²)\' = 5·(x²)\' = 5·2x = 10x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_3',
     grade: 10,
     topic: 'Производная',
@@ -10444,7 +10445,7 @@ final List<Task> _grade10Tasks = [
       'y\' = 4x³ - 6x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_4',
     grade: 10,
     topic: 'Производная',
@@ -10455,7 +10456,7 @@ final List<Task> _grade10Tasks = [
       'Стандартная формула: (sin x)\' = cos x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_5',
     grade: 10,
     topic: 'Производная',
@@ -10466,7 +10467,7 @@ final List<Task> _grade10Tasks = [
       'Стандартная формула: (cos x)\' = -sin x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_6',
     grade: 10,
     topic: 'Производная',
@@ -10478,7 +10479,7 @@ final List<Task> _grade10Tasks = [
       '(eˣ)\' = eˣ',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_7',
     grade: 10,
     topic: 'Производная',
@@ -10489,7 +10490,7 @@ final List<Task> _grade10Tasks = [
       'Стандартная формула: (ln x)\' = 1/x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_8',
     grade: 10,
     topic: 'Производная',
@@ -10501,7 +10502,7 @@ final List<Task> _grade10Tasks = [
       '(7)\' = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_9',
     grade: 10,
     topic: 'Производная',
@@ -10512,7 +10513,7 @@ final List<Task> _grade10Tasks = [
       '(x)\' = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_10',
     grade: 10,
     topic: 'Производная',
@@ -10521,7 +10522,7 @@ final List<Task> _grade10Tasks = [
     options: ['2x·sin x + x²·cos x', '2x·cos x', 'x²·cos x', '2x·sin x'],
     answer: '2x·sin x + x²·cos x',
   ),
-  Task(
+  const Task(
     id: 'g10_der_11',
     grade: 10,
     topic: 'Производная',
@@ -10534,7 +10535,7 @@ final List<Task> _grade10Tasks = [
       'y\' = 2(3x + 1)·3 = 6(3x + 1)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_12',
     grade: 10,
     topic: 'Производная',
@@ -10546,7 +10547,7 @@ final List<Task> _grade10Tasks = [
       'y\' = -1·x⁻² = -1/x²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_13',
     grade: 10,
     topic: 'Производная',
@@ -10558,7 +10559,7 @@ final List<Task> _grade10Tasks = [
       'y\' = (1/2)·x^(-1/2) = 1/(2√x)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_14',
     grade: 10,
     topic: 'Производная',
@@ -10571,7 +10572,7 @@ final List<Task> _grade10Tasks = [
       'y\'\' = 2 > 0, значит это минимум',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_15',
     grade: 10,
     topic: 'Производная',
@@ -10580,7 +10581,7 @@ final List<Task> _grade10Tasks = [
     options: ['y = 4x - 4', 'y = 2x', 'y = 4x + 4', 'y = 2x - 4'],
     answer: 'y = 4x - 4',
   ),
-  Task(
+  const Task(
     id: 'g10_der_16',
     grade: 10,
     topic: 'Производная',
@@ -10591,7 +10592,7 @@ final List<Task> _grade10Tasks = [
       '(4x⁵)\' = 4·5x⁴ = 20x⁴',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_17',
     grade: 10,
     topic: 'Производная',
@@ -10600,7 +10601,7 @@ final List<Task> _grade10Tasks = [
     options: ['Возможный экстремум', 'Точно максимум', 'Точно минимум', 'Точка перегиба'],
     answer: 'Возможный экстремум',
   ),
-  Task(
+  const Task(
     id: 'g10_der_18',
     grade: 10,
     topic: 'Производная',
@@ -10609,7 +10610,7 @@ final List<Task> _grade10Tasks = [
     options: ['1/cos²x', '-1/sin²x', 'cos²x', 'sin²x'],
     answer: '1/cos²x',
   ),
-  Task(
+  const Task(
     id: 'g10_der_19',
     grade: 10,
     topic: 'Производная',
@@ -10621,7 +10622,7 @@ final List<Task> _grade10Tasks = [
       'Или: ln(3x) = ln 3 + ln x, производная = 1/x',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_der_20',
     grade: 10,
     topic: 'Производная',
@@ -10632,7 +10633,7 @@ final List<Task> _grade10Tasks = [
   ),
 
   // ==================== СТЕРЕОМЕТРИЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g10_stereo_1',
     grade: 10,
     topic: 'Стереометрия',
@@ -10644,7 +10645,7 @@ final List<Task> _grade10Tasks = [
       'V = 3³ = 27 см³',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_2',
     grade: 10,
     topic: 'Стереометрия',
@@ -10656,7 +10657,7 @@ final List<Task> _grade10Tasks = [
       'S = 6a² = 6·4² = 6·16 = 96 см²',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_3',
     grade: 10,
     topic: 'Стереометрия',
@@ -10668,7 +10669,7 @@ final List<Task> _grade10Tasks = [
       'V = 3·4·5 = 60 см³',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_4',
     grade: 10,
     topic: 'Стереометрия',
@@ -10677,7 +10678,7 @@ final List<Task> _grade10Tasks = [
     options: ['a√3', 'a√2', '2a', 'a√6'],
     answer: 'a√3',
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_5',
     grade: 10,
     topic: 'Стереометрия',
@@ -10689,7 +10690,7 @@ final List<Task> _grade10Tasks = [
       'V = (1/3)·S·h = (1/3)·9√3·4 = 12√3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_6',
     grade: 10,
     topic: 'Стереометрия',
@@ -10701,7 +10702,7 @@ final List<Task> _grade10Tasks = [
       'V = (1/3)·24·5 = 40',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_7',
     grade: 10,
     topic: 'Стереометрия',
@@ -10712,7 +10713,7 @@ final List<Task> _grade10Tasks = [
       '1 квадратное основание + 4 треугольных боковых грани = 5 граней',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_8',
     grade: 10,
     topic: 'Стереометрия',
@@ -10724,7 +10725,7 @@ final List<Task> _grade10Tasks = [
       'S = 2(2·3 + 3·4 + 2·4) = 2(6 + 12 + 8) = 2·26 = 52',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_9',
     grade: 10,
     topic: 'Стереометрия',
@@ -10735,7 +10736,7 @@ final List<Task> _grade10Tasks = [
       'Куб имеет 12 рёбер: 4 снизу + 4 сверху + 4 вертикальных',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_10',
     grade: 10,
     topic: 'Стереометрия',
@@ -10748,7 +10749,7 @@ final List<Task> _grade10Tasks = [
       'V = a³ = 27',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_11',
     grade: 10,
     topic: 'Стереометрия',
@@ -10759,7 +10760,7 @@ final List<Task> _grade10Tasks = [
       '3 вершины основания + 1 вершина пирамиды = 4 вершины',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_12',
     grade: 10,
     topic: 'Стереометрия',
@@ -10771,7 +10772,7 @@ final List<Task> _grade10Tasks = [
       'R = d/2 = √3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_13',
     grade: 10,
     topic: 'Стереометрия',
@@ -10780,7 +10781,7 @@ final List<Task> _grade10Tasks = [
     options: ['V = (1/3)·S·h', 'V = S·h', 'V = (1/2)·S·h', 'V = (2/3)·S·h'],
     answer: 'V = (1/3)·S·h',
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_14',
     grade: 10,
     topic: 'Стереометрия',
@@ -10791,7 +10792,7 @@ final List<Task> _grade10Tasks = [
       'S = 6a² = 6·25 = 150',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_15',
     grade: 10,
     topic: 'Стереометрия',
@@ -10802,7 +10803,7 @@ final List<Task> _grade10Tasks = [
       'Параллелепипед ограничен 6 прямоугольными гранями',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_16',
     grade: 10,
     topic: 'Стереометрия',
@@ -10814,7 +10815,7 @@ final List<Task> _grade10Tasks = [
       'V_new = (1/3)·S·2h = 2·V = 60',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_17',
     grade: 10,
     topic: 'Стереометрия',
@@ -10823,7 +10824,7 @@ final List<Task> _grade10Tasks = [
     options: ['Высота боковой грани', 'Ребро пирамиды', 'Высота пирамиды', 'Медиана основания'],
     answer: 'Высота боковой грани',
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_18',
     grade: 10,
     topic: 'Стереометрия',
@@ -10835,7 +10836,7 @@ final List<Task> _grade10Tasks = [
       'V = a³ = 27',
     ],
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_19',
     grade: 10,
     topic: 'Стереометрия',
@@ -10844,7 +10845,7 @@ final List<Task> _grade10Tasks = [
     options: ['√2/3', '2√2/3', '√3/2', '√2'],
     answer: '2√2/3',
   ),
-  Task(
+  const Task(
     id: 'g10_stereo_20',
     grade: 10,
     topic: 'Стереометрия',
@@ -10861,7 +10862,7 @@ final List<Task> _grade10Tasks = [
 
 final List<Task> _grade11Tasks = [
   // ==================== ПРОИЗВОДНАЯ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g11_deriv_1',
     grade: 11,
     topic: 'Производная',
@@ -10873,7 +10874,7 @@ final List<Task> _grade11Tasks = [
       "(x³)' = 3x²",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_2',
     grade: 11,
     topic: 'Производная',
@@ -10887,7 +10888,7 @@ final List<Task> _grade11Tasks = [
       "f'(x) = 10x - 3",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_3',
     grade: 11,
     topic: 'Производная',
@@ -10898,7 +10899,7 @@ final List<Task> _grade11Tasks = [
       "(sin x)' = cos x",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_4',
     grade: 11,
     topic: 'Производная',
@@ -10909,7 +10910,7 @@ final List<Task> _grade11Tasks = [
       "(eˣ)' = eˣ",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_5',
     grade: 11,
     topic: 'Производная',
@@ -10920,7 +10921,7 @@ final List<Task> _grade11Tasks = [
       "(ln x)' = 1/x (x > 0)",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_6',
     grade: 11,
     topic: 'Производная',
@@ -10931,7 +10932,7 @@ final List<Task> _grade11Tasks = [
       "Производная константы равна нулю",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_7',
     grade: 11,
     topic: 'Производная',
@@ -10942,7 +10943,7 @@ final List<Task> _grade11Tasks = [
       "(cos x)' = -sin x",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_8',
     grade: 11,
     topic: 'Производная',
@@ -10955,7 +10956,7 @@ final List<Task> _grade11Tasks = [
       "(x)' = 1",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_9',
     grade: 11,
     topic: 'Производная',
@@ -10964,7 +10965,7 @@ final List<Task> _grade11Tasks = [
     options: ["u'v'", "u'v + uv'", "u'v - uv'", "(u+v)'"],
     answer: "u'v + uv'",
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_10',
     grade: 11,
     topic: 'Производная',
@@ -10975,7 +10976,7 @@ final List<Task> _grade11Tasks = [
       "(x·sin x)' = x'·sin x + x·(sin x)' = sin x + x·cos x",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_11',
     grade: 11,
     topic: 'Производная',
@@ -10986,7 +10987,7 @@ final List<Task> _grade11Tasks = [
       "Правило цепочки: 2(3x+1) × 3 = 6(3x+1)",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_12',
     grade: 11,
     topic: 'Производная',
@@ -10995,7 +10996,7 @@ final List<Task> _grade11Tasks = [
     options: ['Ускорение', 'Скорость', 'Путь', 'Время'],
     answer: 'Скорость',
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_13',
     grade: 11,
     topic: 'Производная',
@@ -11004,7 +11005,7 @@ final List<Task> _grade11Tasks = [
     options: ['x > 0', 'x > 1 или x < -1', '0 < x < 1', '-1 < x < 1'],
     answer: 'x > 1 или x < -1',
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_14',
     grade: 11,
     topic: 'Производная',
@@ -11013,7 +11014,7 @@ final List<Task> _grade11Tasks = [
     options: ['> 0', '< 0', '= 0', '≠ 0'],
     answer: '< 0',
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_15',
     grade: 11,
     topic: 'Производная',
@@ -11025,7 +11026,7 @@ final List<Task> _grade11Tasks = [
       "(x^(1/2))' = 1/2 × x^(-1/2) = 1/(2√x)",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_16',
     grade: 11,
     topic: 'Производная',
@@ -11037,7 +11038,7 @@ final List<Task> _grade11Tasks = [
       "f(2) = -4 + 8 - 1 = 3",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_17',
     grade: 11,
     topic: 'Производная',
@@ -11050,7 +11051,7 @@ final List<Task> _grade11Tasks = [
       "y = 2x - 1",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_18',
     grade: 11,
     topic: 'Производная',
@@ -11061,7 +11062,7 @@ final List<Task> _grade11Tasks = [
       "(tg x)' = 1/cos²x",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_19',
     grade: 11,
     topic: 'Производная',
@@ -11072,7 +11073,7 @@ final List<Task> _grade11Tasks = [
       "Правило цепочки: e^(2x) × (2x)' = 2e^(2x)",
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_deriv_20',
     grade: 11,
     topic: 'Производная',
@@ -11086,7 +11087,7 @@ final List<Task> _grade11Tasks = [
   ),
 
   // ==================== ИНТЕГРАЛ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g11_integ_1',
     grade: 11,
     topic: 'Интеграл',
@@ -11098,7 +11099,7 @@ final List<Task> _grade11Tasks = [
       '∫x dx = x²/2 + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_2',
     grade: 11,
     topic: 'Интеграл',
@@ -11109,7 +11110,7 @@ final List<Task> _grade11Tasks = [
       '∫3x² dx = 3 × x³/3 + C = x³ + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_3',
     grade: 11,
     topic: 'Интеграл',
@@ -11120,7 +11121,7 @@ final List<Task> _grade11Tasks = [
       '∫sin x dx = -cos x + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_4',
     grade: 11,
     topic: 'Интеграл',
@@ -11131,7 +11132,7 @@ final List<Task> _grade11Tasks = [
       '∫cos x dx = sin x + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_5',
     grade: 11,
     topic: 'Интеграл',
@@ -11142,7 +11143,7 @@ final List<Task> _grade11Tasks = [
       '∫eˣ dx = eˣ + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_6',
     grade: 11,
     topic: 'Интеграл',
@@ -11153,7 +11154,7 @@ final List<Task> _grade11Tasks = [
       '[x²/2]₀² = 4/2 - 0 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_7',
     grade: 11,
     topic: 'Интеграл',
@@ -11162,7 +11163,7 @@ final List<Task> _grade11Tasks = [
     options: ['Длина кривой', 'Площадь под кривой', 'Объём', 'Скорость'],
     answer: 'Площадь под кривой',
   ),
-  Task(
+  const Task(
     id: 'g11_integ_8',
     grade: 11,
     topic: 'Интеграл',
@@ -11173,7 +11174,7 @@ final List<Task> _grade11Tasks = [
       '∫1/x dx = ln|x| + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_9',
     grade: 11,
     topic: 'Интеграл',
@@ -11182,7 +11183,7 @@ final List<Task> _grade11Tasks = [
     options: ['F(a) - F(b)', 'F(b) - F(a)', 'f(b) - f(a)', 'f(a) + f(b)'],
     answer: 'F(b) - F(a)',
   ),
-  Task(
+  const Task(
     id: 'g11_integ_10',
     grade: 11,
     topic: 'Интеграл',
@@ -11193,7 +11194,7 @@ final List<Task> _grade11Tasks = [
       '[x² + x]₀¹ = (1 + 1) - 0 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_11',
     grade: 11,
     topic: 'Интеграл',
@@ -11202,7 +11203,7 @@ final List<Task> _grade11Tasks = [
     options: ['x³', 'x³/3', 'x³/3 + C', '2x'],
     answer: 'x³/3 + C',
   ),
-  Task(
+  const Task(
     id: 'g11_integ_12',
     grade: 11,
     topic: 'Интеграл',
@@ -11213,7 +11214,7 @@ final List<Task> _grade11Tasks = [
       '∫c dx = cx + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_13',
     grade: 11,
     topic: 'Интеграл',
@@ -11224,7 +11225,7 @@ final List<Task> _grade11Tasks = [
       '∫₀³ x² dx = [x³/3]₀³ = 27/3 = 9',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_14',
     grade: 11,
     topic: 'Интеграл',
@@ -11236,7 +11237,7 @@ final List<Task> _grade11Tasks = [
       '(x+1)³/3 + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_15',
     grade: 11,
     topic: 'Интеграл',
@@ -11247,7 +11248,7 @@ final List<Task> _grade11Tasks = [
       '[ln|x|]₁² = ln 2 - ln 1 = ln 2 - 0 = ln 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_16',
     grade: 11,
     topic: 'Интеграл',
@@ -11258,7 +11259,7 @@ final List<Task> _grade11Tasks = [
       '∫₀¹ (x - x²) dx = [x²/2 - x³/3]₀¹ = 1/2 - 1/3 = 1/6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_17',
     grade: 11,
     topic: 'Интеграл',
@@ -11269,7 +11270,7 @@ final List<Task> _grade11Tasks = [
       'Интеграл суммы = сумма интегралов',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_18',
     grade: 11,
     topic: 'Интеграл',
@@ -11280,7 +11281,7 @@ final List<Task> _grade11Tasks = [
       '[-cos x]₀^π = -cos π + cos 0 = 1 + 1 = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_19',
     grade: 11,
     topic: 'Интеграл',
@@ -11291,7 +11292,7 @@ final List<Task> _grade11Tasks = [
       '2∫eˣ dx = 2eˣ + C',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_integ_20',
     grade: 11,
     topic: 'Интеграл',
@@ -11302,7 +11303,7 @@ final List<Task> _grade11Tasks = [
   ),
 
   // ==================== ПОКАЗАТЕЛЬНЫЕ И ЛОГАРИФМИЧЕСКИЕ ФУНКЦИИ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g11_explog_1',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11313,7 +11314,7 @@ final List<Task> _grade11Tasks = [
       '2ˣ = 2³ → x = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_2',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11324,7 +11325,7 @@ final List<Task> _grade11Tasks = [
       '2⁴ = 16 → log₂ 16 = 4',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_3',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11335,7 +11336,7 @@ final List<Task> _grade11Tasks = [
       'ln e = log_e(e) = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_4',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11347,7 +11348,7 @@ final List<Task> _grade11Tasks = [
       '2 + 1 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_5',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11358,7 +11359,7 @@ final List<Task> _grade11Tasks = [
       'x = 2⁵ = 32',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_6',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11369,7 +11370,7 @@ final List<Task> _grade11Tasks = [
       'log_a(a) = 1 (по определению)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_7',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11378,7 +11379,7 @@ final List<Task> _grade11Tasks = [
     options: ['log_a(m) × log_a(n)', 'log_a(m) + log_a(n)', 'log_a(m) - log_a(n)', 'log_a(m) / log_a(n)'],
     answer: 'log_a(m) + log_a(n)',
   ),
-  Task(
+  const Task(
     id: 'g11_explog_8',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11390,7 +11391,7 @@ final List<Task> _grade11Tasks = [
       'x+1 = 3 → x = 2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_9',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11401,7 +11402,7 @@ final List<Task> _grade11Tasks = [
       '10³ = 1000 → log₁₀ 1000 = 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_10',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11410,7 +11411,7 @@ final List<Task> _grade11Tasks = [
     options: ['Убывает к 0', 'Растёт к +∞', 'Остаётся постоянной', 'Осциллирует'],
     answer: 'Растёт к +∞',
   ),
-  Task(
+  const Task(
     id: 'g11_explog_11',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11419,7 +11420,7 @@ final List<Task> _grade11Tasks = [
     options: ['log_a(m) + log_a(n)', 'log_a(m) - log_a(n)', 'log_a(m) × log_a(n)', 'log_a(m/n²)'],
     answer: 'log_a(m) - log_a(n)',
   ),
-  Task(
+  const Task(
     id: 'g11_explog_12',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11430,7 +11431,7 @@ final List<Task> _grade11Tasks = [
       'ln 1 = 0 → x = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_13',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11441,7 +11442,7 @@ final List<Task> _grade11Tasks = [
       'log_a(aⁿ) = n',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_14',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11450,7 +11451,7 @@ final List<Task> _grade11Tasks = [
     options: ['Любым числом', 'Положительным и ≠ 1', 'Только целым числом', 'Больше 1'],
     answer: 'Положительным и ≠ 1',
   ),
-  Task(
+  const Task(
     id: 'g11_explog_15',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11459,7 +11460,7 @@ final List<Task> _grade11Tasks = [
     options: ['n × log_a(m)', 'log_a(m) + n', 'log_a(m) - n', 'n/log_a(m)'],
     answer: 'n × log_a(m)',
   ),
-  Task(
+  const Task(
     id: 'g11_explog_16',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11471,7 +11472,7 @@ final List<Task> _grade11Tasks = [
       'x = -2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_17',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11482,7 +11483,7 @@ final List<Task> _grade11Tasks = [
       'Аргумент логарифма > 0: x - 3 > 0 → x > 3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_18',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11494,7 +11495,7 @@ final List<Task> _grade11Tasks = [
       'x = 8',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_19',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11506,7 +11507,7 @@ final List<Task> _grade11Tasks = [
       'e^(ln 5) = 5',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_explog_20',
     grade: 11,
     topic: 'Показательные и логарифмы',
@@ -11517,7 +11518,7 @@ final List<Task> _grade11Tasks = [
   ),
 
   // ==================== КОМБИНАТОРИКА (20 задач) ====================
-  Task(
+  const Task(
     id: 'g11_comb_1',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11526,7 +11527,7 @@ final List<Task> _grade11Tasks = [
     options: ['n + (n-1) + ... + 1', 'n × (n-1) × ... × 1', 'nⁿ', 'n × 2'],
     answer: 'n × (n-1) × ... × 1',
   ),
-  Task(
+  const Task(
     id: 'g11_comb_2',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11537,7 +11538,7 @@ final List<Task> _grade11Tasks = [
       '5! = 5 × 4 × 3 × 2 × 1 = 120',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_3',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11548,7 +11549,7 @@ final List<Task> _grade11Tasks = [
       'P₄ = 4! = 24',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_4',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11559,7 +11560,7 @@ final List<Task> _grade11Tasks = [
       'A(5,2) = 5!/(5-2)! = 5×4 = 20',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_5',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11570,7 +11571,7 @@ final List<Task> _grade11Tasks = [
       'C(5,2) = 5!/(2!×3!) = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_6',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11581,7 +11582,7 @@ final List<Task> _grade11Tasks = [
       'C(n,0) = 1 по определению',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_7',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11592,7 +11593,7 @@ final List<Task> _grade11Tasks = [
       'C(n,n) = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_8',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11603,7 +11604,7 @@ final List<Task> _grade11Tasks = [
       'C(10,3) = 10!/(3!×7!) = 120',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_9',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11614,7 +11615,7 @@ final List<Task> _grade11Tasks = [
       '(1+1)ⁿ = 2ⁿ = сумма биномиальных коэффициентов',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_10',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11625,7 +11626,7 @@ final List<Task> _grade11Tasks = [
       'Правило произведения: m × n способов',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_11',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11636,7 +11637,7 @@ final List<Task> _grade11Tasks = [
       'P₃ = 3! = 6',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_12',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11647,7 +11648,7 @@ final List<Task> _grade11Tasks = [
       '0! = 1 по соглашению',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_13',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11656,7 +11657,7 @@ final List<Task> _grade11Tasks = [
     options: ['В сочетании порядок важен', 'В сочетании порядок не важен', 'Размещение всегда меньше', 'Нет разницы'],
     answer: 'В сочетании порядок не важен',
   ),
-  Task(
+  const Task(
     id: 'g11_comb_14',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11667,7 +11668,7 @@ final List<Task> _grade11Tasks = [
       'C(8,6) = C(8,2) = 8×7/2 = 28',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_15',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11678,7 +11679,7 @@ final List<Task> _grade11Tasks = [
       'Правило суммы: m + n',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_16',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11689,7 +11690,7 @@ final List<Task> _grade11Tasks = [
       'C(5,2) = 10',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_17',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11698,7 +11699,7 @@ final List<Task> _grade11Tasks = [
     options: ['P(36)', 'C(36,6)', 'A(36,6)', '36⁶'],
     answer: 'C(36,6)',
   ),
-  Task(
+  const Task(
     id: 'g11_comb_18',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11709,7 +11710,7 @@ final List<Task> _grade11Tasks = [
       'A(30,2) = 30 × 29 = 870',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_comb_19',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11718,7 +11719,7 @@ final List<Task> _grade11Tasks = [
     options: ['C(n,k) + C(n,k-1)', 'C(n,k) + C(n+1,k-1)', 'C(n-1,k) + C(n,k)', 'C(n,k)²'],
     answer: 'C(n,k) + C(n,k-1)',
   ),
-  Task(
+  const Task(
     id: 'g11_comb_20',
     grade: 11,
     topic: 'Комбинаторика',
@@ -11732,7 +11733,7 @@ final List<Task> _grade11Tasks = [
   ),
 
   // ==================== ТЕОРИЯ ВЕРОЯТНОСТЕЙ (20 задач) ====================
-  Task(
+  const Task(
     id: 'g11_prob_1',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11743,7 +11744,7 @@ final List<Task> _grade11Tasks = [
       'P(невозможного) = 0',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_2',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11754,7 +11755,7 @@ final List<Task> _grade11Tasks = [
       'P(достоверного) = 1',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_3',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11765,7 +11766,7 @@ final List<Task> _grade11Tasks = [
       'P = 3/10 = 0.3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_4',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11776,7 +11777,7 @@ final List<Task> _grade11Tasks = [
       'Событие и его противоположное исчерпывают все исходы',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_5',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11787,7 +11788,7 @@ final List<Task> _grade11Tasks = [
       'P(О) × P(О) = 0.5 × 0.5 = 0.25',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_6',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11796,7 +11797,7 @@ final List<Task> _grade11Tasks = [
     options: ['Любых событий', 'Несовместных событий', 'Зависимых событий', 'Независимых событий'],
     answer: 'Несовместных событий',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_7',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11805,7 +11806,7 @@ final List<Task> _grade11Tasks = [
     options: ['Любых событий', 'Совместных событий', 'Независимых событий', 'Несовместных событий'],
     answer: 'Независимых событий',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_8',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11817,7 +11818,7 @@ final List<Task> _grade11Tasks = [
       'P = 3/6 = 1/2',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_9',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11829,7 +11830,7 @@ final List<Task> _grade11Tasks = [
       'P = 4/52 = 1/13',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_10',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11838,7 +11839,7 @@ final List<Task> _grade11Tasks = [
     options: ['Все события равновероятны', 'Известны условные вероятности относительно гипотез', 'События независимы', 'Событий нет'],
     answer: 'Известны условные вероятности относительно гипотез',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_11',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11847,7 +11848,7 @@ final List<Task> _grade11Tasks = [
     options: ['P(A) × P(B)', 'Вероятность A при условии B', 'P(A) + P(B)', 'P(A ∪ B)'],
     answer: 'Вероятность A при условии B',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_12',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11856,7 +11857,7 @@ final List<Task> _grade11Tasks = [
     options: ['Максимальное значение X', 'Взвешенная сумма: ΣxᵢP(xᵢ)', 'Дисперсия X', 'P(X > 0)'],
     answer: 'Взвешенная сумма: ΣxᵢP(xᵢ)',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_13',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11868,7 +11869,7 @@ final List<Task> _grade11Tasks = [
       'P(A|B) = P(A)',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_14',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11880,7 +11881,7 @@ final List<Task> _grade11Tasks = [
       'P = 1/36',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_15',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11891,7 +11892,7 @@ final List<Task> _grade11Tasks = [
       'P(Ā) = 1 - P(A) = 1 - 0.7 = 0.3',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_16',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11900,7 +11901,7 @@ final List<Task> _grade11Tasks = [
     options: ['Числе исходов', 'Отношении мер (длин, площадей)', 'Числе испытаний', 'Частоте события'],
     answer: 'Отношении мер (длин, площадей)',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_17',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11911,7 +11912,7 @@ final List<Task> _grade11Tasks = [
       'P = 7/10 = 0.7',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_18',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11920,7 +11921,7 @@ final List<Task> _grade11Tasks = [
     options: ['C(n,k) × pᵏ × qⁿ⁻ᵏ', 'n × p', 'p^k', 'C(n,k) × p'],
     answer: 'C(n,k) × pᵏ × qⁿ⁻ᵏ',
   ),
-  Task(
+  const Task(
     id: 'g11_prob_19',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11932,7 +11933,7 @@ final List<Task> _grade11Tasks = [
       'D = 0.5 - 0.25 = 0.25',
     ],
   ),
-  Task(
+  const Task(
     id: 'g11_prob_20',
     grade: 11,
     topic: 'Теория вероятностей',
@@ -11982,11 +11983,11 @@ List<Task> getTasksByGradeAndTopic(int grade, String topic) {
 
 /// Информация о теме
 class TopicInfo {
+
+  TopicInfo({required this.name, required this.icon, required this.taskCount});
   final String name;
   final IconData icon;
   final int taskCount;
-
-  TopicInfo({required this.name, required this.icon, required this.taskCount});
 }
 
 /// Описания тем — краткая теория перед началом задач

@@ -1,12 +1,7 @@
 /// Модель пользователя
+library;
 
 class AppUser {
-  final String uid;
-  final String email;
-  final String? displayName;
-  final int? grade;
-  final String? avatar;
-  final DateTime createdAt;
 
   const AppUser({
     required this.uid,
@@ -27,6 +22,12 @@ class AppUser {
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
   }
+  final String uid;
+  final String email;
+  final String? displayName;
+  final int? grade;
+  final String? avatar;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
     return {

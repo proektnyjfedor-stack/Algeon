@@ -1,13 +1,33 @@
 /// Achievements Tab — Награды
 ///
 /// Grid достижений с прогрессом и описанием что нужно сделать
+library;
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../theme/app_theme.dart';
+
+import '../data/tasks_data.dart';
 import '../services/achievements_service.dart';
 import '../services/progress_service.dart';
-import '../data/tasks_data.dart';
+import '../services/reward_drop_service.dart';
+import '../services/sound_service.dart';
+import '../theme/app_theme.dart';
+
+bool _newAchievementsIncludeStreak(List<Achievement> list) {
+  for (final a in list) {
+    switch (a.type) {
+      case AchievementType.streak3:
+      case AchievementType.streak7:
+      case AchievementType.streak14:
+      case AchievementType.streak30:
+        return true;
+      default:
+        break;
+    }
+  }
+  return false;
+}
 
 class AchievementsTab extends StatefulWidget {
   const AchievementsTab({super.key});
@@ -18,6 +38,8 @@ class AchievementsTab extends StatefulWidget {
 
 class _AchievementsTabState extends State<AchievementsTab> {
   bool _isSyncing = true;
+  bool _isOpeningDrop = false;
+  List<DropReward> _dropHistory = const [];
 
   @override
   void initState() {
@@ -25,7 +47,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     _syncAchievementsWithProgress();
   }
 
-  Future<void> _syncAchievementsWithProgress() async {
+  Future<void> _evaluateAchievements() async {
     final totalSolved = ProgressService.getTotalSolved();
     final streak = ProgressService.getStreakDays();
     final accuracy = ProgressService.getAccuracy();
@@ -39,7 +61,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
     final gradeProgress =
         gradeTasks.isNotEmpty ? gradeSolved / gradeTasks.length : 0.0;
 
-    await AchievementsService.evaluateProgress(
+    final newly = await AchievementsService.evaluateProgress(
       totalSolved: totalSolved,
       streak: streak,
       accuracy: accuracy,
@@ -47,9 +69,81 @@ class _AchievementsTabState extends State<AchievementsTab> {
       grade: grade,
       gradeProgress: gradeProgress,
     );
-
     if (!mounted) return;
+    if (newly.isNotEmpty) {
+      await RewardDropService.init();
+      for (final _ in newly) {
+        await RewardDropService.rollRandomDrop();
+      }
+      _dropHistory = RewardDropService.getHistory(limit: 8);
+      if (_newAchievementsIncludeStreak(newly)) {
+        unawaited(SoundService.playStreak());
+      } else {
+        unawaited(SoundService.playAchievement());
+      }
+    }
+  }
+
+  Future<void> _syncAchievementsWithProgress() async {
+    await RewardDropService.init();
+    await _evaluateAchievements();
+    if (!mounted) return;
+    _dropHistory = RewardDropService.getHistory(limit: 8);
     setState(() => _isSyncing = false);
+  }
+
+  Future<void> _pullRefreshAchievements() async {
+    await _evaluateAchievements();
+    if (!mounted) return;
+    _dropHistory = RewardDropService.getHistory(limit: 8);
+    setState(() {});
+  }
+
+  Future<void> _openRandomDrop() async {
+    if (_isOpeningDrop) return;
+    setState(() => _isOpeningDrop = true);
+    try {
+      final reward = await RewardDropService.rollRandomDrop();
+      if (!mounted) return;
+      _dropHistory = RewardDropService.getHistory(limit: 8);
+      setState(() => _isOpeningDrop = false);
+
+      unawaited(SoundService.playAchievement());
+      unawaited(SoundService.hapticBurst(steps: 4));
+      _showDropDialog(reward);
+    } finally {
+      if (mounted && _isOpeningDrop) {
+        setState(() => _isOpeningDrop = false);
+      }
+    }
+  }
+
+  /// Акцент карточки по категории достижения.
+  Color _accentForAchievement(Achievement a) {
+    switch (a.type) {
+      case AchievementType.firstTask:
+      case AchievementType.tasksSolved10:
+      case AchievementType.tasksSolved50:
+      case AchievementType.tasksSolved100:
+      case AchievementType.tasksSolved200:
+        return AppColors.accent;
+      case AchievementType.streak3:
+      case AchievementType.streak7:
+      case AchievementType.streak14:
+      case AchievementType.streak30:
+        return AppColors.orange;
+      case AchievementType.accuracy80:
+      case AchievementType.accuracy90:
+      case AchievementType.accuracy100:
+        return AppColors.purple;
+      case AchievementType.grade5Complete:
+      case AchievementType.grade7Complete:
+      case AchievementType.grade9Complete:
+      case AchievementType.grade11Complete:
+        return AppColors.success;
+      case AchievementType.perfectSession:
+        return AppColors.pink;
+    }
   }
 
   int _getGridColumns(BuildContext context) {
@@ -178,8 +272,15 @@ class _AchievementsTabState extends State<AchievementsTab> {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 900),
-          child: CustomScrollView(
-            slivers: [
+          child: RefreshIndicator(
+            color: AppColors.accent,
+            edgeOffset: 12,
+            onRefresh: _pullRefreshAchievements,
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              slivers: [
               // Header
               SliverToBoxAdapter(
                 child: _StaggeredReveal(
@@ -193,9 +294,18 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.emoji_events_rounded,
-                                color: AppColors.gold, size: 32),
+                            Container(
+                              width: 4,
+                              height: 28,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2),
+                                color: AppColors.gold,
+                              ),
+                            ),
                             const SizedBox(width: 12),
+                            const Icon(Icons.emoji_events_rounded,
+                                color: AppColors.gold, size: 32),
+                            const SizedBox(width: 10),
                             Text('Награды',
                                 style: AppTypography.h1.copyWith(
                                   color:
@@ -232,6 +342,9 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     decoration: BoxDecoration(
                       color: AppColors.gold,
                       borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.22),
+                      ),
                     ),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
@@ -334,6 +447,16 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 ),
               ),
 
+              SliverToBoxAdapter(
+                child: _StaggeredReveal(
+                  delayMs: 62,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 4),
+                    child: _buildRandomDropCard(),
+                  ),
+                ),
+              ),
+
               // Unlocked Section
               if (unlocked.isNotEmpty) ...[
                 SliverToBoxAdapter(
@@ -386,7 +509,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       (context, index) =>
                           _StaggeredReveal(
                             delayMs: 100 + (index * 26).clamp(0, 240),
-                            child: _buildAchievementCard(unlocked[index], true, AppColors.accent),
+                            child: _buildAchievementCard(
+                            unlocked[index],
+                            true,
+                            _accentForAchievement(unlocked[index]),
+                          ),
                           ),
                       childCount: unlocked.length,
                     ),
@@ -451,7 +578,10 @@ class _AchievementsTabState extends State<AchievementsTab> {
                       (context, index) => _StaggeredReveal(
                         delayMs: 120 + (index * 22).clamp(0, 240),
                         child: _buildAchievementCard(
-                            locked[index], false, AppColors.accent),
+                            locked[index],
+                            false,
+                            _accentForAchievement(locked[index]),
+                          ),
                       ),
                       childCount: locked.length,
                     ),
@@ -459,6 +589,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 ),
               ],
             ],
+            ),
           ),
         ),
       ),
@@ -523,13 +654,197 @@ class _AchievementsTabState extends State<AchievementsTab> {
     );
   }
 
+  Widget _buildRandomDropCard() {
+    final skins = RewardDropService.getOwnedSkinCount();
+    final backgrounds = RewardDropService.getOwnedBackgroundCount();
+    final coins = ProgressService.getCoins();
+    final latest = _dropHistory.isNotEmpty ? _dropHistory.first : null;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppThemeColors.surface(context),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppThemeColors.border(context)),
+        boxShadow: AppShadows.soft(context),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Случайные дропы',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'В наградах могут выпадать: фоны профиля, монеты и скины.',
+            style: TextStyle(
+              fontSize: 13,
+              color: AppThemeColors.textSecondary(context),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: _dropCounter(
+                  icon: Icons.style_rounded,
+                  label: 'Скины',
+                  value: '$skins',
+                  color: AppColors.purple,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _dropCounter(
+                  icon: Icons.wallpaper_rounded,
+                  label: 'Фоны',
+                  value: '$backgrounds',
+                  color: AppColors.accent,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _dropCounter(
+                  icon: Icons.monetization_on_rounded,
+                  label: 'Монеты',
+                  value: '$coins',
+                  color: AppColors.gold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          if (latest != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: latest.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: latest.color.withValues(alpha: 0.35),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(latest.icon, color: latest.color, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Последний дроп: ${latest.title}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppThemeColors.textPrimary(context),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          if (_dropHistory.length > 1) ...[
+            const SizedBox(height: 10),
+            Text(
+              'Недавние дропы',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppThemeColors.textSecondary(context),
+              ),
+            ),
+            const SizedBox(height: 6),
+            ..._dropHistory.skip(1).take(3).map((reward) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  children: [
+                    Icon(reward.icon, size: 16, color: reward.color),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        reward.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppThemeColors.textPrimary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _isOpeningDrop ? null : _openRandomDrop,
+              icon: const Icon(Icons.casino_rounded),
+              label: Text(_isOpeningDrop ? 'Открываем...' : 'Открыть случайный дроп'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.gold,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _dropCounter({
+    required IconData icon,
+    required String label,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.32)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              color: AppThemeColors.textSecondary(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAchievementCard(
     Achievement achievement,
     bool isUnlocked,
     Color accent,
   ) {
     final pd = _getAchievementProgress(achievement);
-    final rewardColor = isUnlocked ? AppColors.gold : accent;
 
     return Material(
       color: Colors.transparent,
@@ -537,7 +852,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () {
-          HapticFeedback.lightImpact();
+          SoundService.hapticMedium();
           _showAchievementDetail(achievement);
         },
         child: Ink(
@@ -546,10 +861,19 @@ class _AchievementsTabState extends State<AchievementsTab> {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: isUnlocked
-                  ? rewardColor
+                  ? accent
                   : AppThemeColors.border(context),
               width: isUnlocked ? 2 : 1,
             ),
+            boxShadow: isUnlocked
+                ? [
+                    BoxShadow(
+                      color: accent.withValues(alpha: 0.12),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
@@ -559,12 +883,15 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 Container(
                   width: 52,
                   height: 52,
-                  decoration: BoxDecoration(
-                    color: isUnlocked
-                        ? rewardColor
-                        : AppThemeColors.borderLight(context),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  decoration: isUnlocked
+                      ? BoxDecoration(
+                          color: accent,
+                          borderRadius: BorderRadius.circular(16),
+                        )
+                      : BoxDecoration(
+                          color: AppThemeColors.borderLight(context),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                   child: Center(
                     child: Icon(
                       isUnlocked ? achievement.icon : Icons.lock_rounded,
@@ -648,10 +975,19 @@ class _AchievementsTabState extends State<AchievementsTab> {
   void _showAchievementDetail(Achievement achievement) {
     final pd = _getAchievementProgress(achievement);
 
+    SoundService.playPop();
+
+    if (achievement.isUnlocked) {
+      unawaited(SoundService.hapticBurst(steps: 5));
+    } else {
+      SoundService.hapticSelection();
+    }
+
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) => Dialog(
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24)),
         backgroundColor: AppThemeColors.surface(dialogContext),
@@ -793,7 +1129,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  onPressed: () {
+                    SoundService.hapticLight();
+                    SoundService.playTap();
+                    Navigator.of(dialogContext).pop();
+                  },
                   style: ElevatedButton.styleFrom(
                     padding:
                         const EdgeInsets.symmetric(vertical: 14),
@@ -811,6 +1151,71 @@ class _AchievementsTabState extends State<AchievementsTab> {
     );
   }
 
+  void _showDropDialog(DropReward reward) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return Dialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+          backgroundColor: AppThemeColors.surface(dialogContext),
+          child: Padding(
+            padding: const EdgeInsets.all(22),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 84,
+                  height: 84,
+                  decoration: BoxDecoration(
+                    color: reward.color.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(22),
+                    border: Border.all(color: reward.color.withValues(alpha: 0.5)),
+                  ),
+                  child: Icon(reward.icon, size: 42, color: reward.color),
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  'Выпало!',
+                  style: AppTypography.h2.copyWith(
+                    color: AppThemeColors.textPrimary(dialogContext),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  reward.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: AppThemeColors.textPrimary(dialogContext),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  reward.subtitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppThemeColors.textSecondary(dialogContext),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                    child: const Text('Супер'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   String _formatDate(DateTime date) {
     final months = [
       'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
@@ -821,13 +1226,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
 }
 
 class _StaggeredReveal extends StatefulWidget {
-  final Widget child;
-  final int delayMs;
 
   const _StaggeredReveal({
     required this.child,
     this.delayMs = 0,
   });
+  final Widget child;
+  final int delayMs;
 
   @override
   State<_StaggeredReveal> createState() => _StaggeredRevealState();

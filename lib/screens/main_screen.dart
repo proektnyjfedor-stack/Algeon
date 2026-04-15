@@ -3,20 +3,15 @@
 /// Desktop (>=900px): expanded NavigationRail + content
 /// Tablet  (600-899px): collapsed NavigationRail + content
 /// Mobile  (<600px): floating Liquid Glass bottom nav with drag-to-switch
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
-import '../theme/theme_provider.dart';
 import '../widgets/app_logo.dart';
 
 class _NavDestination {
-  final String label;
-  final IconData icon;
-  final IconData activeIcon;
-  final String route;
 
   const _NavDestination({
     required this.label,
@@ -24,6 +19,10 @@ class _NavDestination {
     required this.activeIcon,
     required this.route,
   });
+  final String label;
+  final IconData icon;
+  final IconData activeIcon;
+  final String route;
 }
 
 const List<_NavDestination> _destinations = [
@@ -40,12 +39,6 @@ const List<_NavDestination> _destinations = [
     route: '/practice',
   ),
   _NavDestination(
-    label: 'Экзамены',
-    icon: Icons.assignment_outlined,
-    activeIcon: Icons.assignment_rounded,
-    route: '/exams',
-  ),
-  _NavDestination(
     label: 'Награды',
     icon: Icons.emoji_events_outlined,
     activeIcon: Icons.emoji_events_rounded,
@@ -60,17 +53,19 @@ const List<_NavDestination> _destinations = [
 ];
 
 class MainScreen extends StatelessWidget {
-  final Widget child;
-  final int currentIndex;
 
   const MainScreen({
     super.key,
     required this.child,
     required this.currentIndex,
   });
+  final Widget child;
+  final int currentIndex;
 
   void _onDestinationSelected(BuildContext context, int index) {
     if (index == currentIndex) return;
+    SoundService.hapticMedium();
+    SoundService.playNavigate();
     context.go(_destinations[index].route);
   }
 
@@ -134,9 +129,6 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildNavigationRail(BuildContext context, {required bool extended}) {
-    final themeProvider = context.watch<ThemeProvider>();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
       color: AppThemeColors.surface(context),
       child: Column(
@@ -149,9 +141,9 @@ class MainScreen extends StatelessWidget {
               onDestinationSelected: (index) => _onDestinationSelected(context, index),
               labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.selected,
               indicatorColor: AppThemeColors.accentLight(context),
-              selectedIconTheme: IconThemeData(color: AppColors.accent, size: 26),
+              selectedIconTheme: const IconThemeData(color: AppColors.accent, size: 26),
               unselectedIconTheme: IconThemeData(color: AppThemeColors.textHint(context), size: 24),
-              selectedLabelTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.accent),
+              selectedLabelTextStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.accent),
               unselectedLabelTextStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: AppThemeColors.textHint(context)),
               leading: extended
                   ? Padding(
@@ -166,14 +158,6 @@ class MainScreen extends StatelessWidget {
               destinations: _destinations.map((d) => NavigationRailDestination(
                 icon: Icon(d.icon), selectedIcon: Icon(d.activeIcon), label: Text(d.label),
               )).toList(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: IconButton(
-              onPressed: () => themeProvider.toggleTheme(),
-              tooltip: isDark ? 'Светлая тема' : 'Тёмная тема',
-              icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: AppThemeColors.textSecondary(context), size: 22),
             ),
           ),
         ],
@@ -209,15 +193,15 @@ class MainScreen extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────
 
 class _LiquidGlassNav extends StatefulWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-  final double bottomPadding;
 
   const _LiquidGlassNav({
     required this.currentIndex,
     required this.onTap,
     required this.bottomPadding,
   });
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final double bottomPadding;
 
   @override
   State<_LiquidGlassNav> createState() => _LiquidGlassNavState();
@@ -296,7 +280,7 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
     _dragHoverIndex = _indexUnderPill(_pillX);
     _prevHoverIndex = _dragHoverIndex;
     setState(() => _isDragging = true);
-    HapticFeedback.lightImpact();
+    SoundService.hapticLight();
   }
 
   void _onPanUpdate(DragUpdateDetails d) {
@@ -308,7 +292,7 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
       if (newHover != _dragHoverIndex) {
         _dragHoverIndex = newHover;
         if (newHover != _prevHoverIndex) {
-          HapticFeedback.selectionClick();
+          SoundService.hapticSelection();
           _prevHoverIndex = newHover;
         }
       }
@@ -326,7 +310,7 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
     _snapController.forward(from: 0);
 
     if (landIndex != widget.currentIndex) {
-      HapticFeedback.mediumImpact();
+      SoundService.hapticMedium();
       widget.onTap(landIndex);
     } else {
       setState(() {});
@@ -449,7 +433,7 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
       child: GestureDetector(
         onTap: () {
           if (_isDragging) return;
-          HapticFeedback.lightImpact();
+          SoundService.hapticLight();
           widget.onTap(index);
         },
         behavior: HitTestBehavior.opaque,

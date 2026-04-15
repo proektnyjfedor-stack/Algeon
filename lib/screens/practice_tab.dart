@@ -2,14 +2,17 @@
 ///
 /// Плоский Duolingo-стиль
 /// Быстрый тест + статистика
+library;
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
-import '../services/progress_service.dart';
 import '../services/ai_service.dart';
+import '../services/progress_service.dart';
+import '../services/sound_service.dart';
 import '../models/task.dart';
 
 class PracticeTab extends StatefulWidget {
@@ -37,12 +40,31 @@ class _PracticeTabState extends State<PracticeTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Заголовок
-                  Text('Практика',
-                      style: AppTypography.h1.copyWith(
-                        color: AppThemeColors.textPrimary(context),
-                      )),
-                  const SizedBox(height: 4),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 26,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF60A5FA)
+                              : AppColors.accent,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Практика',
+                          style: AppTypography.h1.copyWith(
+                            color: AppThemeColors.textPrimary(context),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
                   Text(
                     'Закрепляй знания',
                     style: AppTypography.bodySmall.copyWith(
@@ -85,7 +107,15 @@ class _PracticeTabState extends State<PracticeTab> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.accent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accent.withValues(alpha: 0.35),
+            blurRadius: 18,
+            offset: const Offset(0, 7),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +170,11 @@ class _PracticeTabState extends State<PracticeTab> {
                 child: Padding(
                   padding: EdgeInsets.only(right: count == 15 ? 0 : 8),
                   child: GestureDetector(
-                    onTap: () => setState(() => _selectedCount = count),
+                    onTap: () {
+                      SoundService.hapticSelection();
+                      SoundService.playTap();
+                      setState(() => _selectedCount = count);
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: Container(
                       constraints: const BoxConstraints(minHeight: 44),
@@ -149,7 +183,12 @@ class _PracticeTabState extends State<PracticeTab> {
                         color: isSelected
                             ? Colors.white
                             : Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.white.withValues(alpha: 0.34),
+                        ),
                       ),
                       child: Center(
                         child: Text(
@@ -176,13 +215,23 @@ class _PracticeTabState extends State<PracticeTab> {
             width: double.infinity,
             height: 46,
             child: ElevatedButton(
-              onPressed: _startQuickTest,
+              onPressed: () {
+                SoundService.hapticHeavy();
+                SoundService.playStart();
+                _startQuickTest();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: AppColors.accent,
                 elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
-              child: const Text('НАЧАТЬ'),
+              child: const Text(
+                'НАЧАТЬ',
+                style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3),
+              ),
             ),
           ),
         ],
@@ -227,7 +276,8 @@ class _PracticeTabState extends State<PracticeTab> {
             padding: const EdgeInsets.only(bottom: 10),
             child: GestureDetector(
               onTap: () {
-                HapticFeedback.lightImpact();
+                SoundService.hapticMedium();
+                SoundService.playNavigate();
                 _openTopic(topic.name, tasks);
               },
               behavior: HitTestBehavior.opaque,
@@ -300,14 +350,16 @@ class _PracticeTabState extends State<PracticeTab> {
     final totalSolved = ProgressService.getTotalSolved();
     final accuracy = ProgressService.getAccuracy();
     final streak = ProgressService.getStreakDays();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border:
-            Border.all(color: AppThemeColors.border(context), width: 2),
+            Border.all(color: AppThemeColors.border(context), width: 1.6),
+        boxShadow: AppShadows.soft(context),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,9 +371,24 @@ class _PracticeTabState extends State<PracticeTab> {
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildStatItem('Решено', '$totalSolved', Icons.check_circle_outline),
-              _buildStatItem('Точность', '${accuracy.toStringAsFixed(0)}%', Icons.gps_fixed_rounded),
-              _buildStatItem('Серия', '$streak', Icons.local_fire_department_rounded),
+              _buildStatItem(
+                'Решено',
+                '$totalSolved',
+                Icons.check_circle_outline,
+                isDark ? AppColors.purple : AppColorsLight.purple,
+              ),
+              _buildStatItem(
+                'Точность',
+                '${accuracy.toStringAsFixed(0)}%',
+                Icons.gps_fixed_rounded,
+                isDark ? AppColors.success : AppColorsLight.success,
+              ),
+              _buildStatItem(
+                'Серия',
+                '$streak',
+                Icons.local_fire_department_rounded,
+                isDark ? AppColors.orange : AppColorsLight.orange,
+              ),
             ],
           ),
         ],
@@ -329,11 +396,11 @@ class _PracticeTabState extends State<PracticeTab> {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon) {
+  Widget _buildStatItem(String label, String value, IconData icon, Color iconColor) {
     return Expanded(
       child: Column(
         children: [
-          Icon(icon, color: AppColors.accent, size: 24),
+          Icon(icon, color: iconColor, size: 24),
           const SizedBox(height: 8),
           Text(
             value,
@@ -364,8 +431,9 @@ class _PracticeTabState extends State<PracticeTab> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: AppThemeColors.border(context)),
+        boxShadow: AppShadows.soft(context),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,7 +446,7 @@ class _PracticeTabState extends State<PracticeTab> {
                   color: AppThemeColors.accentLight(context),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(Icons.auto_awesome_rounded,
+                child: const Icon(Icons.auto_awesome_rounded,
                     color: AppColors.accent, size: 22),
               ),
               const SizedBox(width: 12),
@@ -415,7 +483,8 @@ class _PracticeTabState extends State<PracticeTab> {
                 onTap: _aiGenerating
                     ? null
                     : () {
-                        HapticFeedback.lightImpact();
+                        SoundService.hapticMedium();
+                        SoundService.playTap();
                         _generateAiTasks(grade, topic.name);
                       },
                 behavior: HitTestBehavior.opaque,
@@ -431,7 +500,7 @@ class _PracticeTabState extends State<PracticeTab> {
                   ),
                   child: Text(
                     topic.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                       color: AppColors.accent,
@@ -446,7 +515,7 @@ class _PracticeTabState extends State<PracticeTab> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 18,
                   height: 18,
                   child: CircularProgressIndicator(
@@ -488,6 +557,9 @@ class _PracticeTabState extends State<PracticeTab> {
       );
       return;
     }
+
+    unawaited(SoundService.hapticBurst(steps: 5));
+    SoundService.playAchievement();
 
     context
         .push(

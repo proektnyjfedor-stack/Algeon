@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../services/achievements_service.dart';
-import '../services/auth_service.dart';
 import '../services/progress_service.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_provider.dart';
@@ -28,37 +27,45 @@ class _ProfileTabState extends State<ProfileTab> {
   static const Color _blueSoft = Color(0xFFF0F7FF);
 
   ({Color primary, Color secondary, Color soft, String? label}) _equippedPalette() {
-    final equipped = ProgressService.getEquippedBetaItem();
-    switch (equipped) {
-      case 'skin_gold_star':
-        return (
-          primary: const Color(0xFFD4A017),
-          secondary: const Color(0xFFB8860B),
-          soft: const Color(0xFFFFF7D6),
-          label: 'Экипировано: Золотая Звезда',
-        );
-      case 'theme_space':
-        return (
-          primary: const Color(0xFF312E81),
-          secondary: const Color(0xFF1E1B4B),
-          soft: const Color(0xFFEDE9FE),
-          label: 'Экипировано: Космос',
-        );
-      case 'skin_neon_blue':
-        return (
-          primary: _bluePrimary,
-          secondary: _blueDeep,
-          soft: _blueSoft,
-          label: 'Экипировано: Неон Синий',
-        );
-      default:
-        return (
-          primary: _bluePrimary,
-          secondary: _blueDeep,
-          soft: _blueSoft,
-          label: null,
-        );
+    final unlocked = AchievementsService.getUnlockedCount();
+    if (unlocked >= 14) {
+      return (
+        primary: const Color(0xFF6D28D9),
+        secondary: const Color(0xFF4C1D95),
+        soft: const Color(0xFFF3E8FF),
+        label: 'Фон: Аметист (14 наград)',
+      );
     }
+    if (unlocked >= 10) {
+      return (
+        primary: const Color(0xFF0F766E),
+        secondary: const Color(0xFF115E59),
+        soft: const Color(0xFFDCFDF7),
+        label: 'Фон: Мята (10 наград)',
+      );
+    }
+    if (unlocked >= 6) {
+      return (
+        primary: const Color(0xFFD97706),
+        secondary: const Color(0xFFB45309),
+        soft: const Color(0xFFFEF3C7),
+        label: 'Фон: Закат (6 наград)',
+      );
+    }
+    if (unlocked >= 3) {
+      return (
+        primary: const Color(0xFF1D4ED8),
+        secondary: const Color(0xFF1E40AF),
+        soft: const Color(0xFFDBEAFE),
+        label: 'Фон: Сапфир (3 награды)',
+      );
+    }
+    return (
+      primary: _bluePrimary,
+      secondary: _blueDeep,
+      soft: _blueSoft,
+      label: null,
+    );
   }
 
   @override
@@ -81,6 +88,10 @@ class _ProfileTabState extends State<ProfileTab> {
         final isLandscape =
             MediaQuery.of(context).size.width > MediaQuery.of(context).size.height;
         return AlertDialog(
+          backgroundColor: AppThemeColors.surface(context),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+          ),
           insetPadding: EdgeInsets.symmetric(
             horizontal: isLandscape ? 24 : 40,
             vertical: isLandscape ? 16 : 24,
@@ -182,17 +193,18 @@ class _ProfileTabState extends State<ProfileTab> {
                       children: List.generate(7, (i) {
                         final grade = i + 5;
                         final isSelected = selected == grade;
+                        final cs = Theme.of(context).colorScheme;
                         return ChoiceChip(
                           label: Text('$grade класс'),
                           selected: isSelected,
                           onSelected: (_) => setModalState(() => selected = grade),
-                          selectedColor: _bluePrimary.withValues(alpha: 0.18),
+                          selectedColor: cs.primary.withValues(alpha: 0.18),
                           labelStyle: TextStyle(
-                            color: isSelected ? _blueDeep : AppThemeColors.textPrimary(context),
+                            color: isSelected ? cs.primary : AppThemeColors.textPrimary(context),
                             fontWeight: FontWeight.w700,
                           ),
                           side: BorderSide(
-                            color: isSelected ? _bluePrimary : AppThemeColors.border(context),
+                            color: isSelected ? cs.primary : AppThemeColors.border(context),
                           ),
                         );
                       }),
@@ -203,8 +215,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       child: ElevatedButton(
                         onPressed: () => Navigator.pop(context, true),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _bluePrimary,
-                          foregroundColor: Colors.white,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
                         ),
                         child: const Text('Сохранить класс'),
                       ),
@@ -386,362 +398,11 @@ class _ProfileTabState extends State<ProfileTab> {
     );
   }
 
-  // ignore: unused_element
-  Future<void> _openBetaShop() async {
-    const firstPurchaseFxKey = 'shop_first_purchase_confetti_shown';
-    final items = [
-      ('skin_neon_blue', 'Скин: Неон Синий', 120),
-      ('skin_gold_star', 'Скин: Золотая Звезда', 180),
-      ('theme_space', 'Тема: Космос', 250),
-    ];
-    String? equippingItemId;
-    String? sparkleItemId;
-    bool showFirstPurchaseFx = false;
-
-    await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            final coins = ProgressService.getCoins();
-            final equipped = ProgressService.getEquippedBetaItem();
-            return Container(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-              decoration: BoxDecoration(
-                color: AppThemeColors.surface(context),
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              child: SafeArea(
-                top: false,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.storefront_rounded, color: AppColors.accent),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Бета-магазин',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            color: AppThemeColors.textPrimary(context),
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppThemeColors.accentLight(context),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '$coins монет',
-                            style: const TextStyle(
-                              color: AppColors.accent,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 260),
-                      switchInCurve: Curves.easeOutCubic,
-                      switchOutCurve: Curves.easeInCubic,
-                      child: showFirstPurchaseFx
-                          ? Container(
-                              key: const ValueKey('first_purchase_fx'),
-                              margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppThemeColors.accentLight(context),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('🎉', style: TextStyle(fontSize: 14)),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'Первая покупка!',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.accent,
-                                    ),
-                                  ),
-                                  SizedBox(width: 6),
-                                  Text('✨', style: TextStyle(fontSize: 14)),
-                                ],
-                              ),
-                            )
-                          : const SizedBox.shrink(key: ValueKey('no_first_purchase_fx')),
-                    ),
-                    ...items.map((item) {
-                      final id = item.$1;
-                      final title = item.$2;
-                      final price = item.$3;
-                      final owned = ProgressService.getBool('shop_item_$id');
-                      final isEquipped = equipped == id;
-                      final isEquipAnimating = equippingItemId == id;
-                      final showSparkle = sparkleItemId == id;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(color: AppThemeColors.border(context)),
-                          ),
-                          title: Row(
-                            children: [
-                              Expanded(child: Text(title)),
-                              if (isEquipped)
-                                Row(
-                                  children: [
-                                    AnimatedOpacity(
-                                      duration: const Duration(milliseconds: 220),
-                                      opacity: showSparkle ? 1 : 0,
-                                      child: AnimatedScale(
-                                        duration: const Duration(milliseconds: 220),
-                                        curve: Curves.easeOutBack,
-                                        scale: showSparkle ? 1.15 : 0.7,
-                                        child: const Padding(
-                                          padding: EdgeInsets.only(right: 4),
-                                          child: Icon(
-                                            Icons.auto_awesome_rounded,
-                                            size: 14,
-                                            color: AppColors.gold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: AppThemeColors.accentLight(context),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: const Text(
-                                        'Экипировано',
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w700,
-                                          color: AppColors.accent,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                          subtitle: Text(owned ? 'Куплено' : '$price монет'),
-                          trailing: owned
-                              ? AnimatedScale(
-                                  duration: const Duration(milliseconds: 220),
-                                  curve: Curves.easeOutBack,
-                                  scale: isEquipAnimating ? 1.08 : 1.0,
-                                  child: ElevatedButton(
-                                    onPressed: isEquipped
-                                        ? null
-                                        : () async {
-                                            setModalState(() => equippingItemId = id);
-                                            await ProgressService.setEquippedBetaItem(id);
-                                            if (!mounted) return;
-                                            setModalState(() => sparkleItemId = id);
-                                            setModalState(() {});
-                                            setState(() {});
-                                            _showSnack('Экипировано: $title');
-                                            await Future<void>.delayed(
-                                              const Duration(milliseconds: 260),
-                                            );
-                                            if (!mounted) return;
-                                            setModalState(() => equippingItemId = null);
-                                            await Future<void>.delayed(
-                                              const Duration(milliseconds: 450),
-                                            );
-                                            if (!mounted) return;
-                                            setModalState(() => sparkleItemId = null);
-                                          },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: isEquipped
-                                          ? AppThemeColors.disabled(context)
-                                          : _bluePrimary,
-                                      foregroundColor: Colors.white,
-                                    ),
-                                    child: Text(isEquipped ? 'Надето' : 'Надеть'),
-                                  ),
-                                )
-                              : AnimatedScale(
-                                  duration: const Duration(milliseconds: 220),
-                                  curve: Curves.easeOutBack,
-                                  scale: isEquipAnimating ? 1.08 : 1.0,
-                                  child: ElevatedButton(
-                                    onPressed: () async {
-                                      final confirm = await showDialog<bool>(
-                                        context: context,
-                                        builder: (ctx) {
-                                          final isLandscape = MediaQuery.of(ctx).size.width >
-                                              MediaQuery.of(ctx).size.height;
-                                          return AlertDialog(
-                                            insetPadding: EdgeInsets.symmetric(
-                                              horizontal: isLandscape ? 24 : 40,
-                                              vertical: isLandscape ? 16 : 24,
-                                            ),
-                                            title: const Text('Подтвердить покупку'),
-                                            content: SingleChildScrollView(
-                                              child: Text('Купить "$title" за $price монет?'),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(ctx, false),
-                                                child: const Text('Отмена'),
-                                              ),
-                                              ElevatedButton(
-                                                onPressed: () => Navigator.pop(ctx, true),
-                                                child: Text(
-                                                  'Купить',
-                                                  style: TextStyle(
-                                                    fontSize: isLandscape ? 13 : 14,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                      if (confirm != true) return;
-
-                                      final ok = await ProgressService.spendCoins(price);
-                                      if (!ok) {
-                                        _showSnack('Недостаточно монет');
-                                        return;
-                                      }
-                                      final firstPurchaseFxWasShown =
-                                          ProgressService.getBool(firstPurchaseFxKey);
-                                      setModalState(() => equippingItemId = id);
-                                      await ProgressService.setBool('shop_item_$id', true);
-                                      await ProgressService.setEquippedBetaItem(id);
-                                      if (!firstPurchaseFxWasShown) {
-                                        await ProgressService.setBool(firstPurchaseFxKey, true);
-                                      }
-                                      if (!mounted) return;
-                                      setModalState(() => sparkleItemId = id);
-                                      if (!firstPurchaseFxWasShown) {
-                                        setModalState(() => showFirstPurchaseFx = true);
-                                      }
-                                      setModalState(() {});
-                                      setState(() {});
-                                      _showSnack('Покупка: $title (экипировано)');
-                                      if (!firstPurchaseFxWasShown) {
-                                        final openProfileNow =
-                                            await _showFirstPurchaseWelcomeDialog();
-                                        if (!mounted) return;
-                                        if (openProfileNow) {
-                                          if (!context.mounted) return;
-                                          Navigator.of(context).pop();
-                                          _scrollController.animateTo(
-                                            0,
-                                            duration: const Duration(milliseconds: 280),
-                                            curve: Curves.easeOutCubic,
-                                          );
-                                        }
-                                      }
-                                      await Future<void>.delayed(
-                                        const Duration(milliseconds: 260),
-                                      );
-                                      if (!mounted) return;
-                                      setModalState(() => equippingItemId = null);
-                                      await Future<void>.delayed(
-                                        const Duration(milliseconds: 450),
-                                      );
-                                      if (!mounted) return;
-                                      setModalState(() => sparkleItemId = null);
-                                      if (!firstPurchaseFxWasShown) {
-                                        await Future<void>.delayed(
-                                          const Duration(milliseconds: 800),
-                                        );
-                                        if (!mounted) return;
-                                        setModalState(() => showFirstPurchaseFx = false);
-                                      }
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: _bluePrimary,
-                                      foregroundColor: Colors.white,
-                                    ),
-                                    child: const Text('Купить'),
-                                  ),
-                                ),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Это бета-магазин. Позже добавим реальные скины и эффекты.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppThemeColors.textSecondary(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
   void _showSnack(String text) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(text)),
     );
-  }
-
-  Future<bool> _showFirstPurchaseWelcomeDialog() async {
-    if (!mounted) return false;
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (ctx) {
-        final isLandscape =
-            MediaQuery.of(ctx).size.width > MediaQuery.of(ctx).size.height;
-        return AlertDialog(
-          insetPadding: EdgeInsets.symmetric(
-            horizontal: isLandscape ? 24 : 40,
-            vertical: isLandscape ? 16 : 24,
-          ),
-          title: const Text('Добро пожаловать в магазин'),
-          content: const SingleChildScrollView(
-            child: Text(
-              'Ты сделал первую покупку! Теперь можешь менять стиль профиля и экранов через экипировку.',
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Позже'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: Text(
-                'Перейти в профиль',
-                style: TextStyle(fontSize: isLandscape ? 13 : 14),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-    return result == true;
   }
 
   @override
@@ -753,19 +414,20 @@ class _ProfileTabState extends State<ProfileTab> {
     final streak = ProgressService.getStreakDays();
     final achievementsUnlocked = AchievementsService.getUnlockedCount();
     final achievementsTotal = AchievementsService.getTotalCount();
-    final isGuest = AuthService.isAnonymous();
     final themeProvider = context.watch<ThemeProvider>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final palette = _equippedPalette();
     final skinPrimary = palette.primary;
-    final skinSecondary = palette.secondary;
     final skinSoft = palette.soft;
     final equippedLabel = palette.label;
     final bgColor = AppThemeColors.background(context);
     final cardBg = AppThemeColors.surface(context);
-    final blueCard = isDark ? skinSecondary : skinPrimary;
-    final blueCardAlt = isDark ? skinPrimary : skinSecondary;
     final ratio = achievementsTotal == 0 ? 0.0 : achievementsUnlocked / achievementsTotal;
+    final colorScheme = Theme.of(context).colorScheme;
+    final quickAccentA = isDark ? AppColors.purple : AppColorsLight.purple;
+    final quickAccentB = isDark ? AppColors.orange : AppColorsLight.orange;
+    final quickAccentC = isDark ? AppColors.success : AppColorsLight.success;
+    final quickAccentD = isDark ? AppColors.pink : AppColorsLight.pink;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -795,7 +457,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 curve: Curves.easeOutCubic,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: blueCard,
+                  color: palette.primary,
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
                     color: isDark
@@ -827,16 +489,17 @@ class _ProfileTabState extends State<ProfileTab> {
                               width: 28,
                               height: 28,
                               decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppThemeColors.surface(context)
-                                    : Colors.white,
+                                color: Colors.black.withValues(alpha: 0.35),
                                 borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: _bluePrimary, width: 2),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                  width: 2,
+                                ),
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.edit_rounded,
                                 size: 14,
-                                color: _bluePrimary,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -852,7 +515,7 @@ class _ProfileTabState extends State<ProfileTab> {
                             userName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
@@ -874,6 +537,37 @@ class _ProfileTabState extends State<ProfileTab> {
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.18),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _CompactProfileStat(
+                              value: '$solved',
+                              label: 'решено',
+                            ),
+                          ),
+                          Expanded(
+                            child: _CompactProfileStat(
+                              value: '${accuracy.toStringAsFixed(0)}%',
+                              label: 'точность',
+                            ),
+                          ),
+                          Expanded(
+                            child: _CompactProfileStat(
+                              value: '$streak',
+                              label: 'серия',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     if (equippedLabel != null) ...[
                       const SizedBox(height: 10),
                       Container(
@@ -892,74 +586,40 @@ class _ProfileTabState extends State<ProfileTab> {
                         ),
                       ),
                     ],
-                    if (isGuest) ...[
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
+                    const SizedBox(height: 14),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        _HeroMiniBadge(
+                          icon: Icons.military_tech_rounded,
+                          label: 'Ур. ${ProgressService.getLevel()}',
+                          accent: const Color(0xFFFBBF24),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(12),
+                        _HeroMiniBadge(
+                          icon: Icons.monetization_on_rounded,
+                          label: '${ProgressService.getCoins()} монет',
+                          accent: const Color(0xFF34D399),
                         ),
-                        child: Text(
-                          'Гостевой режим',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
+                        _HeroMiniBadge(
+                          icon: Icons.today_rounded,
+                          label: 'Сегодня +${ProgressService.getTodayCompletedCount()}',
+                          accent: const Color(0xFFA78BFA),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 20),
             const _EntranceSection(
-              delayMs: 80,
-              child: _SectionTitle(title: 'Статистика'),
-            ),
-            const SizedBox(height: 12),
-            _EntranceSection(
-              delayMs: 110,
-              child: Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  _StatCard(
-                    label: 'Решено',
-                    value: '$solved',
-                    accent: Colors.white,
-                    background: blueCard,
-                  ),
-                  _StatCard(
-                    label: 'Точность',
-                    value: '${accuracy.toStringAsFixed(0)}%',
-                    accent: Colors.white,
-                    background: blueCardAlt,
-                  ),
-                  _StatCard(
-                    label: 'Серия',
-                    value: '$streak дн.',
-                    accent: Colors.white,
-                    background: blueCard,
-                  ),
-                  _StatCard(
-                    label: 'Награды',
-                    value: '$achievementsUnlocked/$achievementsTotal',
-                    accent: Colors.white,
-                    background: blueCardAlt,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            const _EntranceSection(
               delayMs: 140,
-              child: _SectionTitle(title: 'Прогресс по наградам'),
+              child: _SectionTitle(
+                title: 'Прогресс по наградам',
+                barColors: [Color(0xFF8B5CF6), Color(0xFF14B8A6)],
+              ),
             ),
             const SizedBox(height: 12),
             _EntranceSection(
@@ -995,24 +655,34 @@ class _ProfileTabState extends State<ProfileTab> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(999),
-                      child: TweenAnimationBuilder<double>(
-                        key: ValueKey('profile_ratio_${ratio.toStringAsFixed(3)}'),
-                        tween: Tween(begin: 0, end: ratio.clamp(0, 1)),
-                        duration: const Duration(milliseconds: 600),
-                        curve: Curves.easeOutCubic,
-                        builder: (context, animatedRatio, _) {
-                          return LinearProgressIndicator(
-                            minHeight: 10,
-                            value: animatedRatio,
-                            backgroundColor: isDark
-                                ? AppThemeColors.border(context)
-                                : skinSoft,
-                            valueColor: AlwaysStoppedAnimation<Color>(skinPrimary),
-                          );
-                        },
-                      ),
+                    TweenAnimationBuilder<double>(
+                      key: ValueKey('profile_ratio_${ratio.toStringAsFixed(3)}'),
+                      tween: Tween(begin: 0, end: ratio.clamp(0, 1)),
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.easeOutCubic,
+                      builder: (context, animatedRatio, _) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(999),
+                          child: SizedBox(
+                            height: 10,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                ColoredBox(
+                                  color: isDark
+                                      ? AppThemeColors.border(context)
+                                      : skinSoft,
+                                ),
+                                FractionallySizedBox(
+                                  widthFactor: animatedRatio,
+                                  alignment: Alignment.centerLeft,
+                                  child: ColoredBox(color: skinPrimary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -1021,7 +691,10 @@ class _ProfileTabState extends State<ProfileTab> {
             const SizedBox(height: 20),
             const _EntranceSection(
               delayMs: 200,
-              child: _SectionTitle(title: 'Быстрые действия'),
+              child: _SectionTitle(
+                title: 'Профиль и данные',
+                barColors: [Color(0xFFF97316), Color(0xFFEC4899)],
+              ),
             ),
             const SizedBox(height: 12),
             _EntranceSection(
@@ -1033,25 +706,25 @@ class _ProfileTabState extends State<ProfileTab> {
                   _QuickActionButton(
                     title: 'Изменить имя',
                     icon: Icons.badge_outlined,
-                    color: _bluePrimary,
+                    color: quickAccentA,
                     onTap: _editName,
                   ),
                   _QuickActionButton(
                     title: 'Сменить аватар',
                     icon: Icons.face_rounded,
-                    color: _bluePrimary,
+                    color: quickAccentB,
                     onTap: _showAvatarActions,
                   ),
                   _QuickActionButton(
                     title: 'Фото из галереи',
                     icon: Icons.photo_library_rounded,
-                    color: _bluePrimary,
+                    color: quickAccentC,
                     onTap: _pickPhotoFromGallery,
                   ),
                   _QuickActionButton(
                     title: 'Сменить класс',
                     icon: Icons.school_rounded,
-                    color: _bluePrimary,
+                    color: quickAccentD,
                     onTap: _changeGrade,
                   ),
                 ],
@@ -1060,7 +733,10 @@ class _ProfileTabState extends State<ProfileTab> {
             const SizedBox(height: 20),
             const _EntranceSection(
               delayMs: 260,
-              child: _SectionTitle(title: 'Настройки'),
+              child: _SectionTitle(
+                title: 'Настройки',
+                barColors: [Color(0xFF64748B), Color(0xFF3B82F6)],
+              ),
             ),
             const SizedBox(height: 12),
             _EntranceSection(
@@ -1078,7 +754,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       title: 'Имя',
                       subtitle: userName,
                       icon: Icons.person_outline_rounded,
-                      iconColor: _bluePrimary,
+                      iconColor: quickAccentA,
                       trailing: TextButton(
                         onPressed: _editName,
                         child: const Text('Изменить'),
@@ -1089,7 +765,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       title: 'Аватарка',
                       subtitle: 'Выбрать из готовых, конструктор или фото',
                       icon: Icons.face_rounded,
-                      iconColor: _bluePrimary,
+                      iconColor: quickAccentB,
                       trailing: TextButton(
                         onPressed: _showAvatarActions,
                         child: const Text('Открыть'),
@@ -1100,7 +776,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       title: 'Класс',
                       subtitle: '$currentGrade класс',
                       icon: Icons.school_outlined,
-                      iconColor: _bluePrimary,
+                      iconColor: quickAccentD,
                       trailing: TextButton(
                         onPressed: _changeGrade,
                         child: const Text('Изменить'),
@@ -1129,9 +805,9 @@ class _ProfileTabState extends State<ProfileTab> {
                         themeProvider.autoByTime
                             ? Icons.brightness_auto_rounded
                             : (isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded),
-                        color: _bluePrimary,
+                        color: quickAccentC,
                       ),
-                      activeThumbColor: _bluePrimary,
+                      activeThumbColor: colorScheme.primary,
                     ),
                     if (!themeProvider.autoByTime) ...[
                       const _DividerLine(),
@@ -1153,9 +829,9 @@ class _ProfileTabState extends State<ProfileTab> {
                         ),
                         secondary: Icon(
                           isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-                          color: _bluePrimary,
+                          color: quickAccentA,
                         ),
-                        activeThumbColor: _bluePrimary,
+                        activeThumbColor: colorScheme.primary,
                       ),
                     ],
                   ],
@@ -1171,31 +847,93 @@ class _ProfileTabState extends State<ProfileTab> {
 }
 
 class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({
+    required this.title,
+    this.barColors,
+  });
   final String title;
-
-  const _SectionTitle({required this.title});
+  final List<Color>? barColors;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w800,
-        color: AppThemeColors.textPrimary(context),
+    final colors = barColors ??
+        <Color>[
+          AppColors.accent,
+          AppColors.purple,
+        ];
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 4,
+          height: 22,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(2),
+            color: colors.first,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HeroMiniBadge extends StatelessWidget {
+  const _HeroMiniBadge({
+    required this.icon,
+    required this.label,
+    required this.accent,
+  });
+  final IconData icon;
+  final String label;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.22),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: accent.withValues(alpha: 0.75)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: accent),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _EntranceSection extends StatefulWidget {
-  final Widget child;
-  final int delayMs;
 
   const _EntranceSection({
     required this.child,
     this.delayMs = 0,
   });
+  final Widget child;
+  final int delayMs;
 
   @override
   State<_EntranceSection> createState() => _EntranceSectionState();
@@ -1229,66 +967,46 @@ class _EntranceSectionState extends State<_EntranceSection> {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color accent;
-  final Color background;
-
-  const _StatCard({
-    required this.label,
+class _CompactProfileStat extends StatelessWidget {
+  const _CompactProfileStat({
     required this.value,
-    required this.accent,
-    required this.background,
+    required this.label,
   });
+
+  final String value;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final availableWidth = MediaQuery.of(context).size.width - 40;
-    final cardWidth = (availableWidth - 12) / 2;
-    return SizedBox(
-      width: cardWidth.clamp(140.0, 220.0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: isDark ? 0.16 : 0.22),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: accent,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white.withValues(alpha: 0.85),
-              ),
-            ),
-          ],
+        const SizedBox(height: 2),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.84),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
 
 class _QuickActionButton extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final Color color;
-  final VoidCallback onTap;
 
   const _QuickActionButton({
     required this.title,
@@ -1296,6 +1014,10 @@ class _QuickActionButton extends StatelessWidget {
     required this.color,
     required this.onTap,
   });
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1309,7 +1031,7 @@ class _QuickActionButton extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
           decoration: BoxDecoration(
-            color: _ProfileTabState._bluePrimary,
+            color: color,
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           child: Row(
@@ -1319,7 +1041,7 @@ class _QuickActionButton extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
@@ -1334,13 +1056,13 @@ class _QuickActionButton extends StatelessWidget {
 }
 
 class _PressableTile extends StatefulWidget {
-  final Widget child;
-  final VoidCallback onTap;
 
   const _PressableTile({
     required this.child,
     required this.onTap,
   });
+  final Widget child;
+  final VoidCallback onTap;
 
   @override
   State<_PressableTile> createState() => _PressableTileState();
@@ -1374,11 +1096,6 @@ class _PressableTileState extends State<_PressableTile> {
 }
 
 class _SettingsTile extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color iconColor;
-  final Widget? trailing;
 
   const _SettingsTile({
     required this.title,
@@ -1387,6 +1104,11 @@ class _SettingsTile extends StatelessWidget {
     required this.iconColor,
     this.trailing,
   });
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -1414,10 +1136,6 @@ class _SettingsTile extends StatelessWidget {
 }
 
 class _ActionTile extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String title;
-  final VoidCallback onTap;
 
   const _ActionTile({
     required this.icon,
@@ -1425,6 +1143,10 @@ class _ActionTile extends StatelessWidget {
     required this.title,
     required this.onTap,
   });
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -1463,13 +1185,13 @@ class _DividerLine extends StatelessWidget {
 }
 
 class _InteractiveListTileShell extends StatefulWidget {
-  final Widget child;
-  final VoidCallback? onTap;
 
   const _InteractiveListTileShell({
     required this.child,
     this.onTap,
   });
+  final Widget child;
+  final VoidCallback? onTap;
 
   @override
   State<_InteractiveListTileShell> createState() => _InteractiveListTileShellState();

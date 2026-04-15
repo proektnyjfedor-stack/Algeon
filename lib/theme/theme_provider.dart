@@ -1,6 +1,7 @@
 /// Theme Provider — управление светлой/тёмной темой
 ///
 /// Сохраняет выбор пользователя в SharedPreferences
+library;
 
 import 'dart:async';
 
@@ -8,6 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
+
+  ThemeProvider() {
+    _loadThemeMode();
+    _startThemeTicker();
+  }
   static const String _keyThemeMode = 'theme_mode';
   static const String _keyAutoByTime = 'theme_auto_by_time';
 
@@ -20,11 +26,6 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode =>
       _autoByTime ? _themeModeByCurrentTime() : _manualThemeMode;
-
-  ThemeProvider() {
-    _loadThemeMode();
-    _startThemeTicker();
-  }
 
   Future<void> _loadThemeMode() async {
     final prefs = await SharedPreferences.getInstance();

@@ -3,9 +3,9 @@
     "short_name": "Algeon",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#1A1A2E",
-    "theme_color": "#1CB0F6",
-    "description": "Algeon — математический тренажёр для учеников 1-4 классов",
+    "background_color": "#F0F4FF",
+    "theme_color": "#2563EB",
+    "description": "Algeon — математика с пониманием: задачи и практика для 5–11 класса",
     "orientation": "any",
     "prefer_related_applications": false,
     "icons": [

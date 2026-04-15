@@ -2,24 +2,25 @@
 ///
 /// Структурированная теория: определения, формулы, примеры,
 /// визуальные иллюстрации, пошаговые алгоритмы и советы.
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
+import '../services/sound_service.dart';
 import '../models/task.dart';
 import '../data/tasks_data.dart';
 import '../data/topic_theory.dart';
 
 class TopicIntroScreen extends StatelessWidget {
-  final String topicName;
-  final List<Task> tasks;
 
   const TopicIntroScreen({
     super.key,
     required this.topicName,
     required this.tasks,
   });
+  final String topicName;
+  final List<Task> tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +101,11 @@ class TopicIntroScreen extends StatelessWidget {
               color: AppThemeColors.accentLight(context),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.menu_book_rounded, size: 16, color: AppColors.accent),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Text(
                   'Теория',
                   style: TextStyle(
@@ -235,11 +236,11 @@ class TopicIntroScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.functions_rounded, color: AppColors.accent, size: 22),
+              const Icon(Icons.functions_rounded, color: AppColors.accent, size: 22),
               const SizedBox(width: 10),
               Text(
                 section.title ?? 'Формула',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.accent,
@@ -293,12 +294,12 @@ class TopicIntroScreen extends StatelessWidget {
                   color: AppColors.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.edit_rounded, color: AppColors.success, size: 16),
+                child: const Icon(Icons.edit_rounded, color: AppColors.success, size: 16),
               ),
               const SizedBox(width: 10),
               Text(
                 section.title ?? 'Пример',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.success,
@@ -334,7 +335,7 @@ class TopicIntroScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             '${e.key + 1}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: AppColors.success,
@@ -364,6 +365,8 @@ class TopicIntroScreen extends StatelessWidget {
 
   // --- VISUAL ---
   Widget _buildVisualCard(BuildContext context, TheorySection section) {
+    final accent = section.accentColor ?? AppColors.accent;
+    final topicIcon = getTopicIcon(topicName);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -404,14 +407,54 @@ class TopicIntroScreen extends StatelessWidget {
               color: AppThemeColors.borderLight(context),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              section.content,
-              style: TextStyle(
-                fontSize: 15,
-                height: 1.7,
-                color: AppThemeColors.textPrimary(context),
-              ),
-              textAlign: TextAlign.left,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: accent.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: accent.withValues(alpha: 0.35)),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.85),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(topicIcon, color: accent, size: 24),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Иллюстрация темы',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: AppThemeColors.textPrimary(context),
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.image_rounded, color: accent, size: 20),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  section.content,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: 1.7,
+                    color: AppThemeColors.textPrimary(context),
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ],
             ),
           ),
         ],
@@ -438,7 +481,7 @@ class TopicIntroScreen extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 section.title ?? 'Совет',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.orange,
@@ -475,13 +518,13 @@ class TopicIntroScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.table_chart_rounded,
+              const Icon(Icons.table_chart_rounded,
                   color: AppColors.purple, size: 20),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   section.title ?? 'Таблица',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.purple,
@@ -543,13 +586,13 @@ class TopicIntroScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.format_list_numbered_rounded,
+              const Icon(Icons.format_list_numbered_rounded,
                   color: AppColors.accent, size: 22),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   section.title ?? 'Алгоритм',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: AppColors.accent,
@@ -653,14 +696,15 @@ class TopicIntroScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: InkWell(
             onTap: () {
-              HapticFeedback.mediumImpact();
+              SoundService.hapticMedium();
+              SoundService.playStart();
               context.pushReplacement(
                 '/learn/topic',
                 extra: {'name': topicName, 'tasks': tasks},
               );
             },
             borderRadius: BorderRadius.circular(AppRadius.md),
-            child: Container(
+            child: SizedBox(
             width: double.infinity,
             height: 56,
             child: Row(

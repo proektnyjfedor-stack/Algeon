@@ -2,14 +2,12 @@
 ///
 /// Формулы обозначаются $...$, остальное — обычный текст.
 /// Пример: 'Вычислите: $27^{\frac{2}{3}}$'
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
 class MathText extends StatelessWidget {
-  final String text;
-  final TextStyle? style;
-  final TextAlign textAlign;
 
   const MathText(
     this.text, {
@@ -17,6 +15,9 @@ class MathText extends StatelessWidget {
     this.style,
     this.textAlign = TextAlign.start,
   });
+  final String text;
+  final TextStyle? style;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,7 @@ class MathText extends StatelessWidget {
 }
 
 class _Part {
+  const _Part(this.content, this.isMath);
   final String content;
   final bool isMath;
-  const _Part(this.content, this.isMath);
 }

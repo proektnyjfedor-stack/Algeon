@@ -1,12 +1,13 @@
 /// Onboarding — Кастомизация персонажа, имя, класс
 ///
 /// 3 шага без выбора пола
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../services/progress_service.dart';
+import '../services/sound_service.dart';
 import '../widgets/avatars.dart';
 import '../widgets/app_logo.dart';
 
@@ -26,6 +27,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   // Кастомизация персонажа
   AvatarData _avatarData = defaultCustomAvatar;
 
+  bool get _isLandscape {
+    final size = MediaQuery.of(context).size;
+    return size.width > size.height;
+  }
+
   void _applyPreset(AvatarData preset) {
     setState(() {
       _avatarData = _avatarData.copyWith(
@@ -41,7 +47,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   }
 
   void _randomizeAvatar() {
-    HapticFeedback.lightImpact();
+    SoundService.hapticLight();
+    SoundService.playTap();
     final time = DateTime.now().microsecondsSinceEpoch;
     setState(() {
       _avatarData = _avatarData.copyWith(
@@ -64,17 +71,20 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
 
   void _nextPage() {
     if (_currentPage < 2) {
+      SoundService.playNavigate();
       setState(() => _currentPage++);
     }
   }
 
   void _prevPage() {
     if (_currentPage > 0) {
+      SoundService.playTap();
       setState(() => _currentPage--);
     }
   }
 
   Future<void> _skip() async {
+    SoundService.playNavigate();
     await ProgressService.setUserName('Ученик');
     await ProgressService.setAvatar('boy_blue');
     await ProgressService.setCurrentGrade(5);
@@ -85,6 +95,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   }
 
   Future<void> _finish() async {
+    SoundService.playComplete();
     final name = _nameController.text.trim();
     if (name.isNotEmpty) {
       await ProgressService.setUserName(name);
@@ -99,6 +110,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final landscape = _isLandscape;
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: SafeArea(
@@ -109,7 +121,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               children: [
                 // Progress bar + Skip
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+                  padding: EdgeInsets.fromLTRB(landscape ? 16 : 24,
+                      landscape ? 10 : 16, landscape ? 16 : 24, 0),
                   child: Row(
                     children: [
                       if (_currentPage > 0)
@@ -132,15 +145,15 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                         )
                       else
                         const SizedBox(width: 40),
-                      const SizedBox(width: 16),
+                      SizedBox(width: landscape ? 10 : 16),
                       Expanded(child: _buildProgressDots()),
-                      const SizedBox(width: 8),
+                      SizedBox(width: landscape ? 4 : 8),
                       TextButton(
                         onPressed: _skip,
                         child: Text(
                           'Пропустить',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: landscape ? 13 : 14,
                             fontWeight: FontWeight.w600,
                             color: AppThemeColors.textHint(context),
                           ),
@@ -175,10 +188,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             height: 6,
             margin: const EdgeInsets.symmetric(horizontal: 3),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
               color: isActive
                   ? AppColors.accent
                   : AppThemeColors.borderLight(context),
-              borderRadius: BorderRadius.circular(3),
             ),
           ),
         );
@@ -186,56 +199,79 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     );
   }
 
+  /// Мягкая карточка-шапка — единый стиль шагов онбординга.
+  Widget _onboardingSoftHeader(List<Widget> children) {
+    final landscape = _isLandscape;
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        vertical: landscape ? 14 : 18,
+        horizontal: landscape ? 12 : 16,
+      ),
+      decoration: BoxDecoration(
+        color: AppThemeColors.accentLight(context),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppThemeColors.border(context)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: children,
+      ),
+    );
+  }
+
   // === PAGE 1: Customize Character ===
   Widget _buildCustomizePage() {
+    final landscape = _isLandscape;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: landscape ? 16 : 24),
       child: Column(
         children: [
-          const SizedBox(height: 16),
+          SizedBox(height: landscape ? 8 : 16),
 
-          // Logo and welcome
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const AppLogoIcon(size: 40),
-              const SizedBox(width: 12),
-              Text(
-                'Algeon',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  color: AppThemeColors.textPrimary(context),
+          _onboardingSoftHeader([
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const AppLogoIcon(size: 40),
+                SizedBox(width: landscape ? 8 : 12),
+                Text(
+                  'Algeon',
+                  style: TextStyle(
+                    fontSize: landscape ? 24 : 28,
+                    fontWeight: FontWeight.w800,
+                    color: AppThemeColors.textPrimary(context),
+                  ),
                 ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            'Создай своего персонажа',
-            style: TextStyle(
-              fontSize: 15,
-              color: AppThemeColors.textSecondary(context),
+              ],
             ),
-          ),
+            SizedBox(height: landscape ? 6 : 8),
+            Text(
+              'Создай своего персонажа',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: landscape ? 14 : 15,
+                color: AppThemeColors.textSecondary(context),
+              ),
+            ),
+          ]),
 
-          const SizedBox(height: 20),
+          SizedBox(height: landscape ? 10 : 20),
 
           // Avatar preview
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(landscape ? 10 : 12),
             decoration: BoxDecoration(
               color: AppThemeColors.surface(context),
               borderRadius: BorderRadius.circular(18),
               border: Border.all(color: AppThemeColors.border(context)),
               boxShadow: AppShadows.soft(context),
             ),
-            child: AvatarWidget(avatarData: _avatarData, size: 96),
+            child: AvatarWidget(
+                avatarData: _avatarData, size: landscape ? 82 : 96),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: landscape ? 10 : 16),
           Row(
             children: [
               Expanded(
@@ -247,7 +283,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: landscape ? 8 : 10),
 
           // Customization options
           Expanded(
@@ -275,7 +311,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarSkinColors,
                       _avatarData.skinColor,
-                      (color) => setState(() => _avatarData = _avatarData.copyWith(skinColor: color)),
+                      (color) => setState(() =>
+                          _avatarData = _avatarData.copyWith(skinColor: color)),
                     ),
                   ),
 
@@ -286,7 +323,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarHairColors,
                       _avatarData.hairColor,
-                      (color) => setState(() => _avatarData = _avatarData.copyWith(hairColor: color)),
+                      (color) => setState(() =>
+                          _avatarData = _avatarData.copyWith(hairColor: color)),
                     ),
                   ),
 
@@ -297,7 +335,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarShirtColors,
                       _avatarData.shirtColor,
-                      (color) => setState(() => _avatarData = _avatarData.copyWith(shirtColor: color)),
+                      (color) => setState(() => _avatarData =
+                          _avatarData.copyWith(shirtColor: color)),
                     ),
                   ),
 
@@ -321,7 +360,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarBgColors,
                       _avatarData.bgColor,
-                      (color) => setState(() => _avatarData = _avatarData.copyWith(bgColor: color)),
+                      (color) => setState(() =>
+                          _avatarData = _avatarData.copyWith(bgColor: color)),
                     ),
                   ),
                 ],
@@ -329,11 +369,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: landscape ? 8 : 12),
 
           SizedBox(
             width: double.infinity,
-            height: 56,
+            height: landscape ? 50 : 56,
             child: ElevatedButton(
               onPressed: _nextPage,
               style: ElevatedButton.styleFrom(
@@ -347,7 +387,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: landscape ? 10 : 16),
         ],
       ),
     );
@@ -361,7 +401,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, size: 16, color: AppThemeColors.textSecondary(context)),
+              Icon(icon,
+                  size: 16, color: AppThemeColors.textSecondary(context)),
               const SizedBox(width: 6),
               Text(
                 title,
@@ -380,7 +421,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     );
   }
 
-  Widget _buildColorRow(List<Color> colors, Color selected, Function(Color) onSelect) {
+  Widget _buildColorRow(
+      List<Color> colors, Color selected, Function(Color) onSelect) {
     // SingleChildScrollView + Row — reliable tap handling on Flutter Web mobile
     // (ListView can swallow taps due to scroll gesture disambiguation)
     return SizedBox(
@@ -391,7 +433,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           children: [
             for (int i = 0; i < colors.length; i++) ...[
               if (i > 0) const SizedBox(width: 8),
-              _buildColorCircle(colors[i], colors[i].toARGB32() == selected.toARGB32(), onSelect),
+              _buildColorCircle(colors[i],
+                  colors[i].toARGB32() == selected.toARGB32(), onSelect),
             ],
           ],
         ),
@@ -399,10 +442,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     );
   }
 
-  Widget _buildColorCircle(Color color, bool isSelected, Function(Color) onSelect) {
+  Widget _buildColorCircle(
+      Color color, bool isSelected, Function(Color) onSelect) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
+        SoundService.hapticLight();
+        SoundService.playTap();
         onSelect(color);
       },
       behavior: HitTestBehavior.opaque,
@@ -418,7 +463,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             width: 3,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: AppColors.accent.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 1)]
+              ? [
+                  BoxShadow(
+                      color: AppColors.accent.withValues(alpha: 0.4),
+                      blurRadius: 6,
+                      spreadRadius: 1)
+                ]
               : null,
         ),
         child: isSelected
@@ -457,7 +507,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     final isSelected = _avatarData.hairStyle == style;
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
+        SoundService.hapticLight();
+        SoundService.playTap();
         setState(() => _avatarData = _avatarData.copyWith(hairStyle: style));
       },
       behavior: HitTestBehavior.opaque,
@@ -470,7 +521,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color:
+                isSelected ? AppColors.accent : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -540,8 +592,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     final isSelected = _avatarData.expression == expression;
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
-        setState(() => _avatarData = _avatarData.copyWith(expression: expression));
+        SoundService.hapticLight();
+        SoundService.playTap();
+        setState(
+            () => _avatarData = _avatarData.copyWith(expression: expression));
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -552,7 +606,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color:
+                isSelected ? AppColors.accent : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -561,7 +616,9 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            color: isSelected ? AppColors.accent : AppThemeColors.textSecondary(context),
+            color: isSelected
+                ? AppColors.accent
+                : AppThemeColors.textSecondary(context),
           ),
         ),
       ),
@@ -579,7 +636,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               if (i > 0) const SizedBox(width: 8),
               GestureDetector(
                 onTap: () {
-                  HapticFeedback.lightImpact();
+                  SoundService.hapticLight();
+                  SoundService.playTap();
                   _applyPreset(allAvatars[i]);
                 },
                 child: Container(
@@ -618,8 +676,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
     final isSelected = _avatarData.accessory == accessory;
     return GestureDetector(
       onTap: () {
-        HapticFeedback.lightImpact();
-        setState(() => _avatarData = _avatarData.copyWith(accessory: accessory));
+        SoundService.hapticLight();
+        SoundService.playTap();
+        setState(
+            () => _avatarData = _avatarData.copyWith(accessory: accessory));
       },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
@@ -631,7 +691,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color:
+                isSelected ? AppColors.accent : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -665,38 +726,37 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
 
   // === PAGE 2: Name ===
   Widget _buildNamePage() {
+    final landscape = _isLandscape;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: landscape ? 16 : 24),
       child: Column(
         children: [
-          const Spacer(flex: 2),
+          Spacer(flex: landscape ? 1 : 2),
 
-          // Avatar preview
-          AvatarWidget(avatarData: _avatarData, size: 100),
-
-          const SizedBox(height: 24),
-
-          Text(
-            'Отлично!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppThemeColors.textPrimary(context),
+          _onboardingSoftHeader([
+            AvatarWidget(avatarData: _avatarData, size: landscape ? 82 : 100),
+            SizedBox(height: landscape ? 12 : 16),
+            Text(
+              'Отлично!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: landscape ? 24 : 28,
+                fontWeight: FontWeight.w800,
+                color: AppThemeColors.textPrimary(context),
+              ),
             ),
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            'Теперь давай познакомимся',
-            style: TextStyle(
-              fontSize: 16,
-              color: AppThemeColors.textSecondary(context),
+            SizedBox(height: landscape ? 6 : 8),
+            Text(
+              'Теперь давай познакомимся',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: landscape ? 14 : 16,
+                color: AppThemeColors.textSecondary(context),
+              ),
             ),
-          ),
+          ]),
 
-          const Spacer(flex: 2),
+          Spacer(flex: landscape ? 1 : 2),
 
           // Name input
           Align(
@@ -704,18 +764,18 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             child: Text(
               'Как тебя зовут?',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: landscape ? 16 : 18,
                 fontWeight: FontWeight.w700,
                 color: AppThemeColors.textPrimary(context),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: landscape ? 8 : 12),
           TextField(
             controller: _nameController,
             textCapitalization: TextCapitalization.words,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: landscape ? 16 : 18,
               fontWeight: FontWeight.w600,
               color: AppThemeColors.textPrimary(context),
             ),
@@ -732,35 +792,33 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                    color: AppThemeColors.border(context), width: 2),
+                borderSide:
+                    BorderSide(color: AppThemeColors.border(context), width: 2),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(
-                    color: AppThemeColors.border(context), width: 2),
+                borderSide:
+                    BorderSide(color: AppThemeColors.border(context), width: 2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide:
-                    const BorderSide(color: AppColors.accent, width: 2),
+                borderSide: const BorderSide(color: AppColors.accent, width: 2),
               ),
-              contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 18),
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16, vertical: landscape ? 14 : 18),
             ),
             onChanged: (_) => setState(() {}),
           ),
 
-          const Spacer(flex: 1),
+          Spacer(flex: landscape ? 0 : 1),
 
           // Button
           SizedBox(
             width: double.infinity,
-            height: 56,
+            height: landscape ? 50 : 56,
             child: ElevatedButton(
-              onPressed: _nameController.text.trim().isNotEmpty
-                  ? _nextPage
-                  : null,
+              onPressed:
+                  _nameController.text.trim().isNotEmpty ? _nextPage : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: _nameController.text.trim().isNotEmpty
                     ? AppColors.accent
@@ -778,7 +836,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: landscape ? 12 : 32),
         ],
       ),
     );
@@ -786,38 +844,49 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
 
   // === PAGE 3: Grade ===
   Widget _buildGradePage() {
+    final landscape = _isLandscape;
     final descriptions = {
       5: 'Натуральные числа, дроби, проценты',
       6: 'Рациональные числа, пропорции',
       7: 'Алгебра, функции, геометрия',
       8: 'Квадратные уравнения, корни',
-      9: 'Подготовка к ОГЭ',
+      9: 'Функции, прогрессии, комбинаторика',
       10: 'Тригонометрия, логарифмы',
-      11: 'Подготовка к ЕГЭ',
+      11: 'Продвинутая алгебра и анализ',
     };
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: landscape ? 16 : 24),
       child: Column(
         children: [
-          const SizedBox(height: 40),
-          Text(
-            'Выбери класс',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: AppThemeColors.textPrimary(context),
+          SizedBox(height: landscape ? 8 : 16),
+          _onboardingSoftHeader([
+            Icon(
+              Icons.school_rounded,
+              color: AppColors.accent,
+              size: landscape ? 32 : 36,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Мы подберём подходящие задания',
-            style: TextStyle(
-                fontSize: 15,
-                color: AppThemeColors.textSecondary(context)),
-          ),
-          const SizedBox(height: 32),
-
+            SizedBox(height: landscape ? 8 : 10),
+            Text(
+              'Выбери класс',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: landscape ? 24 : 28,
+                fontWeight: FontWeight.w800,
+                color: AppThemeColors.textPrimary(context),
+              ),
+            ),
+            SizedBox(height: landscape ? 6 : 8),
+            Text(
+              'Мы подберём подходящие задания',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: landscape ? 14 : 15,
+                color: AppThemeColors.textSecondary(context),
+              ),
+            ),
+          ]),
+          SizedBox(height: landscape ? 14 : 24),
           Expanded(
             child: ListView(
               children: [5, 6, 7, 8, 9, 10, 11].map((grade) {
@@ -826,13 +895,14 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                   padding: const EdgeInsets.only(bottom: 12),
                   child: GestureDetector(
                     onTap: () {
-                      HapticFeedback.lightImpact();
+                      SoundService.hapticLight();
+                      SoundService.playTap();
                       setState(() => _selectedGrade = grade);
                     },
                     behavior: HitTestBehavior.opaque,
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(20),
+                      padding: EdgeInsets.all(landscape ? 14 : 20),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppThemeColors.accentLight(context)
@@ -849,7 +919,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                         children: [
                           Container(
                             width: 52,
-                            height: 52,
+                            height: landscape ? 46 : 52,
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? AppColors.accent
@@ -860,49 +930,44 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                               child: Text(
                                 '$grade',
                                 style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: landscape ? 21 : 24,
                                   fontWeight: FontWeight.w800,
                                   color: isSelected
                                       ? Colors.white
-                                      : AppThemeColors.textPrimary(
-                                          context),
+                                      : AppThemeColors.textPrimary(context),
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          SizedBox(width: landscape ? 12 : 16),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '$grade класс',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: landscape ? 16 : 18,
                                     fontWeight: FontWeight.w700,
                                     color: isSelected
                                         ? AppColors.accent
-                                        : AppThemeColors.textPrimary(
-                                            context),
+                                        : AppThemeColors.textPrimary(context),
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: landscape ? 2 : 4),
                                 Text(
                                   descriptions[grade] ?? '',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: landscape ? 13 : 14,
                                     color:
-                                        AppThemeColors.textSecondary(
-                                            context),
+                                        AppThemeColors.textSecondary(context),
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           AnimatedContainer(
-                            duration:
-                                const Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
                             width: 28,
                             height: 28,
                             decoration: BoxDecoration(
@@ -930,10 +995,9 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               }).toList(),
             ),
           ),
-
           SizedBox(
             width: double.infinity,
-            height: 56,
+            height: landscape ? 50 : 56,
             child: ElevatedButton(
               onPressed: _selectedGrade != null ? _finish : null,
               style: ElevatedButton.styleFrom(
@@ -953,7 +1017,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: landscape ? 12 : 32),
         ],
       ),
     );

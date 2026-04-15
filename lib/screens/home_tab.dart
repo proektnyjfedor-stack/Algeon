@@ -1,13 +1,14 @@
 /// Home Tab — Главная с прогрессом
 /// Величественный дизайн Algeon
+library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
 import '../models/task.dart';
 import '../services/progress_service.dart';
+import '../services/sound_service.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/user_avatar_display.dart';
 
@@ -84,8 +85,20 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
-      body: CustomScrollView(
-        slivers: [
+      body: RefreshIndicator(
+        color: AppColors.accent,
+        edgeOffset: 8,
+        onRefresh: () async {
+          SoundService.hapticLight();
+          SoundService.playTap();
+          _refresh();
+          await Future<void>.delayed(const Duration(milliseconds: 220));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          slivers: [
           // Hero header
           SliverToBoxAdapter(
             child: _buildHeroHeader(userName, todayCompleted, totalSolved, totalTasks, overallProgress),
@@ -109,8 +122,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     width: 4,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: AppColors.accent,
                       borderRadius: BorderRadius.circular(2),
+                      color: AppColors.accent,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -131,7 +144,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     ),
                     child: Text(
                       '${topics.length} тем',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: AppColors.accent,
@@ -159,6 +172,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             ),
           ),
         ],
+        ),
       ),
     );
   }
@@ -176,27 +190,31 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       bottom: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-        child: AnimatedContainer(
-      duration: const Duration(milliseconds: 320),
-      curve: Curves.easeOutCubic,
-      decoration: BoxDecoration(
-        color: palette.primary,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.14),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: palette.secondary.withValues(alpha: 0.24),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-          child: Column(
-            children: [
+        child: Semantics(
+          container: true,
+          label:
+              'Прогресс по $_grade классу: $solved из $total задач, ${(progress * 100).round()} процентов. Серия ${ProgressService.getStreakDays()} дней.',
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
+            decoration: BoxDecoration(
+              color: palette.primary,
+              borderRadius: BorderRadius.circular(28),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.14),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: palette.secondary.withValues(alpha: 0.28),
+                  blurRadius: 22,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              child: Column(
+                children: [
               // Top row: logo + grade / avatar + greeting
               Row(
                 children: [
@@ -213,10 +231,17 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: () => context.go('/profile'),
-                    behavior: HitTestBehavior.opaque,
-                    child: const UserAvatarDisplay(size: 40),
+                  Tooltip(
+                    message: 'Профиль',
+                    child: GestureDetector(
+                      onTap: () {
+                        SoundService.hapticLight();
+                        SoundService.playTap();
+                        context.go('/profile');
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: const UserAvatarDisplay(size: 40),
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Container(
@@ -337,8 +362,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     // Streak indicator
                     Column(
                       children: [
-                        Icon(Icons.local_fire_department_rounded,
-                            color: const Color(0xFFFF9600), size: 22),
+                        const Icon(Icons.local_fire_department_rounded,
+                            color: Color(0xFFFF9600), size: 22),
                         Text(
                           '${ProgressService.getStreakDays()}',
                           style: const TextStyle(
@@ -359,9 +384,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   ],
                 ),
               ),
-            ],
+                ],
+              ),
+            ),
           ),
-        ),
         ),
       ),
     );
@@ -493,19 +519,28 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             icon: Icons.play_arrow_rounded,
             title: 'Продолжить',
             subtitle: 'С текущего места',
-            onTap: () => _continueLearning(topics),
+            onTap: () {
+              SoundService.playStart();
+              _continueLearning(topics);
+            },
           ),
           _QuickHomeButton(
             icon: Icons.bolt_rounded,
             title: 'Практика',
             subtitle: 'Быстрые задания',
-            onTap: () => context.go('/practice'),
+            onTap: () {
+              SoundService.playNavigate();
+              context.go('/practice');
+            },
           ),
           _QuickHomeButton(
-            icon: Icons.assignment_rounded,
-            title: 'Экзамен',
-            subtitle: 'Режим ОГЭ/ЕГЭ',
-            onTap: () => context.go('/exams'),
+            icon: Icons.emoji_events_rounded,
+            title: 'Награды',
+            subtitle: 'Достижения и прогресс',
+            onTap: () {
+              SoundService.playNavigate();
+              context.go('/achievements');
+            },
           ),
         ],
       ),
@@ -569,20 +604,21 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       padding: const EdgeInsets.only(bottom: 10),
       child: _PressableScale(
         onTap: () {
-          HapticFeedback.lightImpact();
+          SoundService.hapticLight();
           _openTopic(topic.name, tasks);
         },
         child: Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: AppThemeColors.surface(context),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(
                 color: isComplete
                     ? AppColors.success.withValues(alpha: 0.5)
                     : AppThemeColors.border(context),
                 width: isComplete ? 1.5 : 1,
               ),
+              boxShadow: AppShadows.soft(context),
             ),
             child: Row(
               children: [
@@ -677,7 +713,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
   }
 
   void _openTopic(String topicName, List<Task> tasks) {
-    HapticFeedback.mediumImpact();
+    SoundService.playNavigate();
+    SoundService.hapticMedium();
     context
         .push('/learn/intro', extra: {'name': topicName, 'tasks': tasks})
         .then((_) => _refresh());
@@ -685,10 +722,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 }
 
 class _QuickHomeButton extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
 
   const _QuickHomeButton({
     required this.icon,
@@ -696,11 +729,18 @@ class _QuickHomeButton extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
   });
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return _PressableScale(
-      onTap: onTap,
+      onTap: () {
+        SoundService.hapticMedium();
+        onTap();
+      },
         child: Container(
         constraints: const BoxConstraints(minHeight: 56),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -708,6 +748,7 @@ class _QuickHomeButton extends StatelessWidget {
           color: AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(color: AppThemeColors.border(context)),
+          boxShadow: AppShadows.soft(context),
         ),
         child: Row(
           children: [
@@ -753,13 +794,13 @@ class _QuickHomeButton extends StatelessWidget {
 }
 
 class _PressableScale extends StatefulWidget {
-  final Widget child;
-  final VoidCallback onTap;
 
   const _PressableScale({
     required this.child,
     required this.onTap,
   });
+  final Widget child;
+  final VoidCallback onTap;
 
   @override
   State<_PressableScale> createState() => _PressableScaleState();

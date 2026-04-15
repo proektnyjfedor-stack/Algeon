@@ -2,6 +2,7 @@
 ///   • 'photo'  → фото из галереи (base64)
 ///   • 'custom' → конструктор аватара
 ///   • иначе    → предустановленный аватар по id
+library;
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -9,9 +10,6 @@ import 'avatars.dart';
 import '../services/progress_service.dart';
 
 class UserAvatarDisplay extends StatelessWidget {
-  final double size;
-  final bool showBorder;
-  final Color borderColor;
 
   const UserAvatarDisplay({
     super.key,
@@ -19,6 +17,9 @@ class UserAvatarDisplay extends StatelessWidget {
     this.showBorder = false,
     this.borderColor = Colors.white,
   });
+  final double size;
+  final bool showBorder;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +82,6 @@ class UserAvatarDisplay extends StatelessWidget {
 
 /// Рамка для фото (такой же скруглённый контейнер, как у AvatarWidget)
 class _PhotoFrame extends StatelessWidget {
-  final double size;
-  final bool showBorder;
-  final Color borderColor;
-  final Widget child;
 
   const _PhotoFrame({
     required this.size,
@@ -92,6 +89,10 @@ class _PhotoFrame extends StatelessWidget {
     required this.borderColor,
     required this.child,
   });
+  final double size;
+  final bool showBorder;
+  final Color borderColor;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

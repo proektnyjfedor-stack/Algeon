@@ -1,6 +1,7 @@
 /// Achievements Service — достижения и бейджи
 ///
 /// Система наград за прогресс
+library;
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,13 +38,6 @@ enum AchievementType {
 
 /// Модель достижения
 class Achievement {
-  final AchievementType type;
-  final String title;
-  final String description;
-  final IconData icon;
-  final int target;
-  bool isUnlocked;
-  DateTime? unlockedAt;
 
   Achievement({
     required this.type,
@@ -54,6 +48,13 @@ class Achievement {
     this.isUnlocked = false,
     this.unlockedAt,
   });
+  final AchievementType type;
+  final String title;
+  final String description;
+  final IconData icon;
+  final int target;
+  bool isUnlocked;
+  DateTime? unlockedAt;
 
   String get key => 'achievement_${type.name}';
 }
@@ -181,7 +182,7 @@ class AchievementsService {
       ),
       Achievement(
         type: AchievementType.grade9Complete,
-        title: 'ОГЭ-база',
+        title: 'Девятый класс',
         description: 'Заверши 9 класс',
         icon: Icons.school_rounded,
         target: 9,

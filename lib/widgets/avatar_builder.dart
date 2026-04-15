@@ -1,20 +1,22 @@
 /// Avatar Builder — конструктор персонажа
 ///
 /// Bottom sheet с табами: фон, кожа, волосы, цвет волос, одежда, аксессуар, лицо
+library;
 
 import 'package:flutter/material.dart';
+import '../services/reward_drop_service.dart';
 import '../theme/app_theme.dart';
 import 'avatars.dart';
 
 class AvatarBuilderSheet extends StatefulWidget {
-  final AvatarData initialAvatar;
-  final ValueChanged<AvatarData> onSave;
 
   const AvatarBuilderSheet({
     super.key,
     required this.initialAvatar,
     required this.onSave,
   });
+  final AvatarData initialAvatar;
+  final ValueChanged<AvatarData> onSave;
 
   @override
   State<AvatarBuilderSheet> createState() => _AvatarBuilderSheetState();
@@ -23,6 +25,7 @@ class AvatarBuilderSheet extends StatefulWidget {
 class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   late AvatarData _avatar;
   int _selectedTab = 0;
+  List<DropSkinItem> _unlockedSkins = const [];
 
   final _tabs = const [
     ('Фон', Icons.palette_outlined),
@@ -31,6 +34,7 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
     ('Цвет волос', Icons.brush_outlined),
     ('Одежда', Icons.checkroom_outlined),
     ('Аксессуар', Icons.auto_awesome_outlined),
+    ('Скины', Icons.style_outlined),
     ('Лицо', Icons.emoji_emotions_outlined),
   ];
 
@@ -38,12 +42,25 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   void initState() {
     super.initState();
     _avatar = widget.initialAvatar;
+    _loadSkins();
+  }
+
+  Future<void> _loadSkins() async {
+    await RewardDropService.init();
+    if (!mounted) return;
+    setState(() {
+      _unlockedSkins = RewardDropService.getUnlockedSkinItems();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final isLandscape = media.size.width > media.size.height;
+    final sheetHeight = media.size.height * (isLandscape ? 0.9 : 0.78);
+
     return Container(
-      height: MediaQuery.of(context).size.height * 0.78,
+      height: sheetHeight,
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -63,14 +80,14 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
 
           // Title
           Text('Конструктор персонажа', style: TextStyle(
-            fontSize: 20, fontWeight: FontWeight.w700,
+            fontSize: isLandscape ? 18 : 20, fontWeight: FontWeight.w700,
             color: AppThemeColors.textPrimary(context),
           )),
-          const SizedBox(height: 16),
+          SizedBox(height: isLandscape ? 12 : 16),
 
           // Preview
-          AvatarWidget(avatarData: _avatar, size: 120, showBorder: true),
-          const SizedBox(height: 16),
+          AvatarWidget(avatarData: _avatar, size: isLandscape ? 96 : 120, showBorder: true),
+          SizedBox(height: isLandscape ? 10 : 16),
 
           // Tabs
           SizedBox(
@@ -118,7 +135,7 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: isLandscape ? 10 : 16),
 
           // Options
           Expanded(
@@ -167,7 +184,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
       case 3: return _buildColorGrid(avatarHairColors, _avatar.hairColor, (c) => setState(() => _avatar = _avatar.copyWith(hairColor: c)));
       case 4: return _buildColorGrid(avatarShirtColors, _avatar.shirtColor, (c) => setState(() => _avatar = _avatar.copyWith(shirtColor: c)));
       case 5: return _buildAccessoryGrid();
-      case 6: return _buildExpressionGrid();
+      case 6: return _buildSkinGrid();
+      case 7: return _buildExpressionGrid();
       default: return const SizedBox();
     }
   }
@@ -322,17 +340,145 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
     );
   }
 
+  Widget _buildSkinGrid() {
+    if (_unlockedSkins.isEmpty) {
+      return Center(
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppThemeColors.borderLight(context),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Пока нет открытых скинов.\nОткрывай дропы в "Награды".',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppThemeColors.textSecondary(context),
+                ),
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                onPressed: _loadSkins,
+                icon: const Icon(Icons.refresh_rounded, size: 18),
+                label: const Text('Обновить'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1.45,
+      ),
+      itemCount: _unlockedSkins.length,
+      itemBuilder: (_, i) {
+        final skin = _unlockedSkins[i];
+        final applied = _avatar.id == skin.id;
+        final preview = _skinToAvatar(skin.id);
+        return GestureDetector(
+          onTap: () => setState(() => _avatar = preview),
+          behavior: HitTestBehavior.opaque,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: skin.color.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: applied ? AppColors.accent : skin.color.withValues(alpha: 0.35),
+                width: applied ? 2.5 : 1.2,
+              ),
+            ),
+            child: Row(
+              children: [
+                AvatarWidget(avatarData: preview, size: 48),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        skin.title.replaceFirst('Скин: ', ''),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppThemeColors.textPrimary(context),
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        skin.subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppThemeColors.textSecondary(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  AvatarData _skinToAvatar(String skinId) {
+    final seed = skinId.hashCode.abs();
+    final bg = avatarBgColors[seed % avatarBgColors.length];
+    final skin = avatarSkinColors[(seed ~/ 3) % avatarSkinColors.length];
+    final hairStyle = avatarHairStyles[(seed ~/ 5) % avatarHairStyles.length];
+    final hairColor = avatarHairColors[(seed ~/ 7) % avatarHairColors.length];
+    final shirtColor = avatarShirtColors[(seed ~/ 11) % avatarShirtColors.length];
+    final accessory = avatarAccessories[(seed ~/ 13) % avatarAccessories.length];
+    final expression = avatarExpressions[(seed ~/ 17) % avatarExpressions.length];
+
+    return AvatarData(
+      id: skinId,
+      name: skinId.replaceFirst('skin_', '').replaceAll('_', ' '),
+      bgColor: bg,
+      skinColor: skin,
+      hairStyle: hairStyle,
+      hairColor: hairColor,
+      shirtColor: shirtColor,
+      accessory: accessory,
+      expression: expression,
+    );
+  }
+
   void _showPresets() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (_) => Container(
-        height: 350,
+      isScrollControlled: true,
+      builder: (_) {
+        final media = MediaQuery.of(context);
+        final isLandscape = media.size.width > media.size.height;
+        final width = media.size.width;
+        final columns = width >= 1100 ? 7 : (width >= 800 ? 6 : (width >= 560 ? 5 : 4));
+        return Container(
+        height: media.size.height * (isLandscape ? 0.86 : 0.58),
         decoration: BoxDecoration(
           color: AppThemeColors.surface(context),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
         child: Column(
           children: [
             Text('Готовые персонажи', style: TextStyle(
@@ -342,8 +488,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
             const SizedBox(height: 16),
             Expanded(
               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5, mainAxisSpacing: 10, crossAxisSpacing: 10,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns, mainAxisSpacing: 10, crossAxisSpacing: 10,
                 ),
                 itemCount: allAvatars.length,
                 itemBuilder: (_, i) {
@@ -358,9 +504,11 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
                 },
               ),
             ),
+            SizedBox(height: media.padding.bottom),
           ],
         ),
-      ),
+      );
+      },
     );
   }
 }
