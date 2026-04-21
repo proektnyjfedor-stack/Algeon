@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../router/app_router.dart';
 import '../services/achievements_service.dart';
+import '../services/auth_service.dart';
 import '../services/progress_service.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_provider.dart';
@@ -401,12 +404,21 @@ class _ProfileTabState extends State<ProfileTab> {
   void _showSnack(String text) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(text)),
+      SnackBar(
+        content: Text(text),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isPhone = screenWidth <= 390;
     final userName = ProgressService.getUserName();
     final currentGrade = ProgressService.getCurrentGrade();
     final solved = ProgressService.getTotalSolved();
@@ -436,14 +448,14 @@ class _ProfileTabState extends State<ProfileTab> {
           controller: _scrollController,
           primary: false,
           key: const ValueKey('profile_list'),
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(isPhone ? 14 : 20),
           children: [
             _EntranceSection(
               delayMs: 0,
               child: Text(
                 'Профиль',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: isPhone ? 24 : 28,
                   fontWeight: FontWeight.w800,
                   color: AppThemeColors.textPrimary(context),
                 ),
@@ -455,7 +467,7 @@ class _ProfileTabState extends State<ProfileTab> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 320),
                 curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(isPhone ? 14 : 20),
                 decoration: BoxDecoration(
                   color: palette.primary,
                   borderRadius: BorderRadius.circular(24),
@@ -481,7 +493,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       behavior: HitTestBehavior.opaque,
                       child: Stack(
                         children: [
-                          const UserAvatarDisplay(size: 92, showBorder: true),
+                          UserAvatarDisplay(size: isPhone ? 82 : 92, showBorder: true),
                           Positioned(
                             right: 0,
                             bottom: 0,
@@ -515,8 +527,8 @@ class _ProfileTabState extends State<ProfileTab> {
                             userName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 24,
+                            style: TextStyle(
+                              fontSize: isPhone ? 21 : 24,
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
                             ),
@@ -533,7 +545,7 @@ class _ProfileTabState extends State<ProfileTab> {
                     Text(
                       '$currentGrade класс',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: isPhone ? 13 : 14,
                         color: Colors.white.withValues(alpha: 0.9),
                       ),
                     ),
@@ -781,6 +793,17 @@ class _ProfileTabState extends State<ProfileTab> {
                         onPressed: _changeGrade,
                         child: const Text('Изменить'),
                       ),
+                    ),
+                    const _DividerLine(),
+                    _ActionTile(
+                      icon: Icons.logout_rounded,
+                      iconColor: quickAccentB,
+                      title: 'Выйти из аккаунта',
+                      onTap: () async {
+                        await AuthService.signOut();
+                        if (!context.mounted) return;
+                        context.go(AppRoutes.auth);
+                      },
                     ),
                     const _DividerLine(),
                     SwitchListTile(
@@ -1180,6 +1203,137 @@ class _DividerLine extends StatelessWidget {
       height: 1,
       thickness: 1,
       color: AppThemeColors.border(context),
+    );
+  }
+}
+
+class _BackgroundInventoryTile extends StatelessWidget {
+  const _BackgroundInventoryTile({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.color,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final Color color;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: selected ? 0.18 : 0.1),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: selected ? color : color.withValues(alpha: 0.25),
+              width: selected ? 1.6 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, size: 18, color: color),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppThemeColors.textPrimary(context),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppThemeColors.textSecondary(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                selected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
+                color: selected ? color : AppThemeColors.textHint(context),
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InventoryStatChip extends StatelessWidget {
+  const _InventoryStatChip({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.28)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 16, color: color),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 10,
+              color: AppThemeColors.textSecondary(context),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

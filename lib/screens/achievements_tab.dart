@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import '../data/tasks_data.dart';
 import '../services/achievements_service.dart';
 import '../services/progress_service.dart';
-import '../services/reward_drop_service.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 
@@ -38,8 +37,6 @@ class AchievementsTab extends StatefulWidget {
 
 class _AchievementsTabState extends State<AchievementsTab> {
   bool _isSyncing = true;
-  bool _isOpeningDrop = false;
-  List<DropReward> _dropHistory = const [];
 
   @override
   void initState() {
@@ -71,11 +68,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
     );
     if (!mounted) return;
     if (newly.isNotEmpty) {
-      await RewardDropService.init();
-      for (final _ in newly) {
-        await RewardDropService.rollRandomDrop();
-      }
-      _dropHistory = RewardDropService.getHistory(limit: 8);
       if (_newAchievementsIncludeStreak(newly)) {
         unawaited(SoundService.playStreak());
       } else {
@@ -85,37 +77,15 @@ class _AchievementsTabState extends State<AchievementsTab> {
   }
 
   Future<void> _syncAchievementsWithProgress() async {
-    await RewardDropService.init();
     await _evaluateAchievements();
     if (!mounted) return;
-    _dropHistory = RewardDropService.getHistory(limit: 8);
     setState(() => _isSyncing = false);
   }
 
   Future<void> _pullRefreshAchievements() async {
     await _evaluateAchievements();
     if (!mounted) return;
-    _dropHistory = RewardDropService.getHistory(limit: 8);
     setState(() {});
-  }
-
-  Future<void> _openRandomDrop() async {
-    if (_isOpeningDrop) return;
-    setState(() => _isOpeningDrop = true);
-    try {
-      final reward = await RewardDropService.rollRandomDrop();
-      if (!mounted) return;
-      _dropHistory = RewardDropService.getHistory(limit: 8);
-      setState(() => _isOpeningDrop = false);
-
-      unawaited(SoundService.playAchievement());
-      unawaited(SoundService.hapticBurst(steps: 4));
-      _showDropDialog(reward);
-    } finally {
-      if (mounted && _isOpeningDrop) {
-        setState(() => _isOpeningDrop = false);
-      }
-    }
   }
 
   /// Акцент карточки по категории достижения.
@@ -148,11 +118,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
   int _getGridColumns(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width <= 430) return 1;
+    if (width <= 430) return 2;
     if (width < 700) return 2;
     if (width > 900) return 4;
     return 3;
   }
+
+  bool _isPhone(BuildContext context) => MediaQuery.of(context).size.width <= 430;
 
   /// Получить прогресс и текст для достижения
   ({double progress, String progressText}) _getAchievementProgress(
@@ -233,6 +205,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final isPhone = _isPhone(context);
     if (_isSyncing) {
       return Scaffold(
         backgroundColor: AppThemeColors.background(context),
@@ -288,7 +261,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   child: SafeArea(
                     bottom: false,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                      padding: EdgeInsets.fromLTRB(isPhone ? 16 : 24, 20, isPhone ? 16 : 24, 0),
                       child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -303,11 +276,12 @@ class _AchievementsTabState extends State<AchievementsTab> {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            const Icon(Icons.emoji_events_rounded,
-                                color: AppColors.gold, size: 32),
-                            const SizedBox(width: 10),
+                            Icon(Icons.emoji_events_rounded,
+                                color: AppColors.gold, size: isPhone ? 26 : 32),
+                            SizedBox(width: isPhone ? 8 : 10),
                             Text('Награды',
                                 style: AppTypography.h1.copyWith(
+                                  fontSize: isPhone ? 28 : AppTypography.h1.fontSize,
                                   color:
                                       AppThemeColors.textPrimary(context),
                                 )),
@@ -334,11 +308,11 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 child: _StaggeredReveal(
                   delayMs: 40,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                    padding: EdgeInsets.fromLTRB(isPhone ? 14 : 20, 16, isPhone ? 14 : 20, 8),
                     child: AnimatedContainer(
                     duration: const Duration(milliseconds: 320),
                     curve: Curves.easeOutCubic,
-                    padding: const EdgeInsets.all(24),
+                    padding: EdgeInsets.all(isPhone ? 16 : 24),
                     decoration: BoxDecoration(
                       color: AppColors.gold,
                       borderRadius: BorderRadius.circular(24),
@@ -355,8 +329,8 @@ class _AchievementsTabState extends State<AchievementsTab> {
                             children: [
                               Row(
                                 children: [
-                                  _buildProgressBadge(progress),
-                                  const SizedBox(width: 12),
+                                  _buildProgressBadge(progress, compact: true),
+                                  const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -372,8 +346,8 @@ class _AchievementsTabState extends State<AchievementsTab> {
                                         const SizedBox(height: 4),
                                         Text(
                                           '${unlocked.length} / ${achievements.length}',
-                                          style: const TextStyle(
-                                            fontSize: 28,
+                                          style: TextStyle(
+                                            fontSize: isPhone ? 22 : 28,
                                             fontWeight: FontWeight.w900,
                                             color: Colors.white,
                                           ),
@@ -447,24 +421,13 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 ),
               ),
 
-              SliverToBoxAdapter(
-                child: _StaggeredReveal(
-                  delayMs: 62,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 4),
-                    child: _buildRandomDropCard(),
-                  ),
-                ),
-              ),
-
               // Unlocked Section
               if (unlocked.isNotEmpty) ...[
                 SliverToBoxAdapter(
                   child: _StaggeredReveal(
                     delayMs: 80,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                      padding: EdgeInsets.fromLTRB(isPhone ? 14 : 20, 24, isPhone ? 14 : 20, 12),
                       child: Row(
                       children: [
                         Container(
@@ -495,15 +458,14 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   ),
                 ),
                 SliverPadding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: isPhone ? 14 : 20),
                   sliver: SliverGrid(
                     gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.75,
+                      mainAxisSpacing: isPhone ? 8 : 12,
+                      crossAxisSpacing: isPhone ? 8 : 12,
+                      childAspectRatio: isPhone ? 0.92 : 0.75,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) =>
@@ -513,6 +475,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                             unlocked[index],
                             true,
                             _accentForAchievement(unlocked[index]),
+                            compact: isPhone,
                           ),
                           ),
                       childCount: unlocked.length,
@@ -527,8 +490,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   child: _StaggeredReveal(
                     delayMs: 90,
                     child: Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                      padding: EdgeInsets.fromLTRB(isPhone ? 14 : 20, 24, isPhone ? 14 : 20, 12),
                       child: Row(
                       children: [
                         Container(
@@ -564,15 +526,14 @@ class _AchievementsTabState extends State<AchievementsTab> {
                   ),
                 ),
                 SliverPadding(
-                  padding:
-                      const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                  padding: EdgeInsets.fromLTRB(isPhone ? 14 : 20, 0, isPhone ? 14 : 20, 100),
                   sliver: SliverGrid(
                     gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: columns,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.75,
+                      mainAxisSpacing: isPhone ? 8 : 12,
+                      crossAxisSpacing: isPhone ? 8 : 12,
+                      childAspectRatio: isPhone ? 0.92 : 0.75,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => _StaggeredReveal(
@@ -581,6 +542,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                             locked[index],
                             false,
                             _accentForAchievement(locked[index]),
+                            compact: isPhone,
                           ),
                       ),
                       childCount: locked.length,
@@ -613,16 +575,18 @@ class _AchievementsTabState extends State<AchievementsTab> {
     );
   }
 
-  Widget _buildProgressBadge(double progress) {
+  Widget _buildProgressBadge(double progress, {bool compact = false}) {
+    final box = compact ? 60.0 : 72.0;
+    final ring = compact ? 52.0 : 64.0;
     return SizedBox(
-      width: 72,
-      height: 72,
+      width: box,
+      height: box,
       child: Stack(
         children: [
           Center(
             child: SizedBox(
-              width: 64,
-              height: 64,
+              width: ring,
+              height: ring,
               child: TweenAnimationBuilder<double>(
                 key: ValueKey('ach_progress_${progress.toStringAsFixed(3)}'),
                 tween: Tween(begin: 0, end: progress),
@@ -631,7 +595,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 builder: (context, animatedProgress, _) {
                   return CircularProgressIndicator(
                     value: animatedProgress,
-                    strokeWidth: 6,
+                    strokeWidth: compact ? 5 : 6,
                     backgroundColor: Colors.white.withValues(alpha: 0.3),
                     valueColor: const AlwaysStoppedAnimation(Colors.white),
                   );
@@ -643,7 +607,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
             child: Text(
               '${(progress * 100).toInt()}%',
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: compact ? 13 : 16,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
               ),
@@ -654,203 +618,20 @@ class _AchievementsTabState extends State<AchievementsTab> {
     );
   }
 
-  Widget _buildRandomDropCard() {
-    final skins = RewardDropService.getOwnedSkinCount();
-    final backgrounds = RewardDropService.getOwnedBackgroundCount();
-    final coins = ProgressService.getCoins();
-    final latest = _dropHistory.isNotEmpty ? _dropHistory.first : null;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppThemeColors.surface(context),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppThemeColors.border(context)),
-        boxShadow: AppShadows.soft(context),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Случайные дропы',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: AppThemeColors.textPrimary(context),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'В наградах могут выпадать: фоны профиля, монеты и скины.',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppThemeColors.textSecondary(context),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _dropCounter(
-                  icon: Icons.style_rounded,
-                  label: 'Скины',
-                  value: '$skins',
-                  color: AppColors.purple,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _dropCounter(
-                  icon: Icons.wallpaper_rounded,
-                  label: 'Фоны',
-                  value: '$backgrounds',
-                  color: AppColors.accent,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _dropCounter(
-                  icon: Icons.monetization_on_rounded,
-                  label: 'Монеты',
-                  value: '$coins',
-                  color: AppColors.gold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          if (latest != null)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              decoration: BoxDecoration(
-                color: latest.color.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: latest.color.withValues(alpha: 0.35),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(latest.icon, color: latest.color, size: 20),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Последний дроп: ${latest.title}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppThemeColors.textPrimary(context),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          if (_dropHistory.length > 1) ...[
-            const SizedBox(height: 10),
-            Text(
-              'Недавние дропы',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: AppThemeColors.textSecondary(context),
-              ),
-            ),
-            const SizedBox(height: 6),
-            ..._dropHistory.skip(1).take(3).map((reward) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  children: [
-                    Icon(reward.icon, size: 16, color: reward.color),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        reward.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppThemeColors.textPrimary(context),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ],
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _isOpeningDrop ? null : _openRandomDrop,
-              icon: const Icon(Icons.casino_rounded),
-              label: Text(_isOpeningDrop ? 'Открываем...' : 'Открыть случайный дроп'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.gold,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dropCounter({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.32)),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: AppThemeColors.textPrimary(context),
-            ),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: AppThemeColors.textSecondary(context),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildAchievementCard(
     Achievement achievement,
     bool isUnlocked,
     Color accent,
+    {bool compact = false}
   ) {
     final pd = _getAchievementProgress(achievement);
 
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(compact ? 16 : 20),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(compact ? 16 : 20),
         onTap: () {
           SoundService.hapticMedium();
           _showAchievementDetail(achievement);
@@ -858,7 +639,7 @@ class _AchievementsTabState extends State<AchievementsTab> {
         child: Ink(
           decoration: BoxDecoration(
             color: AppThemeColors.surface(context),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(compact ? 16 : 20),
             border: Border.all(
               color: isUnlocked
                   ? accent
@@ -876,34 +657,37 @@ class _AchievementsTabState extends State<AchievementsTab> {
                 : null,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            padding: EdgeInsets.symmetric(
+              horizontal: compact ? 6 : 8,
+              vertical: compact ? 8 : 10,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 52,
-                  height: 52,
+                  width: compact ? 42 : 52,
+                  height: compact ? 42 : 52,
                   decoration: isUnlocked
                       ? BoxDecoration(
                           color: accent,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(compact ? 12 : 16),
                         )
                       : BoxDecoration(
                           color: AppThemeColors.borderLight(context),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(compact ? 12 : 16),
                         ),
                   child: Center(
                     child: Icon(
                       isUnlocked ? achievement.icon : Icons.lock_rounded,
                       color: isUnlocked ? Colors.white : AppThemeColors.textHint(context),
-                      size: isUnlocked ? 28 : 24,
+                      size: compact ? (isUnlocked ? 22 : 20) : (isUnlocked ? 28 : 24),
                     ),
                   ),
                 ),
                 Text(
                   achievement.title,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: compact ? 11 : 12,
                     fontWeight: FontWeight.w600,
                     color: isUnlocked
                         ? AppThemeColors.textPrimary(context)
@@ -926,10 +710,10 @@ class _AchievementsTabState extends State<AchievementsTab> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: compact ? 4 : 6),
                   // Мини прогресс-бар
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: EdgeInsets.symmetric(horizontal: compact ? 2 : 4),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
                       child: TweenAnimationBuilder<double>(
@@ -1148,71 +932,6 @@ class _AchievementsTabState extends State<AchievementsTab> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showDropDialog(DropReward reward) {
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        return Dialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
-          backgroundColor: AppThemeColors.surface(dialogContext),
-          child: Padding(
-            padding: const EdgeInsets.all(22),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 84,
-                  height: 84,
-                  decoration: BoxDecoration(
-                    color: reward.color.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(22),
-                    border: Border.all(color: reward.color.withValues(alpha: 0.5)),
-                  ),
-                  child: Icon(reward.icon, size: 42, color: reward.color),
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  'Выпало!',
-                  style: AppTypography.h2.copyWith(
-                    color: AppThemeColors.textPrimary(dialogContext),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  reward.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                    color: AppThemeColors.textPrimary(dialogContext),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  reward.subtitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppThemeColors.textSecondary(dialogContext),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                    child: const Text('Супер'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 

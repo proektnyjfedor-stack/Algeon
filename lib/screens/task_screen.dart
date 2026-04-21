@@ -14,7 +14,6 @@ import '../models/task.dart';
 import '../services/progress_service.dart';
 import '../services/sound_service.dart';
 import '../services/achievements_service.dart';
-import '../services/ai_service.dart';
 import '../data/tasks_data.dart';
 import '../widgets/math_text.dart';
 import '../widgets/math_keyboard.dart';
@@ -56,8 +55,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   // ignore: unused_field
   bool _hintUsed = false;
   bool _textIsNotEmpty = false;
-  bool _aiHintLoading = false;
-  String? _aiHintText;
   Color? _answerFlashColor;
   bool _showMathKeyboard = false;
 
@@ -150,8 +147,6 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     _hintRevealed = false;
     _hintUsed = false;
     _textIsNotEmpty = false;
-    _aiHintLoading = false;
-    _aiHintText = null;
     _wrongAttemptsOnCurrentTask = 0;
     _answerFlashColor = null;
     _showMathKeyboard = false;
@@ -552,73 +547,29 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildHintSection() {
+    if (_task.hint == null || _task.hint!.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     // Кнопка «Подсказка» — ещё не нажали
     if (!_hintRevealed) {
       return TextButton.icon(
-        onPressed: () async {
+        onPressed: () {
           setState(() {
             _hintRevealed = true;
             _hintUsed = true;
           });
-          // Если статической подсказки нет — запрашиваем у ИИ
-          if (_task.hint == null) {
-            setState(() => _aiHintLoading = true);
-            final grade = ProgressService.getCurrentGrade();
-            final hint = await AiService.generateHint(
-              question: _task.question,
-              grade: grade,
-            );
-            if (mounted) {
-              setState(() {
-                _aiHintText = hint;
-                _aiHintLoading = false;
-              });
-            }
-          }
         },
-        icon: const Icon(Icons.auto_awesome_rounded,
+        icon: const Icon(Icons.lightbulb_outline_rounded,
             size: 18, color: AppColors.gold),
         label: const Text(
-          'Подсказка от ИИ',
+          'Показать подсказку',
           style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w500),
         ),
       );
     }
 
-    // Загрузка ИИ-подсказки
-    if (_aiHintLoading) {
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppThemeColors.orangeLight(context),
-          borderRadius: BorderRadius.circular(AppRadius.md),
-        ),
-        child: Row(
-          children: [
-            const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.gold,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'ИИ готовит подсказку...',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppThemeColors.textSecondary(context),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Показываем подсказку (статическую или от ИИ)
-    final hintText = _task.hint ?? _aiHintText ?? '';
+    final hintText = _task.hint!.trim();
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -629,7 +580,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.auto_awesome_rounded, size: 20, color: AppColors.gold),
+          const Icon(Icons.lightbulb_outline_rounded, size: 20, color: AppColors.gold),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

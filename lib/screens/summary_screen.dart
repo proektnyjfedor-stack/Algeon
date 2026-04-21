@@ -8,7 +8,6 @@ import '../theme/app_theme.dart';
 import '../models/task.dart';
 import '../services/progress_service.dart';
 import '../services/achievements_service.dart';
-import '../services/ai_service.dart';
 import '../services/sound_service.dart';
 
 class SummaryScreen extends StatefulWidget {
@@ -53,8 +52,6 @@ class SummaryScreen extends StatefulWidget {
 
 class _SummaryScreenState extends State<SummaryScreen>
     with SingleTickerProviderStateMixin {
-  bool _aiAnalysisLoading = false;
-  String? _aiAnalysisText;
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
   late Animation<double> _slideAnim;
@@ -111,21 +108,6 @@ class _SummaryScreenState extends State<SummaryScreen>
     return Icons.trending_up_rounded;
   }
 
-  Future<void> _requestAnalysis() async {
-    setState(() => _aiAnalysisLoading = true);
-    final grade = ProgressService.getCurrentGrade();
-    final analysis = await AiService.analyzeErrors(
-      wrongTasks: widget.wrongTasks,
-      grade: grade,
-    );
-    if (mounted) {
-      setState(() {
-        _aiAnalysisText = analysis;
-        _aiAnalysisLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,8 +132,6 @@ class _SummaryScreenState extends State<SummaryScreen>
                   SliverToBoxAdapter(child: _buildDetailsRow()),
                   if (widget.newAchievements.isNotEmpty)
                     SliverToBoxAdapter(child: _buildAchievementsCard()),
-                  if (widget.wrongTasks.isNotEmpty)
-                    SliverToBoxAdapter(child: _buildAiCard()),
                   SliverToBoxAdapter(child: _buildActions()),
                   const SliverToBoxAdapter(child: SizedBox(height: 40)),
                 ],
@@ -458,143 +438,6 @@ class _SummaryScreenState extends State<SummaryScreen>
                     ],
                   ),
                 )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAiCard() {
-    if (_aiAnalysisText == null && !_aiAnalysisLoading) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-        child: GestureDetector(
-          onTap: () {
-            SoundService.hapticLight();
-            SoundService.playTap();
-            _requestAnalysis();
-          },
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppThemeColors.surface(context),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppThemeColors.border(context)),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: AppThemeColors.accentLight(context),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.auto_awesome_rounded,
-                      color: AppColors.accent, size: 22),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Разбор ошибок с ИИ',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                          color: AppThemeColors.textPrimary(context),
-                        ),
-                      ),
-                      Text(
-                        'Получи персональные подсказки',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppThemeColors.textSecondary(context),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right_rounded,
-                    color: AppThemeColors.textHint(context), size: 22),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    if (_aiAnalysisLoading) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppThemeColors.accentLight(context),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            children: [
-              const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: AppColors.accent,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'ИИ анализирует ошибки...',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppThemeColors.textSecondary(context),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppThemeColors.accentLight(context),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.accent.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.auto_awesome_rounded,
-                    color: AppColors.accent, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  'Анализ от ИИ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: AppThemeColors.textPrimary(context),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              _aiAnalysisText!,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppThemeColors.textPrimary(context),
-                height: 1.6,
-              ),
-            ),
           ],
         ),
       ),

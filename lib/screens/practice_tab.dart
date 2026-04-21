@@ -4,13 +4,10 @@
 /// Быстрый тест + статистика
 library;
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
-import '../services/ai_service.dart';
 import '../services/progress_service.dart';
 import '../services/sound_service.dart';
 import '../models/task.dart';
@@ -24,7 +21,6 @@ class PracticeTab extends StatefulWidget {
 
 class _PracticeTabState extends State<PracticeTab> {
   int _selectedCount = 10;
-  bool _aiGenerating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +72,6 @@ class _PracticeTabState extends State<PracticeTab> {
 
                   // Быстрый тест
                   _buildQuickTestCard(),
-
-                  const SizedBox(height: 16),
-
-                  // ИИ-задачи
-                  _buildAiTasksCard(),
 
                   const SizedBox(height: 16),
 
@@ -369,27 +360,66 @@ class _PracticeTabState extends State<PracticeTab> {
                 color: AppThemeColors.textPrimary(context),
               )),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              _buildStatItem(
-                'Решено',
-                '$totalSolved',
-                Icons.check_circle_outline,
-                isDark ? AppColors.purple : AppColorsLight.purple,
-              ),
-              _buildStatItem(
-                'Точность',
-                '${accuracy.toStringAsFixed(0)}%',
-                Icons.gps_fixed_rounded,
-                isDark ? AppColors.success : AppColorsLight.success,
-              ),
-              _buildStatItem(
-                'Серия',
-                '$streak',
-                Icons.local_fire_department_rounded,
-                isDark ? AppColors.orange : AppColorsLight.orange,
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final narrow = constraints.maxWidth < 360;
+              if (!narrow) {
+                return Row(
+                  children: [
+                    _buildStatItem(
+                      'Решено',
+                      '$totalSolved',
+                      Icons.check_circle_outline,
+                      isDark ? AppColors.purple : AppColorsLight.purple,
+                    ),
+                    _buildStatItem(
+                      'Точность',
+                      '${accuracy.toStringAsFixed(0)}%',
+                      Icons.gps_fixed_rounded,
+                      isDark ? AppColors.success : AppColorsLight.success,
+                    ),
+                    _buildStatItem(
+                      'Серия',
+                      '$streak',
+                      Icons.local_fire_department_rounded,
+                      isDark ? AppColors.orange : AppColorsLight.orange,
+                    ),
+                  ],
+                );
+              }
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      _buildStatItem(
+                        'Решено',
+                        '$totalSolved',
+                        Icons.check_circle_outline,
+                        isDark ? AppColors.purple : AppColorsLight.purple,
+                      ),
+                      _buildStatItem(
+                        'Точность',
+                        '${accuracy.toStringAsFixed(0)}%',
+                        Icons.gps_fixed_rounded,
+                        isDark ? AppColors.success : AppColorsLight.success,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      _buildStatItem(
+                        'Серия',
+                        '$streak',
+                        Icons.local_fire_department_rounded,
+                        isDark ? AppColors.orange : AppColorsLight.orange,
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -421,154 +451,6 @@ class _PracticeTabState extends State<PracticeTab> {
         ],
       ),
     );
-  }
-
-  Widget _buildAiTasksCard() {
-    final grade = ProgressService.getCurrentGrade();
-    final topics = getTopicsInfoByGrade(grade);
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppThemeColors.surface(context),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: AppThemeColors.border(context)),
-        boxShadow: AppShadows.soft(context),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppThemeColors.accentLight(context),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.auto_awesome_rounded,
-                    color: AppColors.accent, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'ИИ-задачи',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppThemeColors.textPrimary(context),
-                      ),
-                    ),
-                    Text(
-                      'Новые задачи от ИИ по теме',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppThemeColors.textSecondary(context),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: topics.map((topic) {
-              return GestureDetector(
-                onTap: _aiGenerating
-                    ? null
-                    : () {
-                        SoundService.hapticMedium();
-                        SoundService.playTap();
-                        _generateAiTasks(grade, topic.name);
-                      },
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: AppThemeColors.accentLight(context),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppColors.accent.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Text(
-                    topic.name,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.accent,
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          if (_aiGenerating) ...[
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.accent,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  'ИИ генерирует задачи...',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppThemeColors.textSecondary(context),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Future<void> _generateAiTasks(int grade, String topic) async {
-    setState(() => _aiGenerating = true);
-
-    final tasks = await AiService.generateTasks(
-      grade: grade,
-      topic: topic,
-      count: 5,
-    );
-
-    if (!mounted) return;
-    setState(() => _aiGenerating = false);
-
-    if (tasks.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Не удалось сгенерировать задачи')),
-      );
-      return;
-    }
-
-    unawaited(SoundService.hapticBurst(steps: 5));
-    SoundService.playAchievement();
-
-    context
-        .push(
-          '/learn/topic',
-          extra: {'name': '$topic (ИИ)', 'tasks': tasks},
-        )
-        .then((_) {
-      if (mounted) setState(() {});
-    });
   }
 
   void _startQuickTest() {

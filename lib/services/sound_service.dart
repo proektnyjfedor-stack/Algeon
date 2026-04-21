@@ -4,6 +4,7 @@
 library;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +21,12 @@ class SoundService {
   static int _poolIndex = 0;
   static bool _audioReady = false;
   static Future<void>? _poolInitFuture;
+  static final Random _rng = Random();
+  static final Map<String, int> _lastPlayedAtMs = <String, int>{};
+
+  // Глобальный мастер-уровень (чуть ниже 1.0, чтобы убрать клиппинг
+  // при быстрых последовательных звуках).
+  static const double _masterVolume = 0.9;
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -60,14 +67,26 @@ class SoundService {
     await _prefs?.setBool(_keySoundEnabled, enabled);
   }
 
-  static Future<void> _playAsset(String file, {double volume = 1.0}) async {
+  static Future<void> _playAsset(
+    String file, {
+    double volume = 1.0,
+    int minGapMs = 0,
+    bool humanize = false,
+  }) async {
     if (!isSoundEnabled()) return;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final last = _lastPlayedAtMs[file];
+    if (minGapMs > 0 && last != null && now - last < minGapMs) return;
+    _lastPlayedAtMs[file] = now;
+
     await _ensurePoolLoaded();
     if (!_audioReady || _pool.isEmpty) return;
     final p = _pool[_poolIndex % _pool.length];
     _poolIndex++;
     try {
-      await p.setVolume(volume.clamp(0.0, 1.0));
+      final jitter = humanize ? ((_rng.nextDouble() - 0.5) * 0.06) : 0.0;
+      final mixedVolume = (volume * _masterVolume + jitter).clamp(0.0, 1.0);
+      await p.setVolume(mixedVolume);
       await p.stop();
       await p.play(AssetSource('sounds/$file'));
     } catch (e, st) {
@@ -75,8 +94,20 @@ class SoundService {
     }
   }
 
-  static void _fire(String file, {double volume = 1.0}) {
-    unawaited(_playAsset(file, volume: volume));
+  static void _fire(
+    String file, {
+    double volume = 1.0,
+    int minGapMs = 0,
+    bool humanize = false,
+  }) {
+    unawaited(
+      _playAsset(
+        file,
+        volume: volume,
+        minGapMs: minGapMs,
+        humanize: humanize,
+      ),
+    );
   }
 
   static void _vibrate({bool heavy = false}) {
@@ -90,43 +121,53 @@ class SoundService {
   // ── Ответы и прогресс ──
 
   static Future<void> playCorrect() async {
-    _fire('correct.wav');
+    _fire('correct.wav', volume: 0.92);
     _vibrate();
   }
 
   static Future<void> playWrong() async {
-    _fire('wrong.wav', volume: 1.0);
+    _fire('wrong.wav', volume: 0.92);
     _vibrate(heavy: true);
   }
 
   static Future<void> playStreak() async {
-    _fire('streak.wav');
+    _fire('streak.wav', volume: 0.94);
     _vibrate();
   }
 
   static Future<void> playAchievement() async {
-    _fire('achievement.wav');
+    _fire('achievement.wav', volume: 0.96);
     _vibrate();
   }
 
   static Future<void> playComplete() async {
-    _fire('complete.wav');
+    _fire('complete.wav', volume: 0.96);
     _vibrate();
   }
 
   // ── UI (короткие) ──
 
-  static void playTap() => _fire('tap.wav');
+  static void playTap() => _fire(
+        'tap.wav',
+        volume: 0.46,
+        minGapMs: 55,
+        humanize: true,
+      );
 
-  static void playKey() => _fire('tap.wav', volume: 0.38);
+  static void playKey() => _fire(
+        'tap.wav',
+        volume: 0.33,
+        minGapMs: 25,
+        humanize: true,
+      );
 
-  static void playNavigate() => _fire('navigate.wav');
+  static void playNavigate() => _fire('navigate.wav', volume: 0.72, minGapMs: 90);
 
-  static void playPop() => _fire('pop.wav');
+  static void playPop() => _fire('pop.wav', volume: 0.65, minGapMs: 90);
 
-  static void playStart() => _fire('start.wav');
+  static void playStart() => _fire('start.wav', volume: 0.82, minGapMs: 120);
 
-  static void playNext() => _fire('next.wav');
+  static void playNext() => _fire('next.wav', volume: 0.7, minGapMs: 80);
 
   // ── Только тактильно (Safari на iPhone вибрацию с сайта не даёт) ──
 

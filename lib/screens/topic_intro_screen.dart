@@ -13,7 +13,6 @@ import '../data/tasks_data.dart';
 import '../data/topic_theory.dart';
 
 class TopicIntroScreen extends StatelessWidget {
-
   const TopicIntroScreen({
     super.key,
     required this.topicName,
@@ -51,21 +50,22 @@ class TopicIntroScreen extends StatelessWidget {
 
                         // Theory sections
                         if (theory != null)
-                          ...theory.sections.map((section) => Padding(
+                          ...theory.sections
+                              .where((section) => section.type != TheorySectionType.visual)
+                              .map((section) => Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: _buildSection(context, section),
                               ))
                         else
                           _buildFallbackContent(context),
+                        const SizedBox(height: 8),
+                        _buildBottomButton(context),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-
-            // Bottom button
-            _buildBottomButton(context),
           ],
         ),
       ),
@@ -166,7 +166,7 @@ class TopicIntroScreen extends StatelessWidget {
       case TheorySectionType.example:
         return _buildExampleCard(context, section);
       case TheorySectionType.visual:
-        return _buildVisualCard(context, section);
+        return const SizedBox.shrink();
       case TheorySectionType.tip:
         return _buildTipCard(context, section);
       case TheorySectionType.table:
@@ -363,104 +363,6 @@ class TopicIntroScreen extends StatelessWidget {
     );
   }
 
-  // --- VISUAL ---
-  Widget _buildVisualCard(BuildContext context, TheorySection section) {
-    final accent = section.accentColor ?? AppColors.accent;
-    final topicIcon = getTopicIcon(topicName);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppThemeColors.surface(context),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppThemeColors.border(context)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (section.title != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: Row(
-                children: [
-                  if (section.emoji != null) ...[
-                    Text(section.emoji!, style: const TextStyle(fontSize: 22)),
-                    const SizedBox(width: 10),
-                  ],
-                  Expanded(
-                    child: Text(
-                      section.title!,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: AppThemeColors.textPrimary(context),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppThemeColors.borderLight(context),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: accent.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: accent.withValues(alpha: 0.35)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.85),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(topicIcon, color: accent, size: 24),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Иллюстрация темы',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppThemeColors.textPrimary(context),
-                          ),
-                        ),
-                      ),
-                      Icon(Icons.image_rounded, color: accent, size: 20),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  section.content,
-                  style: TextStyle(
-                    fontSize: 15,
-                    height: 1.7,
-                    color: AppThemeColors.textPrimary(context),
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   // --- TIP ---
   Widget _buildTipCard(BuildContext context, TheorySection section) {
@@ -684,27 +586,26 @@ class TopicIntroScreen extends StatelessWidget {
 
   Widget _buildBottomButton(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 6),
       decoration: BoxDecoration(
-        color: AppThemeColors.surface(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
-      child: SafeArea(
-        top: false,
-        child: Material(
-          color: AppColors.accent,
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          child: InkWell(
-            onTap: () {
+      child: Material(
+        color: AppColors.accent,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: InkWell(
+          onTap: () {
               SoundService.hapticMedium();
               SoundService.playStart();
               context.pushReplacement(
                 '/learn/topic',
                 extra: {'name': topicName, 'tasks': tasks},
               );
-            },
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            child: SizedBox(
+            }
+            ,
+          borderRadius: BorderRadius.circular(AppRadius.md),
+          child: SizedBox(
             width: double.infinity,
             height: 56,
             child: Row(
@@ -729,10 +630,9 @@ class TopicIntroScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          ),
         ),
       ),
     );
   }
+
 }

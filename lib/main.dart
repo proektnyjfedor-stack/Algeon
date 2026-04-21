@@ -10,17 +10,21 @@ library;
 
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
 import 'theme/app_theme.dart';
 import 'theme/theme_provider.dart';
 import 'router/app_router.dart';
+import 'services/auth_service.dart';
+import 'services/cloud_sync_service.dart';
 import 'services/progress_service.dart';
 import 'services/achievements_service.dart';
-import 'services/reward_drop_service.dart';
 import 'services/sound_service.dart';
+import 'widgets/app_logo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,12 +61,16 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
 
   Future<void> _warmUp() async {
     try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       await Future.wait([
+        AuthService.init(),
         ProgressService.init(),
         AchievementsService.init(),
-        RewardDropService.init(),
         SoundService.init(),
       ]).timeout(_initTimeout);
+      await CloudSyncService.initAndBind();
     } on TimeoutException catch (e) {
       if (mounted) {
         setState(() => _initError = 'Превышено время ожидания (${_initTimeout.inSeconds} с). $e');
@@ -127,34 +135,86 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
           useMaterial3: true,
         ),
         themeMode: ThemeMode.system,
-        home: const Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Algeon',
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1.5,
-                    color: Color(0xFF2563EB),
-                  ),
-                ),
-                SizedBox(height: 28),
-                SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: CircularProgressIndicator(strokeWidth: 3),
-                ),
-              ],
-            ),
-          ),
-        ),
+        home: const Scaffold(body: _BootstrapSplash()),
       );
     }
 
     return const AlgeonApp();
+  }
+}
+
+class _BootstrapSplash extends StatefulWidget {
+  const _BootstrapSplash();
+
+  @override
+  State<_BootstrapSplash> createState() => _BootstrapSplashState();
+}
+
+class _BootstrapSplashState extends State<_BootstrapSplash>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fade;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _fade = Tween<double>(begin: 0.7, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+    _scale = Tween<double>(begin: 0.97, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _fade.value,
+            child: Transform.scale(
+              scale: _scale.value,
+              child: child,
+            ),
+          );
+        },
+        child: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppLogoIcon(size: 88),
+            SizedBox(height: 16),
+            Text(
+              'Algeon',
+              style: TextStyle(
+                fontSize: 34,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.9,
+                color: Color(0xFF2563EB),
+              ),
+            ),
+            SizedBox(height: 22),
+            SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(strokeWidth: 2.8),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

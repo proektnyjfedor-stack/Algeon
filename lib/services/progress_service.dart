@@ -358,4 +358,63 @@ class ProgressService {
   static void _log(String msg) {
     debugPrint('[Progress] $msg');
   }
+
+  // ============================================================
+  // CLOUD SNAPSHOT
+  // ============================================================
+
+  static const List<String> _cloudKeys = [
+    _keyAttempts,
+    _keyCorrect,
+    _keyLastActive,
+    _keyStreak,
+    _keyGrade,
+    _keyOnboarding,
+    _keyUserName,
+    _keyAvatar,
+    _keyTodayDate,
+    _keyTodayCompleted,
+    _keyCoins,
+    _keyDailyBonusDate,
+    _keyEquippedBetaItem,
+    'custom_avatar',
+    _keyCustomPhoto,
+  ];
+
+  static Map<String, dynamic> exportForCloud() {
+    final out = <String, dynamic>{
+      _keySolved: _solvedTaskIds.toList(growable: false),
+    };
+    for (final k in _cloudKeys) {
+      final v = _prefs?.get(k);
+      if (v != null) out[k] = v;
+    }
+    return out;
+  }
+
+  static Future<void> importFromCloud(Map<String, dynamic> data) async {
+    final solvedRaw = data[_keySolved];
+    if (solvedRaw is List) {
+      final solved = solvedRaw.map((e) => e.toString()).toList(growable: false);
+      _solvedTaskIds = solved.toSet();
+      await _prefs?.setStringList(_keySolved, solved);
+    }
+
+    for (final k in _cloudKeys) {
+      final v = data[k];
+      if (v == null) continue;
+      if (v is bool) {
+        await _prefs?.setBool(k, v);
+      } else if (v is int) {
+        await _prefs?.setInt(k, v);
+      } else if (v is double) {
+        await _prefs?.setDouble(k, v);
+      } else if (v is String) {
+        await _prefs?.setString(k, v);
+      } else if (v is List) {
+        await _prefs?.setStringList(k, v.map((e) => e.toString()).toList());
+      }
+    }
+    _loadSolvedTasks();
+  }
 }

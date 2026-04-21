@@ -18,7 +18,9 @@ import '../screens/topic_intro_screen.dart';
 import '../screens/summary_screen.dart';
 import '../screens/onboarding_welcome_screen.dart';
 import '../screens/splash_screen.dart';
+import '../screens/auth_screen.dart';
 import '../models/task.dart';
+import '../services/auth_service.dart';
 import '../services/progress_service.dart';
 
 /// Tab paths used by ShellRoute navigation.
@@ -34,6 +36,7 @@ class AppRoutes {
   static const String summary = '/summary';
   static const String onboarding = '/onboarding';
   static const String splash = '/splash';
+  static const String auth = '/auth';
 }
 
 /// Resolves the bottom-nav / rail index from the current location.
@@ -74,6 +77,19 @@ final GoRouter appRouter = GoRouter(
 
     // Already heading to onboarding -- allow.
     if (path == AppRoutes.onboarding) return null;
+    if (path == AppRoutes.auth) {
+      if (AuthService.isLoggedIn()) {
+        if (!ProgressService.isOnboardingComplete()) {
+          return AppRoutes.onboarding;
+        }
+        return AppRoutes.learn;
+      }
+      return null;
+    }
+
+    if (!AuthService.isLoggedIn()) {
+      return AppRoutes.auth;
+    }
 
     // Optional placeholder for platform-specific branch.
     if (!kIsWeb) {
@@ -178,6 +194,13 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.onboarding,
       pageBuilder: (BuildContext context, GoRouterState state) {
         return const NoTransitionPage(child: OnboardingWelcomeScreen());
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutes.auth,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return const NoTransitionPage(child: AuthScreen());
       },
     ),
 

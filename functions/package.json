@@ -1,6 +1,6 @@
 {
   "name": "algeon-functions",
-  "description": "AI proxy for Algeon",
+  "description": "Cloud Functions for Algeon",
   "engines": {
     "node": "18"
   },

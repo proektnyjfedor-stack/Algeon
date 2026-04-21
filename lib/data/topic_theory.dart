@@ -95,13 +95,6 @@ TopicTheory _buildGeneratedTheory(String topicName, String description) {
         content: formulaBlock,
       ),
       const TheorySection(
-        type: TheorySectionType.visual,
-        title: 'Схема и образ',
-        emoji: '🧩',
-        content:
-            'Ниже — визуальная карточка темы. Используй её как опору: сначала пойми идею, затем переходи к формулам и задачам.',
-      ),
-      const TheorySection(
         type: TheorySectionType.steps,
         title: 'Как решать задания по теме',
         content: 'Универсальный алгоритм:',
