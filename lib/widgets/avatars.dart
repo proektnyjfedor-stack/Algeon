@@ -11,47 +11,62 @@ import 'package:flutter/material.dart';
 const List<Color> avatarBgColors = [
   Color(0xFFDDF4FF), Color(0xFFFFE0F0), Color(0xFFD7FFB8), Color(0xFFF3E8FF),
   Color(0xFFFFF4E5), Color(0xFFFFE0E0), Color(0xFFE8E8E8), Color(0xFFFFF9E6),
+  Color(0xFFD9F7F0), Color(0xFFE6F0FF), Color(0xFFFFEAD6), Color(0xFFE9E3FF),
+  Color(0xFFDFFFE6), Color(0xFFFDE2FF),
 ];
 
 const List<Color> avatarSkinColors = [
   Color(0xFFFFDBAC), Color(0xFFF5D0A9), Color(0xFFE8B98A),
   Color(0xFFC68642), Color(0xFF8D5524), Color(0xFFFFE0BD),
+  Color(0xFFB77947), Color(0xFF6E4121),
 ];
 
 const List<Color> avatarHairColors = [
   Color(0xFF1A1A1A), Color(0xFF5C4033), Color(0xFF8B4513), Color(0xFF2C1810),
   Color(0xFFD4A03A), Color(0xFFC0392B), Color(0xFF607D8B), Color(0xFFE8E8E8),
+  Color(0xFF7B3F00), Color(0xFF2F4F4F), Color(0xFF5B2C6F), Color(0xFF0B3D91),
 ];
 
 const List<Color> avatarShirtColors = [
   Color(0xFF1CB0F6), Color(0xFFFF6B9D), Color(0xFF58CC02), Color(0xFFCE82FF),
   Color(0xFFFF9600), Color(0xFFFF4B4B), Color(0xFF3C3C3C), Color(0xFF1ABC9C),
+  Color(0xFF355CDE), Color(0xFF7F8C8D), Color(0xFFE67E22), Color(0xFF16A085),
+  Color(0xFF8E44AD), Color(0xFF2ECC71),
 ];
 
 const List<String> avatarHairStyles = [
   'boy_short', 'boy_spiky', 'girl_long', 'girl_pigtails', 'girl_short', 'bald',
+  'curly', 'ponytail', 'mohawk', 'afro',
 ];
 
 const Map<String, String> hairStyleNames = {
-  'boy_short': 'Короткие',
-  'boy_spiky': 'Торчком',
-  'girl_long': 'Длинные',
-  'girl_pigtails': 'Хвостики',
-  'girl_short': 'Каре',
-  'bald': 'Нет',
+  'boy_short': 'Short',
+  'boy_spiky': 'Spiky',
+  'girl_long': 'Long',
+  'girl_pigtails': 'Pigtails',
+  'girl_short': 'Bob',
+  'bald': 'None',
+  'curly': 'Curly',
+  'ponytail': 'Ponytail',
+  'mohawk': 'Mohawk',
+  'afro': 'Afro',
 };
 
 const List<String> avatarAccessories = [
   'none', 'glasses', 'bow', 'hat', 'headband', 'crown',
+  'earrings', 'mask', 'necklace',
 ];
 
 const Map<String, String> accessoryNames = {
-  'none': 'Нет',
-  'glasses': 'Очки',
-  'bow': 'Бант',
-  'hat': 'Шляпа',
-  'headband': 'Повязка',
-  'crown': 'Корона',
+  'none': 'None',
+  'glasses': 'Glasses',
+  'bow': 'Bow',
+  'hat': 'Hat',
+  'headband': 'Headband',
+  'crown': 'Crown',
+  'earrings': 'Earrings',
+  'mask': 'Mask',
+  'necklace': 'Necklace',
 };
 
 const List<String> avatarExpressions = [
@@ -59,11 +74,11 @@ const List<String> avatarExpressions = [
 ];
 
 const Map<String, String> expressionNames = {
-  'smile': 'Улыбка',
-  'grin': 'Ухмылка',
-  'wink': 'Подмиг.',
-  'surprised': 'Удивл.',
-  'cool': 'Крутой',
+  'smile': 'Smile',
+  'grin': 'Grin',
+  'wink': 'Wink',
+  'surprised': 'Surprised',
+  'cool': 'Cool',
 };
 
 /// Данные аватарки
@@ -84,7 +99,7 @@ class AvatarData {
   factory AvatarData.fromMap(Map<String, dynamic> map) {
     return AvatarData(
       id: map['id'] as String? ?? 'custom',
-      name: map['name'] as String? ?? 'Персонаж',
+      name: map['name'] as String? ?? 'Character',
       bgColor: Color(map['bgColor'] as int? ?? 0xFFDDF4FF),
       skinColor: Color(map['skinColor'] as int? ?? 0xFFFFDBAC),
       hairStyle: map['hairStyle'] as String? ?? 'boy_short',
@@ -150,22 +165,22 @@ class AvatarData {
 
 /// Пресетные аватарки
 const List<AvatarData> allAvatars = [
-  AvatarData(id: 'boy_blue', name: 'Артём', bgColor: Color(0xFFDDF4FF), skinColor: Color(0xFFFFDBAC), hairStyle: 'boy_short', hairColor: Color(0xFF5C4033), shirtColor: Color(0xFF1CB0F6)),
-  AvatarData(id: 'girl_pink', name: 'Алиса', bgColor: Color(0xFFFFE0F0), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_long', hairColor: Color(0xFF8B4513), shirtColor: Color(0xFFFF6B9D), accessory: 'bow'),
-  AvatarData(id: 'boy_green', name: 'Максим', bgColor: Color(0xFFD7FFB8), skinColor: Color(0xFFF5D0A9), hairStyle: 'boy_short', hairColor: Color(0xFF2C1810), shirtColor: Color(0xFF58CC02), accessory: 'glasses'),
-  AvatarData(id: 'girl_purple', name: 'Мария', bgColor: Color(0xFFF3E8FF), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_short', hairColor: Color(0xFF1A1A2E), shirtColor: Color(0xFFCE82FF)),
-  AvatarData(id: 'boy_orange', name: 'Дима', bgColor: Color(0xFFFFF4E5), skinColor: Color(0xFFE8B98A), hairStyle: 'boy_spiky', hairColor: Color(0xFFD4A03A), shirtColor: Color(0xFFFF9600), accessory: 'hat'),
-  AvatarData(id: 'girl_red', name: 'София', bgColor: Color(0xFFFFE0E0), skinColor: Color(0xFFF5D0A9), hairStyle: 'girl_pigtails', hairColor: Color(0xFFC0392B), shirtColor: Color(0xFFFF4B4B), accessory: 'bow'),
-  AvatarData(id: 'boy_dark', name: 'Кирилл', bgColor: Color(0xFFE8E8E8), skinColor: Color(0xFFC68642), hairStyle: 'boy_short', hairColor: Color(0xFF1A1A1A), shirtColor: Color(0xFF3C3C3C)),
-  AvatarData(id: 'girl_teal', name: 'Настя', bgColor: Color(0xFFD5F5F5), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_long', hairColor: Color(0xFF5C4033), shirtColor: Color(0xFF1ABC9C), accessory: 'glasses'),
-  AvatarData(id: 'robot', name: 'Робот', bgColor: Color(0xFFE8E8E8), skinColor: Color(0xFFB0BEC5), hairStyle: 'bald', hairColor: Color(0xFF607D8B), shirtColor: Color(0xFF1CB0F6)),
-  AvatarData(id: 'cat', name: 'Котик', bgColor: Color(0xFFFFF4E5), skinColor: Color(0xFFFF9600), hairStyle: 'bald', hairColor: Color(0xFFE67E22), shirtColor: Color(0xFFFF9600)),
+  AvatarData(id: 'boy_blue', name: 'Artem', bgColor: Color(0xFFDDF4FF), skinColor: Color(0xFFFFDBAC), hairStyle: 'boy_short', hairColor: Color(0xFF5C4033), shirtColor: Color(0xFF1CB0F6)),
+  AvatarData(id: 'girl_pink', name: 'Alice', bgColor: Color(0xFFFFE0F0), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_long', hairColor: Color(0xFF8B4513), shirtColor: Color(0xFFFF6B9D), accessory: 'bow'),
+  AvatarData(id: 'boy_green', name: 'Max', bgColor: Color(0xFFD7FFB8), skinColor: Color(0xFFF5D0A9), hairStyle: 'boy_short', hairColor: Color(0xFF2C1810), shirtColor: Color(0xFF58CC02), accessory: 'glasses'),
+  AvatarData(id: 'girl_purple', name: 'Maria', bgColor: Color(0xFFF3E8FF), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_short', hairColor: Color(0xFF1A1A2E), shirtColor: Color(0xFFCE82FF)),
+  AvatarData(id: 'boy_orange', name: 'Dima', bgColor: Color(0xFFFFF4E5), skinColor: Color(0xFFE8B98A), hairStyle: 'boy_spiky', hairColor: Color(0xFFD4A03A), shirtColor: Color(0xFFFF9600), accessory: 'hat'),
+  AvatarData(id: 'girl_red', name: 'Sophie', bgColor: Color(0xFFFFE0E0), skinColor: Color(0xFFF5D0A9), hairStyle: 'girl_pigtails', hairColor: Color(0xFFC0392B), shirtColor: Color(0xFFFF4B4B), accessory: 'bow'),
+  AvatarData(id: 'boy_dark', name: 'Kirill', bgColor: Color(0xFFE8E8E8), skinColor: Color(0xFFC68642), hairStyle: 'boy_short', hairColor: Color(0xFF1A1A1A), shirtColor: Color(0xFF3C3C3C)),
+  AvatarData(id: 'girl_teal', name: 'Nastya', bgColor: Color(0xFFD5F5F5), skinColor: Color(0xFFFFDBAC), hairStyle: 'girl_long', hairColor: Color(0xFF5C4033), shirtColor: Color(0xFF1ABC9C), accessory: 'glasses'),
+  AvatarData(id: 'robot', name: 'Robot', bgColor: Color(0xFFE8E8E8), skinColor: Color(0xFFB0BEC5), hairStyle: 'bald', hairColor: Color(0xFF607D8B), shirtColor: Color(0xFF1CB0F6)),
+  AvatarData(id: 'cat', name: 'Cat', bgColor: Color(0xFFFFF4E5), skinColor: Color(0xFFFF9600), hairStyle: 'bald', hairColor: Color(0xFFE67E22), shirtColor: Color(0xFFFF9600)),
 ];
 
 /// Дефолтный аватар для конструктора
 AvatarData defaultCustomAvatar = const AvatarData(
   id: 'custom',
-  name: 'Персонаж',
+  name: 'Character',
   bgColor: Color(0xFFDDF4FF),
   skinColor: Color(0xFFFFDBAC),
   hairStyle: 'boy_short',
@@ -326,6 +341,44 @@ class _AvatarPainter extends CustomPainter {
       case 'bald':
         // Без волос
         break;
+
+      case 'curly':
+        canvas.drawArc(Rect.fromLTWH(s * 0.16, s * 0.08, s * 0.68, s * 0.34), 3.14, 3.14, true, hairPaint);
+        for (final dx in [0.22, 0.33, 0.44, 0.56, 0.67, 0.78]) {
+          canvas.drawCircle(Offset(s * dx, s * 0.21), s * 0.05, hairPaint);
+        }
+        break;
+
+      case 'ponytail':
+        canvas.drawArc(Rect.fromLTWH(s * 0.16, s * 0.07, s * 0.68, s * 0.36), 3.14, 3.14, true, hairPaint);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(s * 0.72, s * 0.2, s * 0.16, s * 0.32),
+            Radius.circular(s * 0.08),
+          ),
+          hairPaint,
+        );
+        canvas.drawCircle(Offset(s * 0.74, s * 0.25), s * 0.03, Paint()..color = avatar.shirtColor);
+        break;
+
+      case 'mohawk':
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(cx - s * 0.07, s * 0.03, s * 0.14, s * 0.28),
+            Radius.circular(s * 0.04),
+          ),
+          hairPaint,
+        );
+        for (final y in [0.02, 0.07, 0.12]) {
+          canvas.drawOval(Rect.fromCenter(center: Offset(cx, s * y), width: s * 0.12, height: s * 0.07), hairPaint);
+        }
+        break;
+
+      case 'afro':
+        canvas.drawCircle(Offset(cx, s * 0.2), s * 0.18, hairPaint);
+        canvas.drawCircle(Offset(cx - s * 0.14, s * 0.21), s * 0.09, hairPaint);
+        canvas.drawCircle(Offset(cx + s * 0.14, s * 0.21), s * 0.09, hairPaint);
+        break;
     }
   }
 
@@ -475,6 +528,37 @@ class _AvatarPainter extends CustomPainter {
         canvas.drawPath(crownPath, crownPaint);
         // Камни
         canvas.drawCircle(Offset(s * 0.5, s * 0.1), s * 0.02, Paint()..color = const Color(0xFFFF4B4B));
+        break;
+
+      case 'earrings':
+        final ringPaint = Paint()
+          ..color = const Color(0xFFFFD700)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = s * 0.02;
+        canvas.drawOval(Rect.fromLTWH(s * 0.14, s * 0.34, s * 0.08, s * 0.12), ringPaint);
+        canvas.drawOval(Rect.fromLTWH(s * 0.78, s * 0.34, s * 0.08, s * 0.12), ringPaint);
+        break;
+
+      case 'mask':
+        final maskPaint = Paint()..color = avatar.shirtColor.withValues(alpha: 0.95);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromLTWH(s * 0.3, s * 0.41, s * 0.4, s * 0.16),
+            Radius.circular(s * 0.06),
+          ),
+          maskPaint,
+        );
+        canvas.drawLine(Offset(s * 0.3, s * 0.47), Offset(s * 0.2, s * 0.43), Paint()..color = maskPaint.color..strokeWidth = s * 0.01);
+        canvas.drawLine(Offset(s * 0.7, s * 0.47), Offset(s * 0.8, s * 0.43), Paint()..color = maskPaint.color..strokeWidth = s * 0.01);
+        break;
+
+      case 'necklace':
+        final chainPaint = Paint()
+          ..color = const Color(0xFFFFD166)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = s * 0.02;
+        canvas.drawArc(Rect.fromLTWH(s * 0.3, s * 0.58, s * 0.4, s * 0.2), 0.15, 2.85, false, chainPaint);
+        canvas.drawCircle(Offset(cx, s * 0.74), s * 0.03, Paint()..color = const Color(0xFFFFC300));
         break;
 
       case 'none':

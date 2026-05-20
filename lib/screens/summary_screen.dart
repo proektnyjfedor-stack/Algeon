@@ -4,10 +4,13 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../models/task.dart';
 import '../services/progress_service.dart';
 import '../services/achievements_service.dart';
+import '../services/language_service.dart';
+import '../data/topic_titles_en.dart';
 import '../services/sound_service.dart';
 
 class SummaryScreen extends StatefulWidget {
@@ -88,12 +91,12 @@ class _SummaryScreenState extends State<SummaryScreen>
     return '$m:${s.toString().padLeft(2, '0')}';
   }
 
-  String _getTitle() {
-    if (_successRate >= 1.0) return 'Превосходно!';
-    if (_successRate >= 0.8) return 'Отличная работа!';
-    if (_successRate >= 0.6) return 'Хороший результат!';
-    if (_successRate >= 0.4) return 'Неплохо!';
-    return 'Продолжай учиться!';
+  String _getTitle(String Function(String) t) {
+    if (_successRate >= 1.0) return t('summary.excellent');
+    if (_successRate >= 0.8) return t('summary.great');
+    if (_successRate >= 0.6) return t('summary.good');
+    if (_successRate >= 0.4) return t('summary.notBad');
+    return t('summary.keepLearning');
   }
 
   Color get _primaryColor {
@@ -110,6 +113,7 @@ class _SummaryScreenState extends State<SummaryScreen>
 
   @override
   Widget build(BuildContext context) {
+    final t = context.watch<LanguageService>().t;
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: AnimatedBuilder(
@@ -127,12 +131,12 @@ class _SummaryScreenState extends State<SummaryScreen>
               constraints: const BoxConstraints(maxWidth: 520),
               child: CustomScrollView(
                 slivers: [
-                  SliverToBoxAdapter(child: _buildResultHeader()),
-                  SliverToBoxAdapter(child: _buildScoreCard()),
-                  SliverToBoxAdapter(child: _buildDetailsRow()),
+                  SliverToBoxAdapter(child: _buildResultHeader(t)),
+                  SliverToBoxAdapter(child: _buildScoreCard(t)),
+                  SliverToBoxAdapter(child: _buildDetailsRow(t)),
                   if (widget.newAchievements.isNotEmpty)
-                    SliverToBoxAdapter(child: _buildAchievementsCard()),
-                  SliverToBoxAdapter(child: _buildActions()),
+                    SliverToBoxAdapter(child: _buildAchievementsCard(t)),
+                  SliverToBoxAdapter(child: _buildActions(t)),
                   const SliverToBoxAdapter(child: SizedBox(height: 40)),
                 ],
               ),
@@ -143,7 +147,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildResultHeader() {
+  Widget _buildResultHeader(String Function(String) t) {
     return Container(
       width: double.infinity,
       color: _primaryColor,
@@ -186,7 +190,7 @@ class _SummaryScreenState extends State<SummaryScreen>
           const SizedBox(height: 16),
 
           Text(
-            _getTitle(),
+            _getTitle(t),
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w800,
@@ -195,7 +199,9 @@ class _SummaryScreenState extends State<SummaryScreen>
           ),
           const SizedBox(height: 6),
           Text(
-            widget.topicName,
+            context.watch<LanguageService>().isEnglish
+                ? topicTitleEn(widget.topicName)
+                : widget.topicName,
             style: TextStyle(
               fontSize: 14,
               color: Colors.white.withValues(alpha: 0.8),
@@ -206,7 +212,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildScoreCard() {
+  Widget _buildScoreCard(String Function(String) t) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Container(
@@ -265,13 +271,13 @@ class _SummaryScreenState extends State<SummaryScreen>
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildScoreStatChip('${widget.correctCount}', 'Верно', AppColors.success),
-                _buildScoreStatChip('${widget.wrongCount}', 'Ошибок', AppColors.error),
-                _buildScoreStatChip('${widget.totalCount}', 'Задач', AppColors.accent),
+                _buildScoreStatChip('${widget.correctCount}', t('summary.correct'), AppColors.success),
+                _buildScoreStatChip('${widget.wrongCount}', t('summary.wrong'), AppColors.error),
+                _buildScoreStatChip('${widget.totalCount}', t('summary.tasks'), AppColors.accent),
                 if (widget.elapsedTime != null)
                   _buildScoreStatChip(
                     _formatDuration(widget.elapsedTime!),
-                    'Время',
+                    t('summary.time'),
                     AppThemeColors.textSecondary(context),
                   ),
               ],
@@ -314,7 +320,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildDetailsRow() {
+  Widget _buildDetailsRow(String Function(String) t) {
     final xpEarned = widget.correctCount * 10;
     final streak = ProgressService.getStreakDays();
 
@@ -331,7 +337,7 @@ class _SummaryScreenState extends State<SummaryScreen>
           const SizedBox(width: 10),
           _buildPillCard(
             icon: Icons.local_fire_department_rounded,
-            value: '$streak дней',
+            value: t('summary.days').replaceAll('{count}', '$streak'),
             color: AppColors.orange,
             bg: AppColors.orange.withValues(alpha: 0.1),
           ),
@@ -371,7 +377,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildAchievementsCard() {
+  Widget _buildAchievementsCard(String Function(String) t) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
       child: Container(
@@ -389,7 +395,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                 const Icon(Icons.emoji_events_rounded, color: AppColors.gold, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  'Новые достижения!',
+                  t('summary.newAchievements'),
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -444,7 +450,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     );
   }
 
-  Widget _buildActions() {
+  Widget _buildActions(String Function(String) t) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Column(
@@ -462,7 +468,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                   },
                   icon: const Icon(Icons.replay_rounded, size: 20),
                   label: Text(
-                    'Повторить ошибки (${widget.wrongTasks.length})',
+                    t('summary.retryWrong')
+                        .replaceAll('{count}', '${widget.wrongTasks.length}'),
                     style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -485,9 +492,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                 context.go('/learn');
               },
               icon: const Icon(Icons.home_rounded, size: 20),
-              label: const Text(
-                'На главную',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              label: Text(
+                t('summary.toHome'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _isGood ? AppColors.success : AppColors.accent,
@@ -502,9 +509,10 @@ class _SummaryScreenState extends State<SummaryScreen>
   }
 
   void _retryWrong(BuildContext context) {
+    final t = context.read<LanguageService>().t;
     context.pushReplacement(
       '/learn/topic',
-      extra: {'name': 'Работа над ошибками', 'tasks': widget.wrongTasks},
+      extra: {'name': t('summary.wrongWorkTopic'), 'tasks': widget.wrongTasks},
     );
   }
 }

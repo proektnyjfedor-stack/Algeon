@@ -4,7 +4,9 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../services/language_service.dart';
 import 'avatars.dart';
 
 class AvatarBuilderSheet extends StatefulWidget {
@@ -25,24 +27,26 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   late AvatarData _avatar;
   int _selectedTab = 0;
 
-  final _tabs = const [
-    ('Фон', Icons.palette_outlined),
-    ('Кожа', Icons.face_outlined),
-    ('Причёска', Icons.content_cut_rounded),
-    ('Цвет волос', Icons.brush_outlined),
-    ('Одежда', Icons.checkroom_outlined),
-    ('Аксессуар', Icons.auto_awesome_outlined),
-    ('Лицо', Icons.emoji_emotions_outlined),
-  ];
+  late List<(String, IconData)> _tabs;
 
   @override
   void initState() {
     super.initState();
     _avatar = widget.initialAvatar;
+    _tabs = const [
+      ('onboarding.background', Icons.palette_outlined),
+      ('onboarding.skin', Icons.face_outlined),
+      ('onboarding.hair', Icons.content_cut_rounded),
+      ('onboarding.hairColor', Icons.brush_outlined),
+      ('onboarding.clothes', Icons.checkroom_outlined),
+      ('onboarding.accessory', Icons.auto_awesome_outlined),
+      ('onboarding.expression', Icons.emoji_emotions_outlined),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = context.watch<LanguageService>().t;
     final media = MediaQuery.of(context);
     final isLandscape = media.size.width > media.size.height;
     final sheetHeight = media.size.height * (isLandscape ? 0.9 : 0.78);
@@ -67,7 +71,7 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
           const SizedBox(height: 16),
 
           // Title
-          Text('Конструктор персонажа', style: TextStyle(
+          Text(t('profile.openAvatarBuilder'), style: TextStyle(
             fontSize: isLandscape ? 18 : 20, fontWeight: FontWeight.w700,
             color: AppThemeColors.textPrimary(context),
           )),
@@ -106,7 +110,7 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
                                     ? Colors.white
                                     : AppThemeColors.textSecondary(context)),
                             const SizedBox(width: 6),
-                            Text(_tabs[i].$1, style: TextStyle(
+                            Text(t(_tabs[i].$1), style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: _selectedTab == i
@@ -133,29 +137,18 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
             ),
           ),
 
-          // Presets + Save
+          // Save
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _showPresets,
-                    child: const Text('Готовые'),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  flex: 2,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      widget.onSave(_avatar);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Сохранить'),
-                  ),
-                ),
-              ],
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  widget.onSave(_avatar);
+                  Navigator.pop(context);
+                },
+                child: Text(t('common.save')),
+              ),
             ),
           ),
           SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
@@ -327,53 +320,4 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
     );
   }
 
-  void _showPresets() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) {
-        final media = MediaQuery.of(context);
-        final isLandscape = media.size.width > media.size.height;
-        final width = media.size.width;
-        final columns = width >= 1100 ? 7 : (width >= 800 ? 6 : (width >= 560 ? 5 : 4));
-        return Container(
-        height: media.size.height * (isLandscape ? 0.86 : 0.58),
-        decoration: BoxDecoration(
-          color: AppThemeColors.surface(context),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
-        child: Column(
-          children: [
-            Text('Готовые персонажи', style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w700,
-              color: AppThemeColors.textPrimary(context),
-            )),
-            const SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: columns, mainAxisSpacing: 10, crossAxisSpacing: 10,
-                ),
-                itemCount: allAvatars.length,
-                itemBuilder: (_, i) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() => _avatar = allAvatars[i].copyWith(id: 'custom'));
-                      Navigator.pop(context);
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: AvatarWidget(avatarData: allAvatars[i], size: 60),
-                  );
-                },
-              ),
-            ),
-            SizedBox(height: media.padding.bottom),
-          ],
-        ),
-      );
-      },
-    );
-  }
 }

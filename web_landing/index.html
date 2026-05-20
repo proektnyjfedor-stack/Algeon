@@ -3,299 +3,643 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MathPilot — Математика с пониманием</title>
-  <meta name="description" content="Приложение для детей 7–12 лет. 200+ задач, объяснения шаг за шагом, геймификация. Бесплатно.">
+  <title>Algeon — математика с пониманием</title>
+  <meta name="description" content="Интерактивный тренажёр по математике для 5–11 класса: теория, задачи, практика и прогресс в одном приложении.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%232563EB' d='M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z'/%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var t = localStorage.getItem('algeon-theme');
+      if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+      else if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#">
-        <div class="nav-logo-icon">✕</div>
-        <span>MathPilot</span>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <header class="header" id="header">
+    <div class="header-inner container">
+      <a class="logo" href="#">
+        <span class="logo-icon" aria-hidden="true">
+          <svg class="logo-stairs-svg" width="36" height="36" viewBox="0 0 32 32" fill="none">
+            <path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/>
+          </svg>
+        </span>
+        <span class="logo-text">Algeon</span>
       </a>
-      <div class="nav-links">
+      <nav class="nav" aria-label="Основное меню">
         <a href="#features">Возможности</a>
+        <a href="#showcase">Интерфейс</a>
         <a href="#grades">Классы</a>
+        <a href="#reviews">Отзывы</a>
         <a href="#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+        <a class="btn btn-ghost btn-sm" href="https://algeon.tech" target="_blank" rel="noopener">Войти</a>
+        <a class="btn btn-primary btn-sm magnetic" href="https://algeon.tech" target="_blank" rel="noopener">Начать</a>
       </div>
-      <a class="btn btn-sm" href="#download">Скачать бесплатно</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-  </nav>
+    <div class="mobile-nav" id="mobileNav" hidden>
+      <a href="#features">Возможности</a>
+      <a href="#showcase">Интерфейс</a>
+      <a href="#grades">Классы</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="https://algeon.tech" target="_blank" rel="noopener">Открыть приложение</a>
+      <button type="button" class="theme-toggle theme-toggle-mobile" id="themeToggleMobile" aria-label="Переключить тему">
+        <span class="theme-toggle-label">Тема</span>
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-    <div class="container hero-inner">
-      <div class="hero-badge">🎉 Полностью бесплатно · Без рекламы</div>
-      <h1 class="hero-title">
-        Математика,<br>
-        которую понимают дети
-      </h1>
-      <p class="hero-subtitle">
-        Приложение для школьников 7–12 лет. 200+ задач, объяснения шаг за шагом,
-        ИИ-подсказки и геймификация. Не просто решать — понимать.
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn-lg" href="#download">Попробовать бесплатно</a>
-        <a class="btn btn-outline btn-lg" href="#features">Как это работает</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num" data-target="200">0</span><span class="stat-plus">+</span>
-          <span class="stat-label">Задач</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num" data-target="24">0</span>
-          <span class="stat-label">Темы</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num" data-target="4">0</span>
-          <span class="stat-label">Класса</span>
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-grid"></div>
+        <div class="hero-glow hero-glow-1" data-parallax="0.04"></div>
+        <div class="hero-glow hero-glow-2" data-parallax="-0.03"></div>
+        <div class="math-floats">
+          <span class="math-char" style="--i:0">∫</span>
+          <span class="math-char" style="--i:1">π</span>
+          <span class="math-char" style="--i:2">√</span>
+          <span class="math-char" style="--i:3">x²</span>
+          <span class="math-char" style="--i:4">Σ</span>
+          <span class="math-char" style="--i:5">Δ</span>
+          <span class="math-char" style="--i:6">∞</span>
+          <span class="math-char" style="--i:7">α</span>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section class="section" id="features">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Почему MathPilot</h2>
-        <p class="section-desc">Разработано вместе с педагогами. Проверено детьми.</p>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card feature-large">
-          <div class="feature-icon">🧠</div>
-          <h3>ИИ-подсказки</h3>
-          <p>Когда ребёнок застревает — ИИ даёт умную подсказку, которая направляет, а не даёт ответ. Учит думать, а не подсматривать.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📚</div>
-          <h3>Шаг за шагом</h3>
-          <p>Каждая задача содержит подробное объяснение решения — ребёнок понимает, а не зазубривает.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎮</div>
-          <h3>Геймификация</h3>
-          <p>Стрики, достижения, уровни, конфетти — учёба становится игрой, в которую хочется возвращаться.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>Прогресс</h3>
-          <p>Наглядная статистика: точность, решённые задачи, серия дней. Видно, что было и куда двигаться.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">✈️</div>
-          <h3>Офлайн</h3>
-          <p>Работает без интернета — в самолёте, на даче, в метро. Прогресс синхронизируется при подключении.</p>
-        </div>
-        <div class="feature-card feature-large">
-          <div class="feature-icon">🏆</div>
-          <h3>Достижения и мотивация</h3>
-          <p>30+ уникальных достижений. От «Первый шаг» до «Идеальная неделя». Каждое открытие — повод для гордости.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- How it works -->
-  <section class="section how-it-works">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Как это работает</h2>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">01</div>
-          <h3>Выбери класс и тему</h3>
-          <p>Программа с 1 по 4 класс. Темы разблокируются последовательно.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-num">02</div>
-          <h3>Реши задачи</h3>
-          <p>Выбор варианта или ввод числа. Мгновенная проверка и объяснение.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-num">03</div>
-          <h3>Получи ИИ-подсказку</h3>
-          <p>Застрял? Нажми «Подсказка» — ИИ направит на верный путь.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-num">04</div>
-          <h3>Открой достижения</h3>
-          <p>Завершил тему? Получи награду и переходи к следующей.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Grades -->
-  <section class="section" id="grades">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Программа 1–4 класс</h2>
-        <p class="section-desc">Полное покрытие школьной программы</p>
-      </div>
-      <div class="grades-grid">
-        <div class="grade-card">
-          <div class="grade-num">1</div>
-          <h3>Первый класс</h3>
-          <ul>
-            <li>Счёт до 10 и до 20</li>
-            <li>Сложение и вычитание</li>
-            <li>Сравнение чисел</li>
-            <li>Простые задачи</li>
-          </ul>
-          <div class="grade-meta">~50 заданий</div>
-        </div>
-        <div class="grade-card">
-          <div class="grade-num">2</div>
-          <h3>Второй класс</h3>
-          <ul>
-            <li>Числа до 100</li>
-            <li>Таблица умножения</li>
-            <li>Деление</li>
-            <li>Задачи в 2 действия</li>
-          </ul>
-          <div class="grade-meta">~60 заданий</div>
-        </div>
-        <div class="grade-card">
-          <div class="grade-num">3</div>
-          <h3>Третий класс</h3>
-          <ul>
-            <li>Числа до 1000</li>
-            <li>Умножение на 2 цифры</li>
-            <li>Дроби (введение)</li>
-            <li>Задачи в 3 действия</li>
-          </ul>
-          <div class="grade-meta">~50 заданий</div>
-        </div>
-        <div class="grade-card">
-          <div class="grade-num">4</div>
-          <h3>Четвёртый класс</h3>
-          <ul>
-            <li>Числа до миллиона</li>
-            <li>Обыкновенные дроби</li>
-            <li>ОГЭ/ЕГЭ-подготовка</li>
-            <li>Сложные задачи</li>
-          </ul>
-          <div class="grade-meta">~50 заданий</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="section" id="faq">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Часто задаваемые вопросы</h2>
-      </div>
-      <div class="faq-list">
-        <div class="faq-item">
-          <button class="faq-question">Приложение платное?</button>
-          <div class="faq-answer">
-            <p>Нет. MathPilot полностью бесплатен — без рекламы и без платных функций. Всё, что есть в приложении, доступно сразу.</p>
+      <div class="container hero-layout">
+        <div class="hero-copy">
+          <div class="pill anim-fade-up">
+            <span class="pill-dot"></span>
+            Веб-приложение · 5–11 класс · бесплатно
+          </div>
+          <h1 class="hero-title anim-fade-up" style="--d:1">
+            Поднимайся по ступеням<br>
+            <span class="text-accent">математики</span>
+          </h1>
+          <p class="hero-lead anim-fade-up" style="--d:2">
+            Algeon — интерактивный тренажёр с теорией, задачами и практикой.
+            Каждая тема — новая ступень: разобрался → решил → закрепил.
+          </p>
+          <div class="hero-actions anim-fade-up" style="--d:3">
+            <a class="btn btn-primary btn-lg magnetic glow-pulse" href="https://algeon.tech" target="_blank" rel="noopener">
+              Перейти в приложение
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn-glass btn-lg" href="#showcase">Смотреть демо</a>
+          </div>
+          <div class="hero-metrics anim-fade-up" style="--d:4">
+            <div class="metric">
+              <strong data-count="57">0</strong>
+              <span>тем в программе</span>
+            </div>
+            <div class="metric">
+              <strong data-count="500">0</strong>
+              <span>+ задач</span>
+            </div>
+            <div class="metric">
+              <strong data-count="11">0</strong>
+              <span>классов</span>
+            </div>
           </div>
         </div>
-        <div class="faq-item">
-          <button class="faq-question">Нужен интернет?</button>
-          <div class="faq-answer">
-            <p>Нет. Приложение работает полностью офлайн. Интернет нужен только для синхронизации прогресса с аккаунтом.</p>
+
+        <div class="hero-visual anim-scale-in">
+          <div class="device-frame tilt-card">
+            <div class="device-bar">
+              <span></span><span></span><span></span>
+              <span class="device-url">algeon.tech</span>
+            </div>
+            <div class="device-screen">
+              <div class="mock-sidebar">
+                <div class="mock-logo-icon">
+                  <svg class="logo-stairs-svg logo-stairs-sm" viewBox="0 0 32 32" width="28" height="28" fill="none">
+                    <path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/>
+                  </svg>
+                </div>
+                <div class="mock-nav-item active"></div>
+                <div class="mock-nav-item"></div>
+                <div class="mock-nav-item"></div>
+                <div class="mock-nav-item"></div>
+              </div>
+              <div class="mock-main">
+                <div class="mock-header">
+                  <span class="mock-title shimmer"></span>
+                  <span class="mock-streak">🔥 5</span>
+                </div>
+                <div class="mock-card mock-card-hero">
+                  <span class="mock-label">Алгебра · 7 класс</span>
+                  <div class="mock-line w90"></div>
+                  <div class="mock-line w70"></div>
+                  <div class="mock-progress">
+                    <div class="mock-progress-fill anim-progress"></div>
+                  </div>
+                  <span class="mock-pct">68%</span>
+                </div>
+                <div class="mock-topics">
+                  <div class="mock-topic done"><span></span>Линейные уравнения</div>
+                  <div class="mock-topic active"><span></span>Системы уравнений</div>
+                  <div class="mock-topic"><span></span>Неравенства</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Как работает ИИ-подсказка?</button>
-          <div class="faq-answer">
-            <p>Когда ребёнок нажимает «Подсказка», ИИ анализирует задачу и даёт наводящий вопрос или объяснение — без готового ответа. Это развивает мышление.</p>
+          <div class="float-card float-card-1 anim-float">
+            <span class="float-icon">✓</span>
+            <div>
+              <strong>Верно!</strong>
+              <span>Серия: 12 подряд</span>
+            </div>
           </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Для какого возраста подходит?</button>
-          <div class="faq-answer">
-            <p>MathPilot создан для детей 7–12 лет (1–4 класс). Дизайн простой и понятный даже для первоклассника.</p>
+          <div class="float-card float-card-2 anim-float" style="--fd:1.2s">
+            <span class="float-icon gold">★</span>
+            <div>
+              <strong>Награда</strong>
+              <span>«Марафонец»</span>
+            </div>
           </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Можно использовать без регистрации?</button>
-          <div class="faq-answer">
-            <p>Да. Можно начать без регистрации в гостевом режиме. Для сохранения прогресса между устройствами — нужен аккаунт (Email, Google или Apple).</p>
+          <div class="float-card float-card-3 anim-float" style="--fd:0.6s">
+            <span class="float-icon blue">📐</span>
+            <div>
+              <strong>Теория</strong>
+              <span>+ формулы</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Download CTA -->
-  <section class="section download" id="download">
-    <div class="container">
-      <div class="download-card">
-        <div class="orb orb-sm orb-dl-1"></div>
-        <div class="orb orb-sm orb-dl-2"></div>
-        <h2>Начни учиться сегодня</h2>
-        <p>Бесплатно. Без рекламы. Без регистрации.</p>
-        <div class="download-buttons">
-          <a class="btn btn-white btn-lg" href="#">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            App Store
-          </a>
-          <a class="btn btn-white btn-lg" href="#">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.2.96.08L14.46 12 3.04.16C2.72.04 2.38.07 2.08.24 1.48.58 1.07 1.22 1.07 2v20c0 .78.41 1.42 1.01 1.76zM16.66 13.69l2.64 2.65-9.37 5.37 6.73-8.02zM22.4 10.65l-2.82-1.61-2.97 2.97 2.97 2.96 2.85-1.63c.81-.46.81-1.22-.03-1.69zM10.27 12L16.66 5.3l-6.39-7.26z"/></svg>
-            Google Play
-          </a>
+    <!-- Marquee -->
+    <section class="marquee-section" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track">
+          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>5–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
+          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>5–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
         </div>
-        <p class="download-sub">Или откройте в браузере — работает как PWA</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <a class="nav-logo" href="#">
-          <div class="nav-logo-icon">✕</div>
-          <span>MathPilot</span>
-        </a>
-        <p>Математика с пониманием</p>
-      </div>
-      <div class="footer-links-grid">
-        <div>
-          <h4>Продукт</h4>
-          <a href="#features">Возможности</a>
-          <a href="#grades">Классы</a>
-          <a href="#download">Скачать</a>
+    <!-- Stats bar -->
+    <section class="stats-bar">
+      <div class="container stats-grid reveal">
+        <div class="stat-item">
+          <span class="stat-icon">📚</span>
+          <strong data-count="57">0</strong>
+          <span>тем с теорией</span>
         </div>
-        <div>
-          <h4>Поддержка</h4>
-          <a href="#faq">FAQ</a>
-          <a href="mailto:support@mathpilot.app">Написать нам</a>
+        <div class="stat-item">
+          <span class="stat-icon">✏️</span>
+          <strong data-count="500">0</strong>
+          <span>+ интерактивных задач</span>
         </div>
-        <div>
-          <h4>Компания</h4>
-          <a href="#">О проекте</a>
-          <a href="#">Политика конфиденциальности</a>
+        <div class="stat-item">
+          <span class="stat-icon">🏆</span>
+          <strong data-count="24">0</strong>
+          <span>достижения</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">🌐</span>
+          <strong>0₽</strong>
+          <span>бесплатный доступ</span>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
       <div class="container">
-        <p>© 2025 MathPilot. Все права защищены.</p>
+        <div class="section-head reveal">
+          <p class="eyebrow">Возможности</p>
+          <h2>Всё, что нужно для <span class="text-accent">регулярной практики</span></h2>
+          <p class="section-lead">Структура как в учебнике, подача как в современном приложении — без лишней сложности.</p>
+        </div>
+        <div class="features-bento">
+          <article class="feature-card feature-card-lg reveal stagger" style="--s:0">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><path d="M8 7h8M8 11h6"/></svg>
+            </div>
+            <h3>Теория перед задачами</h3>
+            <p>К каждой теме — понятное объяснение: определения, формулы, примеры и пошаговый разбор. Сначала разобраться, потом тренироваться.</p>
+            <div class="feature-tags">
+              <span>Формулы</span><span>Примеры</span><span>Шаги</span>
+            </div>
+          </article>
+          <article class="feature-card reveal stagger" style="--s:1">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h4"/></svg></div>
+            <h3>Интерактивные задачи</h3>
+            <p>Ввод ответа, мгновенная проверка и подсказки — ученик видит, где ошибся.</p>
+          </article>
+          <article class="feature-card reveal stagger" style="--s:2">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <h3>Быстрая практика</h3>
+            <p>Режим тренировки по классу — закрепляй навыки короткими сессиями по 5–10 минут.</p>
+          </article>
+          <article class="feature-card reveal stagger" style="--s:3">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 010-5C7 4 7 7 7 7"/><path d="M18 9h1.5a2.5 2.5 0 000-5C17 4 17 7 17 7"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg></div>
+            <h3>Достижения и серии</h3>
+            <p>Награды за точность, серии правильных ответов и завершённые темы.</p>
+          </article>
+          <article class="feature-card reveal stagger" style="--s:4">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <h3>Профиль и синхронизация</h3>
+            <p>Аватар, класс, статистика — прогресс сохраняется в аккаунте на всех устройствах.</p>
+          </article>
+          <article class="feature-card feature-card-lg reveal stagger" style="--s:5">
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+            <h3>Работает в браузере</h3>
+            <p>Открой algeon.tech на компьютере, планшете или телефоне — установка не нужна. Удобно для школы и дома.</p>
+            <div class="feature-langs">
+              <span class="lang-badge">🇷🇺 Русский</span>
+              <span class="lang-badge">🇬🇧 English</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Showcase tabs -->
+    <section class="section section-dark" id="showcase">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow eyebrow-light">Интерфейс</p>
+          <h2>Три режима — <span class="text-accent-on-dark">одно приложение</span></h2>
+          <p class="section-lead section-lead-light">Переключайся между обучением, тренировкой и отслеживанием прогресса.</p>
+        </div>
+        <div class="showcase reveal">
+          <div class="showcase-tabs" role="tablist">
+            <button class="showcase-tab active" role="tab" data-tab="learn" aria-selected="true">Обучение</button>
+            <button class="showcase-tab" role="tab" data-tab="practice">Практика</button>
+            <button class="showcase-tab" role="tab" data-tab="progress">Прогресс</button>
+          </div>
+          <div class="showcase-panels">
+            <div class="showcase-panel active" id="panel-learn" role="tabpanel">
+              <div class="showcase-mock">
+                <div class="sm-sidebar">
+                  <div class="sm-logo"><svg class="logo-stairs-svg logo-stairs-sm" viewBox="0 0 32 32" width="24" height="24" fill="none"><path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/></svg></div>
+                  <div class="sm-item on"></div><div class="sm-item"></div><div class="sm-item"></div>
+                </div>
+                <div class="sm-content">
+                  <h4>Квадратные уравнения</h4>
+                  <div class="sm-theory">
+                    <p><strong>Дискриминант:</strong> D = b² − 4ac</p>
+                    <p>Если D &gt; 0 — два корня, D = 0 — один, D &lt; 0 — нет действительных корней.</p>
+                  </div>
+                  <div class="sm-task">
+                    <span>Решите: x² − 5x + 6 = 0</span>
+                    <div class="sm-input">x₁ = 2, x₂ = 3</div>
+                    <div class="sm-check">✓ Верно</div>
+                  </div>
+                </div>
+              </div>
+              <div class="showcase-desc">
+                <h3>Теория → задачи</h3>
+                <p>Сначала читаешь блок с формулами и примерами, затем решаешь задачи по теме. Всё в одном потоке.</p>
+                <ul class="check-list">
+                  <li>Пошаговые объяснения</li>
+                  <li>Математическая клавиатура</li>
+                  <li>Разбор ошибок</li>
+                </ul>
+              </div>
+            </div>
+            <div class="showcase-panel" id="panel-practice" role="tabpanel" hidden>
+              <div class="showcase-mock practice-mock">
+                <div class="pm-header">
+                  <span>Быстрая практика</span>
+                  <span class="pm-timer">⏱ 4:32</span>
+                </div>
+                <div class="pm-question">Найдите 15% от 240</div>
+                <div class="pm-answer">36</div>
+                <div class="pm-streak">Серия: 8 ✓</div>
+              </div>
+              <div class="showcase-desc">
+                <h3>Тренировка на скорость</h3>
+                <p>Случайные задачи по выбранному классу — идеально перед контрольной или для ежедневной привычки.</p>
+                <ul class="check-list">
+                  <li>Задачи из всех тем класса</li>
+                  <li>Счётчик серии</li>
+                  <li>Без привязки к одной теме</li>
+                </ul>
+              </div>
+            </div>
+            <div class="showcase-panel" id="panel-progress" role="tabpanel" hidden>
+              <div class="showcase-mock progress-mock">
+                <div class="pm-avatar"></div>
+                <div class="pm-stats">
+                  <div class="pm-stat"><strong>127</strong><span>задач решено</span></div>
+                  <div class="pm-stat"><strong>89%</strong><span>точность</span></div>
+                  <div class="pm-stat"><strong>12</strong><span>наград</span></div>
+                </div>
+                <div class="pm-badges">
+                  <span>🥇</span><span>🔥</span><span>📐</span><span>⭐</span>
+                </div>
+              </div>
+              <div class="showcase-desc">
+                <h3>Виден реальный рост</h3>
+                <p>Профиль с аватаром, статистикой и коллекцией достижений — мотивация расти ступень за ступенью.</p>
+                <ul class="check-list">
+                  <li>Точность и серии</li>
+                  <li>Кастомный аватар</li>
+                  <li>Облачное сохранение</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why -->
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Почему Algeon</p>
+          <h2>Математика без <span class="text-accent">страха и скуки</span></h2>
+        </div>
+        <div class="why-grid">
+          <div class="why-card reveal stagger" style="--s:0">
+            <span class="why-num">01</span>
+            <h3>Понимание, не зубрёжка</h3>
+            <p>Теория объясняет «почему», а не только «как». Задачи закрепляют смысл, а не шаблон.</p>
+          </div>
+          <div class="why-card reveal stagger" style="--s:1">
+            <span class="why-num">02</span>
+            <h3>Мгновенная обратная связь</h3>
+            <p>Ошибся — сразу видишь разбор. Не нужно ждать учителя или искать ответ в конце учебника.</p>
+          </div>
+          <div class="why-card reveal stagger" style="--s:2">
+            <span class="why-num">03</span>
+            <h3>Игровая мотивация</h3>
+            <p>Серии, достижения, прогресс-бары — как в любимых приложениях, только про математику.</p>
+          </div>
+          <div class="why-card reveal stagger" style="--s:3">
+            <span class="why-num">04</span>
+            <h3>Школьная программа</h3>
+            <p>Темы от 5 до 11 класса — от дробей до производной. Всё по логике учебника.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grades -->
+    <section class="section section-alt" id="grades">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Программа</p>
+          <h2>От <span class="text-accent">5</span> до <span class="text-accent">11</span> класса</h2>
+          <p class="section-lead">Темы подобраны по школьной линейке — от натуральных чисел до производной.</p>
+        </div>
+        <div class="grades-grid reveal">
+          <div class="grade-card" data-grade="5">
+            <span class="grade-num">5</span>
+            <h4>Натуральные числа</h4>
+            <p>Дроби, десятичные, проценты</p>
+            <span class="grade-topics">8 тем</span>
+          </div>
+          <div class="grade-card" data-grade="6">
+            <span class="grade-num">6</span>
+            <h4>Пропорции</h4>
+            <p>Координаты, отрицательные числа</p>
+            <span class="grade-topics">7 тем</span>
+          </div>
+          <div class="grade-card" data-grade="7">
+            <span class="grade-num">7</span>
+            <h4>Алгебра</h4>
+            <p>Линейные функции, уравнения</p>
+            <span class="grade-topics">9 тем</span>
+          </div>
+          <div class="grade-card" data-grade="8">
+            <span class="grade-num">8</span>
+            <h4>Квадратики</h4>
+            <p>Квадратные уравнения, неравенства</p>
+            <span class="grade-topics">8 тем</span>
+          </div>
+          <div class="grade-card" data-grade="9">
+            <span class="grade-num">9</span>
+            <h4>Функции</h4>
+            <p>Прогрессии, системы, графики</p>
+            <span class="grade-topics">8 тем</span>
+          </div>
+          <div class="grade-card" data-grade="10">
+            <span class="grade-num">10</span>
+            <h4>Тригонометрия</h4>
+            <p>Логарифмы, степени</p>
+            <span class="grade-topics">9 тем</span>
+          </div>
+          <div class="grade-card featured" data-grade="11">
+            <span class="grade-num">11</span>
+            <h4>Производная</h4>
+            <p>Интеграл, исследование функций</p>
+            <span class="grade-topics">8 тем</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- For whom -->
+    <section class="section" id="audience">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Для кого</p>
+          <h2>Каждому — <span class="text-accent">свой сценарий</span></h2>
+        </div>
+        <div class="audience-grid">
+          <div class="audience-card reveal stagger" style="--s:0">
+            <span class="audience-emoji">🎒</span>
+            <h3>Ученикам</h3>
+            <p>Готовься к контрольным, закрывай пробелы, тренируйся каждый день по 10 минут.</p>
+          </div>
+          <div class="audience-card reveal stagger" style="--s:1">
+            <span class="audience-emoji">👨‍👩‍👧</span>
+            <h3>Родителям</h3>
+            <p>Безопасный контент по программе, бесплатно, без рекламы — ребёнок занят с пользой.</p>
+          </div>
+          <div class="audience-card reveal stagger" style="--s:2">
+            <span class="audience-emoji">👩‍🏫</span>
+            <h3>Учителям</h3>
+            <p>Дополнительная практика дома: теория уже объяснена, остаётся закрепить задачами.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How -->
+    <section class="section section-alt" id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Как устроено</p>
+          <h2>Четыре ступени к результату</h2>
+        </div>
+        <ol class="steps steps-4 reveal">
+          <li class="step stagger" style="--s:0">
+            <div class="step-icon">
+              <svg class="logo-stairs-svg logo-stairs-sm" viewBox="0 0 32 32" width="28" height="28" fill="none"><path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/></svg>
+            </div>
+            <span class="step-num">01</span>
+            <h3>Регистрация</h3>
+            <p>Создай аккаунт за минуту — прогресс сохранится в облаке.</p>
+          </li>
+          <li class="step stagger" style="--s:1">
+            <span class="step-num">02</span>
+            <h3>Выбери класс</h3>
+            <p>Программа открывается по уровню — от простого к сложному.</p>
+          </li>
+          <li class="step stagger" style="--s:2">
+            <span class="step-num">03</span>
+            <h3>Изучи теорию</h3>
+            <p>Короткие блоки с формулами — без воды и лишних страниц.</p>
+          </li>
+          <li class="step stagger" style="--s:3">
+            <span class="step-num">04</span>
+            <h3>Решай и расти</h3>
+            <p>Задачи, практика, награды — виден реальный прогресс.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="section" id="reviews">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Отзывы</p>
+          <h2>Что говорят <span class="text-accent">пользователи</span></h2>
+        </div>
+        <div class="reviews-grid">
+          <blockquote class="review-card reveal stagger" style="--s:0">
+            <div class="review-stars">★★★★★</div>
+            <p>«Наконец понял квадратные уравнения — теория короткая, а задачи сразу с проверкой. Серия мотивирует не бросать.»</p>
+            <footer><strong>Артём</strong><span>8 класс, Москва</span></footer>
+          </blockquote>
+          <blockquote class="review-card reveal stagger" style="--s:1">
+            <div class="review-stars">★★★★★</div>
+            <p>«Дочь занимается по 15 минут в день перед сном. Не нужно ничего ставить — открыли в браузере и всё.»</p>
+            <footer><strong>Елена</strong><span>мама ученицы, 6 класс</span></footer>
+          </blockquote>
+          <blockquote class="review-card reveal stagger" style="--s:2">
+            <div class="review-stars">★★★★☆</div>
+            <p>«Рекомендую как дополнение к урокам. Ученики сами тренируются, а я вижу, что тема дошла — по прогрессу.»</p>
+            <footer><strong>Дмитрий</strong><span>учитель математики</span></footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compare -->
+    <section class="section section-alt" id="compare">
+      <div class="container container-narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow">Сравнение</p>
+          <h2>Algeon vs обычный учебник</h2>
+        </div>
+        <div class="compare-table reveal">
+          <div class="compare-row compare-head">
+            <span></span><span>Учебник</span><span class="compare-highlight">Algeon</span>
+          </div>
+          <div class="compare-row"><span>Мгновенная проверка</span><span class="no">✗</span><span class="yes">✓</span></div>
+          <div class="compare-row"><span>Теория с примерами</span><span class="yes">✓</span><span class="yes">✓</span></div>
+          <div class="compare-row"><span>Мотивация и прогресс</span><span class="no">✗</span><span class="yes">✓</span></div>
+          <div class="compare-row"><span>Работает в браузере</span><span class="no">✗</span><span class="yes">✓</span></div>
+          <div class="compare-row"><span>Бесплатно</span><span class="partial">~</span><span class="yes">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container container-narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2>Частые вопросы</h2>
+        </div>
+        <div class="faq reveal">
+          <details class="faq-item" open>
+            <summary>Это бесплатно?</summary>
+            <p>Да, приложение можно открыть и пользоваться без оплаты. Мы развиваем продукт и добавляем новые темы.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Нужно что-то устанавливать?</summary>
+            <p>Нет. Algeon работает в браузере на algeon.tech — достаточно открыть сайт на любом устройстве.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Для какого возраста подходит?</summary>
+            <p>Ориентир — ученики 5–11 класса. Сложность задач и теории соответствует школьной программе.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Есть ли английский язык?</summary>
+            <p>Да, в настройках профиля можно переключить интерфейс и теорию на English.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Нужна регистрация?</summary>
+            <p>Для сохранения прогресса между устройствами — да. Создай аккаунт за минуту и продолжай с любого места.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Можно ли заниматься с телефона?</summary>
+            <p>Да, интерфейс адаптирован под мобильные экраны. Удобнее всего на планшете или компьютере, но телефон тоже подойдёт.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="cta">
+      <div class="container reveal">
+        <div class="cta-card">
+          <div class="cta-stairs anim-stairs-pulse" aria-hidden="true">
+            <svg class="logo-stairs-svg cta-stairs-icon" viewBox="0 0 32 32" width="72" height="72" fill="none">
+              <path class="logo-stairs-path logo-stairs-on-blue" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/>
+            </svg>
+          </div>
+          <div class="cta-glow" aria-hidden="true"></div>
+          <h2>Поднимись на новую ступень</h2>
+          <p>Открой Algeon в браузере — первые задачи займут пару минут.</p>
+          <a class="btn btn-white btn-lg magnetic" href="https://algeon.tech" target="_blank" rel="noopener">
+            Открыть algeon.tech
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <a class="logo" href="#">
+          <span class="logo-icon" aria-hidden="true">
+            <svg class="logo-stairs-svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/>
+            </svg>
+          </span>
+          <span class="logo-text">Algeon</span>
+        </a>
+        <p class="footer-tagline">Математика с пониманием — ступень за ступенью.</p>
+        <nav class="footer-nav">
+          <a href="#features">Возможности</a>
+          <a href="#showcase">Интерфейс</a>
+          <a href="#grades">Классы</a>
+          <a href="#faq">FAQ</a>
+          <a href="https://algeon.tech" target="_blank" rel="noopener">Приложение</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Algeon · algeon.tech</p>
       </div>
     </div>
   </footer>

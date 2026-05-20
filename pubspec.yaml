@@ -13,11 +13,6 @@ dependencies:
   # Локальное хранение
   shared_preferences: ^2.2.2
 
-  # Шрифт
-  google_fonts: ^8.0.2
-
-  crypto: ^3.0.6
-
   # Роутинг
   go_router: ^17.1.0
 
@@ -35,10 +30,7 @@ dependencies:
 
   # Звуковые эффекты (web / iOS / Android)
   audioplayers: ^6.1.0
-  firebase_core: ^4.7.0
-  firebase_auth: ^6.4.0
-  cloud_firestore: ^6.0.2
-  google_sign_in: ^7.2.0
+  cupertino_icons: ^1.0.9
 
 dev_dependencies:
   flutter_test:

@@ -3,87 +3,88 @@
 /// Сохраняет выбор пользователя в SharedPreferences
 library;
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-
   ThemeProvider() {
     _loadThemeMode();
-    _startThemeTicker();
+    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged =
+        () {
+      if (_themeMode == ThemeMode.system) {
+        notifyListeners();
+      }
+    };
   }
   static const String _keyThemeMode = 'theme_mode';
-  static const String _keyAutoByTime = 'theme_auto_by_time';
 
-  ThemeMode _manualThemeMode = ThemeMode.light;
-  bool _autoByTime = true;
-  Timer? _themeTick;
+  ThemeMode _themeMode = ThemeMode.system;
 
-  bool get autoByTime => _autoByTime;
-  ThemeMode get manualThemeMode => _manualThemeMode;
+  bool get followSystem => _themeMode == ThemeMode.system;
+  ThemeMode get themeMode => _themeMode;
 
-  ThemeMode get themeMode =>
-      _autoByTime ? _themeModeByCurrentTime() : _manualThemeMode;
+  ThemeMode get manualThemeMode =>
+      _themeMode == ThemeMode.system ? ThemeMode.light : _themeMode;
 
   Future<void> _loadThemeMode() async {
     final prefs = await SharedPreferences.getInstance();
     final value = prefs.getString(_keyThemeMode);
-    _autoByTime = prefs.getBool(_keyAutoByTime) ?? true;
     switch (value) {
       case 'light':
-        _manualThemeMode = ThemeMode.light;
+        _themeMode = ThemeMode.light;
         break;
       case 'dark':
-        _manualThemeMode = ThemeMode.dark;
+        _themeMode = ThemeMode.dark;
+        break;
+      case 'system':
+        _themeMode = ThemeMode.system;
         break;
       default:
-        _manualThemeMode = ThemeMode.light;
+        // Старые версии сохраняли авто-тему по времени. Новый дефолт — тема
+        // системы, чтобы сайт совпадал с настройкой телефона/браузера.
+        _themeMode = ThemeMode.system;
         break;
     }
     notifyListeners();
   }
 
-  ThemeMode _themeModeByCurrentTime() {
-    final hour = DateTime.now().hour;
-    final isNight = hour >= 20 || hour < 7;
-    return isNight ? ThemeMode.dark : ThemeMode.light;
-  }
-
-  void _startThemeTicker() {
-    _themeTick = Timer.periodic(const Duration(minutes: 1), (_) {
-      if (_autoByTime) {
-        notifyListeners();
-      }
-    });
-  }
-
-  Future<void> setAutoByTime(bool enabled) async {
-    _autoByTime = enabled;
-    notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyAutoByTime, enabled);
+  Future<void> setFollowSystem(bool enabled) async {
+    if (enabled) {
+      await setThemeMode(ThemeMode.system);
+    } else {
+      await setThemeMode(_platformBrightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light);
+    }
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
-    _manualThemeMode = mode;
+    _themeMode = mode;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyThemeMode, mode.name);
   }
 
   Future<void> toggleTheme() async {
-    if (_manualThemeMode == ThemeMode.dark) {
+    final current = _themeMode == ThemeMode.system
+        ? (_platformBrightness == Brightness.dark
+            ? ThemeMode.dark
+            : ThemeMode.light)
+        : _themeMode;
+    if (current == ThemeMode.dark) {
       await setThemeMode(ThemeMode.light);
     } else {
       await setThemeMode(ThemeMode.dark);
     }
   }
 
+  Brightness get _platformBrightness =>
+      WidgetsBinding.instance.platformDispatcher.platformBrightness;
+
   @override
   void dispose() {
-    _themeTick?.cancel();
+    WidgetsBinding.instance.platformDispatcher.onPlatformBrightnessChanged =
+        null;
     super.dispose();
   }
 }

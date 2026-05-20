@@ -26,10 +26,13 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Algeon">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <!-- Абсолютные пути: Safari / избранное надёжно подхватывают иконку с корня сайта -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
 
   <title>Algeon</title>
   <link rel="manifest" href="manifest.json">
@@ -51,23 +54,6 @@
 
 </head>
 <body>
-  <script>
-    // Жестко сбрасываем старые service workers, чтобы после деплоя
-    // всегда подтягивалась актуальная web-версия приложения.
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(regs) {
-        if (!regs.length) return;
-        Promise.all(regs.map(function(reg) { return reg.unregister(); }))
-          .then(function() {
-            if (!sessionStorage.getItem('sw_reset_done')) {
-              sessionStorage.setItem('sw_reset_done', '1');
-              window.location.reload();
-            }
-          });
-      });
-    }
-  </script>
-
   <script src="flutter_bootstrap.js" async
     onerror="(function(){var p=document.createElement('p');p.style.cssText='padding:2rem;font-family:system-ui,sans-serif;text-align:center;max-width:28rem;margin:2rem auto;';p.textContent='Не удалось загрузить приложение (flutter_bootstrap.js). Проверьте сеть или откройте сайт в режиме инкогнито / с жёстким обновлением страницы (Ctrl+Shift+R).';document.body.appendChild(p);})();"></script>
 </body>

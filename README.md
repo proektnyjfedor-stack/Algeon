@@ -39,7 +39,9 @@ flutter run -d chrome
 ## Сборка веба
 
 ```bash
-flutter build web --release
+# Флаг --no-web-resources-cdn: CanvasKit с algeon.tech, а не с gstatic.com —
+# иначе у части пользователей с блокировщиками Safari показывает пустой экран.
+flutter build web --release --no-web-resources-cdn
 ```
 
 ## Деплой

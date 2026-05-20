@@ -1,16 +1,19 @@
 /// Topic Intro Screen — экран с подробным объяснением темы перед задачами
 ///
 /// Структурированная теория: определения, формулы, примеры,
-/// визуальные иллюстрации, пошаговые алгоритмы и советы.
+/// пошаговые разборы и таблицы.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../services/sound_service.dart';
+import '../services/language_service.dart';
 import '../models/task.dart';
 import '../data/tasks_data.dart';
 import '../data/topic_theory.dart';
+import '../data/topic_titles_en.dart';
 
 class TopicIntroScreen extends StatelessWidget {
   const TopicIntroScreen({
@@ -23,8 +26,11 @@ class TopicIntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theory = getTopicTheory(topicName);
+    final t = context.watch<LanguageService>().t;
+    final isEnglish = context.watch<LanguageService>().isEnglish;
+    final theory = getTopicTheory(topicName, english: isEnglish);
     final icon = getTopicIcon(topicName);
+    final displayTopic = isEnglish ? topicTitleEn(topicName) : topicName;
 
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
@@ -32,7 +38,7 @@ class TopicIntroScreen extends StatelessWidget {
         child: Column(
           children: [
             // Top bar
-            _buildTopBar(context),
+            _buildTopBar(context, t),
 
             // Content
             Expanded(
@@ -45,7 +51,7 @@ class TopicIntroScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         // Header
-                        _buildHeader(context, icon, theory),
+                        _buildHeader(context, icon, theory, t, displayTopic),
                         const SizedBox(height: 24),
 
                         // Theory sections
@@ -54,12 +60,12 @@ class TopicIntroScreen extends StatelessWidget {
                               .where((section) => section.type != TheorySectionType.visual)
                               .map((section) => Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
-                                child: _buildSection(context, section),
+                                child: _buildSection(context, section, t),
                               ))
                         else
-                          _buildFallbackContent(context),
+                          _buildFallbackContent(context, isEnglish, displayTopic),
                         const SizedBox(height: 8),
-                        _buildBottomButton(context),
+                        _buildBottomButton(context, t),
                       ],
                     ),
                   ),
@@ -72,7 +78,7 @@ class TopicIntroScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBar(BuildContext context) {
+  Widget _buildTopBar(BuildContext context, String Function(String) t) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
       child: Row(
@@ -101,14 +107,14 @@ class TopicIntroScreen extends StatelessWidget {
               color: AppThemeColors.accentLight(context),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.menu_book_rounded, size: 16, color: AppColors.accent),
-                SizedBox(width: 6),
+                const Icon(Icons.menu_book_rounded, size: 16, color: AppColors.accent),
+                const SizedBox(width: 6),
                 Text(
-                  'Теория',
-                  style: TextStyle(
+                  t('topic.theory'),
+                  style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: AppColors.accent,
@@ -122,7 +128,13 @@ class TopicIntroScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, IconData icon, TopicTheory? theory) {
+  Widget _buildHeader(
+    BuildContext context,
+    IconData icon,
+    TopicTheory? theory,
+    String Function(String) t,
+    String displayTopic,
+  ) {
     return Column(
       children: [
         Container(
@@ -136,7 +148,7 @@ class TopicIntroScreen extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          topicName,
+          displayTopic,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w800,
@@ -146,7 +158,8 @@ class TopicIntroScreen extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          theory?.subtitle ?? '${tasks.length} задач',
+          theory?.subtitle ??
+              t('topic.tasksCount').replaceAll('{count}', '${tasks.length}'),
           style: TextStyle(
             fontSize: 14,
             color: AppThemeColors.textHint(context),
@@ -157,27 +170,35 @@ class TopicIntroScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, TheorySection section) {
+  Widget _buildSection(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     switch (section.type) {
       case TheorySectionType.definition:
-        return _buildDefinitionCard(context, section);
+        return _buildDefinitionCard(context, section, t);
       case TheorySectionType.formula:
-        return _buildFormulaCard(context, section);
+        return _buildFormulaCard(context, section, t);
       case TheorySectionType.example:
-        return _buildExampleCard(context, section);
+        return _buildExampleCard(context, section, t);
       case TheorySectionType.visual:
         return const SizedBox.shrink();
       case TheorySectionType.tip:
-        return _buildTipCard(context, section);
+        return _buildTipCard(context, section, t);
       case TheorySectionType.table:
-        return _buildTableCard(context, section);
+        return _buildTableCard(context, section, t);
       case TheorySectionType.steps:
-        return _buildStepsCard(context, section);
+        return _buildStepsCard(context, section, t);
     }
   }
 
   // --- DEFINITION ---
-  Widget _buildDefinitionCard(BuildContext context, TheorySection section) {
+  Widget _buildDefinitionCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -197,7 +218,7 @@ class TopicIntroScreen extends StatelessWidget {
               ],
               Expanded(
                 child: Text(
-                  section.title ?? 'Определение',
+                  section.title ?? t('topic.definition'),
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -222,7 +243,11 @@ class TopicIntroScreen extends StatelessWidget {
   }
 
   // --- FORMULA ---
-  Widget _buildFormulaCard(BuildContext context, TheorySection section) {
+  Widget _buildFormulaCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -239,7 +264,7 @@ class TopicIntroScreen extends StatelessWidget {
               const Icon(Icons.functions_rounded, color: AppColors.accent, size: 22),
               const SizedBox(width: 10),
               Text(
-                section.title ?? 'Формула',
+                section.title ?? t('topic.formula'),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -273,7 +298,11 @@ class TopicIntroScreen extends StatelessWidget {
   }
 
   // --- EXAMPLE ---
-  Widget _buildExampleCard(BuildContext context, TheorySection section) {
+  Widget _buildExampleCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -298,7 +327,7 @@ class TopicIntroScreen extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                section.title ?? 'Пример',
+                section.title ?? t('topic.example'),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -365,7 +394,11 @@ class TopicIntroScreen extends StatelessWidget {
 
 
   // --- TIP ---
-  Widget _buildTipCard(BuildContext context, TheorySection section) {
+  Widget _buildTipCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -382,7 +415,7 @@ class TopicIntroScreen extends StatelessWidget {
               Text(section.emoji ?? '💡', style: const TextStyle(fontSize: 22)),
               const SizedBox(width: 10),
               Text(
-                section.title ?? 'Совет',
+                section.title ?? t('topic.tip'),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -406,7 +439,11 @@ class TopicIntroScreen extends StatelessWidget {
   }
 
   // --- TABLE ---
-  Widget _buildTableCard(BuildContext context, TheorySection section) {
+  Widget _buildTableCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -425,7 +462,7 @@ class TopicIntroScreen extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  section.title ?? 'Таблица',
+                  section.title ?? t('topic.table'),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -474,7 +511,11 @@ class TopicIntroScreen extends StatelessWidget {
   }
 
   // --- STEPS ---
-  Widget _buildStepsCard(BuildContext context, TheorySection section) {
+  Widget _buildStepsCard(
+    BuildContext context,
+    TheorySection section,
+    String Function(String) t,
+  ) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -493,7 +534,7 @@ class TopicIntroScreen extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  section.title ?? 'Алгоритм',
+                  section.title ?? t('topic.algorithm'),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -562,7 +603,31 @@ class TopicIntroScreen extends StatelessWidget {
   }
 
   // --- FALLBACK (если теории нет) ---
-  Widget _buildFallbackContent(BuildContext context) {
+  Widget _buildFallbackContent(
+    BuildContext context,
+    bool isEnglish,
+    String displayTopic,
+  ) {
+    if (isEnglish) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppThemeColors.surface(context),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppThemeColors.border(context)),
+        ),
+        child: Text(
+          'Detailed theory for this topic is not available yet. '
+          'You can start practice now.',
+          style: TextStyle(
+            fontSize: 15,
+            height: 1.6,
+            color: AppThemeColors.textPrimary(context),
+          ),
+        ),
+      );
+    }
     final description = getTopicDescription(topicName);
     if (description == null) return const SizedBox.shrink();
     return Container(
@@ -584,7 +649,7 @@ class TopicIntroScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomButton(BuildContext context) {
+  Widget _buildBottomButton(BuildContext context, String Function(String) t) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 6),
       decoration: BoxDecoration(
@@ -602,8 +667,7 @@ class TopicIntroScreen extends StatelessWidget {
                 '/learn/topic',
                 extra: {'name': topicName, 'tasks': tasks},
               );
-            }
-            ,
+            },
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: SizedBox(
             width: double.infinity,
@@ -611,9 +675,9 @@ class TopicIntroScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Начать задачи',
-                  style: TextStyle(
+                Text(
+                  t('topic.startTasks'),
+                  style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -630,6 +694,7 @@ class TopicIntroScreen extends StatelessWidget {
                 ),
               ],
             ),
+          ),
         ),
       ),
     );

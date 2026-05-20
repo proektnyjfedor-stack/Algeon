@@ -3,11 +3,12 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../services/language_service.dart';
 import '../services/sound_service.dart';
 
 class MathKeyboard extends StatelessWidget {
-
   const MathKeyboard({
     super.key,
     required this.controller,
@@ -79,12 +80,34 @@ class MathKeyboard extends StatelessWidget {
             TextSelection.collapsed(offset: controller.text.length);
         return;
 
-      case '*':
+      case 'x=':
+      case 'y=':
+      case 'z=':
+        controller.text = '$text$key';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
       case '^':
       case '(':
       case ')':
+      case '[':
+      case ']':
       case 'x':
+      case 'y':
+      case 'z':
+      case 'a':
+      case 'b':
+      case 'c':
+      case 'n':
+      case 'π':
       case '+':
+      case '-':
+      case '*':
+      case ',':
+      case ';':
+      case '²':
+      case '³':
         controller.text = '$text$key';
         controller.selection =
             TextSelection.collapsed(offset: controller.text.length);
@@ -110,6 +133,12 @@ class MathKeyboard extends StatelessWidget {
             TextSelection.collapsed(offset: controller.text.length);
         return;
 
+      case '≠':
+        controller.text = '$text!=';
+        controller.selection =
+            TextSelection.collapsed(offset: controller.text.length);
+        return;
+
       default:
         // Digit
         controller.text = text + key;
@@ -128,8 +157,9 @@ class MathKeyboard extends StatelessWidget {
     );
   }
 
-  static Widget buildKey(
-      BuildContext context, String key, bool isUltraCompact, VoidCallback onTap) {
+  static Widget buildKey(BuildContext context, String key, bool isUltraCompact,
+      VoidCallback onTap) {
+    final t = context.read<LanguageService>().t;
     final isBackspace = key == 'backspace';
     final isClear = key == 'clear';
     final isSpace = key == 'space';
@@ -142,9 +172,16 @@ class MathKeyboard extends StatelessWidget {
         key == '<' ||
         key == '≥' ||
         key == '≤' ||
+        key == '≠' ||
         key == '^' ||
+        key == '²' ||
+        key == '³' ||
         key == '(' ||
         key == ')' ||
+        key == '[' ||
+        key == ']' ||
+        key == ',' ||
+        key == ';' ||
         key == 'x' ||
         key == 'y' ||
         key == 'z' ||
@@ -154,7 +191,10 @@ class MathKeyboard extends StatelessWidget {
         key == 'n' ||
         key == 'π' ||
         key == '√' ||
-        key == '±';
+        key == '±' ||
+        key == 'x=' ||
+        key == 'y=' ||
+        key == 'z=';
 
     Color bgColor;
     Color borderColor;
@@ -163,12 +203,13 @@ class MathKeyboard extends StatelessWidget {
     if (isBackspace) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
-      child = Icon(Icons.backspace_rounded, color: AppColors.error, size: isUltraCompact ? 18 : 20);
+      child = Icon(Icons.backspace_rounded,
+          color: AppColors.error, size: isUltraCompact ? 18 : 20);
     } else if (isClear) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
       child = Text(
-        'Очистить',
+        t('keyboard.clear'),
         style: TextStyle(
           fontSize: isUltraCompact ? 12 : 13,
           fontWeight: FontWeight.w700,
@@ -179,7 +220,7 @@ class MathKeyboard extends StatelessWidget {
       bgColor = AppThemeColors.surface(context);
       borderColor = AppThemeColors.border(context);
       child = Text(
-        'Пробел',
+        t('keyboard.space'),
         style: TextStyle(
           fontSize: isUltraCompact ? 11 : 12,
           fontWeight: FontWeight.w700,
@@ -198,7 +239,9 @@ class MathKeyboard extends StatelessWidget {
       child = Text(
         display,
         style: TextStyle(
-          fontSize: display.length > 1 ? (isUltraCompact ? 14 : 16) : (isUltraCompact ? 18 : 20),
+          fontSize: display.length > 1
+              ? (isUltraCompact ? 14 : 16)
+              : (isUltraCompact ? 18 : 20),
           fontWeight: FontWeight.w700,
           color: AppColors.accent,
         ),
@@ -220,18 +263,11 @@ class MathKeyboard extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        height: isUltraCompact ? 34 : 40,
+        height: isUltraCompact ? 36 : 42,
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(isUltraCompact ? 10 : 12),
-          border: Border.all(color: borderColor, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(color: borderColor, width: 1.4),
         ),
         child: Center(child: child),
       ),
@@ -240,7 +276,6 @@ class MathKeyboard extends StatelessWidget {
 }
 
 class _MathKeyboardBody extends StatefulWidget {
-
   const _MathKeyboardBody({
     required this.controller,
     required this.enabled,
@@ -280,65 +315,68 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
     final size = MediaQuery.of(context).size;
     final isLandscape = size.width > size.height;
     final isUltraCompact = h < 780 || isLandscape;
-    final rowGap = isUltraCompact ? 3.0 : 6.0;
-    final keyGap = isUltraCompact ? 3.0 : 6.0;
+    final rowGap = isUltraCompact ? 4.0 : 6.0;
+    final keyGap = isUltraCompact ? 4.0 : 6.0;
+    final maxHeight = isUltraCompact ? 238.0 : 276.0;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: [
-            _tabButton(context, 0, '123'),
-            SizedBox(width: keyGap),
-            _tabButton(context, 1, 'x,y'),
-            SizedBox(width: keyGap),
-            _tabButton(context, 2, 'ineq'),
-          ],
-        ),
-        SizedBox(height: rowGap),
-        ..._rowsForTab().expand((row) sync* {
-          yield _buildRow(context, row, keyGap, isUltraCompact);
-          yield SizedBox(height: rowGap);
-        }),
-        Row(
-          children: [
-            Expanded(flex: 2, child: _buildKey(context, 'clear', isUltraCompact)),
-            SizedBox(width: keyGap),
-            Expanded(flex: 3, child: _buildKey(context, 'backspace', isUltraCompact)),
-          ],
-        ),
-      ],
+    return SizedBox(
+      height: maxHeight,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              _tabButton(context, 0, '123'),
+              SizedBox(width: keyGap),
+              _tabButton(context, 1, 'x,y'),
+              SizedBox(width: keyGap),
+              _tabButton(context, 2, '≤ ≥'),
+            ],
+          ),
+          SizedBox(height: rowGap),
+          ..._rowsForTab().expand((row) sync* {
+            yield _buildRow(context, row, keyGap, isUltraCompact);
+            yield SizedBox(height: rowGap);
+          }),
+        ],
+      ),
     );
   }
 
   List<List<String>> _rowsForTab() {
+    // 3 clearly separated layouts:
+    // 123  -> numbers + basic arithmetic
+    // alg  -> variables/equation algebra
+    // ≶    -> inequality-focused symbols
     if (_tab == 1) {
       return const [
+        ['x=', 'y=', 'z=', '=', 'backspace'],
         ['x', 'y', 'z', 'a', 'b'],
-        ['c', 'n', '(', ')', '^'],
-        ['√', 'π', '%', 'space', '='],
-        ['0', '1', '2', '3', '.'],
+        ['c', 'n', '^', '²', '³'],
+        ['(', ')', '√', ',', 'clear'],
+        ['+', '-', '*', '/', 'π'],
       ];
     }
     if (_tab == 2) {
       return const [
-        ['>', '<', '≥', '≤', '='],
-        ['x', 'y', '(', ')', ','],
-        ['0', '1', '2', '3', '.'],
-        ['4', '5', '6', '7', 'space'],
+        ['>', '<', '≥', '≤', '≠'],
+        ['x', 'y', 'z', '=', 'backspace'],
+        ['(', ')', '[', ']', ','],
+        ['7', '8', '9', '+', '-'],
+        ['1', '2', '3', '0', 'clear'],
       ];
     }
     return const [
-      ['7', '8', '9', '(', ')'],
-      ['4', '5', '6', '+', '-'],
-      ['1', '2', '3', '*', '/'],
-      ['0', '.', 'x', '^', '='],
-      ['±', '>', '<', '≥', '≤'],
+      ['7', '8', '9', 'backspace'],
+      ['4', '5', '6', '-'],
+      ['1', '2', '3', '+'],
+      ['0', '.', ',', '/'],
+      ['(', ')', '=', 'clear'],
     ];
   }
 
-  Widget _buildRow(
-      BuildContext context, List<String> keys, double keyGap, bool isUltraCompact) {
+  Widget _buildRow(BuildContext context, List<String> keys, double keyGap,
+      bool isUltraCompact) {
     return Row(
       children: [
         for (int i = 0; i < keys.length; i++) ...[
@@ -370,10 +408,14 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
           duration: const Duration(milliseconds: 140),
           padding: EdgeInsets.symmetric(vertical: isUltraCompact ? 4 : 6),
           decoration: BoxDecoration(
-            color: active ? AppThemeColors.accentLight(context) : AppThemeColors.surface(context),
+            color: active
+                ? AppThemeColors.accentLight(context)
+                : AppThemeColors.surface(context),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: active ? AppColors.accent.withValues(alpha: 0.35) : AppThemeColors.border(context),
+              color: active
+                  ? AppColors.accent.withValues(alpha: 0.35)
+                  : AppThemeColors.border(context),
             ),
           ),
           child: Center(
@@ -382,7 +424,9 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
               style: TextStyle(
                 fontSize: isUltraCompact ? 11 : 12,
                 fontWeight: FontWeight.w700,
-                color: active ? AppColors.accent : AppThemeColors.textSecondary(context),
+                color: active
+                    ? AppColors.accent
+                    : AppThemeColors.textSecondary(context),
               ),
             ),
           ),

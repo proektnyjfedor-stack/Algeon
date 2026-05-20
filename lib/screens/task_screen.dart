@@ -5,21 +5,26 @@
 library;
 
 import 'dart:async';
+import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../models/task.dart';
 import '../services/progress_service.dart';
 import '../services/sound_service.dart';
 import '../services/achievements_service.dart';
+import '../services/language_service.dart';
+import '../services/localized_text_service.dart';
 import '../data/tasks_data.dart';
+import '../data/topic_titles_en.dart';
 import '../widgets/math_text.dart';
 import '../widgets/math_keyboard.dart';
 
 class TaskScreen extends StatefulWidget {
-
   const TaskScreen({
     super.key,
     required this.tasks,
@@ -57,12 +62,16 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   bool _textIsNotEmpty = false;
   Color? _answerFlashColor;
   bool _showMathKeyboard = false;
+  final Map<String, List<String>> _optionsCache = <String, List<String>>{};
 
   late AnimationController _cardAnimController;
   late Animation<double> _cardScaleAnim;
 
   Task get _task => widget.tasks[_currentIndex];
-  bool get _hasExplanation => _task.explanationSteps.isNotEmpty;
+  List<String> get _explanationSteps => _task.explanationSteps.isNotEmpty
+      ? _task.explanationSteps
+      : _fallbackStepsFor(_task);
+  bool get _hasExplanation => _explanationSteps.isNotEmpty;
   double get _progress => (_currentIndex + 1) / widget.tasks.length;
   bool get _isInequalityTask {
     final q = _task.question;
@@ -81,6 +90,13 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final size = MediaQuery.of(context).size;
     return size.width > size.height;
   }
+
+  bool get _isLowPerfMobileWeb {
+    final size = MediaQuery.of(context).size;
+    return kIsWeb && size.width < 700;
+  }
+
+  bool get _noMotion => kIsWeb;
 
   int get _keyboardInitialTab {
     final combined = '${_task.question} ${_task.answer}'.toLowerCase();
@@ -108,7 +124,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
     _cardAnimController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: _noMotion
+          ? const Duration(milliseconds: 1)
+          : const Duration(milliseconds: 300),
     );
     _cardScaleAnim = Tween<double>(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(parent: _cardAnimController, curve: Curves.easeOutBack),
@@ -183,7 +201,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       if (_isChecked) {
         if (_isCorrect ||
             !_hasExplanation ||
-            _explanationStep >= _task.explanationSteps.length - 1) {
+            _explanationStep >= _explanationSteps.length - 1) {
           _goNext();
         } else {
           setState(() => _explanationStep++);
@@ -199,16 +217,26 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     // Физическая клавиатура для textInput задач
     if (!_isChecked && _task.type == TaskType.textInput) {
       final digits = {
-        LogicalKeyboardKey.digit0: '0', LogicalKeyboardKey.numpad0: '0',
-        LogicalKeyboardKey.digit1: '1', LogicalKeyboardKey.numpad1: '1',
-        LogicalKeyboardKey.digit2: '2', LogicalKeyboardKey.numpad2: '2',
-        LogicalKeyboardKey.digit3: '3', LogicalKeyboardKey.numpad3: '3',
-        LogicalKeyboardKey.digit4: '4', LogicalKeyboardKey.numpad4: '4',
-        LogicalKeyboardKey.digit5: '5', LogicalKeyboardKey.numpad5: '5',
-        LogicalKeyboardKey.digit6: '6', LogicalKeyboardKey.numpad6: '6',
-        LogicalKeyboardKey.digit7: '7', LogicalKeyboardKey.numpad7: '7',
-        LogicalKeyboardKey.digit8: '8', LogicalKeyboardKey.numpad8: '8',
-        LogicalKeyboardKey.digit9: '9', LogicalKeyboardKey.numpad9: '9',
+        LogicalKeyboardKey.digit0: '0',
+        LogicalKeyboardKey.numpad0: '0',
+        LogicalKeyboardKey.digit1: '1',
+        LogicalKeyboardKey.numpad1: '1',
+        LogicalKeyboardKey.digit2: '2',
+        LogicalKeyboardKey.numpad2: '2',
+        LogicalKeyboardKey.digit3: '3',
+        LogicalKeyboardKey.numpad3: '3',
+        LogicalKeyboardKey.digit4: '4',
+        LogicalKeyboardKey.numpad4: '4',
+        LogicalKeyboardKey.digit5: '5',
+        LogicalKeyboardKey.numpad5: '5',
+        LogicalKeyboardKey.digit6: '6',
+        LogicalKeyboardKey.numpad6: '6',
+        LogicalKeyboardKey.digit7: '7',
+        LogicalKeyboardKey.numpad7: '7',
+        LogicalKeyboardKey.digit8: '8',
+        LogicalKeyboardKey.numpad8: '8',
+        LogicalKeyboardKey.digit9: '9',
+        LogicalKeyboardKey.numpad9: '9',
       };
 
       if (digits.containsKey(key)) {
@@ -310,6 +338,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardFocusMode =
+        _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppThemeColors.background(context),
@@ -332,9 +362,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                   child: Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 600),
-                      child: _isChecked && !_isCorrect && _hasExplanation
-                          ? _buildExplanation()
-                          : _buildTaskCard(),
+                      child: keyboardFocusMode
+                          ? _buildKeyboardFocusCard()
+                          : (_isChecked && !_isCorrect && _hasExplanation
+                              ? _buildExplanation()
+                              : _buildTaskCard()),
                     ),
                   ),
                 ),
@@ -350,8 +382,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   Widget _buildTopBar() {
     final landscape = _isLandscape;
     return Container(
-      margin: EdgeInsets.fromLTRB(12, landscape ? 6 : 10, 12, landscape ? 4 : 8),
-      padding: EdgeInsets.fromLTRB(12, landscape ? 8 : 10, 12, landscape ? 8 : 10),
+      margin:
+          EdgeInsets.fromLTRB(12, landscape ? 6 : 10, 12, landscape ? 4 : 8),
+      padding:
+          EdgeInsets.fromLTRB(12, landscape ? 8 : 10, 12, landscape ? 8 : 10),
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: BorderRadius.circular(AppRadius.lg),
@@ -371,20 +405,30 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.xs),
-                  child: TweenAnimationBuilder<double>(
-                    key: ValueKey('task_progress_${_progress.toStringAsFixed(3)}'),
-                    tween: Tween(begin: 0, end: _progress),
-                    duration: const Duration(milliseconds: 420),
-                    curve: Curves.easeOutCubic,
-                    builder: (context, animatedProgress, _) {
-                      return LinearProgressIndicator(
-                        value: animatedProgress,
-                        backgroundColor: AppThemeColors.border(context),
-                        valueColor: const AlwaysStoppedAnimation(AppColors.accent),
-                        minHeight: 8,
-                      );
-                    },
-                  ),
+                  child: _noMotion
+                      ? LinearProgressIndicator(
+                          value: _progress,
+                          backgroundColor: AppThemeColors.border(context),
+                          valueColor:
+                              const AlwaysStoppedAnimation(AppColors.accent),
+                          minHeight: 8,
+                        )
+                      : TweenAnimationBuilder<double>(
+                          key: ValueKey(
+                              'task_progress_${_progress.toStringAsFixed(3)}'),
+                          tween: Tween(begin: 0, end: _progress),
+                          duration: const Duration(milliseconds: 420),
+                          curve: Curves.easeOutCubic,
+                          builder: (context, animatedProgress, _) {
+                            return LinearProgressIndicator(
+                              value: animatedProgress,
+                              backgroundColor: AppThemeColors.border(context),
+                              valueColor: const AlwaysStoppedAnimation(
+                                  AppColors.accent),
+                              minHeight: 8,
+                            );
+                          },
+                        ),
                 ),
                 const SizedBox(height: 6),
                 Text(
@@ -430,18 +474,19 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTaskCard() {
+    final t = context.watch<LanguageService>().t;
+    final isEnglish = context.watch<LanguageService>().isEnglish;
     final landscape = _isLandscape;
-    return ScaleTransition(
-      scale: _cardScaleAnim,
-      child: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (notification) {
-          notification.disallowIndicator();
-          return true;
-        },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(landscape ? 14 : 24),
-          child: Column(
-            children: [
+    final lowPerf = _isLowPerfMobileWeb;
+    final content = NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (notification) {
+        notification.disallowIndicator();
+        return true;
+      },
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(landscape ? 14 : 24),
+        child: Column(
+          children: [
             // Topic label
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
@@ -453,7 +498,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 ),
               ),
               child: Text(
-                widget.topicName,
+                isEnglish ? topicTitleEn(widget.topicName) : widget.topicName,
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -465,11 +510,15 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
             // Question card
             AnimatedSwitcher(
-              duration: const Duration(milliseconds: 260),
+              duration: _noMotion
+                  ? Duration.zero
+                  : Duration(milliseconds: lowPerf ? 140 : 260),
               switchInCurve: Curves.easeOutCubic,
               switchOutCurve: Curves.easeInCubic,
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 220),
+                duration: _noMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 220),
                 curve: Curves.easeOutCubic,
                 key: ValueKey('${_task.id}_${_isChecked}_$_explanationStep'),
                 width: double.infinity,
@@ -483,21 +532,15 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                         : AppThemeColors.border(context),
                     width: _answerFlashColor == null ? 1 : 2,
                   ),
-                  boxShadow: AppShadows.soft(context),
+                  boxShadow: lowPerf ? null : AppShadows.soft(context),
                 ),
                 child: Column(
                   children: [
-                    MathText(
-                      _task.question,
-                      style: TextStyle(
-                        fontSize: _task.type == TaskType.multipleChoice
-                            ? (landscape ? 28 : 36)
-                            : (landscape ? 18 : 20),
-                        fontWeight: FontWeight.w700,
-                        color: AppThemeColors.textPrimary(context),
-                        height: 1.3,
-                      ),
-                      textAlign: TextAlign.center,
+                    _buildQuestionPresentation(
+                      _localizedDynamicText(_clarifiedQuestion(_task)),
+                      fontSize: _task.type == TaskType.multipleChoice
+                          ? (landscape ? 28 : 36)
+                          : (landscape ? 18 : 20),
                     ),
                     if (!_isChecked) ...[
                       const SizedBox(height: 20),
@@ -516,19 +559,19 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             else
               Column(
                 children: [
-                  if (!(_showMathKeyboard && !_isChecked))
-                    _buildTextInput(),
+                  if (!(_showMathKeyboard && !_isChecked)) _buildTextInput(),
                   if (_isInequalityTask) ...[
                     const SizedBox(height: 10),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 10),
                       decoration: BoxDecoration(
                         color: AppThemeColors.accentLight(context),
                         borderRadius: BorderRadius.circular(AppRadius.md),
                       ),
                       child: Text(
-                        'Подсказка: для неравенств используй >= и <= (или кнопки ≥ и ≤).',
+                        t('task.inequalityHint'),
                         style: TextStyle(
                           fontSize: 12,
                           color: AppThemeColors.textSecondary(context),
@@ -539,14 +582,17 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                   ],
                 ],
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
+
+    if (_noMotion) return content;
+    return ScaleTransition(scale: _cardScaleAnim, child: content);
   }
 
   Widget _buildHintSection() {
+    final t = context.watch<LanguageService>().t;
     if (_task.hint == null || _task.hint!.trim().isEmpty) {
       return const SizedBox.shrink();
     }
@@ -562,9 +608,10 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         },
         icon: const Icon(Icons.lightbulb_outline_rounded,
             size: 18, color: AppColors.gold),
-        label: const Text(
-          'Показать подсказку',
-          style: TextStyle(color: AppColors.gold, fontWeight: FontWeight.w500),
+        label: Text(
+          t('task.showHint'),
+          style: const TextStyle(
+              color: AppColors.gold, fontWeight: FontWeight.w500),
         ),
       );
     }
@@ -580,11 +627,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.lightbulb_outline_rounded, size: 20, color: AppColors.gold),
+          const Icon(Icons.lightbulb_outline_rounded,
+              size: 20, color: AppColors.gold),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
-              hintText,
+              _localizedDynamicText(hintText),
               style: TextStyle(
                 fontSize: 14,
                 color: AppThemeColors.textPrimary(context),
@@ -599,7 +647,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   Widget _buildOptions() {
     final landscape = _isLandscape;
-    final options = _task.options ?? [];
+    final lowPerf = _isLowPerfMobileWeb;
+    final options = _optionsForCurrentTask();
 
     return Wrap(
       spacing: 12,
@@ -639,39 +688,67 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 },
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              constraints: BoxConstraints(minWidth: 80, minHeight: landscape ? 48 : 56),
-              padding: EdgeInsets.symmetric(horizontal: landscape ? 16 : 20, vertical: landscape ? 10 : 14),
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                border: Border.all(color: borderColor, width: 1.8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  option,
-                  style: TextStyle(
-                    fontSize: landscape ? 16 : 17,
-                    fontWeight: FontWeight.w600,
-                    color: textColor,
-                  ),
-                  textAlign: TextAlign.center,
+            duration:
+                _noMotion ? Duration.zero : const Duration(milliseconds: 200),
+            constraints:
+                BoxConstraints(minWidth: 80, minHeight: landscape ? 48 : 56),
+            padding: EdgeInsets.symmetric(
+                horizontal: landscape ? 16 : 20, vertical: landscape ? 10 : 14),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(color: borderColor, width: 1.8),
+              boxShadow: lowPerf
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+            ),
+            child: Center(
+              child: Text(
+                _localizedDynamicText(option),
+                style: TextStyle(
+                  fontSize: landscape ? 16 : 17,
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
+          ),
         );
       }).toList(),
     );
   }
 
+  List<String> _optionsForCurrentTask() {
+    final task = _task;
+    final original = task.options;
+    if (original == null) return const <String>[];
+    if (original.length <= 1) return List<String>.from(original);
+
+    final cached = _optionsCache[task.id];
+    if (cached != null) return cached;
+
+    final shuffled = List<String>.from(original);
+    final random = Random(task.id.hashCode);
+    for (int i = shuffled.length - 1; i > 0; i--) {
+      final j = random.nextInt(i + 1);
+      final tmp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = tmp;
+    }
+
+    _optionsCache[task.id] = shuffled;
+    return shuffled;
+  }
+
   Widget _buildTextInput() {
+    final t = context.watch<LanguageService>().t;
     final landscape = _isLandscape;
     Color borderColor = AppThemeColors.border(context);
     Color bgColor = AppThemeColors.surface(context);
@@ -687,21 +764,20 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final isEmpty = text.isEmpty;
 
     return GestureDetector(
-      onTap: _isChecked
-          ? null
-          : () => setState(() => _showMathKeyboard = true),
+      onTap: _isChecked ? null : () => setState(() => _showMathKeyboard = true),
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: landscape ? 18 : 24, vertical: landscape ? 14 : 22),
+        padding: EdgeInsets.symmetric(
+            horizontal: landscape ? 18 : 24, vertical: landscape ? 14 : 22),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(color: borderColor, width: 2),
         ),
         child: Text(
-          isEmpty ? 'Введи ответ' : text,
+          isEmpty ? t('task.enterAnswer') : text,
           style: TextStyle(
             fontSize: landscape ? 24 : 30,
             fontWeight: isEmpty ? FontWeight.w400 : FontWeight.w700,
@@ -716,7 +792,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildExplanation() {
-    final steps = _task.explanationSteps;
+    final t = context.watch<LanguageService>().t;
+    final steps = _explanationSteps;
     final visible = steps.take(_explanationStep + 1).toList();
 
     return NotificationListener<OverscrollIndicatorNotification>(
@@ -729,99 +806,96 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.errorLight,
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.school_rounded, color: AppColors.error, size: 20),
-                SizedBox(width: 10),
-                Text(
-                  'Разберём вместе',
-                  style: TextStyle(
-                    color: AppColors.error,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.errorLight,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.school_rounded,
+                      color: AppColors.error, size: 20),
+                  const SizedBox(width: 10),
+                  Text(
+                    t('task.explainTogether'),
+                    style: const TextStyle(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppThemeColors.surface(context),
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-            ),
-            child: MathText(
-              _task.question,
-              style: TextStyle(
+            const SizedBox(height: 24),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppThemeColors.surface(context),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+              ),
+              child: _buildQuestionPresentation(
+                _localizedDynamicText(_clarifiedQuestion(_task)),
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppThemeColors.textPrimary(context),
               ),
             ),
-          ),
-          const SizedBox(height: 24),
-          ...visible.asMap().entries.map((e) => Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: AppThemeColors.accentLight(context),
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${e.key + 1}',
-                          style: const TextStyle(
-                            color: AppColors.accent,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
+            const SizedBox(height: 24),
+            ...visible.asMap().entries.map((e) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
-                          color: AppThemeColors.surface(context),
-                          borderRadius: BorderRadius.circular(AppRadius.md),
+                          color: AppThemeColors.accentLight(context),
+                          borderRadius: BorderRadius.circular(AppRadius.sm),
                         ),
-                        child: Text(
-                          e.value,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: AppThemeColors.textPrimary(context),
-                            height: 1.5,
+                        child: Center(
+                          child: Text(
+                            '${e.key + 1}',
+                            style: const TextStyle(
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: AppThemeColors.surface(context),
+                            borderRadius: BorderRadius.circular(AppRadius.md),
+                          ),
+                          child: Text(
+                            _localizedDynamicText(e.value),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppThemeColors.textPrimary(context),
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            const SizedBox(height: 8),
+            if (_explanationStep < steps.length - 1)
+              Center(
+                child: TextButton.icon(
+                  onPressed: () => setState(() => _explanationStep++),
+                  icon: const Icon(Icons.arrow_downward_rounded, size: 18),
+                  label: Text(t('task.nextStep')),
                 ),
-              )),
-          const SizedBox(height: 8),
-          if (_explanationStep < steps.length - 1)
-            Center(
-              child: TextButton.icon(
-                onPressed: () => setState(() => _explanationStep++),
-                icon: const Icon(Icons.arrow_downward_rounded, size: 18),
-                label: const Text('Следующий шаг'),
               ),
-            ),
           ],
         ),
       ),
@@ -829,6 +903,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildBottomBar() {
+    final t = context.watch<LanguageService>().t;
     final landscape = _isLandscape;
     final keyboardMode =
         _showMathKeyboard && !_isChecked && _task.type == TaskType.textInput;
@@ -861,7 +936,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 child: IconButton(
                   onPressed: () => setState(() => _showMathKeyboard = false),
                   icon: const Icon(Icons.keyboard_hide_rounded, size: 20),
-                  tooltip: 'Свернуть клавиатуру',
+                  tooltip: t('task.hideKeyboard'),
                   visualDensity: VisualDensity.compact,
                 ),
               ),
@@ -871,11 +946,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               ),
               const SizedBox(height: 2),
             ],
-
             if (!keyboardMode) ...[
               // Кнопка действия
               AnimatedSwitcher(
-                duration: const Duration(milliseconds: 220),
+                duration: _noMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 220),
                 switchInCurve: Curves.easeOutCubic,
                 switchOutCurve: Curves.easeInCubic,
                 child: _buildPrimaryAction(),
@@ -883,7 +959,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               if (!_isChecked && _wrongAttemptsOnCurrentTask >= 2) ...[
                 const SizedBox(height: 8),
                 AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
+                  duration: _noMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 200),
                   child: _buildDontKnowButton(),
                 ),
               ],
@@ -894,23 +972,74 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildKeyboardFocusCard() {
+    final landscape = _isLandscape;
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(landscape ? 12 : 14),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppThemeColors.accentLight(context),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                color: AppColors.accent.withValues(alpha: 0.32),
+              ),
+            ),
+            child: Text(
+              context.watch<LanguageService>().isEnglish
+                  ? topicTitleEn(widget.topicName)
+                  : widget.topicName,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: AppColors.accent,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(landscape ? 14 : 16),
+            decoration: BoxDecoration(
+              color: AppThemeColors.surface(context),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+              border: Border.all(color: AppThemeColors.border(context)),
+            ),
+            child: _buildQuestionPresentation(
+              _localizedDynamicText(_clarifiedQuestion(_task)),
+              fontSize: landscape ? 18 : 20,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildPrimaryAction() {
+    final t = context.watch<LanguageService>().t;
     if (_isChecked && (_isCorrect || !_hasExplanation)) {
       return _buildActionButton(
         key: const ValueKey('primary_continue'),
-        label: _currentIndex < widget.tasks.length - 1 ? 'Продолжить' : 'Завершить',
+        label: _currentIndex < widget.tasks.length - 1
+            ? t('task.continue')
+            : t('task.finish'),
         color: _isCorrect ? AppColors.success : AppColors.accent,
         onTap: _goNext,
       );
     }
     if (_isChecked && _hasExplanation) {
+      final steps = _explanationSteps;
       return _buildActionButton(
         key: const ValueKey('primary_explain'),
-        label: _explanationStep < _task.explanationSteps.length - 1 ? 'Далее' : 'Понятно',
+        label: _explanationStep < steps.length - 1
+            ? t('task.next')
+            : t('task.gotIt'),
         color: AppColors.accent,
         onTap: () {
           SoundService.playTap();
-          if (_explanationStep < _task.explanationSteps.length - 1) {
+          if (_explanationStep < steps.length - 1) {
             setState(() => _explanationStep++);
           } else {
             _goNext();
@@ -921,15 +1050,184 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     if (!_isChecked && _task.type == TaskType.textInput) {
       return _buildActionButton(
         key: const ValueKey('primary_check'),
-        label: 'Проверить',
-        color: _textIsNotEmpty ? AppColors.accent : AppThemeColors.disabled(context),
+        label: t('task.check'),
+        color: _textIsNotEmpty
+            ? AppColors.accent
+            : AppThemeColors.disabled(context),
         onTap: _textIsNotEmpty ? _checkAnswer : null,
       );
     }
     return const SizedBox.shrink(key: ValueKey('primary_empty'));
   }
 
+  Widget _buildQuestionPresentation(String question,
+      {required double fontSize}) {
+    final extracted = _extractExampleFromQuestion(question);
+    if (extracted == null) {
+      return MathText(
+        question,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w700,
+          color: AppThemeColors.textPrimary(context),
+          height: 1.25,
+        ),
+        textAlign: TextAlign.center,
+      );
+    }
+
+    final intro = question.replaceFirst(extracted, '').trim();
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (intro.isNotEmpty) ...[
+            Text(
+              intro,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: fontSize * 0.58,
+                fontWeight: FontWeight.w600,
+                color: AppThemeColors.textSecondary(context),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppThemeColors.accentLight(context),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(
+                  color: AppColors.accent.withValues(alpha: 0.45),
+                  width: 1.4,
+                ),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    MathText(
+                      extracted,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.accent,
+                        height: 1.25,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _localizedDynamicText(String text) {
+    if (!context.read<LanguageService>().isEnglish) return text;
+    return LocalizedTextService.forEnglishUi(text);
+  }
+
+  String? _extractExampleFromQuestion(String question) {
+    final q = question.trim();
+    if (q.isEmpty) return null;
+
+    bool looksLikeExpression(String v) {
+      final s = v.trim();
+      if (s.length < 3) return false;
+      if (RegExp(r'[А-Яа-яA-Za-w]')
+          .hasMatch(s.replaceAll(RegExp(r'[xyzXYZ]'), ''))) {
+        return false;
+      }
+      return RegExp(r'[0-9xyzXYZ]').hasMatch(s) &&
+          RegExp(r'[=+\-*/<>≤≥^√]').hasMatch(s);
+    }
+
+    final colon = q.lastIndexOf(':');
+    if (colon != -1 && colon < q.length - 1) {
+      final tail = q.substring(colon + 1).trim();
+      if (looksLikeExpression(tail)) return tail;
+    }
+
+    if (looksLikeExpression(q)) return q;
+
+    final m =
+        RegExp(r'([xyzXYZ0-9][xyzXYZ0-9\s+\-*/=<>≤≥^√().,]+)').firstMatch(q);
+    if (m != null) {
+      final candidate = (m.group(1) ?? '').trim();
+      if (looksLikeExpression(candidate)) return candidate;
+    }
+    return null;
+  }
+
+  String _clarifiedQuestion(Task task) {
+    final q = task.question.trim();
+    final isEnglish = context.read<LanguageService>().isEnglish;
+    final topic = isEnglish ? topicTitleEn(task.topic) : task.topic;
+
+    final gcdMatch = RegExp(
+      r'^НОД\((\d+),\s*(\d+)\)\s*=\s*\?$',
+      caseSensitive: false,
+    ).firstMatch(q);
+    if (gcdMatch != null) {
+      if (isEnglish) {
+        return 'Find the GCD of ${gcdMatch.group(1)} and ${gcdMatch.group(2)}.\n'
+            'GCD means greatest common divisor: the largest number that divides both numbers without a remainder.';
+      }
+      return 'Найдите НОД чисел ${gcdMatch.group(1)} и ${gcdMatch.group(2)}.\n'
+          'НОД — это наибольший общий делитель: самое большое число, на которое оба числа делятся без остатка.';
+    }
+
+    final lcmMatch = RegExp(
+      r'^НОК\((\d+),\s*(\d+)\)\s*=\s*\?$',
+      caseSensitive: false,
+    ).firstMatch(q);
+    if (lcmMatch != null) {
+      if (isEnglish) {
+        return 'Find the LCM of ${lcmMatch.group(1)} and ${lcmMatch.group(2)}.\n'
+            'LCM means least common multiple: the smallest positive number divisible by both given numbers.';
+      }
+      return 'Найдите НОК чисел ${lcmMatch.group(1)} и ${lcmMatch.group(2)}.\n'
+          'НОК — это наименьшее общее кратное: самое маленькое положительное число, которое делится на оба данных числа.';
+    }
+
+    final terseExpression = RegExp(r'^[\d\s+\-*/×÷().,]+=\s*\?$').hasMatch(q);
+    if (terseExpression) {
+      if (isEnglish) {
+        return 'Calculate the expression and enter only the answer:\n$q';
+      }
+      return 'Вычислите выражение и запишите только ответ:\n$q';
+    }
+
+    final terseFraction = RegExp(r'^\d+/\d+\s+от\s+числа\s+\d+\s*=\s*\?$')
+        .hasMatch(q.toLowerCase());
+    if (terseFraction) {
+      if (isEnglish) {
+        return 'Find the requested fraction of the number. First divide by the denominator, then multiply by the numerator:\n$q';
+      }
+      return 'Найдите указанную долю числа. Сначала разделите число на знаменатель, затем умножьте на числитель:\n$q';
+    }
+
+    if (q.length <= 22 && q.endsWith('?') && task.type == TaskType.textInput) {
+      if (isEnglish) {
+        return 'Complete the task from “$topic” and enter the answer:\n$q';
+      }
+      return 'Выполните задание по теме "${task.topic}" и запишите ответ:\n$q';
+    }
+
+    return q;
+  }
+
   Widget _buildKeyboardInputPreview() {
+    final t = context.watch<LanguageService>().t;
     final text = _textController.text;
     return Container(
       width: double.infinity,
@@ -941,11 +1239,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       ),
       child: Row(
         children: [
-          Icon(Icons.edit_rounded, size: 14, color: AppThemeColors.textHint(context)),
+          Icon(Icons.edit_rounded,
+              size: 14, color: AppThemeColors.textHint(context)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              text.isEmpty ? 'Ввод...' : text,
+              text.isEmpty ? t('task.inputPreview') : text,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -969,6 +1268,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     VoidCallback? onTap,
   }) {
     final enabled = onTap != null;
+    final lowPerf = _isLowPerfMobileWeb;
     return GestureDetector(
       key: key,
       onTap: onTap,
@@ -979,7 +1279,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         decoration: BoxDecoration(
           color: enabled ? color : color.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(AppRadius.md),
-          boxShadow: enabled
+          boxShadow: enabled && !lowPerf
               ? [
                   BoxShadow(
                     color: color.withValues(alpha: 0.28),
@@ -995,9 +1295,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w700,
-              color: enabled
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.75),
+              color:
+                  enabled ? Colors.white : Colors.white.withValues(alpha: 0.75),
             ),
           ),
         ),
@@ -1006,6 +1305,8 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildDontKnowButton() {
+    final t = context.watch<LanguageService>().t;
+    final lowPerf = _isLowPerfMobileWeb;
     return GestureDetector(
       key: const ValueKey('secondary_dontknow'),
       onTap: _revealAnswer,
@@ -1020,27 +1321,29 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             color: AppColors.error.withValues(alpha: 0.4),
             width: 1.8,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.error.withValues(alpha: 0.14),
-              blurRadius: 12,
-              offset: const Offset(0, 5),
-            ),
-          ],
+          boxShadow: lowPerf
+              ? null
+              : [
+                  BoxShadow(
+                    color: AppColors.error.withValues(alpha: 0.14),
+                    blurRadius: 12,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.help_outline_rounded,
+            const Icon(Icons.help_outline_rounded,
                 size: 20, color: AppColors.error),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Flexible(
               child: Text(
-                'Не знаю — покажи ответ',
+                t('task.dontKnow'),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: AppColors.error,
@@ -1196,6 +1499,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
   }
 
   void _showExitConfirmation() {
+    final t = context.read<LanguageService>().t;
     if (_currentIndex == 0 && !_isChecked) {
       context.pop();
       return;
@@ -1205,22 +1509,24 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: AppThemeColors.surface(context),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.xl)),
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        title: Text('Выйти?', style: TextStyle(color: AppThemeColors.textPrimary(context))),
-        content: Text('Твой прогресс будет сохранён.', style: TextStyle(color: AppThemeColors.textSecondary(context))),
+        title: Text(t('task.exitTitle'),
+            style: TextStyle(color: AppThemeColors.textPrimary(context))),
+        content: Text(t('task.exitBody'),
+            style: TextStyle(color: AppThemeColors.textSecondary(context))),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Остаться'),
+            child: Text(t('task.stay')),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
               if (mounted) context.pop();
             },
-            child: const Text('Выйти'),
+            child: Text(t('task.exit')),
           ),
         ],
       ),
@@ -1229,6 +1535,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
 
   Future<void> _showAchievementsUnlockedDialog(
       List<Achievement> achievements) async {
+    final t = context.read<LanguageService>().t;
     if (!mounted || achievements.isEmpty) return;
     await showDialog<void>(
       context: context,
@@ -1239,8 +1546,9 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.xl),
           ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          title: const Text('Новое достижение!'),
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          title: Text(t('task.newAchievement')),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1257,9 +1565,35 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                           Expanded(
                             child: Text(
                               a.title,
-                              style: const TextStyle(fontWeight: FontWeight.w600),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             ),
                           ),
+                          if (AchievementsService.getAvatarSkinUnlockedBy(
+                                  a.type) !=
+                              null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      AppColors.success.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  t('task.skin'),
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.success,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -1273,11 +1607,190 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                 SoundService.playTap();
                 Navigator.of(ctx).pop();
               },
-              child: const Text('Круто'),
+              child: Text(t('task.cool')),
             ),
           ],
         );
       },
     );
+  }
+
+  List<String> _fallbackStepsFor(Task task) {
+    final answer = _localizedDynamicText(task.answer).trim();
+    if (answer.isEmpty) return const <String>[];
+
+    final specific = _specificFallbackStepsFor(task, answer);
+    if (specific.isNotEmpty) return specific;
+
+    final steps = <String>[];
+    final isEnglish = context.read<LanguageService>().isEnglish;
+    final topic = isEnglish ? topicTitleEn(task.topic) : task.topic;
+
+    if (task.type == TaskType.multipleChoice &&
+        (task.options?.isNotEmpty ?? false)) {
+      steps.add(isEnglish
+          ? 'First read the question and decide which rule from “$topic” applies.'
+          : 'Сначала прочитай условие и определи, какое правило из темы "$topic" нужно применить.');
+      steps.add(isEnglish
+          ? 'Check the options one by one: wrong options usually break the sign, operation order, units, or domain restrictions.'
+          : 'Проверь варианты по очереди: неподходящие варианты обычно нарушают знак, порядок действий, единицы измерения или область допустимых значений.');
+    } else {
+      steps.add(isEnglish
+          ? 'First write down the given data and choose the rule from “$topic”.'
+          : 'Сначала выпиши данные из условия и выбери правило из темы "$topic".');
+      steps.add(isEnglish
+          ? 'Carry out the calculation carefully: watch operation order, signs, and units.'
+          : 'Выполни вычисление аккуратно: соблюдай порядок действий, знаки и единицы измерения.');
+    }
+
+    steps.add(
+        isEnglish ? 'Correct answer: $answer.' : 'Правильный ответ: $answer.');
+    return steps;
+  }
+
+  List<String> _specificFallbackStepsFor(Task task, String answer) {
+    final q = task.question.trim();
+    final isEnglish = context.read<LanguageService>().isEnglish;
+
+    final gcdMatch = RegExp(
+      r'НОД\((\d+),\s*(\d+)\)',
+      caseSensitive: false,
+    ).firstMatch(q);
+    if (gcdMatch != null) {
+      final a = int.parse(gcdMatch.group(1)!);
+      final b = int.parse(gcdMatch.group(2)!);
+      final divisorsA = _divisors(a).join(', ');
+      final divisorsB = _divisors(b).join(', ');
+      if (isEnglish) {
+        return [
+          'List the divisors of the first number: $a → $divisorsA.',
+          'List the divisors of the second number: $b → $divisorsB.',
+          'Common divisors appear in both lists. The greatest one is $answer.',
+        ];
+      }
+      return [
+        'Выпишем делители первого числа: $a → $divisorsA.',
+        'Выпишем делители второго числа: $b → $divisorsB.',
+        'Общие делители есть в обоих списках. Самый большой из них — $answer.',
+      ];
+    }
+
+    final lcmMatch = RegExp(
+      r'НОК\((\d+),\s*(\d+)\)',
+      caseSensitive: false,
+    ).firstMatch(q);
+    if (lcmMatch != null) {
+      final a = int.parse(lcmMatch.group(1)!);
+      final b = int.parse(lcmMatch.group(2)!);
+      final gcd = _gcd(a, b);
+      if (isEnglish) {
+        return [
+          'First find the GCD of $a and $b: it is $gcd.',
+          'Use the relationship GCD(a, b) × LCM(a, b) = a × b.',
+          'LCM($a, $b) = $a × $b / $gcd = $answer.',
+        ];
+      }
+      return [
+        'Сначала найдём НОД чисел $a и $b: он равен $gcd.',
+        'Используем связь НОД и НОК: НОК(a, b) = a × b / НОД(a, b).',
+        'НОК($a, $b) = $a × $b / $gcd = $answer.',
+      ];
+    }
+
+    final shareMatch = RegExp(
+      r'(\d+)/(\d+)\s+от\s+числа\s+(\d+)',
+      caseSensitive: false,
+    ).firstMatch(q);
+    if (shareMatch != null) {
+      final n = int.parse(shareMatch.group(1)!);
+      final d = int.parse(shareMatch.group(2)!);
+      final whole = int.parse(shareMatch.group(3)!);
+      if (isEnglish) {
+        return [
+          'The fraction $n/$d means: split the number into $d equal parts and take $n of them.',
+          'First find one $d-th part: $whole / $d.',
+          'Then multiply the result by $n. The answer is $answer.',
+        ];
+      }
+      return [
+        'Дробь $n/$d означает: число нужно разделить на $d равных частей и взять $n таких частей.',
+        'Сначала найдём одну $d-ю часть: $whole / $d.',
+        'Затем умножим результат на $n. Получаем ответ: $answer.',
+      ];
+    }
+
+    final percentMatch =
+        RegExp(r'(\d+(?:[.,]\d+)?)%\s+от\s+(\d+(?:[.,]\d+)?)').firstMatch(q);
+    if (percentMatch != null) {
+      final percent = percentMatch.group(1)!.replaceAll(',', '.');
+      final whole = percentMatch.group(2)!.replaceAll(',', '.');
+      if (isEnglish) {
+        return [
+          '$percent% means $percent/100 of a quantity.',
+          'To find $percent% of $whole, calculate $whole × $percent / 100.',
+          'After the calculation, the answer is $answer.',
+        ];
+      }
+      return [
+        '$percent% означает $percent/100 от величины.',
+        'Чтобы найти $percent% от $whole, нужно вычислить $whole × $percent / 100.',
+        'После вычисления получаем ответ: $answer.',
+      ];
+    }
+
+    final equationMatch =
+        RegExp(r'(^|[\s:])([xyz])\s*[+\-*/=]').firstMatch(q.toLowerCase());
+    if (equationMatch != null && q.contains('=')) {
+      if (isEnglish) {
+        return [
+          'This is an equation: find the value of the unknown that makes the equality true.',
+          'Use equivalent transformations: you may add, subtract, multiply, or divide both sides by the same non-zero number.',
+          'Check by substituting the value back into the equation. Correct answer: $answer.',
+        ];
+      }
+      return [
+        'Это уравнение: нужно найти значение неизвестной буквы, при котором равенство станет верным.',
+        'Переноси числа и буквенные слагаемые по правилам равносильных преобразований: к обеим частям можно прибавлять, вычитать, умножать или делить на одно и то же ненулевое число.',
+        'Проверка делается подстановкой найденного значения. Правильный ответ: $answer.',
+      ];
+    }
+
+    final coordinateMatch = RegExp(r'\((-?\d+),\s*(-?\d+)\)').firstMatch(q);
+    if (coordinateMatch != null &&
+        task.topic.toLowerCase().contains('координ')) {
+      if (isEnglish) {
+        return [
+          'In coordinates (x, y), the first coordinate shows movement right or left; the second shows movement up or down.',
+          'Check the signs: positive means right/up, negative means left/down.',
+          'After checking the condition, the answer is $answer.',
+        ];
+      }
+      return [
+        'В координатах (x, y) первая координата показывает движение вправо или влево, вторая — вверх или вниз.',
+        'Определи знаки координат: положительная координата идёт вправо/вверх, отрицательная — влево/вниз.',
+        'После проверки условия получаем ответ: $answer.',
+      ];
+    }
+
+    return const <String>[];
+  }
+
+  List<int> _divisors(int value) {
+    final out = <int>[];
+    for (var i = 1; i <= value; i++) {
+      if (value % i == 0) out.add(i);
+    }
+    return out;
+  }
+
+  int _gcd(int a, int b) {
+    var x = a.abs();
+    var y = b.abs();
+    while (y != 0) {
+      final r = x % y;
+      x = y;
+      y = r;
+    }
+    return x;
   }
 }

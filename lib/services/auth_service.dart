@@ -1,33 +1,62 @@
 library;
 
-import 'package:firebase_auth/firebase_auth.dart';
+class AuthUser {
+  const AuthUser({required this.uid});
+
+  final String uid;
+}
 
 class AuthService {
   AuthService._();
 
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-
   static Future<void> init() async {}
 
-  static Stream<User?> authStateChanges() => _auth.authStateChanges();
+  static Stream<AuthUser?> authStateChanges() =>
+      const Stream<AuthUser?>.empty();
 
-  static User? currentUser() => _auth.currentUser;
+  static AuthUser? currentUser() => null;
 
-  static bool isLoggedIn() => _auth.currentUser != null;
+  static bool isLoggedIn() => false;
 
-  static Future<UserCredential> signInWithEmail({
-    required String email,
-    required String password,
-  }) {
-    return _auth.signInWithEmailAndPassword(email: email, password: password);
+  static String loginToEmail(String login) {
+    final normalized = login.trim().toLowerCase();
+    final cleaned = normalized.replaceAll(RegExp(r'[^a-z0-9._-]'), '');
+    return '$cleaned@algeon.local';
   }
 
-  static Future<UserCredential> registerWithEmail({
-    required String email,
-    required String password,
-  }) {
-    return _auth.createUserWithEmailAndPassword(email: email, password: password);
+  static bool isLoginValid(String login) {
+    final normalized = login.trim();
+    if (normalized.length < 3) return false;
+    return RegExp(r'^[a-zA-Z0-9._-]+$').hasMatch(normalized);
   }
 
-  static Future<void> signOut() => _auth.signOut();
+  static Future<void> signInWithLogin({
+    required String login,
+    required String password,
+  }) async {
+    throw UnsupportedError('Login is disabled.');
+  }
+
+  static Future<void> registerWithLogin({
+    required String login,
+    required String password,
+  }) async {
+    throw UnsupportedError('Registration is disabled.');
+  }
+
+  static Future<void> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    throw UnsupportedError('Login is disabled.');
+  }
+
+  static Future<void> registerWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    throw UnsupportedError('Registration is disabled.');
+  }
+
+  static Future<void> signOut() async {}
 }

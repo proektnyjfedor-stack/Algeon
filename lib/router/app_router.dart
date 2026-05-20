@@ -17,10 +17,8 @@ import '../screens/task_screen.dart';
 import '../screens/topic_intro_screen.dart';
 import '../screens/summary_screen.dart';
 import '../screens/onboarding_welcome_screen.dart';
-import '../screens/splash_screen.dart';
-import '../screens/auth_screen.dart';
 import '../models/task.dart';
-import '../services/auth_service.dart';
+import '../services/language_service.dart';
 import '../services/progress_service.dart';
 
 /// Tab paths used by ShellRoute navigation.
@@ -36,7 +34,6 @@ class AppRoutes {
   static const String summary = '/summary';
   static const String onboarding = '/onboarding';
   static const String splash = '/splash';
-  static const String auth = '/auth';
 }
 
 /// Resolves the bottom-nav / rail index from the current location.
@@ -53,7 +50,7 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 /// Global router instance.
 final GoRouter appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
-  initialLocation: AppRoutes.splash,
+  initialLocation: AppRoutes.learn,
   debugLogDiagnostics: false,
 
   // ------------------------------------------------------------------
@@ -72,23 +69,17 @@ final GoRouter appRouter = GoRouter(
       return normalized.toString();
     }
 
-    // Already heading to splash -- allow.
-    if (path == AppRoutes.splash) return null;
+    // Старые ссылки на заставку — сразу в приложение без экрана splash.
+    if (path == AppRoutes.splash) {
+      if (!ProgressService.isOnboardingComplete()) return AppRoutes.onboarding;
+      return AppRoutes.learn;
+    }
 
     // Already heading to onboarding -- allow.
     if (path == AppRoutes.onboarding) return null;
-    if (path == AppRoutes.auth) {
-      if (AuthService.isLoggedIn()) {
-        if (!ProgressService.isOnboardingComplete()) {
-          return AppRoutes.onboarding;
-        }
-        return AppRoutes.learn;
-      }
-      return null;
-    }
-
-    if (!AuthService.isLoggedIn()) {
-      return AppRoutes.auth;
+    if (path == '/auth') {
+      if (!ProgressService.isOnboardingComplete()) return AppRoutes.onboarding;
+      return AppRoutes.learn;
     }
 
     // Optional placeholder for platform-specific branch.
@@ -196,23 +187,9 @@ final GoRouter appRouter = GoRouter(
         return const NoTransitionPage(child: OnboardingWelcomeScreen());
       },
     ),
-
-    GoRoute(
-      path: AppRoutes.auth,
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return const NoTransitionPage(child: AuthScreen());
-      },
-    ),
-
-    // Splash screen (standalone, shown on app launch).
-    GoRoute(
-      path: AppRoutes.splash,
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return const NoTransitionPage(child: SplashScreen());
-      },
-    ),
   ],
   errorBuilder: (context, state) {
+    final t = LanguageService.instance.t;
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: Center(
@@ -230,7 +207,7 @@ final GoRouter appRouter = GoRouter(
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Страница не найдена',
+                  t('error.notFound'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppThemeColors.textPrimary(context),
@@ -251,7 +228,7 @@ final GoRouter appRouter = GoRouter(
                 FilledButton.icon(
                   onPressed: () => context.go(AppRoutes.learn),
                   icon: const Icon(Icons.home_rounded),
-                  label: const Text('На главную'),
+                  label: Text(t('error.toHome')),
                 ),
               ],
             ),

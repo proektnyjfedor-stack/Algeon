@@ -21,9 +21,8 @@ class ProgressService {
   static const String _keyAvatar = 'user_avatar';
   static const String _keyTodayDate = 'today_date';
   static const String _keyTodayCompleted = 'today_completed';
-  static const String _keyCoins = 'coins_balance';
-  static const String _keyDailyBonusDate = 'daily_bonus_date';
   static const String _keyEquippedBetaItem = 'equipped_beta_item';
+  static const String _keyProfileBackground = 'profile_background';
   
   static SharedPreferences? _prefs;
   static Set<String> _solvedTaskIds = {};
@@ -60,11 +59,11 @@ class ProgressService {
   
   static int getCurrentGrade() {
     final grade = _prefs?.getInt(_keyGrade) ?? 5;
-    return grade.clamp(5, 11);
+    return grade.clamp(1, 11);
   }
   
   static Future<void> setCurrentGrade(int grade) async {
-    final normalized = grade.clamp(5, 11);
+    final normalized = grade.clamp(1, 11);
     await _prefs?.setInt(_keyGrade, normalized);
     _log('Grade: $normalized');
   }
@@ -258,50 +257,6 @@ class ProgressService {
     return _prefs?.getInt(_keyCorrect) ?? 0;
   }
 
-  // ============================================================
-  // BETA REWARDS (coins)
-  // ============================================================
-
-  static int getCoins() {
-    return _prefs?.getInt(_keyCoins) ?? 0;
-  }
-
-  static Future<void> addCoins(int amount) async {
-    if (amount <= 0) return;
-    final next = getCoins() + amount;
-    await _prefs?.setInt(_keyCoins, next);
-    _log('Coins +$amount => $next');
-  }
-
-  static Future<bool> spendCoins(int amount) async {
-    if (amount <= 0) return true;
-    final current = getCoins();
-    if (current < amount) return false;
-    final next = current - amount;
-    await _prefs?.setInt(_keyCoins, next);
-    _log('Coins -$amount => $next');
-    return true;
-  }
-
-  static int coinsForCorrectAnswer(int comboStreak) {
-    final clampedCombo = comboStreak < 1 ? 1 : comboStreak;
-    final bonus = (clampedCombo - 1).clamp(0, 5);
-    return 5 + bonus;
-  }
-
-  static Future<int> claimDailyBonusIfAvailable() async {
-    final now = DateTime.now();
-    final today = '${now.year}-${now.month}-${now.day}';
-    final savedDate = _prefs?.getString(_keyDailyBonusDate);
-    if (savedDate == today) return 0;
-
-    final streak = getStreakDays();
-    final bonus = 20 + (streak.clamp(0, 10) * 2);
-    await addCoins(bonus);
-    await _prefs?.setString(_keyDailyBonusDate, today);
-    return bonus;
-  }
-
   static String? getEquippedBetaItem() {
     return _prefs?.getString(_keyEquippedBetaItem);
   }
@@ -309,6 +264,15 @@ class ProgressService {
   static Future<void> setEquippedBetaItem(String itemId) async {
     await _prefs?.setString(_keyEquippedBetaItem, itemId);
     _log('Equipped beta item: $itemId');
+  }
+
+  static String getProfileBackground() {
+    return _prefs?.getString(_keyProfileBackground) ?? 'indigo';
+  }
+
+  static Future<void> setProfileBackground(String id) async {
+    await _prefs?.setString(_keyProfileBackground, id);
+    _log('Profile background: $id');
   }
 
   /// Generic bool getter (for exam pass flags etc.)
@@ -374,9 +338,8 @@ class ProgressService {
     _keyAvatar,
     _keyTodayDate,
     _keyTodayCompleted,
-    _keyCoins,
-    _keyDailyBonusDate,
     _keyEquippedBetaItem,
+    _keyProfileBackground,
     'custom_avatar',
     _keyCustomPhoto,
   ];

@@ -3,12 +3,11 @@ library;
 
 import 'package:flutter/material.dart';
 
-/// Цвет лестницы по умолчанию (как в теме Algeon).
-const Color kAppLogoStairBlue = Color(0xFF2563EB);
+/// Цвет лестницы из брендового логотипа.
+const Color kAppLogoStairBlue = Color(0xFF2388F2);
 
-/// Логотип: силуэт лестницы; на светлом фоне обычно синий, в квадрате [AppLogoIcon] — белый на синем
+/// Логотип: единый синий силуэт лестницы с мягкими внешними углами.
 class AppLogo extends StatelessWidget {
-
   const AppLogo({super.key, this.size = 80, this.color});
   final double size;
   final Color? color;
@@ -26,32 +25,20 @@ class AppLogo extends StatelessWidget {
   }
 }
 
-/// Логотип в синем квадрате — иконка приложения
+/// Иконка приложения. Теперь без дополнительного синего квадрата, чтобы везде
+/// использовался один и тот же брендовый знак.
 class AppLogoIcon extends StatelessWidget {
-
   const AppLogoIcon({super.key, this.size = 80});
   final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: const Color(0xFF2563EB),
-        borderRadius: BorderRadius.circular(size * 0.22),
-      ),
-      child: CustomPaint(
-        painter: const _StairsPainter(color: Colors.white),
-        size: Size(size, size),
-      ),
-    );
+    return AppLogo(size: size);
   }
 }
 
-/// Лестница — единый силуэт, только прямые углы (без скруглений)
+/// Лестница из трёх ступеней. Пропорции подобраны под присланный логотип.
 class _StairsPainter extends CustomPainter {
-
   const _StairsPainter({required this.color});
   final Color color;
 
@@ -64,20 +51,33 @@ class _StairsPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.fill;
 
-    final pad = w * 0.06;
-    final step = (w - pad * 2) / 3;
-    final base = h - pad;
+    final left = w * 0.17;
+    final right = w * 0.83;
+    final bottom = h * 0.82;
+    final top = h * 0.16;
+    final x1 = w * 0.38;
+    final x2 = w * 0.61;
+    final stepHeight = (bottom - top) / 3;
+    final y1 = bottom - stepHeight;
+    final y2 = bottom - stepHeight * 2;
+    final r = w * 0.055;
 
     final path = Path()
-      ..moveTo(pad, base)
-      ..lineTo(w - pad, base)
-      ..lineTo(w - pad, pad)
-      ..lineTo(pad + step * 2, pad)
-      ..lineTo(pad + step * 2, base - step * 2)
-      ..lineTo(pad + step, base - step * 2)
-      ..lineTo(pad + step, base - step)
-      ..lineTo(pad, base - step)
-      ..lineTo(pad, base)
+      ..moveTo(left + r, bottom)
+      ..lineTo(right - r, bottom)
+      ..quadraticBezierTo(right, bottom, right, bottom - r)
+      ..lineTo(right, top + r)
+      ..quadraticBezierTo(right, top, right - r, top)
+      ..lineTo(x2 + r, top)
+      ..quadraticBezierTo(x2, top, x2, top + r)
+      ..lineTo(x2, y2)
+      ..lineTo(x1 + r, y2)
+      ..quadraticBezierTo(x1, y2, x1, y2 + r)
+      ..lineTo(x1, y1)
+      ..lineTo(left + r, y1)
+      ..quadraticBezierTo(left, y1, left, y1 + r)
+      ..lineTo(left, bottom - r)
+      ..quadraticBezierTo(left, bottom, left + r, bottom)
       ..close();
 
     canvas.drawPath(path, paint);
@@ -89,7 +89,6 @@ class _StairsPainter extends CustomPainter {
 
 /// Логотип с названием (для онбординга и др.)
 class AppLogoWithText extends StatelessWidget {
-
   const AppLogoWithText({super.key, this.logoSize = 80, this.textColor});
   final double logoSize;
   final Color? textColor;
@@ -107,7 +106,7 @@ class AppLogoWithText extends StatelessWidget {
             fontFamily: 'Inter',
             fontSize: 24,
             fontWeight: FontWeight.w800,
-            color: textColor ?? const Color(0xFF2563EB),
+            color: textColor ?? kAppLogoStairBlue,
             letterSpacing: -0.5,
           ),
         ),

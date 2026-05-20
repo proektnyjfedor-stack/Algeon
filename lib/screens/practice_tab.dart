@@ -6,8 +6,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
+import '../services/language_service.dart';
+import '../data/topic_titles_en.dart';
 import '../services/progress_service.dart';
 import '../services/sound_service.dart';
 import '../models/task.dart';
@@ -24,6 +27,7 @@ class _PracticeTabState extends State<PracticeTab> {
 
   @override
   Widget build(BuildContext context) {
+    final t = context.watch<LanguageService>().t;
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: SafeArea(
@@ -52,7 +56,7 @@ class _PracticeTabState extends State<PracticeTab> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Практика',
+                          t('practice.title'),
                           style: AppTypography.h1.copyWith(
                             color: AppThemeColors.textPrimary(context),
                           ),
@@ -62,7 +66,7 @@ class _PracticeTabState extends State<PracticeTab> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Закрепляй знания',
+                    t('practice.subtitle'),
                     style: AppTypography.bodySmall.copyWith(
                       color: AppThemeColors.textSecondary(context),
                     ),
@@ -92,6 +96,7 @@ class _PracticeTabState extends State<PracticeTab> {
   }
 
   Widget _buildQuickTestCard() {
+    final t = context.watch<LanguageService>().t;
     final grade = ProgressService.getCurrentGrade();
 
     return Container(
@@ -130,16 +135,16 @@ class _PracticeTabState extends State<PracticeTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Быстрый тест',
-                      style: TextStyle(
+                    Text(
+                      t('practice.quickTest'),
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
                     Text(
-                      '$grade класс',
+                      t('practice.gradeSuffix').replaceAll('{grade}', '$grade'),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.white.withValues(alpha: 0.8),
@@ -219,9 +224,9 @@ class _PracticeTabState extends State<PracticeTab> {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-              child: const Text(
-                'НАЧАТЬ',
-                style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3),
+              child: Text(
+                t('practice.start'),
+                style: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3),
               ),
             ),
           ),
@@ -231,6 +236,8 @@ class _PracticeTabState extends State<PracticeTab> {
   }
 
   Widget _buildRepeatSection() {
+    final t = context.watch<LanguageService>().t;
+    final isEnglish = context.watch<LanguageService>().isEnglish;
     final grade = ProgressService.getCurrentGrade();
     final topics = getTopicsInfoByGrade(grade);
 
@@ -250,13 +257,16 @@ class _PracticeTabState extends State<PracticeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Продолжить',
+        Text(t('practice.continue'),
             style: AppTypography.h3.copyWith(
               color: AppThemeColors.textPrimary(context),
             )),
         const SizedBox(height: 12),
         ...incompleteTopics.take(3).map((topic) {
           final tasks = getTasksByGradeAndTopic(grade, topic.name);
+          final displayTopic = isEnglish
+              ? topicTitleEn(topic.name)
+              : topic.name;
           final solved = ProgressService.getSolvedCountForTopic(
             topic.name,
             tasks.map((t) => t.id).toList(),
@@ -299,7 +309,8 @@ class _PracticeTabState extends State<PracticeTab> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(topic.name,
+                          Text(displayTopic,
+                              textAlign: TextAlign.left,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppThemeColors.textPrimary(context),
                               )),
@@ -338,6 +349,7 @@ class _PracticeTabState extends State<PracticeTab> {
   }
 
   Widget _buildStatsCard() {
+    final t = context.watch<LanguageService>().t;
     final totalSolved = ProgressService.getTotalSolved();
     final accuracy = ProgressService.getAccuracy();
     final streak = ProgressService.getStreakDays();
@@ -355,7 +367,7 @@ class _PracticeTabState extends State<PracticeTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Статистика',
+          Text(t('practice.stats'),
               style: AppTypography.h3.copyWith(
                 color: AppThemeColors.textPrimary(context),
               )),
@@ -367,19 +379,19 @@ class _PracticeTabState extends State<PracticeTab> {
                 return Row(
                   children: [
                     _buildStatItem(
-                      'Решено',
+                      t('practice.solved'),
                       '$totalSolved',
                       Icons.check_circle_outline,
                       isDark ? AppColors.purple : AppColorsLight.purple,
                     ),
                     _buildStatItem(
-                      'Точность',
+                      t('practice.accuracy'),
                       '${accuracy.toStringAsFixed(0)}%',
                       Icons.gps_fixed_rounded,
                       isDark ? AppColors.success : AppColorsLight.success,
                     ),
                     _buildStatItem(
-                      'Серия',
+                      t('practice.streak'),
                       '$streak',
                       Icons.local_fire_department_rounded,
                       isDark ? AppColors.orange : AppColorsLight.orange,
@@ -392,13 +404,13 @@ class _PracticeTabState extends State<PracticeTab> {
                   Row(
                     children: [
                       _buildStatItem(
-                        'Решено',
+                        t('practice.solved'),
                         '$totalSolved',
                         Icons.check_circle_outline,
                         isDark ? AppColors.purple : AppColorsLight.purple,
                       ),
                       _buildStatItem(
-                        'Точность',
+                        t('practice.accuracy'),
                         '${accuracy.toStringAsFixed(0)}%',
                         Icons.gps_fixed_rounded,
                         isDark ? AppColors.success : AppColorsLight.success,
@@ -409,7 +421,7 @@ class _PracticeTabState extends State<PracticeTab> {
                   Row(
                     children: [
                       _buildStatItem(
-                        'Серия',
+                        t('practice.streak'),
                         '$streak',
                         Icons.local_fire_department_rounded,
                         isDark ? AppColors.orange : AppColorsLight.orange,
@@ -454,6 +466,7 @@ class _PracticeTabState extends State<PracticeTab> {
   }
 
   void _startQuickTest() {
+    final t = context.read<LanguageService>().t;
     final grade = ProgressService.getCurrentGrade();
     final allTasks = getTasksByGrade(grade);
 
@@ -465,7 +478,7 @@ class _PracticeTabState extends State<PracticeTab> {
     context
         .push(
           '/learn/topic',
-          extra: {'name': 'Быстрый тест', 'tasks': selected},
+          extra: {'name': t('practice.quickTestTopic'), 'tasks': selected},
         )
         .then((_) {
       if (mounted) setState(() {});

@@ -48,8 +48,8 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
-    - name: Build Web (CanvasKit)
-      run: flutter build web --release --web-renderer canvaskit
+    - name: Build Web (CanvasKit, same-origin)
+      run: flutter build web --release --no-web-resources-cdn
 
     - name: Upload Web build
       uses: actions/upload-artifact@v4
