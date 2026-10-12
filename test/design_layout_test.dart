@@ -29,7 +29,8 @@ Future<void> loadDesignFonts() async {
   }
   // Local visual QA uses real Cyrillic glyphs; CI can use its test font.
   final font = File('/System/Library/Fonts/Supplemental/Arial.ttf');
-  if (await font.exists()) {
+  if (Platform.environment['ALGEON_TEST_FALLBACK_FONT'] != '1' &&
+      await font.exists()) {
     await (FontLoader('Inter')..addFont(
           Future.value(ByteData.sublistView(await font.readAsBytes())),
         ))

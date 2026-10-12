@@ -192,15 +192,27 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<int>(
+                  isExpanded: true,
                   initialValue: grade,
                   decoration: const InputDecoration(labelText: 'Класс'),
                   items: [
                     const DropdownMenuItem<int>(
                       value: null,
-                      child: Text('Все классы'),
+                      child: Text(
+                        'Все классы',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     for (var g = 1; g <= 11; g++)
-                      DropdownMenuItem(value: g, child: Text('$g класс')),
+                      DropdownMenuItem(
+                        value: g,
+                        child: Text(
+                          '$g класс',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                   ],
                   onChanged: (g) => setState(() {
                     grade = g;
