@@ -14,7 +14,8 @@ class StudyLinks extends StatefulWidget {
   State<StudyLinks> createState() => _StudyLinksState();
 }
 
-class _StudyLinksState extends State<StudyLinks> {
+class _StudyLinksState extends State<StudyLinks> with WidgetsBindingObserver {
+  String? loadedDay;
   final history = LearningService.instance;
   List<Map<String, dynamic>> daily = [];
   String? error;
@@ -22,7 +23,24 @@ class _StudyLinksState extends State<StudyLinks> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     refresh();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        mounted &&
+        loadedDay != null &&
+        loadedDay != history.today) {
+      refresh();
+    }
   }
 
   Future<void> refresh() async {
@@ -34,6 +52,7 @@ class _StudyLinksState extends State<StudyLinks> {
       if (mounted) {
         setState(() {
           daily = next;
+          loadedDay = history.today;
           ready = true;
           error = null;
         });
@@ -228,11 +247,11 @@ Future<void> openDailyPractice(
   }
 }
 
-void openLearningRef(BuildContext context, Map ref) {
+Future<void> openLearningRef(BuildContext context, Map ref) async {
   if (ref['kind'] == 'school') {
     final task = getTaskById(ref['id'] as String);
     if (task != null) {
-      context.push(
+      await context.push(
         '/learn/intro',
         extra: {
           'name': task.topic,
@@ -242,7 +261,9 @@ void openLearningRef(BuildContext context, Map ref) {
       );
     }
   } else {
-    context.push('/exams/${ref['variant']}?question=${ref['slot']}&retry=1');
+    await context.push(
+      '/exams/${ref['variant']}?question=${ref['slot']}&retry=1',
+    );
   }
 }
 
@@ -253,7 +274,9 @@ class StudyHubScreen extends StatefulWidget {
   State<StudyHubScreen> createState() => _StudyHubScreenState();
 }
 
-class _StudyHubScreenState extends State<StudyHubScreen> {
+class _StudyHubScreenState extends State<StudyHubScreen>
+    with WidgetsBindingObserver {
+  String? loadedDay;
   final history = LearningService.instance;
   ExamCatalog? catalog;
   List<Map<String, dynamic>> items = [];
@@ -262,7 +285,24 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     load();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        mounted &&
+        loadedDay != null &&
+        loadedDay != history.today) {
+      load();
+    }
   }
 
   Future<void> load() async {
@@ -273,6 +313,7 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
       if (mounted) {
         setState(() {
           catalog = c;
+          loadedDay = history.today;
           items = daily;
           error = null;
         });
@@ -542,7 +583,10 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
         const SizedBox(height: 16),
         if (remaining.isNotEmpty)
           FilledButton.icon(
-            onPressed: () => openDailyPractice(context, remaining),
+            onPressed: () async {
+              await openDailyPractice(context, remaining);
+              if (mounted) await load();
+            },
             icon: const Icon(Icons.play_arrow),
             label: const Text('Продолжить план'),
           )
@@ -574,7 +618,10 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
                       ),
                     ),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => openLearningRef(context, r),
+              onTap: () async {
+                await openLearningRef(context, r);
+                if (mounted) await load();
+              },
             ),
           );
         }),
