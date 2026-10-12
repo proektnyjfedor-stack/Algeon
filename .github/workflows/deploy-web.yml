@@ -40,11 +40,27 @@ jobs:
       - name: Run tests
         run: flutter test
 
+      - name: Test release packaging
+        run: python3 -m unittest discover -s tool -p 'test_*.py' -v
+
       # CanvasKit с того же origin — иначе блокировщики (gstatic) дают пустой экран в Safari
       - name: Build Web (release, local CanvasKit)
         run: bash tool/build_web.sh
 
+      - name: Check hosting credentials
+        id: credentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Build verified. Hosting deployment skipped: FIREBASE_SERVICE_ACCOUNT is not configured."
+          fi
+
       - name: Deploy to Firebase Hosting
+        if: steps.credentials.outputs.available == 'true'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

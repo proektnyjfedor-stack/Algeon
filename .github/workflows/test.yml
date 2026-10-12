@@ -30,6 +30,9 @@ jobs:
     - name: Run tests
       run: flutter test
 
+    - name: Test release packaging
+      run: python3 -m unittest discover -s tool -p 'test_*.py' -v
+
   build-web:
     name: Build Web
     runs-on: ubuntu-latest
