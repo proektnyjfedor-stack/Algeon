@@ -127,7 +127,7 @@ class Task {
         .replaceAll(RegExp(r'\s+'), ' ');
     normalized = normalized
         .replaceAllMapped(
-          RegExp(r'sqrt\(([^()]+)\)'),
+          RegExp(r'sqrt\(\s*(\d+(?:[.,]\d+)?|[a-zA-Zαβθ])\s*\)'),
           (m) => 'sqrt${m.group(1)}',
         )
         .replaceAll('+-', '±')
@@ -309,11 +309,35 @@ class Task {
   }
 
   _Rational? _parseNumberLike(String raw) {
-    final text = raw
-        .replaceAll('°', '')
-        .replaceAll('руб.', '')
-        .replaceAll('руб', '')
-        .trim();
+    var text = raw.trim();
+    final declaredUnit = unit == null
+        ? null
+        : _normalizePowers(unit!).replaceAll(RegExp(r'\s+'), '');
+    final suffixes = <String>{?declaredUnit};
+    final context = '$question $answer'.toLowerCase();
+    if (declaredUnit == null) {
+      if (RegExp(
+        r'(^|[^а-яёa-z])руб(?:лей|ля|ль|ли|лю|лём|лем)?\.?(?=$|[^а-яёa-z])|₽',
+      ).hasMatch(context)) {
+        suffixes.addAll(['руб.', 'руб', '₽']);
+      }
+      if (RegExp(
+        r'(^|[^а-яёa-z])(?:угол|угла|углу|углом|угле|углы|углов|углам|углами|углах|градус[а-яё]*)(?=$|[^а-яёa-z])|°',
+      ).hasMatch(context)) {
+        suffixes.add('°');
+      }
+    } else if (RegExp(r'^(?:руб\.?|₽)$').hasMatch(declaredUnit)) {
+      suffixes.addAll(['руб.', 'руб', '₽']);
+    }
+    // Remove one expected suffix only, never a symbol inside the number.
+    final orderedSuffixes = suffixes.toList()
+      ..sort((a, b) => b.length.compareTo(a.length));
+    for (final suffix in orderedSuffixes) {
+      if (suffix.isNotEmpty && text.endsWith(suffix)) {
+        text = text.substring(0, text.length - suffix.length).trim();
+        break;
+      }
+    }
     if (text.isEmpty || text.length > 256) return null;
     final mixed = RegExp(r'^([+-]?\d+)\s+(\d+)/(\d+)$').firstMatch(text);
     if (mixed != null) {
