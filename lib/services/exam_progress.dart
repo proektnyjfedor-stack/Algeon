@@ -2,6 +2,32 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExamProgress {
+  static Future<void> _tail = Future.value();
+  static final Set<Future<void>> _pending = {};
+
+  static Future<void> _enqueue(Future<void> Function() action) {
+    // Start a fresh chain after an idle period; completed operations need not
+    // retain an old async context or a growing future chain.
+    if (_pending.isEmpty) _tail = Future.value();
+    final result = _tail.then((_) => action());
+    _pending.add(result);
+    // Keep the next operation usable after a failure, while returning the
+    // original failed future to its caller and any active flush.
+    _tail = result.then<void>(
+      (_) => _pending.remove(result),
+      onError: (Object _, StackTrace _) {
+        _pending.remove(result);
+      },
+    );
+    return result;
+  }
+
+  static Future<void> flush() async {
+    while (_pending.isNotEmpty) {
+      await Future.wait(_pending.toList());
+    }
+  }
+
   static Set<String> get keys => {
     for (final track in ['oge', 'base', 'profile'])
       for (var i = 1; i <= 10; i++) 'exam_$track-$i',
@@ -48,6 +74,7 @@ class ExamProgress {
   }
 
   static Future<Map<String, dynamic>> read(String id) async {
+    await flush();
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString('exam_$id');
     if (raw == null) return {};
@@ -58,20 +85,24 @@ class ExamProgress {
     }
   }
 
-  static Future<void> save(String id, Map<String, dynamic> data) async {
-    // Capture before the first await so navigation cannot change this snapshot.
+  static Future<void> save(String id, Map<String, dynamic> data) {
+    // Snapshot before queueing so subsequent UI edits cannot change this write.
     final encoded = jsonEncode(data);
     validate(encoded, 'exam_$id');
-    final prefs = await SharedPreferences.getInstance();
-    if (!await prefs.setString('exam_$id', encoded)) {
-      throw StateError('Не удалось сохранить результат');
-    }
+    return _enqueue(() async {
+      final prefs = await SharedPreferences.getInstance();
+      if (!await prefs.setString('exam_$id', encoded)) {
+        throw StateError('Не удалось сохранить результат');
+      }
+    });
   }
 
-  static Future<void> clear() async {
+  static Future<void> clear() => _enqueue(() async {
     final prefs = await SharedPreferences.getInstance();
     for (final key in keys) {
-      await prefs.remove(key);
+      if (!await prefs.remove(key)) {
+        throw StateError('Не удалось очистить результаты экзаменов');
+      }
     }
-  }
+  });
 }

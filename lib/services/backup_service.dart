@@ -53,6 +53,7 @@ class BackupService {
     await BookmarkService.instance.flush();
     await LearningService.instance.flush();
     await MockExamService.flush();
+    await ExamProgress.flush();
     final prefs = await SharedPreferences.getInstance();
     final data = <String, dynamic>{};
     for (final key in keys) {
@@ -157,6 +158,7 @@ class BackupService {
     await LearningService.instance.flush();
     await BookmarkService.instance.flush();
     await MockExamService.flush();
+    await ExamProgress.flush();
     await ProgressService.replacePreferences(data, keys);
     await LearningService.instance.init();
     await BookmarkService.instance.init();

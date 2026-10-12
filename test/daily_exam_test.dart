@@ -230,7 +230,12 @@ void main() {
       expect(tester.widget<FilledButton>(finish).onPressed, isNull);
       await tester.ensureVisible(find.text('В мои ошибки'));
       await tester.tap(find.text('В мои ошибки'));
-      await tester.pumpAndSettle();
+      // Persistence can outlive a frame; wait for the visible saving state
+      // using the widget clock, rather than moving fake-zone futures to runAsync.
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 50));
+        if (tester.widget<FilledButton>(finish).onPressed != null) break;
+      }
       await tester.ensureVisible(finish);
       expect(tester.widget<FilledButton>(finish).onPressed, isNotNull);
       await tester.tap(finish);
