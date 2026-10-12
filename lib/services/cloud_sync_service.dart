@@ -7,6 +7,8 @@ import 'backup_service.dart';
 import 'learning_service.dart';
 import 'bookmark_service.dart';
 import 'cloud_progress_store.dart';
+import 'exam_progress.dart';
+import 'mock_exam_service.dart';
 
 class CloudSyncService extends ChangeNotifier {
   @visibleForTesting
@@ -15,27 +17,37 @@ class CloudSyncService extends ChangeNotifier {
     required String? Function() currentUid,
     required Future<String> Function() export,
     required Future<void> Function(String) restore,
+    Duration debounce = const Duration(seconds: 3),
   }) => CloudSyncService._(
     store: store,
     currentUid: currentUid,
     export: export,
     restore: restore,
+    debounce: debounce,
   );
   CloudSyncService._({
     required CloudProgressStore store,
     required String? Function() currentUid,
     required Future<String> Function() export,
     required Future<void> Function(String) restore,
+    Duration debounce = const Duration(seconds: 3),
   }) : _store = store,
        _currentUid = currentUid,
        _export = export,
-       _restore = restore;
+       _restore = restore,
+       _debounce = debounce {
+    LearningService.instance.addListener(schedule);
+    BookmarkService.instance.addListener(schedule);
+    ExamProgress.changes.addListener(schedule);
+    MockExamService.changes.addListener(schedule);
+  }
   static final instance = CloudSyncService._(
     store: FirebaseProgressStore(),
     currentUid: () => AuthService.currentUser()?.uid,
     export: BackupService.export,
     restore: BackupService.restore,
   );
+  final Duration _debounce;
   final CloudProgressStore _store;
   final String? Function() _currentUid;
   final Future<String> Function() _export;
@@ -74,8 +86,6 @@ class CloudSyncService extends ChangeNotifier {
         _auth = AuthService.authStateChanges().listen((_) {
           unawaited(connect());
         });
-        LearningService.instance.addListener(schedule);
-        BookmarkService.instance.addListener(schedule);
       }
     } catch (_) {
       message = 'Облачное сохранение недоступно. Попробуй позже.';
@@ -162,7 +172,7 @@ class CloudSyncService extends ChangeNotifier {
     if (_disposed || uid == null || needsChoice || _suppress) return;
     _dirty = true;
     _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 3), () {
+    _timer = Timer(_debounce, () {
       unawaited(upload());
     });
   }
@@ -312,6 +322,8 @@ class CloudSyncService extends ChangeNotifier {
     _timer?.cancel();
     LearningService.instance.removeListener(schedule);
     BookmarkService.instance.removeListener(schedule);
+    ExamProgress.changes.removeListener(schedule);
+    MockExamService.changes.removeListener(schedule);
     super.dispose();
   }
 }

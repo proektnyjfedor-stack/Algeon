@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExamProgress {
+  /// Emitted only after a local change has been persisted successfully.
+  static final _changes = ValueNotifier<int>(0);
+  static ValueListenable<int> get changes => _changes;
   static Future<void> _tail = Future.value();
   static final Set<Future<void>> _pending = {};
 
@@ -9,7 +13,10 @@ class ExamProgress {
     // Start a fresh chain after an idle period; completed operations need not
     // retain an old async context or a growing future chain.
     if (_pending.isEmpty) _tail = Future.value();
-    final result = _tail.then((_) => action());
+    final result = _tail.then((_) async {
+      await action();
+      _changes.value++;
+    });
     _pending.add(result);
     // Keep the next operation usable after a failure, while returning the
     // original failed future to its caller and any active flush.

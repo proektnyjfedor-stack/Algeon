@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A wall-clock deadline survives reloads and background throttling.
 class MockExamService {
+  /// Emitted only after a local change has been persisted successfully.
+  static final _changes = ValueNotifier<int>(0);
+  static ValueListenable<int> get changes => _changes;
   static int minutes(String track) => track == 'base' ? 180 : 235;
   static Set<String> get keys => {
     for (final track in ['oge', 'base', 'profile'])
@@ -99,6 +103,7 @@ class MockExamService {
       if (!await prefs.setString('mock_exam_$id', raw)) {
         throw StateError('Mock exam not saved');
       }
+      _changes.value++;
     });
     _queue = result.then<void>(
       (_) {
@@ -116,7 +121,10 @@ class MockExamService {
     if (_pendingWrites > 0) await _queue;
     final prefs = await SharedPreferences.getInstance();
     for (final key in keys) {
-      await prefs.remove(key);
+      if (!await prefs.remove(key)) {
+        throw StateError('Mock exam progress not cleared');
+      }
     }
+    _changes.value++;
   }
 }

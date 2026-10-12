@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
 import 'package:math_pilot/services/exam_progress.dart';
 import 'package:math_pilot/services/progress_service.dart';
+import 'package:math_pilot/services/mock_exam_service.dart';
 import 'package:math_pilot/services/backup_service.dart';
 
 class DelayedStore extends InMemorySharedPreferencesStore {
@@ -173,6 +174,37 @@ void main() {
       expect(premature, false);
     },
   );
+
+  test('Only successful local exam writes emit a persistence change', () async {
+    var examChanges = 0, mockChanges = 0;
+    void examChanged() => examChanges++;
+    void mockChanged() => mockChanges++;
+    ExamProgress.changes.addListener(examChanged);
+    MockExamService.changes.addListener(mockChanged);
+    try {
+      store.failNext = true;
+      await expectLater(
+        ExamProgress.save('profile-1', snapshot('failed')),
+        throwsStateError,
+      );
+      store.failNext = true;
+      final mock = MockExamService.start('base-1', DateTime(2026, 10, 13));
+      await expectLater(MockExamService.save(mock), throwsStateError);
+      expect(examChanges, 0);
+      expect(mockChanges, 0);
+      await ExamProgress.save('profile-1', snapshot('saved'));
+      await MockExamService.save(mock);
+      expect(examChanges, 1);
+      expect(mockChanges, 1);
+      await ExamProgress.clear();
+      await MockExamService.clear();
+      expect(examChanges, 2);
+      expect(mockChanges, 2);
+    } finally {
+      ExamProgress.changes.removeListener(examChanged);
+      MockExamService.changes.removeListener(mockChanged);
+    }
+  });
 
   test(
     'A failed persistence does not block a subsequent successful write',

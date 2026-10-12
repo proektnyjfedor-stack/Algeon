@@ -4,6 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:math_pilot/services/cloud_progress_store.dart';
 import 'package:math_pilot/services/cloud_sync_service.dart';
+import 'package:math_pilot/services/backup_service.dart';
+import 'package:math_pilot/services/exam_progress.dart';
+import 'package:math_pilot/services/mock_exam_service.dart';
 
 String backup(int grade) => jsonEncode({
   'format': 'algeon-progress',
@@ -62,6 +65,60 @@ void main() {
     );
   });
   tearDown(() => sync.dispose());
+  test(
+    'Exam and mock drafts automatically update the cloud without a checked answer',
+    () async {
+      sync.dispose();
+      sync = CloudSyncService.forTesting(
+        store: store,
+        currentUid: () => owner,
+        export: BackupService.export,
+        restore: BackupService.restore,
+        debounce: const Duration(milliseconds: 5),
+      );
+      await sync.connect();
+      await sync.upload();
+      final initialWrites = store.writes.length;
+      await ExamProgress.save('profile-1', {
+        'index': 0,
+        'records': {
+          '0': {'input': 'draft without checking'},
+        },
+      });
+      for (var i = 0; i < 40 && store.writes.length == initialWrites; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+      expect(store.writes.length, initialWrites + 1);
+      var data = BackupService.validate(store.data['a']!.payload);
+      expect(
+        jsonDecode(data['exam_profile-1'])['records']['0']['input'],
+        'draft without checking',
+      );
+      final afterExam = store.writes.length;
+      final mock = MockExamService.start('base-1', DateTime(2026, 10, 13));
+      (mock['answers'] as Map)['0'] = 'unfinished';
+      await MockExamService.save(mock);
+      for (var i = 0; i < 40 && store.writes.length == afterExam; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+      expect(store.writes.length, afterExam + 1);
+      data = BackupService.validate(store.data['a']!.payload);
+      expect(
+        jsonDecode(data['mock_exam_base-1'])['answers']['0'],
+        'unfinished',
+      );
+      final afterMock = store.writes.length;
+      await ExamProgress.clear();
+      for (var i = 0; i < 40 && store.writes.length == afterMock; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+      expect(store.writes.length, afterMock + 1);
+      data = BackupService.validate(store.data['a']!.payload);
+      expect(data.containsKey('exam_profile-1'), false);
+      expect(data.containsKey('mock_exam_base-1'), true);
+    },
+  );
+
   test('A late connection result cannot change the next account', () async {
     final delayed = Completer<CloudProgressCopy?>();
     store.data['b'] = copy(8, 4);
