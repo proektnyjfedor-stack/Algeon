@@ -224,10 +224,7 @@ Future<void> openDailyPractice(
       extra: {'name': 'План на сегодня', 'tasks': tasks, 'restart': true},
     );
   } else {
-    final ref = items.first;
-    await context.push(
-      '/exams/${ref['variant']}?question=${ref['slot']}&retry=1',
-    );
+    await context.push('/study/run');
   }
 }
 

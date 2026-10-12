@@ -19,10 +19,16 @@ class ExamSessionScreen extends StatefulWidget {
     required this.variantId,
     this.initialQuestion,
     this.retry = false,
+    this.onPracticeContinue,
+    this.practicePosition = 1,
+    this.practiceTotal = 1,
   });
   final String variantId;
   final int? initialQuestion;
   final bool retry;
+  final VoidCallback? onPracticeContinue;
+  final int practicePosition, practiceTotal;
+  bool get isDailyPractice => onPracticeContinue != null;
 
   @override
   State<ExamSessionScreen> createState() => _ExamSessionScreenState();
@@ -85,7 +91,13 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                     : ((saved['index'] as int?) ?? 0))
                 .clamp(0, (v['questionIds'] as List).length - 1);
       });
-      if (widget.retry) records.remove('$index');
+      final currentRecord = records['$index'] as Map?;
+      if (widget.retry &&
+          (!widget.isDailyPractice ||
+              ['correct', 'wrong'].contains(currentRecord?['status']) ||
+              currentRecord?['selfAssessed'] == true)) {
+        records.remove('$index');
+      }
       answer.text = (records['$index'] as Map?)?['input'] as String? ?? '';
     } catch (_) {
       if (mounted) {
@@ -211,6 +223,15 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
     }
   }
 
+  Future<void> continuePractice() async {
+    if (saving) return;
+    setState(() => saving = true);
+    await save();
+    if (!mounted) return;
+    widget.onPracticeContinue!();
+    if (mounted) setState(() => saving = false);
+  }
+
   Future<void> move(int next) async {
     if (saving) return;
     final old = Map<String, dynamic>.from(record);
@@ -241,7 +262,8 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
       return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/exams'),
+            onPressed: () =>
+                context.go(widget.isDailyPractice ? '/study' : '/exams'),
             icon: const Icon(Icons.arrow_back),
           ),
           title: const Text('Экзамены'),
@@ -272,12 +294,16 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
         leading: IconButton(
           onPressed: () async {
             await save();
-            if (context.mounted) context.go('/exams');
+            if (context.mounted) {
+              context.go(widget.isDailyPractice ? '/study' : '/exams');
+            }
           },
           icon: const Icon(Icons.arrow_back),
         ),
         title: Text(
-          '${examLabels[variant!['track']]} · №${variant!['number']}',
+          widget.isDailyPractice
+              ? 'План на сегодня'
+              : '${examLabels[variant!['track']]} · №${variant!['number']}',
           style: const TextStyle(fontSize: 17),
         ),
       ),
@@ -288,32 +314,41 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
             controller: scroll,
             padding: const EdgeInsets.all(24),
             children: [
-              LinearProgressIndicator(value: done / ids.length),
-              const SizedBox(height: 12),
-              Text('Разобрано $done из ${ids.length}'),
-              const SizedBox(height: 16),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: List.generate(ids.length, (i) {
-                  final state = (records['$i'] as Map?)?['status'];
-                  return ActionChip(
-                    label: Text(
-                      '${i + 1}${state == 'correct'
-                          ? ' ✓'
-                          : state == 'wrong'
-                          ? ' ×'
-                          : state == 'reviewed'
-                          ? ' •'
-                          : ''}',
-                    ),
-                    backgroundColor: i == index
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : null,
-                    onPressed: saving ? null : () => move(i),
-                  );
-                }),
+              LinearProgressIndicator(
+                value: widget.isDailyPractice
+                    ? (widget.practicePosition - 1) / widget.practiceTotal
+                    : done / ids.length,
               ),
+              const SizedBox(height: 12),
+              Text(
+                widget.isDailyPractice
+                    ? 'Задание ${widget.practicePosition} из ${widget.practiceTotal}'
+                    : 'Разобрано $done из ${ids.length}',
+              ),
+              const SizedBox(height: 16),
+              if (!widget.isDailyPractice)
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: List.generate(ids.length, (i) {
+                    final state = (records['$i'] as Map?)?['status'];
+                    return ActionChip(
+                      label: Text(
+                        '${i + 1}${state == 'correct'
+                            ? ' ✓'
+                            : state == 'wrong'
+                            ? ' ×'
+                            : state == 'reviewed'
+                            ? ' •'
+                            : ''}',
+                      ),
+                      backgroundColor: i == index
+                          ? Theme.of(context).colorScheme.primaryContainer
+                          : null,
+                      onPressed: saving ? null : () => move(i),
+                    );
+                  }),
+                ),
               const SizedBox(height: 24),
               if (summary) ...[
                 const Text(
@@ -333,7 +368,9 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                 ),
               ] else ...[
                 Text(
-                  'Задание ${index + 1}',
+                  widget.isDailyPractice
+                      ? '${examLabels[variant!['track']]} · задание ${q['slot']}'
+                      : 'Задание ${index + 1}',
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
@@ -568,32 +605,54 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                       ),
                   ],
                   const SizedBox(height: 24),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      if (index > 0)
-                        OutlinedButton(
-                          onPressed: saving ? null : () => move(index - 1),
-                          child: const Text('Назад'),
-                        ),
-                      if (index < ids.length - 1)
-                        FilledButton(
-                          onPressed: saving ? null : () => move(index + 1),
-                          child: const Text('Следующее задание'),
-                        ),
-                    ],
-                  ),
+                  if (widget.isDailyPractice)
+                    FilledButton.icon(
+                      onPressed:
+                          saving ||
+                              !(automatic
+                                  ? status != null
+                                  : record['selfAssessed'] == true)
+                          ? null
+                          : continuePractice,
+                      icon: Icon(
+                        widget.practicePosition == widget.practiceTotal
+                            ? Icons.done_all
+                            : Icons.arrow_forward,
+                      ),
+                      label: Text(
+                        widget.practicePosition == widget.practiceTotal
+                            ? 'Завершить план'
+                            : 'Следующее задание плана',
+                      ),
+                    )
+                  else
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: [
+                        if (index > 0)
+                          OutlinedButton(
+                            onPressed: saving ? null : () => move(index - 1),
+                            child: const Text('Назад'),
+                          ),
+                        if (index < ids.length - 1)
+                          FilledButton(
+                            onPressed: saving ? null : () => move(index + 1),
+                            child: const Text('Следующее задание'),
+                          ),
+                      ],
+                    ),
                 ],
               ],
               const SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () async {
-                  await save();
-                  if (mounted) setState(() => summary = true);
-                },
-                child: const Text('Результаты'),
-              ),
+              if (!widget.isDailyPractice)
+                OutlinedButton(
+                  onPressed: () async {
+                    await save();
+                    if (mounted) setState(() => summary = true);
+                  },
+                  child: const Text('Результаты'),
+                ),
               source(variant!['sourceUrl'] as String, 'Вариант в источнике'),
               const SizedBox(height: 32),
             ],

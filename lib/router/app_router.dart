@@ -5,6 +5,7 @@
 library;
 
 import '../screens/study_hub_screen.dart';
+import '../screens/daily_exam_screen.dart';
 import '../screens/library_screen.dart';
 import '../screens/mock_exam_screen.dart';
 import '../screens/diagnostic_screen.dart';
@@ -135,6 +136,10 @@ final GoRouter appRouter = GoRouter(
       path: '/library',
       builder: (context, state) =>
           LibraryScreen(savedOnly: state.uri.queryParameters['saved'] == '1'),
+    ),
+    GoRoute(
+      path: '/study/run',
+      builder: (context, state) => const DailyExamScreen(),
     ),
     GoRoute(
       path: '/study',
