@@ -5,50 +5,230 @@ import '../data/exam_catalog.dart';
 import '../data/tasks_data.dart';
 import '../services/learning_service.dart';
 import '../services/progress_service.dart';
+import '../models/task.dart';
 import '../widgets/math_text.dart';
 
-class StudyLinks extends StatelessWidget {
+class StudyLinks extends StatefulWidget {
   const StudyLinks({super.key});
   @override
-  Widget build(BuildContext context) => Card(
-    child: Column(
-      children: [
-        for (final item in [
-          (
-            '/study',
-            'План подготовки',
-            'Задания на каждый день',
-            Icons.calendar_month,
+  State<StudyLinks> createState() => _StudyLinksState();
+}
+
+class _StudyLinksState extends State<StudyLinks> {
+  final history = LearningService.instance;
+  List<Map<String, dynamic>> daily = [];
+  String? error;
+  bool ready = false;
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+  }
+
+  Future<void> refresh() async {
+    try {
+      await history.init();
+      final next = history.plan.isEmpty
+          ? <Map<String, dynamic>>[]
+          : await history.dailyTasks(await ExamCatalog.load());
+      if (mounted) {
+        setState(() {
+          daily = next;
+          ready = true;
+          error = null;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          error = 'Подготовка не загрузилась';
+          ready = true;
+        });
+      }
+    }
+  }
+
+  Future<void> open(String route) async {
+    await context.push(route);
+    if (mounted) refresh();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: history,
+    builder: (context, _) {
+      final diagnostic = history.diagnostic;
+      final answered = (diagnostic['answers'] as Map? ?? {}).length;
+      final total = (diagnostic['ids'] as List? ?? []).length;
+      final inProgress = total > answered;
+      final hasPlan = history.plan.isNotEmpty;
+      final done = daily.where(history.completedToday).length;
+      final remaining = daily.where((r) => !history.completedToday(r)).toList();
+      final due = history.reviews(dueOnly: true).length;
+      final title = hasPlan
+          ? remaining.isEmpty && daily.isNotEmpty
+                ? 'На сегодня всё готово'
+                : 'Твоя практика на сегодня'
+          : inProgress
+          ? 'Продолжим диагностику'
+          : total > 0
+          ? 'Превратим результат в план'
+          : 'Начни с понятной цели';
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    hasPlan ? 'ПЛАН НА СЕГОДНЯ' : 'ТВОЙ СЛЕДУЮЩИЙ ШАГ',
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(title, style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 10),
+                  Text(
+                    hasPlan
+                        ? '${history.plan['track'] == 'school' ? '${history.plan['grade']} класс' : examLabels[history.plan['track']]} · выполнено $done из ${daily.length}'
+                        : inProgress
+                        ? 'Сохранено $answered из $total ответов. Можно продолжить с того же места.'
+                        : total > 0
+                        ? 'Результаты уже сохранены. Выбери цель и удобную нагрузку.'
+                        : 'Диагностика покажет, что повторить. Или сразу создай план по своему классу или экзамену.',
+                  ),
+                  if (hasPlan) ...[
+                    const SizedBox(height: 14),
+                    LinearProgressIndicator(
+                      value: daily.isEmpty ? 0 : done / daily.length,
+                    ),
+                  ],
+                  const SizedBox(height: 18),
+                  if (!ready)
+                    const LinearProgressIndicator()
+                  else if (error != null)
+                    TextButton(
+                      onPressed: refresh,
+                      child: Text('$error · повторить'),
+                    )
+                  else
+                    FilledButton.icon(
+                      onPressed: () {
+                        if (hasPlan && remaining.isNotEmpty) {
+                          openDailyPractice(context, remaining).then((_) {
+                            if (mounted) refresh();
+                          });
+                        } else {
+                          open(
+                            hasPlan || total > 0 && !inProgress
+                                ? '/study'
+                                : '/diagnostic',
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        hasPlan && remaining.isEmpty
+                            ? Icons.check
+                            : Icons.arrow_forward,
+                      ),
+                      label: Text(
+                        hasPlan
+                            ? remaining.isEmpty
+                                  ? 'Посмотреть план'
+                                  : 'Продолжить план'
+                            : inProgress
+                            ? 'Продолжить диагностику'
+                            : total > 0
+                            ? 'Создать план'
+                            : 'Пройти диагностику',
+                      ),
+                    ),
+                  if (!hasPlan && total == 0)
+                    TextButton(
+                      onPressed: () => open('/study'),
+                      child: const Text('Выбрать цель без диагностики'),
+                    ),
+                ],
+              ),
+            ),
           ),
-          (
-            '/study?tab=1',
-            'Мои ошибки',
-            'Повторение через 1, 3 и 7 дней',
-            Icons.history_edu,
+          const SizedBox(height: 10),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.history_edu),
+                  title: const Text('Мои ошибки'),
+                  subtitle: Text(
+                    due == 0
+                        ? 'На сегодня повторений нет'
+                        : 'Пора повторить: $due',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => open('/study?tab=1'),
+                ),
+                const Divider(height: 1, indent: 16, endIndent: 16),
+                ListTile(
+                  leading: const Icon(Icons.insights),
+                  title: const Text('Темы и результаты'),
+                  subtitle: Text(
+                    history.topicStats().isEmpty
+                        ? 'Появятся после первых ответов'
+                        : 'Тем с результатами: ${history.topicStats().length}',
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => open('/study?tab=2'),
+                ),
+                if (hasPlan || total > 0) ...[
+                  const Divider(height: 1, indent: 16, endIndent: 16),
+                  ListTile(
+                    leading: const Icon(Icons.explore_outlined),
+                    title: const Text('Диагностика'),
+                    subtitle: Text(
+                      inProgress
+                          ? '$answered из $total · продолжить'
+                          : total > 0
+                          ? 'Посмотреть результат'
+                          : 'Найти темы для повторения',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => open('/diagnostic'),
+                  ),
+                ],
+              ],
+            ),
           ),
-          (
-            '/study?tab=2',
-            'Темы и результаты',
-            'Точность по темам',
-            Icons.insights,
-          ),
-          (
-            '/diagnostic',
-            'Определить уровень',
-            '9 заданий и рекомендации',
-            Icons.explore,
-          ),
-        ])
-          ListTile(
-            leading: Icon(item.$4),
-            title: Text(item.$2),
-            subtitle: Text(item.$3),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => context.push(item.$1),
-          ),
-      ],
-    ),
+        ],
+      );
+    },
   );
+}
+
+Future<void> openDailyPractice(
+  BuildContext context,
+  List<Map<String, dynamic>> items,
+) async {
+  if (items.isEmpty) return;
+  if (items.first['kind'] == 'school') {
+    final tasks = items
+        .where((r) => r['kind'] == 'school')
+        .map((r) => getTaskById(r['id'] as String))
+        .whereType<Task>()
+        .toList();
+    await context.push(
+      '/learn/topic',
+      extra: {'name': 'План на сегодня', 'tasks': tasks, 'restart': true},
+    );
+  } else {
+    final ref = items.first;
+    await context.push(
+      '/exams/${ref['variant']}?question=${ref['slot']}&retry=1',
+    );
+  }
 }
 
 void openLearningRef(BuildContext context, Map ref) {
@@ -80,7 +260,7 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
   final history = LearningService.instance;
   ExamCatalog? catalog;
   List<Map<String, dynamic>> items = [];
-  bool dueOnly = false, busy = false;
+  bool dueOnly = true, busy = false;
   String? error;
   @override
   void initState() {
@@ -110,15 +290,17 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
   }
 
   Future<void> configure() async {
-    var track = history.plan['track'] as String? ?? 'oge';
-    var daily = history.plan['daily'] as int? ?? 10;
+    var track = history.plan['track'] as String? ?? 'school';
+    var daily = history.plan['daily'] as int? ?? 5;
     var grade =
-        history.plan['grade'] as int? ?? ProgressService.getCurrentGrade();
+        history.plan['grade'] as int? ??
+        history.diagnostic['grade'] as int? ??
+        ProgressService.getCurrentGrade();
     var target =
         DateTime.tryParse(history.plan['target'] as String? ?? '') ??
         DateTime.now().add(const Duration(days: 90));
     final goal = TextEditingController(
-      text: history.plan['goal'] as String? ?? 'Уверенно решать свой вариант',
+      text: history.plan['goal'] as String? ?? 'Заниматься регулярно',
     );
     final result = await showDialog<Map<String, dynamic>>(
       context: context,
@@ -134,6 +316,7 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
                 children: [
                   DropdownButtonFormField<String>(
                     initialValue: track,
+                    isExpanded: true,
                     decoration: const InputDecoration(
                       labelText: 'К чему готовимся',
                     ),
@@ -142,7 +325,11 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
                         .map(
                           (e) => DropdownMenuItem(
                             value: e.key,
-                            child: Text(e.value),
+                            child: Text(
+                              e.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         )
                         .toList(),
@@ -211,7 +398,9 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
                 'grade': grade,
                 'daily': daily,
                 'target': target.toIso8601String(),
-                'goal': goal.text.trim(),
+                'goal': goal.text.trim().isEmpty
+                    ? 'Заниматься регулярно'
+                    : goal.text.trim(),
               }),
               child: const Text('Сохранить'),
             ),
@@ -291,25 +480,39 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
         children: [
           panel(
             'Твой план',
-            'Выбери цель, срок и количество заданий в день.',
+            'Выбери школьную программу или экзамен и посильную нагрузку. Начни с 5 заданий в день — её всегда можно изменить.',
             Icons.calendar_month,
           ),
+          const SizedBox(height: 12),
+          const ListTile(
+            leading: Icon(Icons.flag_outlined),
+            title: Text('1. Выбери цель'),
+            subtitle: Text('Класс, ОГЭ или один из уровней ЕГЭ'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.today_outlined),
+            title: Text('2. Решай небольшой набор каждый день'),
+            subtitle: Text('Ошибки для повторения и разные темы'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.insights_outlined),
+            title: Text('3. Следи за результатом'),
+            subtitle: Text('Новые попытки уточняют подбор заданий'),
+          ),
+          const SizedBox(height: 12),
           FilledButton(onPressed: configure, child: const Text('Создать план')),
+          TextButton(
+            onPressed: () => context.push('/diagnostic'),
+            child: const Text('Сначала пройти диагностику'),
+          ),
         ],
       );
     }
     final days = DateUtils.dateOnly(
       DateTime.parse(p['target'] as String),
     ).difference(DateUtils.dateOnly(DateTime.now())).inDays;
-    final completed = items
-        .where(
-          (r) =>
-              history.stats[r['kind'] == 'exam'
-                  ? 'exam:${r['id']}'
-                  : r['id']]?['lastDay'] ==
-              history.today,
-        )
-        .length;
+    final completed = items.where(history.completedToday).length;
+    final remaining = items.where((r) => !history.completedToday(r)).toList();
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
@@ -339,16 +542,21 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
         LinearProgressIndicator(
           value: items.isEmpty ? 0 : completed / items.length,
         ),
+        const SizedBox(height: 16),
+        if (remaining.isNotEmpty)
+          FilledButton.icon(
+            onPressed: () => openDailyPractice(context, remaining),
+            icon: const Icon(Icons.play_arrow),
+            label: const Text('Продолжить план'),
+          )
+        else if (items.isNotEmpty)
+          const Text('План выполнен. Новый набор появится завтра.'),
         const SizedBox(height: 12),
         ...items.map((r) {
           final task = r['kind'] == 'school'
               ? getTaskById(r['id'] as String)
               : null;
-          final done =
-              history.stats[r['kind'] == 'exam'
-                  ? 'exam:${r['id']}'
-                  : r['id']]?['lastDay'] ==
-              history.today;
+          final done = history.completedToday(r);
           return Card(
             child: ListTile(
               leading: Icon(done ? Icons.check_circle : Icons.circle_outlined),
@@ -359,7 +567,11 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
               subtitle: task == null
                   ? Text('Вариант ${(r['variant'] as String).split('-').last}')
                   : Text(
-                      'Задание ${items.indexOf(r) + 1}',
+                      '${items.indexOf(r) + 1}. ${history.reviews(dueOnly: true).any((e) => e.value['ref']['kind'] == r['kind'] && e.value['ref']['id'] == r['id'])
+                          ? 'Повторение ошибки'
+                          : history.stats[r['id']] == null
+                          ? 'Новая практика'
+                          : 'Закрепление'}',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -401,10 +613,12 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
           onChanged: (v) => setState(() => dueOnly = v),
         ),
         if (reviews.isEmpty)
-          const Padding(
-            padding: EdgeInsets.all(20),
+          Padding(
+            padding: const EdgeInsets.all(20),
             child: Text(
-              'Пока нет заданий для повторения. Ошибки появятся здесь после решения.',
+              dueOnly && history.reviews().isNotEmpty
+                  ? 'На сегодня всё повторено. Отключи фильтр, чтобы увидеть следующие задания.'
+                  : 'Пока нет заданий для повторения. Ошибки появятся здесь после решения.',
             ),
           ),
         ...reviews.map((e) {
@@ -463,7 +677,7 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
         const LearningNote(
           title: 'Как считается точность',
           text:
-              'Учитываются новые попытки и твоя самооценка развёрнутых решений. При одной-двух попытках выводы предварительные. Старые ошибки из общих счётчиков восстановить нельзя.',
+              'Точность — доля верных ответов среди сохранённых попыток. Для развёрнутых экзаменационных задач учитывается самооценка. При одной-двух попытках выводы предварительные.',
         ),
         if (topics.isEmpty) ...[
           const Text('Реши несколько заданий, чтобы увидеть результаты.'),
@@ -495,7 +709,25 @@ class _StudyHubScreenState extends State<StudyHubScreen> {
                       final source = history.stats.values.firstWhere(
                         (s) => s['topic'] == r['topic'],
                       );
-                      openLearningRef(context, source['ref'] as Map);
+                      final ref = source['ref'] as Map;
+                      final task = ref['kind'] == 'school'
+                          ? getTaskById(ref['id'] as String)
+                          : null;
+                      if (task == null) {
+                        openLearningRef(context, ref);
+                      } else {
+                        context.push(
+                          '/learn/intro',
+                          extra: {
+                            'name': task.topic,
+                            'restart': true,
+                            'tasks': getTasksByGradeAndTopic(
+                              task.grade,
+                              task.topic,
+                            ).take(5).toList(),
+                          },
+                        );
+                      }
                     },
                     child: const Text('Потренироваться'),
                   ),

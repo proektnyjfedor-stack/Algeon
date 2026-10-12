@@ -94,140 +94,40 @@ class _PracticeTabState extends State<PracticeTab> {
     final t = context.watch<LanguageService>().t;
     final grade = ProgressService.getCurrentGrade();
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(
-              context,
-            ).colorScheme.primary.withValues(alpha: 0.35),
-            blurRadius: 18,
-            offset: const Offset(0, 7),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.bolt, color: Colors.white, size: 24),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      t('practice.quickTest'),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      t('practice.gradeSuffix').replaceAll('{grade}', '$grade'),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withValues(alpha: 0.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Выбор количества
-          Row(
-            children: [5, 10, 15].map((count) {
-              final isSelected = _selectedCount == count;
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(right: count == 15 ? 0 : 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      SoundService.hapticSelection();
-                      SoundService.playTap();
-                      setState(() => _selectedCount = count);
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 44),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.white
-                            : Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.34),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '$count',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Кнопка
-          SizedBox(
-            width: double.infinity,
-            height: 46,
-            child: ElevatedButton(
-              onPressed: () {
-                SoundService.hapticHeavy();
-                SoundService.playStart();
-                _startQuickTest();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Theme.of(context).colorScheme.primary,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: Text(
-                t('practice.start'),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.3,
-                ),
-              ),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              t('practice.quickTest'),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text('$grade класс · разные темы, без привязки к плану'),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [5, 10, 15]
+                  .map(
+                    (count) => ChoiceChip(
+                      label: Text('$count заданий'),
+                      selected: _selectedCount == count,
+                      onSelected: (_) => setState(() => _selectedCount = count),
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: 14),
+            OutlinedButton.icon(
+              onPressed: _startQuickTest,
+              icon: const Icon(Icons.bolt),
+              label: const Text('Начать быстрый тест'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -492,7 +392,11 @@ class _PracticeTabState extends State<PracticeTab> {
     context
         .push(
           '/learn/topic',
-          extra: {'name': t('practice.quickTestTopic'), 'tasks': selected},
+          extra: {
+            'name': t('practice.quickTestTopic'),
+            'tasks': selected,
+            'restart': true,
+          },
         )
         .then((_) {
           if (mounted) setState(() {});

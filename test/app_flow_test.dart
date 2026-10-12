@@ -12,8 +12,9 @@ import 'package:math_pilot/services/study_session_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  testWidgets('Mobile navigation, practice launch, and persistent progress',
-      (tester) async {
+  testWidgets('Mobile navigation, practice launch, and persistent progress', (
+    tester,
+  ) async {
     final previousErrorHandler = FlutterError.onError;
     FlutterError.onError = (details) {
       debugPrint(details.toString());
@@ -45,7 +46,8 @@ void main() {
     await tester.tap(find.text('Практика').last);
     await tester.pumpAndSettle();
     expect(find.text('Быстрый тест'), findsOneWidget);
-    await tester.tap(find.text('Начать'));
+    await tester.ensureVisible(find.text('Начать быстрый тест'));
+    await tester.tap(find.text('Начать быстрый тест'));
     await tester.pumpAndSettle();
     expect(find.byType(TaskScreen), findsOneWidget);
     expect(tester.takeException(), isNull);

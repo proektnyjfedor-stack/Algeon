@@ -313,6 +313,12 @@ class LearningService extends ChangeNotifier {
     );
   }
 
+  bool completedToday(Map ref) =>
+      stats[ref['kind'] == 'exam'
+          ? 'exam:${ref['id']}'
+          : ref['id']]?['lastDay'] ==
+      today;
+
   Future<void> configurePlan(Map<String, dynamic> plan) => _mutate(() {
     _data['plan'] = plan;
     _data.remove('dailyPlan');
@@ -327,7 +333,10 @@ class LearningService extends ChangeNotifier {
     final track = plan['track'];
     for (final review in reviews(dueOnly: true)) {
       final ref = Map<String, dynamic>.from(review.value['ref'] as Map);
-      if (track == 'school' ? ref['kind'] == 'school' : ref['track'] == track) {
+      if (track == 'school'
+          ? ref['kind'] == 'school' &&
+                getTaskById(ref['id'] as String)?.grade == plan['grade']
+          : ref['track'] == track) {
         candidates.add(ref);
       }
     }
@@ -337,9 +346,26 @@ class LearningService extends ChangeNotifier {
         ..sort((a, b) {
           final sa = stats[a.id];
           final sb = stats[b.id];
+          if (sa?['lastDay'] == today && sb?['lastDay'] != today) {
+            return 1;
+          }
+          if (sb?['lastDay'] == today && sa?['lastDay'] != today) {
+            return -1;
+          }
+          if (sa == null && sb != null && sb['correct'] == sb['attempts']) {
+            return -1;
+          }
+          if (sb == null && sa != null && sa['correct'] == sa['attempts']) {
+            return 1;
+          }
           final pa = sa == null ? 0.5 : sa['correct'] / sa['attempts'];
           final pb = sb == null ? 0.5 : sb['correct'] / sb['attempts'];
-          return pa.compareTo(pb);
+          final priority = pa.compareTo(pb);
+          return priority != 0
+              ? priority
+              : (sa?['lastDay'] as String? ?? '').compareTo(
+                  sb?['lastDay'] as String? ?? '',
+                );
         });
       candidates.addAll(
         balanced(
@@ -356,8 +382,15 @@ class LearningService extends ChangeNotifier {
             ..sort((a, b) {
               final sa = stats['exam:${a['id']}'];
               final sb = stats['exam:${b['id']}'];
-              return (sa == null ? .5 : sa['correct'] / sa['attempts'])
-                  .compareTo(sb == null ? .5 : sb['correct'] / sb['attempts']);
+              final priority =
+                  (sa == null ? .5 : sa['correct'] / sa['attempts']).compareTo(
+                    sb == null ? .5 : sb['correct'] / sb['attempts'],
+                  );
+              return priority != 0
+                  ? priority
+                  : (sa?['lastDay'] as String? ?? '').compareTo(
+                      sb?['lastDay'] as String? ?? '',
+                    );
             });
       for (final q in balanced(qs, (q) => '${q['slot']}')) {
         final v = catalog.variants.firstWhere(
@@ -393,12 +426,28 @@ class LearningService extends ChangeNotifier {
   }
 
   static List<Task> diagnosticTasks(int grade) {
-    final grades = {(grade - 1).clamp(1, 11), grade, (grade + 1).clamp(1, 11)};
+    // Check prerequisites and current material; never test an unstudied future class.
+    final grades = grade > 1 ? [grade - 1, grade] : [grade];
     final result = <Task>[];
     for (final g in grades) {
       final tasks = getTasksByGrade(g);
-      final topics = <String>{};
-      result.addAll(tasks.where((t) => topics.add(t.topic)).take(3));
+      final groups = <String, List<Task>>{};
+      for (final task in tasks) {
+        groups.putIfAbsent(task.topic, () => []).add(task);
+      }
+      final limit = g == grade ? (grade == 1 ? 9 : 6) : 3;
+      final spread = <Task>[];
+      // Spread selection over the topic list instead of testing only its first entries.
+      final topics = groups.values.toList();
+      for (var i = 0; i < topics.length; i++) {
+        final index = (i * topics.length / limit).floor() % topics.length;
+        final group = topics[index];
+        if (!spread.any((t) => t.topic == group.first.topic)) {
+          spread.add(group[group.length ~/ 2]);
+        }
+      }
+      spread.addAll(tasks.where((t) => !spread.any((s) => s.id == t.id)));
+      result.addAll(spread.take(limit));
     }
     final ids = result.map((t) => t.id).toSet();
     result.addAll(

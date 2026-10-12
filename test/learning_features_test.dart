@@ -109,11 +109,90 @@ void main() {
     },
   );
   test(
+    'Daily school plan rotates solved tasks and excludes reviews from another class',
+    () async {
+      final catalog = await ExamCatalog.load();
+      final other = getTasksByGrade(3).first;
+      await h.record(
+        attemptId: 'other-class',
+        id: other.id,
+        topic: LearningService.taskTopic(other),
+        ref: LearningService.taskRef(other),
+        correct: false,
+        input: '0',
+      );
+      await h.configurePlan({
+        'track': 'school',
+        'grade': 7,
+        'daily': 5,
+        'goal': 'Регулярная практика',
+        'target': '2027-06-01',
+      });
+      final first = await h.dailyTasks(catalog);
+      expect(first.every((r) => getTaskById(r['id'])!.grade == 7), true);
+      for (final ref in first) {
+        final task = getTaskById(ref['id'])!;
+        await h.record(
+          attemptId: 'today:${task.id}',
+          id: task.id,
+          topic: LearningService.taskTopic(task),
+          ref: ref,
+          correct: true,
+          input: task.answer,
+        );
+      }
+      expect(first.every(h.completedToday), true);
+      expect(await h.dailyTasks(catalog), first);
+      h.clock = () => DateTime(2026, 10, 13, 12);
+      expect(first.any(h.completedToday), false);
+      final next = await h.dailyTasks(catalog);
+      expect(
+        next
+            .map((r) => r['id'])
+            .toSet()
+            .intersection(first.map((r) => r['id']).toSet()),
+        isEmpty,
+      );
+    },
+  );
+
+  testWidgets('Diagnostic selection stays editable until confirmation', (
+    tester,
+  ) async {
+    final task = getTasksByGrade(
+      5,
+    ).firstWhere((t) => t.options != null && t.options!.length > 1);
+    await h.saveDiagnostic({
+      'ids': [task.id],
+      'answers': <String, dynamic>{},
+      'grade': 5,
+      'startedAt': '2026-10-12T12:30:00',
+    });
+    await tester.pumpWidget(const MaterialApp(home: DiagnosticScreen()));
+    await tester.pumpAndSettle();
+    final choices = find.byType(OutlinedButton);
+    await tester.ensureVisible(choices.first);
+    await tester.tap(choices.first);
+    await tester.pumpAndSettle();
+    expect((h.diagnostic['answers'] as Map), isEmpty);
+    await tester.ensureVisible(choices.at(1));
+    await tester.tap(choices.at(1));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Посмотреть результат'));
+    await tester.tap(find.text('Посмотреть результат'));
+    await tester.pumpAndSettle();
+    expect(h.diagnostic['answers'][task.id]['input'], task.options![1]);
+    expect(h.stats[task.id]['attempts'], 1);
+    expect(tester.takeException(), isNull);
+  });
+
+  test(
     'Diagnostic uses nine unique tasks from different topics and persists',
     () async {
       for (final grade in [1, 5, 11]) {
         final tasks = LearningService.diagnosticTasks(grade);
         expect(tasks.length, 9);
+        expect(tasks.every((task) => task.grade <= grade), true);
         expect(tasks.map((t) => t.id).toSet().length, 9);
         expect(tasks.map((t) => t.topic).toSet().length, greaterThan(2));
       }

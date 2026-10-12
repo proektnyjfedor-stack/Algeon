@@ -18,6 +18,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
   final input = TextEditingController();
   bool ready = false, busy = false;
   String? error;
+  int selectedGrade = ProgressService.getCurrentGrade();
   Map<String, dynamic> session = {};
   @override
   void initState() {
@@ -32,12 +33,21 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
   }
 
   Future<void> load() async {
-    await history.init();
-    if (mounted) {
-      setState(() {
-        session = history.diagnostic;
-        ready = true;
-      });
+    try {
+      await history.init();
+      if (mounted) {
+        setState(() {
+          session = history.diagnostic;
+          ready = true;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          error = 'Не удалось загрузить диагностику.';
+          ready = true;
+        });
+      }
     }
   }
 
@@ -50,7 +60,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
   Future<void> start() async {
     setState(() => busy = true);
     try {
-      final grade = ProgressService.getCurrentGrade();
+      final grade = selectedGrade;
       final next = <String, dynamic>{
         'ids': LearningService.diagnosticTasks(grade).map((t) => t.id).toList(),
         'answers': <String, dynamic>{},
@@ -143,16 +153,64 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        '9 заданий ${ProgressService.getCurrentGrade()} класса и соседних уровней.',
+                      const Text(
+                        '9 заданий по разным темам. Обычно занимает 10–15 минут.',
                       ),
                       const SizedBox(height: 12),
                       const Text(
                         'Решай без подсказок. Сложное задание можно пропустить. Разбор — в конце, ответы сохраняются.',
                       ),
+                      const SizedBox(height: 20),
+                      DropdownButtonFormField<int>(
+                        initialValue: selectedGrade,
+                        isExpanded: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Класс для диагностики',
+                        ),
+                        items: List.generate(
+                          11,
+                          (i) => DropdownMenuItem(
+                            value: i + 1,
+                            child: Text('${i + 1} класс'),
+                          ),
+                        ),
+                        onChanged: busy
+                            ? null
+                            : (value) => setState(() => selectedGrade = value!),
+                      ),
                       const SizedBox(height: 24),
                       FilledButton(
-                        onPressed: busy ? null : start,
+                        onPressed: busy
+                            ? null
+                            : () async {
+                                final confirmed = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text(
+                                      'Пройти диагностику заново?',
+                                    ),
+                                    content: const Text(
+                                      'Текущий результат заменится. История решений и ошибки сохранятся.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, false),
+                                        child: const Text('Отмена'),
+                                      ),
+                                      FilledButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context, true),
+                                        child: const Text('Пройти заново'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                if (confirmed == true && mounted) {
+                                  selectedGrade = session['grade'] as int;
+                                  await start();
+                                }
+                              },
                         child: const Text('Начать диагностику'),
                       ),
                     ] else if (task != null) ...[
@@ -164,6 +222,11 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                         value: answers.length / tasks.length,
                       ),
                       const SizedBox(height: 24),
+                      Text(
+                        task.topic,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 12),
                       MathText(
                         task.question,
                         style: const TextStyle(fontSize: 22),
@@ -177,24 +240,50 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                               onPressed: busy
                                   ? null
                                   : () {
-                                      input.text = option;
-                                      submit();
+                                      setState(() => input.text = option);
                                     },
-                              child: MathText(option),
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: input.text == option
+                                    ? Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer
+                                    : null,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    input.text == option
+                                        ? Icons.radio_button_checked
+                                        : Icons.radio_button_unchecked,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(child: MathText(option)),
+                                ],
+                              ),
                             ),
                           ),
                         )
-                      else ...[
+                      else
                         FormulaAnswerField(
                           controller: input,
                           onSubmitted: (_) => submit(),
                         ),
-                        const SizedBox(height: 14),
-                        FilledButton(
-                          onPressed: busy ? null : () => submit(),
-                          child: const Text('Дальше'),
+                      const SizedBox(height: 14),
+                      ListenableBuilder(
+                        listenable: input,
+                        builder: (context, _) => FilledButton(
+                          onPressed: busy || input.text.trim().isEmpty
+                              ? null
+                              : () => submit(),
+                          child: Text(
+                            busy
+                                ? 'Сохраняем…'
+                                : answers.length + 1 == tasks.length
+                                ? 'Посмотреть результат'
+                                : 'Подтвердить ответ',
+                          ),
                         ),
-                      ],
+                      ),
                       TextButton(
                         onPressed: busy ? null : () => submit(skip: true),
                         child: const Text('Пока не знаю · пропустить'),
@@ -230,10 +319,36 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
       Text(
         wrong.isEmpty
             ? 'Всё верно. Переходи к более сложным задачам.'
-            : 'Начни с тем: ${weak.join(', ')}. Ошибки уже добавлены в повторение.',
+            : 'Есть темы для повторения. Начни с одной, затем закрепи её в плане.',
       ),
       const SizedBox(height: 12),
-      const Text('Результат — ориентир для дальнейшей практики.'),
+      const Text(
+        'Это короткая проверка, а не оценка знаний за весь класс. Для точных выводов нужно больше практики.',
+      ),
+      const SizedBox(height: 16),
+      for (final topic in weak)
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.school_outlined),
+            title: Text(topic),
+            subtitle: const Text('Повторить правило и закрепить'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              final task = wrong.firstWhere((t) => t.topic == topic);
+              context.push(
+                '/learn/intro',
+                extra: {
+                  'name': topic,
+                  'restart': true,
+                  'tasks': getTasksByGradeAndTopic(
+                    task.grade,
+                    topic,
+                  ).take(5).toList(),
+                },
+              );
+            },
+          ),
+        ),
       if (wrong.isNotEmpty)
         FilledButton(
           onPressed: () => context.push(
@@ -287,7 +402,33 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
         ),
       ),
       TextButton(
-        onPressed: busy ? null : start,
+        onPressed: busy
+            ? null
+            : () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Пройти диагностику заново?'),
+                    content: const Text(
+                      'Текущий результат заменится. История решений и ошибки сохранятся.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('Отмена'),
+                      ),
+                      FilledButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('Пройти заново'),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirmed == true && mounted) {
+                  selectedGrade = session['grade'] as int;
+                  await start();
+                }
+              },
         child: const Text('Пройти ещё раз'),
       ),
     ];
