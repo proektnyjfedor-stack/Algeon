@@ -400,10 +400,16 @@ class LearningService extends ChangeNotifier {
       }
     }
     final unique = <String>{};
-    final items = candidates
+    final available = candidates
         .where((r) => unique.add('${r['kind']}:${r['id']}'))
-        .take(plan['daily'] as int)
         .toList();
+    // Reconfiguring the plan should not consume the new daily target with
+    // attempts already counted today, including mistakes awaiting review.
+    // Keep their order and retain them only as a fallback for a small pool.
+    final items = [
+      ...available.where((ref) => !completedToday(ref)),
+      ...available.where(completedToday),
+    ].take(plan['daily'] as int).toList();
     await _mutate(() => _data['dailyPlan'] = {'day': today, 'items': items});
     return items;
   }

@@ -70,6 +70,7 @@ void main() {
     () async {
       final catalog = await ExamCatalog.load();
       final task = getTasksByGrade(7).last;
+      h.clock = () => DateTime(2026, 10, 11, 12);
       await h.record(
         attemptId: 'due',
         id: task.id,
@@ -78,6 +79,7 @@ void main() {
         correct: false,
         input: '0',
       );
+      h.clock = () => DateTime(2026, 10, 12, 12);
       await h.configurePlan({
         'track': 'school',
         'grade': 7,
@@ -108,6 +110,52 @@ void main() {
       expect((await h.dailyTasks(catalog)).length, 10);
     },
   );
+  test(
+    'Changing a daily target does not fill the new plan with attempts already completed today',
+    () async {
+      final catalog = await ExamCatalog.load();
+      for (final track in ['school', 'oge', 'base', 'profile']) {
+        final plan = <String, dynamic>{
+          'track': track,
+          'grade': 7,
+          'daily': 5,
+          'goal': 'Практика',
+          'target': '2027-06-01',
+        };
+        await h.configurePlan(plan);
+        final first = await h.dailyTasks(catalog);
+        for (final ref in first) {
+          final task = ref['kind'] == 'school' ? getTaskById(ref['id']) : null;
+          final q = task == null ? catalog.questions[ref['id']] : null;
+          await h.record(
+            attemptId: 'changed-plan:$track:${ref['id']}',
+            id: task?.id ?? 'exam:${ref['id']}',
+            topic: task == null
+                ? LearningService.examTopic(q!)
+                : LearningService.taskTopic(task),
+            ref: ref,
+            correct: false,
+            input: '0',
+          );
+        }
+        expect(first.every(h.completedToday), true);
+        expect(
+          await h.dailyTasks(catalog),
+          first,
+          reason: 'An active daily series stays stable',
+        );
+        await h.configurePlan({...plan, 'daily': 10});
+        final next = await h.dailyTasks(catalog);
+        expect(next.length, 10);
+        expect(
+          next.any(h.completedToday),
+          false,
+          reason: 'New $track series has available unattempted tasks',
+        );
+      }
+    },
+  );
+
   test(
     'Daily school plan rotates solved tasks and excludes reviews from another class',
     () async {
@@ -464,10 +512,7 @@ void main() {
       });
       await tester.pumpWidget(const MaterialApp(home: DiagnosticScreen()));
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
-        find.text('Пройти ещё раз'),
-        300,
-      );
+      await tester.scrollUntilVisible(find.text('Пройти ещё раз'), 300);
       await tester.tap(find.text('Пройти ещё раз'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Отмена'));
