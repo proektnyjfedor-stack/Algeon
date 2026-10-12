@@ -8,6 +8,8 @@ import '../widgets/bookmark_button.dart';
 
 import '../widgets/math_text.dart';
 import '../widgets/topic_visual.dart';
+import '../widgets/topic_lesson_card.dart';
+import '../data/topic_lessons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,16 +64,32 @@ class TopicIntroScreen extends StatelessWidget {
                         _buildHeader(context, icon, theory, t, displayTopic),
                         const SizedBox(height: 24),
 
+                        if (!isEnglish && topicLessons[topicName] != null) ...[
+                          TopicLessonCard(lesson: topicLessons[topicName]!),
+                          const SizedBox(height: 16),
+                        ],
                         if (TopicVisual.kind(topicName) != null) ...[
                           TopicVisual(topic: topicName),
                           const SizedBox(height: 16),
                         ],
+                        if (!isEnglish && topicLessons[topicName] != null)
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Text(
+                              'Свойства и дополнительные пояснения',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
                         // Theory sections
                         if (theory != null)
                           ...theory.sections
                               .where(
                                 (section) =>
-                                    section.type != TheorySectionType.visual,
+                                    section.type != TheorySectionType.visual &&
+                                    section.title != 'Официальный ориентир',
                               )
                               .map(
                                 (section) => Padding(

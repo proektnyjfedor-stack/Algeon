@@ -331,13 +331,9 @@ TopicTheory _buildGeneratedTheory(
   final defTitle = english ? 'What this topic is about' : 'Смысл темы';
   final stepsTitle =
       english ? 'Key facts and rules' : 'Факты и правила по порядку';
-  final stepsIntro = english
-      ? 'Each bullet is a separate fact. Read top to bottom to connect ideas with formulas.'
-      : 'Ниже каждый пункт — отдельное утверждение. Прочитай сверху вниз: так проще связать определения с формулами.';
+  const stepsIntro = '';
   final exTitle = english ? 'Worked examples' : 'Примеры по теме';
-  final exIntro = english
-      ? 'Walk each item step by step: what is given, which rule you use, what result you get.'
-      : 'Разбери каждый пример по шагам: что дано, какое правило применяем, какой получаем результат.';
+  const exIntro = '';
 
   final sections = <TheorySection>[
     TheorySection(
@@ -355,7 +351,7 @@ TopicTheory _buildGeneratedTheory(
         content: stepsIntro,
         items: List<String>.generate(
           bulletLines.length,
-          (i) => '${i + 1}. ${bulletLines[i]}',
+          (i) => bulletLines[i],
         ),
       ),
     );
@@ -423,10 +419,6 @@ List<String> _extractExampleItems(
     }
   }
 
-  if (picked.isEmpty && proseLines.isNotEmpty) {
-    final first = proseLines.first;
-    addItem(english ? 'Worked example: $first' : 'Пример применения: $first');
-  }
 
   return picked.take(5).toList(growable: false);
 }

@@ -19,6 +19,9 @@ void main() {
         r'\frac{\frac{1}{2}}{\frac{3}{4}}',
       );
       expect(MathNotation.tex('sin(x)/2'), r'\frac{\sin(x)}{2}');
+      expect(MathNotation.tex('√3/2'), r'\frac{\sqrt{3}}{2}');
+      expect(MathNotation.tex('1/√2'), r'\frac{1}{\sqrt{2}}');
+      expect(MathNotation.parts('√3/2').single.content, r'\frac{\sqrt{3}}{2}');
       expect(MathNotation.tex('2π/3'), r'\frac{2\pi }{3}');
       expect(MathNotation.tex('1/cos²x'), r'\frac{1}{\cos^{2}x}');
       expect(MathNotation.tex('√(x² + y²)'), r'\sqrt{x^{2} + y^{2}}');

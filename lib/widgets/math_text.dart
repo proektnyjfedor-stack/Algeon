@@ -6,7 +6,7 @@ import 'package:flutter_math_fork/flutter_math.dart';
 
 class MathNotation {
   static const _atom =
-      r'(?:\([^()\n]+\)|(?:sin|cos|tan|ctg|tg|ln|log)(?:[²³]|\^\d+)?\s*(?:\([^()\n]+\)|[a-zA-Zαβθ])|[A-Za-z0-9παβθ]+(?:[.,]\d+)?(?:[²³⁴⁵⁶⁷⁸⁹⁰¹₀₁₂₃₄₅₆₇₈₉]+|\^[+-]?\d+)?)';
+      r'(?:√(?:\([^()\n]+\)|[A-Za-z0-9]+)|\([^()\n]+\)|(?:sin|cos|tan|ctg|tg|ln|log)(?:[²³]|\^\d+)?\s*(?:\([^()\n]+\)|[a-zA-Zαβθ])|[A-Za-z0-9παβθ]+(?:[.,]\d+)?(?:[²³⁴⁵⁶⁷⁸⁹⁰¹₀₁₂₃₄₅₆₇₈₉]+|\^[+-]?\d+)?)';
   static String tex(String input) {
     var s = input.trim();
     final fractions = RegExp('($_atom)\\s*/\\s*($_atom)');
@@ -56,8 +56,10 @@ class MathNotation {
     );
     s = s.replaceAllMapped(RegExp(r'\^([+-]?\d+)'), (m) => '^{${m[1]}}');
     s = s.replaceAllMapped(
-      RegExp(r'(?<!\\)\b(sin|cos|tan|ln|log)(?=\(|\s|\^)'),
-      (m) => '\\${m[1]}',
+      RegExp(r'(?<!\\)\b(sin|cos|tan|ctg|tg|ln|log)(?=\(|\s|\^)'),
+      (m) => ['tg', 'ctg'].contains(m[1])
+          ? '\\operatorname{${m[1]}}'
+          : '\\${m[1]}',
     );
     return s
         .replaceAll('·', r'\cdot ')
@@ -102,7 +104,7 @@ class MathNotation {
       // Only notation with an explicit mathematical sign is promoted to math.
       // Dates, web addresses and prose stay as ordinary text.
       final pattern = RegExp(
-        '√\\([^()\\n]+\\)|√[A-Za-z0-9]+|$_atom(?:\\s*[+−\\-×·÷/=^≤≥≠]\\s*(?:$_atom|\\?))+|[A-Za-z0-9]+(?:[²³⁴⁵⁶⁷⁸⁹⁰¹]+|\\^[+-]?\\d+)',
+        '$_atom(?:\\s*[+−\\-×·÷/=^≤≥≠]\\s*(?:$_atom|\\?))+|√\\([^()\\n]+\\)|√[A-Za-z0-9]+|[A-Za-z0-9]+(?:[²³⁴⁵⁶⁷⁸⁹⁰¹]+|\\^[+-]?\\d+)',
       );
       var end = 0;
       for (final m in pattern.allMatches(value)) {
