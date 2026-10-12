@@ -35,6 +35,9 @@ dependencies:
   html: 0.15.7
   flutter_widget_from_html_core: 0.17.4
   flutter_svg: 2.2.4
+  firebase_core: ^4.15.0
+  firebase_auth: ^6.7.0
+  cloud_firestore: ^6.10.0
 
 dev_dependencies:
   flutter_test:

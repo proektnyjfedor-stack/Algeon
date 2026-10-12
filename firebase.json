@@ -40,5 +40,8 @@
         }
       }
     }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

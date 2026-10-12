@@ -8,6 +8,7 @@
 library;
 
 import 'services/learning_service.dart';
+import 'services/cloud_sync_service.dart';
 import 'services/bookmark_service.dart';
 
 import 'dart:async';
@@ -87,6 +88,7 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
       return;
     }
     if (mounted) setState(() => _ready = true);
+    unawaited(CloudSyncService.initAndBind());
   }
 
   @override

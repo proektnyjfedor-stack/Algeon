@@ -33,6 +33,16 @@ class ExamProgress {
           ![null, 'correct', 'wrong', 'reviewed'].contains(record['status'])) {
         throw const FormatException('Invalid exam answer');
       }
+      if ((record['selfAssessed'] != null && record['selfAssessed'] is! bool) ||
+          (record['selfCorrect'] != null && record['selfCorrect'] is! bool) ||
+          (record['criteria'] != null &&
+              (record['criteria'] is! List ||
+                  (record['criteria'] as List).length > 4 ||
+                  (record['criteria'] as List).any(
+                    (v) => v is! String || v.length > 100,
+                  )))) {
+        throw const FormatException('Invalid self assessment');
+      }
     }
     return Map<String, dynamic>.from(decoded);
   }

@@ -1,3 +1,4 @@
+import '../widgets/task_report_button.dart';
 import '../widgets/bookmark_button.dart';
 import '../services/learning_service.dart';
 import '../widgets/formula_answer_field.dart';
@@ -170,18 +171,24 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
   }
 
   Future<void> selfAssess(bool correct) async {
-    if (saving) return;
+    if (saving || record['selfAssessed'] == true) return;
     setState(() => saving = true);
     try {
       await LearningService.instance.record(
-        attemptId:
-            'self:$attemptSession:$index:${DateTime.now().microsecondsSinceEpoch}',
+        attemptId: 'self:$attemptSession:$index',
         id: 'exam:${question['id']}',
         topic: LearningService.examTopic(question),
         ref: LearningService.examRef(question, widget.variantId),
         correct: correct,
         input: answer.text,
       );
+      records['$index'] = {
+        ...record,
+        'input': answer.text,
+        'selfAssessed': true,
+        'selfCorrect': correct,
+      };
+      await save();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -254,7 +261,14 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
         .length;
     return Scaffold(
       appBar: AppBar(
-        actions: [BookmarkButton(id: 'exam:${widget.variantId}:${index + 1}')],
+        actions: [
+          TaskReportButton(
+            taskId: 'exam:${q['id']}',
+            question:
+                'Вариант ${widget.variantId}, задание ${index + 1}\n${q['sourceUrl']}',
+          ),
+          BookmarkButton(id: 'exam:${widget.variantId}:${index + 1}'),
+        ],
         leading: IconButton(
           onPressed: () async {
             await save();
@@ -458,17 +472,63 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                       const Text('Полное решение — в источнике.'),
                     source(q['sourceUrl'] as String, 'Открыть полное решение'),
                     if (!automatic) ...[
-                      const Text('Развёрнутое решение проверь по источнику.'),
+                      const Text(
+                        'Сверь с решением источника: условия и ограничения; обоснование каждого шага; вычисления; все пункты ответа. Эта сверка не заменяет проверку учителя и не даёт баллы ЕГЭ.',
+                      ),
+                      for (final criterion in [
+                        'Учтены условия и ограничения',
+                        'Обоснован каждый шаг',
+                        'Проверены вычисления',
+                        'Даны все требуемые ответы',
+                      ])
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(criterion),
+                          value: (record['criteria'] as List? ?? []).contains(
+                            criterion,
+                          ),
+                          onChanged: saving || record['selfAssessed'] == true
+                              ? null
+                              : (value) async {
+                                  final selected = List<String>.from(
+                                    record['criteria'] as List? ?? [],
+                                  );
+                                  if (value == true) {
+                                    selected.add(criterion);
+                                  } else {
+                                    selected.remove(criterion);
+                                  }
+                                  setState(
+                                    () => records['$index'] = {
+                                      ...record,
+                                      'input': answer.text,
+                                      'criteria': selected,
+                                    },
+                                  );
+                                  await save();
+                                },
+                        ),
+                      if (record['selfAssessed'] == true)
+                        const Text('Самооценка сохранена.'),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
                           OutlinedButton(
-                            onPressed: saving ? null : () => selfAssess(false),
+                            onPressed: saving || record['selfAssessed'] == true
+                                ? null
+                                : () => selfAssess(false),
                             child: const Text('В мои ошибки'),
                           ),
                           TextButton(
-                            onPressed: saving ? null : () => selfAssess(true),
+                            onPressed:
+                                saving ||
+                                    record['selfAssessed'] == true ||
+                                    (record['criteria'] as List? ?? [])
+                                            .length !=
+                                        4
+                                ? null
+                                : () => selfAssess(true),
                             child: const Text('По моей сверке — верно'),
                           ),
                         ],
@@ -484,6 +544,7 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                             : () async {
                                 setState(() => saving = true);
                                 records['$index'] = {
+                                  ...record,
                                   'input': answer.text,
                                   'status': 'reviewed',
                                 };

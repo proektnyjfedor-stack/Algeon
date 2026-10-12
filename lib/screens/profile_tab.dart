@@ -1,3 +1,4 @@
+import '../widgets/account_sync_card.dart';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -763,6 +764,8 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
+            const AccountSyncCard(),
             const SizedBox(height: 20),
             _EntranceSection(
               delayMs: 260,

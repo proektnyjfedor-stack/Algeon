@@ -2,6 +2,15 @@ import '../models/task.dart';
 
 /// Only evaluates fully numeric expressions; never guesses from prose.
 class TaskTeaching {
+  static List<String> explanation(Task task) {
+    if (task.explanationSteps.isNotEmpty) return task.explanationSteps;
+    final calc = calculation(task) ?? linearCalculation(task);
+    if (calc != null && task.checkAnswer(calc.value.toString())) {
+      return calc.steps;
+    }
+    return hints(task);
+  }
+
   static Calculation? calculation(Task task) {
     final match = RegExp(
       r'^(?:Вычислите:?\s*)?([\d\s.,+−\-*/×÷:()]+)\s*=\s*\?$',

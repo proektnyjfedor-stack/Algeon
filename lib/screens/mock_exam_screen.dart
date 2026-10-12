@@ -1,3 +1,4 @@
+import '../widgets/task_report_button.dart';
 import '../widgets/learning_note.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -229,6 +230,14 @@ class _MockExamScreenState extends State<MockExamScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      actions: [
+        if (variant != null && catalog != null)
+          TaskReportButton(
+            taskId: 'exam:${question["id"]}',
+            question:
+                'Вариант ${widget.variantId}, задание ${index + 1}\n${question["sourceUrl"]}',
+          ),
+      ],
       leading: IconButton(
         onPressed: () async {
           if (session != null) await persist();

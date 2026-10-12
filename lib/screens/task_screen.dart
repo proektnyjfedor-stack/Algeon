@@ -4,6 +4,9 @@
 /// Чистый дизайн, мягкие закругления
 library;
 
+import '../services/adaptive_practice.dart';
+import '../widgets/task_report_button.dart';
+
 import '../widgets/bookmark_button.dart';
 
 import '../services/learning_service.dart';
@@ -557,6 +560,7 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
             ),
           ),
           const SizedBox(width: 8),
+          TaskReportButton(taskId: _task.id, question: _task.question),
           BookmarkButton(id: 'task:${_task.id}'),
         ],
       ),
@@ -930,6 +934,21 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
     final t = context.watch<LanguageService>().t;
     final steps = _explanationSteps;
     final visible = steps.take(_explanationStep + 1).toList();
+    final foundations =
+        widget.tasks
+            .where(
+              (task) =>
+                  task.id != _task.id &&
+                  task.topic == _task.topic &&
+                  AdaptivePractice.complexity(task) <
+                      AdaptivePractice.complexity(_task),
+            )
+            .toList()
+          ..sort(
+            (a, b) => AdaptivePractice.complexity(
+              a,
+            ).compareTo(AdaptivePractice.complexity(b)),
+          );
 
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (notification) {
@@ -981,6 +1000,36 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               ),
             ),
             const SizedBox(height: 24),
+            MathText(
+              AdaptivePractice.feedback(
+                _task,
+                _selectedOption ?? _textController.text,
+              ),
+              style: const TextStyle(fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 16),
+            if (foundations.isNotEmpty)
+              ExpansionTile(
+                title: const Text('Повторить на простом примере'),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MathText(foundations.first.question),
+                        ...TaskTeaching.explanation(foundations.first).map(
+                          (step) => Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: MathText(step),
+                          ),
+                        ),
+                        MathText('Ответ: ${foundations.first.answer}'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ...visible.asMap().entries.map(
               (e) => Padding(
                 padding: const EdgeInsets.only(bottom: 16),

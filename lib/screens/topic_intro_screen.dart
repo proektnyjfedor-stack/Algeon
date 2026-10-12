@@ -4,6 +4,9 @@
 /// пошаговые разборы и таблицы.
 library;
 
+import '../services/adaptive_practice.dart';
+import '../widgets/topic_quick_check.dart';
+
 import '../widgets/bookmark_button.dart';
 
 import '../widgets/math_text.dart';
@@ -72,31 +75,33 @@ class TopicIntroScreen extends StatelessWidget {
                           TopicVisual(topic: topicName),
                           const SizedBox(height: 16),
                         ],
-                        if (!isEnglish && topicLessons[topicName] != null)
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Text(
-                              'Свойства и дополнительные пояснения',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
                         // Theory sections
                         if (theory != null)
-                          ...theory.sections
-                              .where(
-                                (section) =>
-                                    section.type != TheorySectionType.visual &&
-                                    section.title != 'Официальный ориентир',
-                              )
-                              .map(
-                                (section) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: _buildSection(context, section, t),
-                                ),
-                              )
+                          ExpansionTile(
+                            title: Text(
+                              isEnglish
+                                  ? 'All properties and examples'
+                                  : 'Все свойства и дополнительные примеры',
+                            ),
+                            tilePadding: EdgeInsets.zero,
+                            children: [
+                              ...theory.sections
+                                  .where(
+                                    (section) =>
+                                        section.type !=
+                                            TheorySectionType.visual &&
+                                        section.title != 'Официальный ориентир',
+                                  )
+                                  .map(
+                                    (section) => Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 16,
+                                      ),
+                                      child: _buildSection(context, section, t),
+                                    ),
+                                  ),
+                            ],
+                          )
                         else
                           _buildFallbackContent(
                             context,
@@ -104,6 +109,12 @@ class TopicIntroScreen extends StatelessWidget {
                             displayTopic,
                           ),
                         const SizedBox(height: 8),
+                        if (!isEnglish && tasks.length >= 2)
+                          TopicQuickCheck(
+                            key: ValueKey(topicName),
+                            tasks: tasks,
+                          ),
+                        const SizedBox(height: 12),
                         _buildBottomButton(context, t),
                       ],
                     ),
@@ -729,7 +740,11 @@ class TopicIntroScreen extends StatelessWidget {
             SoundService.playStart();
             context.pushReplacement(
               '/learn/topic',
-              extra: {'name': topicName, 'tasks': tasks, 'restart': restart},
+              extra: {
+                'name': topicName,
+                'tasks': restart ? tasks : AdaptivePractice.sequence(tasks),
+                'restart': restart,
+              },
             );
           },
           borderRadius: BorderRadius.circular(AppRadius.md),
