@@ -1,16 +1,45 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_service.dart';
 import 'backup_service.dart';
 import 'learning_service.dart';
 import 'bookmark_service.dart';
+import 'cloud_progress_store.dart';
 
 class CloudSyncService extends ChangeNotifier {
-  CloudSyncService._();
-  static final instance = CloudSyncService._();
+  @visibleForTesting
+  factory CloudSyncService.forTesting({
+    required CloudProgressStore store,
+    required String? Function() currentUid,
+    required Future<String> Function() export,
+    required Future<void> Function(String) restore,
+  }) => CloudSyncService._(
+    store: store,
+    currentUid: currentUid,
+    export: export,
+    restore: restore,
+  );
+  CloudSyncService._({
+    required CloudProgressStore store,
+    required String? Function() currentUid,
+    required Future<String> Function() export,
+    required Future<void> Function(String) restore,
+  }) : _store = store,
+       _currentUid = currentUid,
+       _export = export,
+       _restore = restore;
+  static final instance = CloudSyncService._(
+    store: FirebaseProgressStore(),
+    currentUid: () => AuthService.currentUser()?.uid,
+    export: BackupService.export,
+    restore: BackupService.restore,
+  );
+  final CloudProgressStore _store;
+  final String? Function() _currentUid;
+  final Future<String> Function() _export;
+  final Future<void> Function(String) _restore;
   static Future<void> initAndBind() => instance.initialize();
   static Future<void> syncIfSignedIn() => instance.upload();
   static Future<void> syncOnLogin(String uid) => instance.connect();
@@ -23,13 +52,23 @@ class CloudSyncService extends ChangeNotifier {
   int revision = 0;
   Timer? _timer;
   StreamSubscription<AuthUser?>? _auth;
-  Future<void>? _init;
-  bool _suppress = false, _dirty = false;
-  int _connection = 0;
+  Future<void>? _init, _restoreInFlight;
+  bool _suppress = false, _dirty = false, _disposed = false;
+  int _generation = 0;
+  bool _active(int generation, String owner) =>
+      !_disposed &&
+      generation == _generation &&
+      uid == owner &&
+      _currentUid() == owner;
+  void _notify() {
+    if (!_disposed) notifyListeners();
+  }
+
   Future<void> initialize() => _init ??= _initialize();
   Future<void> _initialize() async {
     try {
       await AuthService.init();
+      if (_disposed) return;
       initialized = true;
       if (AuthService.ready) {
         _auth = AuthService.authStateChanges().listen((_) {
@@ -42,76 +81,86 @@ class CloudSyncService extends ChangeNotifier {
       message = 'Облачное сохранение недоступно. Попробуй позже.';
       _init = null;
     }
-    notifyListeners();
+    _notify();
   }
 
-  DocumentReference<Map<String, dynamic>> get doc =>
-      FirebaseFirestore.instance.collection('progress').doc(uid!);
-  String get revisionKey => 'cloud_revision_$uid';
+  String _revisionKey(String owner) => 'cloud_revision_$owner';
+  String _summary(CloudProgressCopy copy) {
+    final data = BackupService.validate(copy.payload);
+    final count = (data['solved_tasks'] as List? ?? []).length;
+    final date = copy.updatedAt?.toLocal();
+    return 'В облаке: $count решённых заданий · ${data['current_grade'] ?? 5} класс${date == null ? '' : ' · ${date.day}.${date.month}.${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}'}';
+  }
+
+  void _validateCopy(CloudProgressCopy copy) {
+    validateSize(copy.payload);
+    if (copy.revision <= 0) {
+      throw const FormatException('Invalid cloud revision');
+    }
+  }
+
   Future<void> connect() async {
-    final generation = ++_connection;
+    if (_disposed) return;
+    final generation = ++_generation;
+    _suppress = _restoreInFlight != null;
     _timer?.cancel();
-    uid = AuthService.currentUser()?.uid;
+    _dirty = false;
+    final owner = _currentUid();
+    uid = owner;
     revision = 0;
     needsChoice = false;
     hasRemote = false;
     remoteSummary = null;
     message = null;
-    if (uid == null) {
-      busy = false;
-      notifyListeners();
-      return;
-    }
-    busy = true;
-    notifyListeners();
+    busy = owner != null;
+    _notify();
+    if (owner == null) return;
     try {
-      final snapshot = await doc
-          .get(const GetOptions(source: Source.server))
-          .timeout(const Duration(seconds: 20));
-      if (generation != _connection || uid != AuthService.currentUser()?.uid) {
-        return;
+      // Finish an already approved local restore before reading ownership metadata
+      // for a newly signed-in account. Do not start an automatic upload meanwhile.
+      try {
+        await _restoreInFlight;
+      } catch (_) {}
+      if (!_active(generation, owner)) return;
+      _suppress = false;
+      final copy = await _store.read(owner);
+      if (!_active(generation, owner)) return;
+      if (copy != null) {
+        _validateCopy(copy);
+        hasRemote = true;
+        revision = copy.revision;
+        remoteSummary = _summary(copy);
       }
-      hasRemote = snapshot.exists;
-      if (hasRemote) {
-        final payload = snapshot.data()?['payload'];
-        if (payload is! String) {
-          throw const FormatException('Invalid cloud copy');
-        }
-        validateSize(payload);
-        final data = BackupService.validate(payload);
-        final count = (data['solved_tasks'] as List? ?? []).length;
-        final date = (snapshot.data()?['updatedAt'] as Timestamp?)
-            ?.toDate()
-            .toLocal();
-        remoteSummary =
-            'В облаке: $count решённых заданий · ${data['current_grade'] ?? 5} класс${date == null ? '' : ' · ${date.day}.${date.month}.${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}'}';
-      }
-      revision = snapshot.data()?['revision'] as int? ?? 0;
       final prefs = await SharedPreferences.getInstance();
+      if (!_active(generation, owner)) return;
+      final localOwner = prefs.getString('cloud_local_owner');
       needsChoice =
-          hasRemote &&
-          (prefs.getInt(revisionKey) != revision ||
-              prefs.getString('cloud_local_owner') != uid);
+          (hasRemote && prefs.getInt(_revisionKey(owner)) != revision) ||
+          (localOwner != null && localOwner != owner) ||
+          (hasRemote && localOwner == null);
       message = needsChoice
-          ? 'На другом устройстве есть сохранение. Выбери, какую копию использовать.'
+          ? 'Выбери копию: прогресс на устройстве и в аккаунте может отличаться.'
           : hasRemote
           ? 'Сохранение подключено.'
           : 'Первое облачное сохранение готово к созданию.';
       if (!needsChoice) schedule();
     } catch (_) {
-      needsChoice = true;
-      message =
-          'Не удалось проверить облачную копию. Локальный прогресс сохранён.';
+      if (_active(generation, owner)) {
+        needsChoice = true;
+        message =
+            'Не удалось проверить облачную копию. Локальный прогресс сохранён.';
+      }
     } finally {
-      if (generation == _connection) {
+      if (_active(generation, owner)) {
         busy = false;
-        notifyListeners();
+        _notify();
       }
     }
   }
 
   void schedule() {
-    if (uid == null || needsChoice || _suppress) return;
+    if (_disposed || uid == null || needsChoice || _suppress) return;
+    _dirty = true;
     _timer?.cancel();
     _timer = Timer(const Duration(seconds: 3), () {
       unawaited(upload());
@@ -128,100 +177,137 @@ class CloudSyncService extends ChangeNotifier {
   }
 
   Future<void> upload({bool replace = false}) async {
-    if (uid == null || needsChoice && !replace) return;
+    if (_disposed || uid == null || needsChoice && !replace || _suppress) {
+      return;
+    }
     if (busy) {
       _dirty = true;
       return;
     }
+    final generation = _generation, owner = uid!, expected = revision;
+    if (!_active(generation, owner)) return;
+    _timer?.cancel();
     _dirty = false;
-    final owner = uid!;
-    final expected = revision;
-    final reference = doc;
     busy = true;
-    notifyListeners();
+    _notify();
     try {
-      final payload = await BackupService.export();
+      final payload = await _export();
       validateSize(payload);
-      final next = await FirebaseFirestore.instance.runTransaction<int>((
-        transaction,
-      ) async {
-        final snapshot = await transaction.get(reference);
-        final current = snapshot.data()?['revision'] as int? ?? 0;
-        // Explicit replace still requires the latest inspected revision.
-        if (current != expected) throw StateError('conflict');
-        transaction.set(reference, {
-          'payload': payload,
-          'revision': current + 1,
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-        return current + 1;
-      });
-      if (uid != owner) return;
+      if (!_active(generation, owner)) return;
+      final next = await _store.write(
+        owner,
+        payload,
+        expectedRevision: expected,
+      );
+      if (!_active(generation, owner)) return;
+      final prefs = await SharedPreferences.getInstance();
+      if (!_active(generation, owner)) return;
+      if (!await prefs.setInt(_revisionKey(owner), next) ||
+          !await prefs.setString('cloud_local_owner', owner)) {
+        throw StateError('Could not record cloud revision');
+      }
+      if (!_active(generation, owner)) return;
       revision = next;
       hasRemote = true;
       needsChoice = false;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(revisionKey, next);
-      await prefs.setString('cloud_local_owner', owner);
-      final savedData = BackupService.validate(payload);
-      remoteSummary =
-          'В облаке: ${(savedData['solved_tasks'] as List? ?? []).length} решённых заданий · ${savedData['current_grade'] ?? 5} класс';
+      remoteSummary = _summary(
+        CloudProgressCopy(
+          payload: payload,
+          revision: next,
+          updatedAt: DateTime.now(),
+        ),
+      );
       message = 'Прогресс сохранён в аккаунте.';
     } on FormatException catch (e) {
-      message = e.message;
+      if (_active(generation, owner)) message = e.message;
     } catch (_) {
-      needsChoice = true;
-      message =
-          'Сохранение не обновлено. Проверь соединение и сравни копии перед повтором.';
+      if (_active(generation, owner)) {
+        needsChoice = true;
+        message =
+            'Сохранение не обновлено. Проверь соединение и сравни копии перед повтором.';
+      }
     } finally {
-      busy = false;
-      notifyListeners();
-      if (_dirty && !needsChoice) schedule();
+      if (_active(generation, owner)) {
+        busy = false;
+        _notify();
+        if (_dirty && !needsChoice) schedule();
+      }
     }
   }
 
   Future<void> download() async {
-    if (uid == null || busy) return;
-    final owner = uid!;
+    if (_disposed || uid == null || busy) return;
+    final generation = _generation, owner = uid!;
+    if (!_active(generation, owner)) return;
     busy = true;
     _suppress = true;
     _timer?.cancel();
-    notifyListeners();
+    _notify();
+    var preserved = false;
     try {
-      final snapshot = await doc
-          .get(const GetOptions(source: Source.server))
-          .timeout(const Duration(seconds: 20));
-      if (uid != owner) return;
-      final data = snapshot.data();
-      if (data == null) throw StateError('No cloud copy');
-      final payload = data['payload'] as String;
-      validateSize(payload);
+      final copy = await _store.read(owner);
+      if (!_active(generation, owner)) return;
+      if (copy == null) throw StateError('No cloud copy');
+      _validateCopy(copy);
       final prefs = await SharedPreferences.getInstance();
-      final recovery = await BackupService.export();
+      final recovery = await _export();
       BackupService.validate(recovery);
-      if (uid != owner) return;
+      if (!_active(generation, owner)) return;
       if (!await prefs.setString('cloud_local_recovery', recovery)) {
-        throw StateError('Could not preserve local recovery');
+        throw StateError('Could not preserve local copy');
       }
-      await BackupService.restore(payload);
-      revision = data['revision'] as int;
-      await prefs.setInt(revisionKey, revision);
-      await prefs.setString('cloud_local_owner', owner);
+      preserved = true;
+      if (!_active(generation, owner)) return;
+      final applying = _applyRemote(owner, copy, prefs);
+      _restoreInFlight = applying;
+      try {
+        await applying;
+      } finally {
+        if (identical(_restoreInFlight, applying)) _restoreInFlight = null;
+      }
+      if (!_active(generation, owner)) return;
+      revision = copy.revision;
       needsChoice = false;
       hasRemote = true;
+      remoteSummary = _summary(copy);
       message =
           'Облачный прогресс загружен. Предыдущая локальная копия сохранена для восстановления.';
     } catch (_) {
-      message = 'Не удалось загрузить копию. Локальные данные не заменены.';
+      if (_active(generation, owner)) {
+        needsChoice = true;
+        message = preserved
+            ? 'Не удалось завершить загрузку. Предыдущая локальная копия доступна для восстановления.'
+            : 'Не удалось загрузить копию. Прогресс на устройстве сохранён.';
+      }
     } finally {
-      busy = false;
-      _suppress = false;
-      notifyListeners();
+      if (_active(generation, owner)) {
+        _suppress = false;
+        busy = false;
+        _notify();
+      }
+    }
+  }
+
+  Future<void> _applyRemote(
+    String owner,
+    CloudProgressCopy copy,
+    SharedPreferences prefs,
+  ) async {
+    // An interrupted restore must never appear to belong to another account.
+    if (!await prefs.setString('cloud_local_owner', 'restoring:$owner')) {
+      throw StateError('Could not mark restore');
+    }
+    await _restore(copy.payload);
+    if (!await prefs.setInt(_revisionKey(owner), copy.revision) ||
+        !await prefs.setString('cloud_local_owner', owner)) {
+      throw StateError('Could not finish restore metadata');
     }
   }
 
   @override
   void dispose() {
+    _disposed = true;
+    _generation++;
     _auth?.cancel();
     _timer?.cancel();
     LearningService.instance.removeListener(schedule);
