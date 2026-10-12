@@ -256,7 +256,7 @@ void main() {
         ),
       ),
     );
-    await tester.tap(find.text('Аккаунт и сохранение'));
+    await tester.tap(find.text('Аккаунт'));
     await tester.pumpAndSettle();
     expect(find.byType(TextField), findsNWidgets(2));
     await tester.ensureVisible(find.text('Создать аккаунт'));
