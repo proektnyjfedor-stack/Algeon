@@ -1,9 +1,15 @@
 /// Сервис прогресса
-/// 
+///
 /// Хранит: профиль, прогресс, streak, статистику
 /// Локальное хранение через SharedPreferences
 library;
 
+import 'bookmark_service.dart';
+
+import 'learning_service.dart';
+import 'mock_exam_service.dart';
+import 'study_session_service.dart';
+import 'exam_progress.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,68 +29,79 @@ class ProgressService {
   static const String _keyTodayCompleted = 'today_completed';
   static const String _keyEquippedBetaItem = 'equipped_beta_item';
   static const String _keyProfileBackground = 'profile_background';
-  
+
   static SharedPreferences? _prefs;
   static Set<String> _solvedTaskIds = {};
-  
+
   // ============================================================
   // INIT
   // ============================================================
-  
-  static Future<void> init() async {
+
+  static DateTime Function() _clock = DateTime.now;
+  static Future<void> _pending = Future<void>.value();
+
+  // Keep read/modify/write operations ordered, including rapid submissions.
+  static Future<void> _mutate(Future<void> Function() action) {
+    final result = _pending.then((_) => action());
+    _pending = result.then<void>((_) {}, onError: (Object _, StackTrace _) {});
+    return result;
+  }
+
+  static Future<void> init({DateTime Function()? clock}) async {
+    await _pending;
+    _clock = clock ?? DateTime.now;
     _prefs = await SharedPreferences.getInstance();
     _loadSolvedTasks();
-    await _updateStreak();
     _log('Initialized');
   }
-  
+
   static void _loadSolvedTasks() {
     final data = _prefs?.getStringList(_keySolved) ?? [];
     _solvedTaskIds = data.toSet();
     _log('Loaded ${_solvedTaskIds.length} solved');
   }
-  
+
   // ============================================================
   // ONBOARDING & GRADE
   // ============================================================
-  
+
   static bool isOnboardingComplete() {
     return _prefs?.getBool(_keyOnboarding) ?? false;
   }
-  
+
   static Future<void> setOnboardingComplete(bool value) async {
     await _prefs?.setBool(_keyOnboarding, value);
     _log('Onboarding: $value');
   }
-  
+
   static int getCurrentGrade() {
     final grade = _prefs?.getInt(_keyGrade) ?? 5;
     return grade.clamp(1, 11);
   }
-  
+
   static Future<void> setCurrentGrade(int grade) async {
     final normalized = grade.clamp(1, 11);
     await _prefs?.setInt(_keyGrade, normalized);
     _log('Grade: $normalized');
   }
-  
+
   // ============================================================
   // PROFILE
   // ============================================================
-  
+
   static String getUserName() {
     return _prefs?.getString(_keyUserName) ?? 'Ученик';
   }
-  
+
   static Future<void> setUserName(String name) async {
     await _prefs?.setString(_keyUserName, name);
     _log('Name: $name');
   }
-  
+
   static String getAvatar() {
     return _prefs?.getString(_keyAvatar) ?? 'boy_blue';
   }
-  
+
   static Future<void> setAvatar(String emoji) async {
     await _prefs?.setString(_keyAvatar, emoji);
     _log('Avatar: $emoji');
@@ -126,109 +143,119 @@ class ProgressService {
   static String? getCustomPhoto() {
     return _prefs?.getString(_keyCustomPhoto);
   }
-  
+
   // ============================================================
   // STREAK
   // ============================================================
-  
-  static Future<void> _updateStreak() async {
-    final now = DateTime.now();
-    final today = '${now.year}-${now.month}-${now.day}';
-    final lastActive = _prefs?.getString(_keyLastActive);
 
-    if (lastActive == null) {
-      await _prefs?.setString(_keyLastActive, today);
-      await _prefs?.setInt(_keyStreak, 1);
-      return;
-    }
+  static String _dateKey(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
-    if (lastActive == today) return;
-
-    final yesterday = now.subtract(const Duration(days: 1));
-    final yesterdayStr = '${yesterday.year}-${yesterday.month}-${yesterday.day}';
-
-    if (lastActive == yesterdayStr) {
-      final streak = (_prefs?.getInt(_keyStreak) ?? 0) + 1;
-      await _prefs?.setInt(_keyStreak, streak);
-    } else {
-      await _prefs?.setInt(_keyStreak, 1);
-    }
-
-    await _prefs?.setString(_keyLastActive, today);
+  static DateTime? _storedDay(String? value) {
+    if (value == null) return null;
+    // Read both the padded format and dates saved by previous versions.
+    final match = RegExp(r'^(\d{4})-(\d{1,2})-(\d{1,2})$').firstMatch(value);
+    if (match == null) return null;
+    final year = int.parse(match[1]!);
+    final month = int.parse(match[2]!);
+    final day = int.parse(match[3]!);
+    final date = DateTime.utc(year, month, day);
+    return date.year == year && date.month == month && date.day == day
+        ? date
+        : null;
   }
-  
+
+  static int? _daysSinceStudy() {
+    final last = _storedDay(_prefs?.getString(_keyLastActive));
+    if (last == null) return null;
+    final now = _clock();
+    return DateTime.utc(now.year, now.month, now.day).difference(last).inDays;
+  }
+
+  static Future<void> _updateStreak() async {
+    final difference = _daysSinceStudy();
+    if (difference == 0) return;
+    final previous = _prefs?.getInt(_keyStreak) ?? 0;
+    final streak = difference == 1 ? previous + 1 : 1;
+    await _prefs?.setInt(_keyStreak, streak);
+    await _prefs?.setString(_keyLastActive, _dateKey(_clock()));
+  }
+
   static int getStreakDays() {
+    final difference = _daysSinceStudy();
+    if (difference != 0 && difference != 1) return 0;
     return _prefs?.getInt(_keyStreak) ?? 0;
   }
-  
+
   // ============================================================
   // TASKS
   // ============================================================
-  
-  static Future<void> markSolved(String taskId) async {
+
+  static Future<void> markSolved(String taskId) => _mutate(() async {
+    if (taskId.trim().isEmpty) throw ArgumentError.value(taskId, 'taskId');
     _solvedTaskIds.add(taskId);
     await _prefs?.setStringList(_keySolved, _solvedTaskIds.toList());
-    
-    final attempts = (_prefs?.getInt(_keyAttempts) ?? 0) + 1;
-    final correct = (_prefs?.getInt(_keyCorrect) ?? 0) + 1;
-    await _prefs?.setInt(_keyAttempts, attempts);
-    await _prefs?.setInt(_keyCorrect, correct);
-    
-    await incrementTodayCompleted();
-    
+    await _recordAttempt(true);
     _log('Solved: $taskId (total: ${_solvedTaskIds.length})');
-  }
-  
-  static Future<void> recordAttempt(bool isCorrect) async {
+  });
+
+  static Future<void> recordAttempt(bool isCorrect) =>
+      _mutate(() => _recordAttempt(isCorrect));
+
+  static Future<void> _recordAttempt(bool isCorrect) async {
     final attempts = (_prefs?.getInt(_keyAttempts) ?? 0) + 1;
     await _prefs?.setInt(_keyAttempts, attempts);
-    
+    // A study day is earned by attempting a task, not by opening the site.
+    await _updateStreak();
     if (isCorrect) {
       final correct = (_prefs?.getInt(_keyCorrect) ?? 0) + 1;
       await _prefs?.setInt(_keyCorrect, correct);
       await incrementTodayCompleted();
     }
   }
-  
+
   static bool isSolved(String taskId) {
     return _solvedTaskIds.contains(taskId);
   }
-  
+
   static Set<String> getSolvedTaskIds() {
     return Set.from(_solvedTaskIds);
   }
-  
+
   static int getTotalSolved() {
     return _solvedTaskIds.length;
   }
-  
+
   static int getSolvedCountForTopic(String topic, List<String> taskIds) {
     return taskIds.where((id) => _solvedTaskIds.contains(id)).length;
   }
-  
-  static int getSolvedCountForGrade(int grade, List<String> allTaskIdsForGrade) {
+
+  static int getSolvedCountForGrade(
+    int grade,
+    List<String> allTaskIdsForGrade,
+  ) {
     return allTaskIdsForGrade.where((id) => _solvedTaskIds.contains(id)).length;
   }
-  
+
   // ============================================================
   // TODAY STATS
   // ============================================================
-  
+
   static int getTodayCompletedCount() {
-    final today = DateTime.now().toString().substring(0, 10);
+    final today = _dateKey(_clock());
     final savedDate = _prefs?.getString(_keyTodayDate);
-    
+
     if (savedDate != today) {
       return 0;
     }
-    
+
     return _prefs?.getInt(_keyTodayCompleted) ?? 0;
   }
-  
+
   static Future<void> incrementTodayCompleted() async {
-    final today = DateTime.now().toString().substring(0, 10);
+    final today = _dateKey(_clock());
     final savedDate = _prefs?.getString(_keyTodayDate);
-    
+
     if (savedDate != today) {
       await _prefs?.setString(_keyTodayDate, today);
       await _prefs?.setInt(_keyTodayCompleted, 1);
@@ -237,22 +264,22 @@ class ProgressService {
       await _prefs?.setInt(_keyTodayCompleted, current + 1);
     }
   }
-  
+
   // ============================================================
   // STATS
   // ============================================================
-  
+
   static double getAccuracy() {
     final attempts = _prefs?.getInt(_keyAttempts) ?? 0;
     final correct = _prefs?.getInt(_keyCorrect) ?? 0;
-    if (attempts == 0) return 0;
-    return (correct / attempts) * 100;
+    if (attempts <= 0) return 0;
+    return ((correct / attempts) * 100).clamp(0, 100);
   }
-  
+
   static int getTotalAttempts() {
     return _prefs?.getInt(_keyAttempts) ?? 0;
   }
-  
+
   static int getTotalCorrect() {
     return _prefs?.getInt(_keyCorrect) ?? 0;
   }
@@ -298,30 +325,83 @@ class ProgressService {
     if (solved >= 5) return 2;
     return 1;
   }
-  
+
   // ============================================================
   // RESET
   // ============================================================
-  
-  static Future<void> resetProgress() async {
+
+  static Future<void> resetProgress() => _mutate(() async {
     _solvedTaskIds.clear();
     await _prefs?.remove(_keySolved);
     await _prefs?.remove(_keyAttempts);
     await _prefs?.remove(_keyCorrect);
     await _prefs?.remove(_keyStreak);
     await _prefs?.remove(_keyLastActive);
+    await _prefs?.remove(_keyTodayDate);
+    await _prefs?.remove(_keyTodayCompleted);
+    await StudySessionService.clear();
+    await ExamProgress.clear();
+    await LearningService.instance.clear();
+    await MockExamService.clear();
     _log('Progress reset');
-  }
-  
-  static Future<void> resetAll() async {
+  });
+
+  static Future<void> resetAll() => _mutate(() async {
+    await LearningService.instance.flush();
+    await MockExamService.flush();
+    await BookmarkService.instance.flush();
     await _prefs?.clear();
+    await BookmarkService.instance.init();
+    await LearningService.instance.init();
     _solvedTaskIds.clear();
+    await StudySessionService.clear();
     _log('Full reset');
-  }
-  
+  });
+
   static void _log(String msg) {
     debugPrint('[Progress] $msg');
   }
+
+  static Future<void> flush() => _pending;
+
+  /// Restore only the explicitly allowed preferences, with rollback on failure.
+  static Future<void> replacePreferences(
+    Map<String, dynamic> data,
+    Set<String> keys,
+  ) => _mutate(() async {
+    final prefs = _prefs;
+    if (prefs == null) throw StateError('Progress is not initialized');
+    final previous = {for (final key in keys) key: prefs.get(key)};
+    Future<void> write(String key, dynamic value) async {
+      final bool saved;
+      if (value == null) {
+        saved = await prefs.remove(key);
+      } else if (value is bool) {
+        saved = await prefs.setBool(key, value);
+      } else if (value is int) {
+        saved = await prefs.setInt(key, value);
+      } else if (value is String) {
+        saved = await prefs.setString(key, value);
+      } else if (value is List) {
+        saved = await prefs.setStringList(key, value.cast<String>());
+      } else {
+        throw ArgumentError('Unsupported preference');
+      }
+      if (!saved) throw StateError('Could not save progress');
+    }
+
+    try {
+      for (final key in keys) {
+        await write(key, data[key]);
+      }
+    } catch (_) {
+      for (final entry in previous.entries) {
+        await write(entry.key, entry.value);
+      }
+      rethrow;
+    }
+    _loadSolvedTasks();
+  });
 
   // ============================================================
   // CLOUD SNAPSHOT

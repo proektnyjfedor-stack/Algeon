@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Algeon — математика с пониманием</title>
-  <meta name="description" content="Интерактивный тренажёр по математике для 5–11 класса: теория, задачи, практика и прогресс в одном приложении.">
+  <meta name="description" content="Интерактивный тренажёр по математике для 1–11 класса: теория, задачи, практика и прогресс в одном приложении.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,7 +12,8 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%232563EB' d='M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z'/%3E%3C/svg%3E">
   <script>
     (function () {
-      var t = localStorage.getItem('algeon-theme');
+      var t;
+      try { t = localStorage.getItem('algeon-theme'); } catch (_) {}
       if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
       else if (window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
     })();
@@ -36,7 +37,6 @@
         <a href="#features">Возможности</a>
         <a href="#showcase">Интерфейс</a>
         <a href="#grades">Классы</a>
-        <a href="#reviews">Отзывы</a>
         <a href="#faq">FAQ</a>
       </nav>
       <div class="header-actions">
@@ -44,8 +44,8 @@
           <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
           <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         </button>
-        <a class="btn btn-ghost btn-sm" href="https://algeon.tech" target="_blank" rel="noopener">Войти</a>
-        <a class="btn btn-primary btn-sm magnetic" href="https://algeon.tech" target="_blank" rel="noopener">Начать</a>
+        <a class="btn btn-ghost btn-sm" href="/" target="_blank" rel="noopener">Открыть</a>
+        <a class="btn btn-primary btn-sm magnetic" href="/" target="_blank" rel="noopener">Начать</a>
       </div>
       <button class="menu-toggle" id="menuToggle" aria-label="Меню" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -55,9 +55,8 @@
       <a href="#features">Возможности</a>
       <a href="#showcase">Интерфейс</a>
       <a href="#grades">Классы</a>
-      <a href="#reviews">Отзывы</a>
       <a href="#faq">FAQ</a>
-      <a class="btn btn-primary" href="https://algeon.tech" target="_blank" rel="noopener">Открыть приложение</a>
+      <a class="btn btn-primary" href="/" target="_blank" rel="noopener">Открыть приложение</a>
       <button type="button" class="theme-toggle theme-toggle-mobile" id="themeToggleMobile" aria-label="Переключить тему">
         <span class="theme-toggle-label">Тема</span>
         <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -88,7 +87,7 @@
         <div class="hero-copy">
           <div class="pill anim-fade-up">
             <span class="pill-dot"></span>
-            Веб-приложение · 5–11 класс · бесплатно
+            Веб-приложение · 1–11 класс · бесплатно
           </div>
           <h1 class="hero-title anim-fade-up" style="--d:1">
             Поднимайся по ступеням<br>
@@ -99,7 +98,7 @@
             Каждая тема — новая ступень: разобрался → решил → закрепил.
           </p>
           <div class="hero-actions anim-fade-up" style="--d:3">
-            <a class="btn btn-primary btn-lg magnetic glow-pulse" href="https://algeon.tech" target="_blank" rel="noopener">
+            <a class="btn btn-primary btn-lg magnetic glow-pulse" href="/" target="_blank" rel="noopener">
               Перейти в приложение
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
@@ -107,12 +106,12 @@
           </div>
           <div class="hero-metrics anim-fade-up" style="--d:4">
             <div class="metric">
-              <strong data-count="57">0</strong>
+              <strong data-count="116">0</strong>
               <span>тем в программе</span>
             </div>
             <div class="metric">
-              <strong data-count="500">0</strong>
-              <span>+ задач</span>
+              <strong data-count="1649">0</strong>
+              <span>задач</span>
             </div>
             <div class="metric">
               <strong data-count="11">0</strong>
@@ -190,8 +189,8 @@
     <section class="marquee-section" aria-hidden="true">
       <div class="marquee">
         <div class="marquee-track">
-          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>5–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
-          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>5–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
+          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>1–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
+          <span>Теория</span><span>·</span><span>Задачи</span><span>·</span><span>Практика</span><span>·</span><span>Достижения</span><span>·</span><span>Прогресс</span><span>·</span><span>1–11 класс</span><span>·</span><span>Браузер</span><span>·</span>
         </div>
       </div>
     </section>
@@ -201,18 +200,18 @@
       <div class="container stats-grid reveal">
         <div class="stat-item">
           <span class="stat-icon">📚</span>
-          <strong data-count="57">0</strong>
-          <span>тем с теорией</span>
+          <strong data-count="116">0</strong>
+          <span>тем в программе</span>
         </div>
         <div class="stat-item">
           <span class="stat-icon">✏️</span>
-          <strong data-count="500">0</strong>
-          <span>+ интерактивных задач</span>
+          <strong data-count="1649">0</strong>
+          <span>интерактивных задач</span>
         </div>
         <div class="stat-item">
           <span class="stat-icon">🏆</span>
-          <strong data-count="24">0</strong>
-          <span>достижения</span>
+          <strong data-count="17">0</strong>
+          <span>достижений</span>
         </div>
         <div class="stat-item">
           <span class="stat-icon">🌐</span>
@@ -258,8 +257,8 @@
           </article>
           <article class="feature-card reveal stagger" style="--s:4">
             <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <h3>Профиль и синхронизация</h3>
-            <p>Аватар, класс, статистика — прогресс сохраняется в аккаунте на всех устройствах.</p>
+            <h3>Профиль и резервная копия</h3>
+            <p>Аватар, класс, статистика и резервная копия — сохрани прогресс и перенеси его на другое устройство.</p>
           </article>
           <article class="feature-card feature-card-lg reveal stagger" style="--s:5">
             <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
@@ -391,7 +390,7 @@
           <div class="why-card reveal stagger" style="--s:3">
             <span class="why-num">04</span>
             <h3>Школьная программа</h3>
-            <p>Темы от 5 до 11 класса — от дробей до производной. Всё по логике учебника.</p>
+            <p>Темы от 1 до 11 класса — от дробей до производной. Всё по логике учебника.</p>
           </div>
         </div>
       </div>
@@ -402,51 +401,56 @@
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">Программа</p>
-          <h2>От <span class="text-accent">5</span> до <span class="text-accent">11</span> класса</h2>
+          <h2>От <span class="text-accent">1</span> до <span class="text-accent">11</span> класса</h2>
           <p class="section-lead">Темы подобраны по школьной линейке — от натуральных чисел до производной.</p>
         </div>
         <div class="grades-grid reveal">
+<div class="grade-card" data-grade="1"><span class="grade-num">1</span><h4>Первые вычисления</h4><p>Счёт, сложение, вычитание</p><span class="grade-topics">10 тем</span></div>
+<div class="grade-card" data-grade="2"><span class="grade-num">2</span><h4>Умножение и деление</h4><p>Числа, величины, задачи</p><span class="grade-topics">11 тем</span></div>
+<div class="grade-card" data-grade="3"><span class="grade-num">3</span><h4>Закрепление навыков</h4><p>Вычисления и текстовые задачи</p><span class="grade-topics">12 тем</span></div>
+<div class="grade-card" data-grade="4"><span class="grade-num">4</span><h4>Основа математики</h4><p>Числа, дроби, геометрия</p><span class="grade-topics">9 тем</span></div>
+
           <div class="grade-card" data-grade="5">
             <span class="grade-num">5</span>
             <h4>Натуральные числа</h4>
             <p>Дроби, десятичные, проценты</p>
-            <span class="grade-topics">8 тем</span>
+            <span class="grade-topics">11 тем</span>
           </div>
           <div class="grade-card" data-grade="6">
             <span class="grade-num">6</span>
             <h4>Пропорции</h4>
             <p>Координаты, отрицательные числа</p>
-            <span class="grade-topics">7 тем</span>
+            <span class="grade-topics">10 тем</span>
           </div>
           <div class="grade-card" data-grade="7">
             <span class="grade-num">7</span>
             <h4>Алгебра</h4>
             <p>Линейные функции, уравнения</p>
-            <span class="grade-topics">9 тем</span>
+            <span class="grade-topics">10 тем</span>
           </div>
           <div class="grade-card" data-grade="8">
             <span class="grade-num">8</span>
             <h4>Квадратики</h4>
             <p>Квадратные уравнения, неравенства</p>
-            <span class="grade-topics">8 тем</span>
+            <span class="grade-topics">10 тем</span>
           </div>
           <div class="grade-card" data-grade="9">
             <span class="grade-num">9</span>
             <h4>Функции</h4>
             <p>Прогрессии, системы, графики</p>
-            <span class="grade-topics">8 тем</span>
+            <span class="grade-topics">11 тем</span>
           </div>
           <div class="grade-card" data-grade="10">
             <span class="grade-num">10</span>
             <h4>Тригонометрия</h4>
             <p>Логарифмы, степени</p>
-            <span class="grade-topics">9 тем</span>
+            <span class="grade-topics">12 тем</span>
           </div>
           <div class="grade-card featured" data-grade="11">
             <span class="grade-num">11</span>
             <h4>Производная</h4>
             <p>Интеграл, исследование функций</p>
-            <span class="grade-topics">8 тем</span>
+            <span class="grade-topics">12 тем</span>
           </div>
         </div>
       </div>
@@ -492,8 +496,8 @@
               <svg class="logo-stairs-svg logo-stairs-sm" viewBox="0 0 32 32" width="28" height="28" fill="none"><path class="logo-stairs-path" d="M1.92 30.08H30.08V1.92H20.69V11.31H11.31V20.69H1.92V30.08Z"/></svg>
             </div>
             <span class="step-num">01</span>
-            <h3>Регистрация</h3>
-            <p>Создай аккаунт за минуту — прогресс сохранится в облаке.</p>
+            <h3>Начни заниматься</h3>
+            <p>Выбери имя и класс. Прогресс сохраняется в этом браузере.</p>
           </li>
           <li class="step stagger" style="--s:1">
             <span class="step-num">02</span>
@@ -511,33 +515,6 @@
             <p>Задачи, практика, награды — виден реальный прогресс.</p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- Reviews -->
-    <section class="section" id="reviews">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Отзывы</p>
-          <h2>Что говорят <span class="text-accent">пользователи</span></h2>
-        </div>
-        <div class="reviews-grid">
-          <blockquote class="review-card reveal stagger" style="--s:0">
-            <div class="review-stars">★★★★★</div>
-            <p>«Наконец понял квадратные уравнения — теория короткая, а задачи сразу с проверкой. Серия мотивирует не бросать.»</p>
-            <footer><strong>Артём</strong><span>8 класс, Москва</span></footer>
-          </blockquote>
-          <blockquote class="review-card reveal stagger" style="--s:1">
-            <div class="review-stars">★★★★★</div>
-            <p>«Дочь занимается по 15 минут в день перед сном. Не нужно ничего ставить — открыли в браузере и всё.»</p>
-            <footer><strong>Елена</strong><span>мама ученицы, 6 класс</span></footer>
-          </blockquote>
-          <blockquote class="review-card reveal stagger" style="--s:2">
-            <div class="review-stars">★★★★☆</div>
-            <p>«Рекомендую как дополнение к урокам. Ученики сами тренируются, а я вижу, что тема дошла — по прогрессу.»</p>
-            <footer><strong>Дмитрий</strong><span>учитель математики</span></footer>
-          </blockquote>
-        </div>
       </div>
     </section>
 
@@ -579,7 +556,7 @@
           </details>
           <details class="faq-item">
             <summary>Для какого возраста подходит?</summary>
-            <p>Ориентир — ученики 5–11 класса. Сложность задач и теории соответствует школьной программе.</p>
+            <p>Ориентир — ученики 1–11 класса. Сложность задач и теории соответствует школьной программе.</p>
           </details>
           <details class="faq-item">
             <summary>Есть ли английский язык?</summary>
@@ -587,7 +564,7 @@
           </details>
           <details class="faq-item">
             <summary>Нужна регистрация?</summary>
-            <p>Для сохранения прогресса между устройствами — да. Создай аккаунт за минуту и продолжай с любого места.</p>
+            <p>Нет. Прогресс хранится в браузере. В профиле можно скачать резервную копию и восстановить её на другом устройстве.</p>
           </details>
           <details class="faq-item">
             <summary>Можно ли заниматься с телефона?</summary>
@@ -609,7 +586,7 @@
           <div class="cta-glow" aria-hidden="true"></div>
           <h2>Поднимись на новую ступень</h2>
           <p>Открой Algeon в браузере — первые задачи займут пару минут.</p>
-          <a class="btn btn-white btn-lg magnetic" href="https://algeon.tech" target="_blank" rel="noopener">
+          <a class="btn btn-white btn-lg magnetic" href="/" target="_blank" rel="noopener">
             Открыть algeon.tech
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
           </a>
@@ -635,7 +612,7 @@
           <a href="#showcase">Интерфейс</a>
           <a href="#grades">Классы</a>
           <a href="#faq">FAQ</a>
-          <a href="https://algeon.tech" target="_blank" rel="noopener">Приложение</a>
+          <a href="/" target="_blank" rel="noopener">Приложение</a>
         </nav>
       </div>
       <div class="footer-bottom">

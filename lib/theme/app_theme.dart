@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'accent_palette.dart';
 
 /// Цвета — ТЁМНАЯ тема
 class AppColors {
@@ -55,7 +56,7 @@ class AppColors {
 class AppColorsLight {
   AppColorsLight._();
 
-  static const Color accent = Color(0xFF2563EB);      // Более насыщенный синий
+  static const Color accent = Color(0xFF2563EB); // Более насыщенный синий
   static const Color accentLight = Color(0xFFDBEAFE);
 
   static const Color success = Color(0xFF16A34A);
@@ -74,9 +75,9 @@ class AppColorsLight {
   static const Color pink = Color(0xFFDB2777);
 
   // Фоны — тёплый мягкий фон вместо белого
-  static const Color background = Color(0xFFF0F4FF);  // нежно-голубой
-  static const Color surface = Color(0xFFFFFFFF);     // белые карточки
-  static const Color card = Color(0xFFF5F7FF);        // чуть голубоватый
+  static const Color background = Color(0xFFF0F4FF); // нежно-голубой
+  static const Color surface = Color(0xFFFFFFFF); // белые карточки
+  static const Color card = Color(0xFFF5F7FF); // чуть голубоватый
 
   // Текст — высокий контраст
   static const Color textPrimary = Color(0xFF0F172A);
@@ -96,78 +97,80 @@ class AppColorsLight {
 class AppThemeColors {
   static Color background(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.background
-          : AppColorsLight.background;
+      ? AppColors.background
+      : AppColorsLight.background;
 
   static Color surface(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.surface
-          : AppColorsLight.surface;
+      ? AppColors.surface
+      : AppColorsLight.surface;
 
   static Color card(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.card
-          : AppColorsLight.card;
+      ? AppColors.card
+      : AppColorsLight.card;
 
   static Color textPrimary(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.textPrimary
-          : AppColorsLight.textPrimary;
+      ? AppColors.textPrimary
+      : AppColorsLight.textPrimary;
 
   static Color textSecondary(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.textSecondary
-          : AppColorsLight.textSecondary;
+      ? AppColors.textSecondary
+      : AppColorsLight.textSecondary;
 
   static Color textHint(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.textHint
-          : AppColorsLight.textHint;
+      ? AppColors.textHint
+      : AppColorsLight.textHint;
 
   static Color border(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.border
-          : AppColorsLight.border;
+      ? AppColors.border
+      : AppColorsLight.border;
 
   static Color borderLight(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.borderLight
-          : AppColorsLight.borderLight;
+      ? AppColors.borderLight
+      : AppColorsLight.borderLight;
 
-  static Color accentLight(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-          ? AppColors.accentLight
-          : AppColorsLight.accentLight;
+  static Color accentLight(BuildContext context) => Color.alphaBlend(
+    Theme.of(context).colorScheme.primary.withValues(
+      alpha: Theme.of(context).brightness == Brightness.dark ? 0.20 : 0.10,
+    ),
+    surface(context),
+  );
 
   static Color successLight(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.successLight
-          : AppColorsLight.successLight;
+      ? AppColors.successLight
+      : AppColorsLight.successLight;
 
   static Color errorLight(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.errorLight
-          : AppColorsLight.errorLight;
+      ? AppColors.errorLight
+      : AppColorsLight.errorLight;
 
   static Color disabled(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.disabled
-          : AppColorsLight.disabled;
+      ? AppColors.disabled
+      : AppColorsLight.disabled;
 
   static Color disabledText(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? AppColors.disabledText
-          : AppColorsLight.disabledText;
+      ? AppColors.disabledText
+      : AppColorsLight.disabledText;
 
   static Color orangeLight(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF2A1F13)
-          : const Color(0xFFFFF7ED);
+      ? const Color(0xFF2A1F13)
+      : const Color(0xFFFFF7ED);
 
   static Color purpleLight(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF1E1A2E)
-          : const Color(0xFFF5F3FF);
+      ? const Color(0xFF1E1A2E)
+      : const Color(0xFFF5F3FF);
 }
 
 /// Типографика
@@ -249,19 +252,23 @@ class AppShadows {
 
   static List<BoxShadow> card(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return isDark ? [] : [
-      BoxShadow(
-        color: const Color(0xFF2563EB).withValues(alpha: 0.06),
-        blurRadius: 12,
-        offset: const Offset(0, 2),
-        spreadRadius: 0,
-      ),
-      BoxShadow(
-        color: Colors.black.withValues(alpha: 0.04),
-        blurRadius: 4,
-        offset: const Offset(0, 1),
-      ),
-    ];
+    return isDark
+        ? []
+        : [
+            BoxShadow(
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+              spreadRadius: 0,
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 4,
+              offset: const Offset(0, 1),
+            ),
+          ];
   }
 
   static List<BoxShadow> soft(BuildContext context) {
@@ -270,19 +277,23 @@ class AppShadows {
 }
 
 /// Тема Material — ТЁМНАЯ
-ThemeData buildDarkTheme() {
+ThemeData buildDarkTheme({Color accentColor = AccentPalette.defaultColor}) {
+  final primary = AccentPalette.primary(accentColor, Brightness.dark);
+  final scheme =
+      ColorScheme.fromSeed(
+        seedColor: accentColor,
+        brightness: Brightness.dark,
+      ).copyWith(
+        primary: primary,
+        onPrimary: Colors.white,
+        surface: AppColors.surface,
+        onSurface: AppColors.textPrimary,
+      );
   return ThemeData(
     useMaterial3: true,
     fontFamily: AppTypography.fontFamily,
     brightness: Brightness.dark,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.accent,
-      onPrimary: Colors.white,
-      surface: AppColors.surface,
-      onSurface: AppColors.textPrimary,
-      error: AppColors.error,
-      onError: Colors.white,
-    ),
+    colorScheme: scheme,
     scaffoldBackgroundColor: AppColors.background,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
@@ -290,9 +301,21 @@ ThemeData buildDarkTheme() {
       elevation: 0,
       centerTitle: true,
     ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        minimumSize: const Size(0, 46),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+        textStyle: AppTypography.button,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accent,
+        backgroundColor: primary,
         foregroundColor: Colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -313,11 +336,11 @@ ThemeData buildDarkTheme() {
       ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: AppColors.accent,
-      ),
+      style: TextButton.styleFrom(foregroundColor: primary),
     ),
     inputDecorationTheme: InputDecorationTheme(
+      helperMaxLines: 3,
+      errorMaxLines: 3,
       filled: true,
       fillColor: AppColors.surface,
       border: OutlineInputBorder(
@@ -330,7 +353,7 @@ ThemeData buildDarkTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.md),
-        borderSide: const BorderSide(color: AppColors.accent, width: 2),
+        borderSide: BorderSide(color: primary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       hintStyle: AppTypography.body.copyWith(color: AppColors.textHint),
@@ -342,17 +365,14 @@ ThemeData buildDarkTheme() {
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
     ),
-    dividerTheme: const DividerThemeData(
-      color: AppColors.border,
-      thickness: 1,
-    ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: AppColors.accent,
+    dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: primary,
       linearTrackColor: AppColors.borderLight,
     ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.surface,
-      selectedItemColor: AppColors.accent,
+      selectedItemColor: primary,
       unselectedItemColor: AppColors.textHint,
       type: BottomNavigationBarType.fixed,
       elevation: 0,
@@ -361,19 +381,23 @@ ThemeData buildDarkTheme() {
 }
 
 /// Тема Material — СВЕТЛАЯ
-ThemeData buildLightTheme() {
+ThemeData buildLightTheme({Color accentColor = AccentPalette.defaultColor}) {
+  final primary = AccentPalette.primary(accentColor, Brightness.light);
+  final scheme =
+      ColorScheme.fromSeed(
+        seedColor: accentColor,
+        brightness: Brightness.light,
+      ).copyWith(
+        primary: primary,
+        onPrimary: Colors.white,
+        surface: AppColorsLight.surface,
+        onSurface: AppColorsLight.textPrimary,
+      );
   return ThemeData(
     useMaterial3: true,
     fontFamily: AppTypography.fontFamily,
     brightness: Brightness.light,
-    colorScheme: const ColorScheme.light(
-      primary: AppColorsLight.accent,
-      onPrimary: Colors.white,
-      surface: AppColorsLight.surface,
-      onSurface: AppColorsLight.textPrimary,
-      error: AppColorsLight.error,
-      onError: Colors.white,
-    ),
+    colorScheme: scheme,
     scaffoldBackgroundColor: AppColorsLight.background,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColorsLight.background,
@@ -381,9 +405,21 @@ ThemeData buildLightTheme() {
       elevation: 0,
       centerTitle: true,
     ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        minimumSize: const Size(0, 46),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+        textStyle: AppTypography.button,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColorsLight.accent,
+        backgroundColor: primary,
         foregroundColor: Colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -404,11 +440,11 @@ ThemeData buildLightTheme() {
       ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: AppColorsLight.accent,
-      ),
+      style: TextButton.styleFrom(foregroundColor: primary),
     ),
     inputDecorationTheme: InputDecorationTheme(
+      helperMaxLines: 3,
+      errorMaxLines: 3,
       filled: true,
       fillColor: AppColorsLight.surface,
       border: OutlineInputBorder(
@@ -421,7 +457,7 @@ ThemeData buildLightTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.md),
-        borderSide: const BorderSide(color: AppColorsLight.accent, width: 2),
+        borderSide: BorderSide(color: primary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       hintStyle: AppTypography.body.copyWith(color: AppColorsLight.textHint),
@@ -437,13 +473,13 @@ ThemeData buildLightTheme() {
       color: AppColorsLight.border,
       thickness: 1,
     ),
-    progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: AppColorsLight.accent,
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: primary,
       linearTrackColor: AppColorsLight.borderLight,
     ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColorsLight.surface,
-      selectedItemColor: AppColorsLight.accent,
+      selectedItemColor: primary,
       unselectedItemColor: AppColorsLight.textHint,
       type: BottomNavigationBarType.fixed,
       elevation: 0,

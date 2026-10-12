@@ -4,6 +4,11 @@
 /// пошаговые разборы и таблицы.
 library;
 
+import '../widgets/bookmark_button.dart';
+
+import '../widgets/math_text.dart';
+import '../widgets/topic_visual.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +25,11 @@ class TopicIntroScreen extends StatelessWidget {
     super.key,
     required this.topicName,
     required this.tasks,
+    this.restart = false,
   });
   final String topicName;
   final List<Task> tasks;
+  final bool restart;
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +54,37 @@ class TopicIntroScreen extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 600),
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Column(
                       children: [
                         // Header
                         _buildHeader(context, icon, theory, t, displayTopic),
                         const SizedBox(height: 24),
 
+                        if (TopicVisual.kind(topicName) != null) ...[
+                          TopicVisual(topic: topicName),
+                          const SizedBox(height: 16),
+                        ],
                         // Theory sections
                         if (theory != null)
                           ...theory.sections
-                              .where((section) => section.type != TheorySectionType.visual)
-                              .map((section) => Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
-                                child: _buildSection(context, section, t),
-                              ))
+                              .where(
+                                (section) =>
+                                    section.type != TheorySectionType.visual,
+                              )
+                              .map(
+                                (section) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: _buildSection(context, section, t),
+                                ),
+                              )
                         else
-                          _buildFallbackContent(context, isEnglish, displayTopic),
+                          _buildFallbackContent(
+                            context,
+                            isEnglish,
+                            displayTopic,
+                          ),
                         const SizedBox(height: 8),
                         _buildBottomButton(context, t),
                       ],
@@ -110,19 +131,25 @@ class TopicIntroScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.menu_book_rounded, size: 16, color: AppColors.accent),
+                Icon(
+                  Icons.menu_book_rounded,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 const SizedBox(width: 6),
                 Text(
                   t('topic.theory'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.accent,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ],
             ),
           ),
+          const Spacer(),
+          BookmarkButton(id: 'topic:${tasks.first.grade}:$topicName'),
         ],
       ),
     );
@@ -144,7 +171,11 @@ class TopicIntroScreen extends StatelessWidget {
             color: AppThemeColors.accentLight(context),
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Icon(icon, color: AppColors.accent, size: 36),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.primary,
+            size: 36,
+          ),
         ),
         const SizedBox(height: 16),
         Text(
@@ -153,16 +184,6 @@ class TopicIntroScreen extends StatelessWidget {
             fontSize: 24,
             fontWeight: FontWeight.w800,
             color: AppThemeColors.textPrimary(context),
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          theory?.subtitle ??
-              t('topic.tasksCount').replaceAll('{count}', '${tasks.length}'),
-          style: TextStyle(
-            fontSize: 14,
-            color: AppThemeColors.textHint(context),
           ),
           textAlign: TextAlign.center,
         ),
@@ -229,7 +250,7 @@ class TopicIntroScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
+          MathText(
             section.content,
             style: TextStyle(
               fontSize: 15,
@@ -254,21 +275,27 @@ class TopicIntroScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppThemeColors.accentLight(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.functions_rounded, color: AppColors.accent, size: 22),
+              Icon(
+                Icons.functions_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 22,
+              ),
               const SizedBox(width: 10),
               Text(
                 section.title ?? t('topic.formula'),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.accent,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
@@ -281,7 +308,7 @@ class TopicIntroScreen extends StatelessWidget {
               color: AppThemeColors.background(context),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
+            child: MathText(
               section.content,
               style: TextStyle(
                 fontSize: 16,
@@ -323,7 +350,11 @@ class TopicIntroScreen extends StatelessWidget {
                   color: AppColors.success.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.edit_rounded, color: AppColors.success, size: 16),
+                child: const Icon(
+                  Icons.edit_rounded,
+                  color: AppColors.success,
+                  size: 16,
+                ),
               ),
               const SizedBox(width: 10),
               Text(
@@ -338,7 +369,7 @@ class TopicIntroScreen extends StatelessWidget {
           ),
           if (section.content.isNotEmpty) ...[
             const SizedBox(height: 12),
-            Text(
+            MathText(
               section.content,
               style: TextStyle(
                 fontSize: 15,
@@ -349,49 +380,50 @@ class TopicIntroScreen extends StatelessWidget {
           ],
           if (section.items != null) ...[
             const SizedBox(height: 12),
-            ...section.items!.asMap().entries.map((e) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${e.key + 1}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.success,
-                            ),
-                          ),
-                        ),
+            ...section.items!.asMap().entries.map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: AppColors.success.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
+                      child: Center(
                         child: Text(
-                          e.value,
-                          style: TextStyle(
-                            fontSize: 14,
-                            height: 1.5,
-                            color: AppThemeColors.textPrimary(context),
+                          '${e.key + 1}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.success,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                )),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: MathText(
+                        e.value,
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.5,
+                          color: AppThemeColors.textPrimary(context),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ],
       ),
     );
   }
-
 
   // --- TIP ---
   Widget _buildTipCard(
@@ -425,7 +457,7 @@ class TopicIntroScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
+          MathText(
             section.content,
             style: TextStyle(
               fontSize: 15,
@@ -457,8 +489,11 @@ class TopicIntroScreen extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.table_chart_rounded,
-                  color: AppColors.purple, size: 20),
+              const Icon(
+                Icons.table_chart_rounded,
+                color: AppColors.purple,
+                size: 20,
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
@@ -474,7 +509,7 @@ class TopicIntroScreen extends StatelessWidget {
           ),
           if (section.content.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(
+            MathText(
               section.content,
               style: TextStyle(
                 fontSize: 14,
@@ -484,27 +519,31 @@ class TopicIntroScreen extends StatelessWidget {
           ],
           const SizedBox(height: 12),
           if (section.items != null)
-            ...section.items!.asMap().entries.map((e) => Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 6),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: e.key.isEven
-                        ? AppThemeColors.borderLight(context)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
+            ...section.items!.asMap().entries.map(
+              (e) => Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: e.key.isEven
+                      ? AppThemeColors.borderLight(context)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: MathText(
+                  e.value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    height: 1.4,
+                    color: AppThemeColors.textPrimary(context),
                   ),
-                  child: Text(
-                    e.value,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      height: 1.4,
-                      color: AppThemeColors.textPrimary(context),
-                    ),
-                  ),
-                )),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -522,23 +561,28 @@ class TopicIntroScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.format_list_numbered_rounded,
-                  color: AppColors.accent, size: 22),
+              Icon(
+                Icons.format_list_numbered_rounded,
+                color: Theme.of(context).colorScheme.primary,
+                size: 22,
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   section.title ?? t('topic.algorithm'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.accent,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
@@ -546,7 +590,7 @@ class TopicIntroScreen extends StatelessWidget {
           ),
           if (section.content.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(
+            MathText(
               section.content,
               style: TextStyle(
                 fontSize: 14,
@@ -556,46 +600,48 @@ class TopicIntroScreen extends StatelessWidget {
           ],
           if (section.items != null) ...[
             const SizedBox(height: 14),
-            ...section.items!.asMap().entries.map((e) => Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          color: AppColors.accent,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${e.key + 1}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+            ...section.items!.asMap().entries.map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${e.key + 1}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Text(
-                            e.value,
-                            style: TextStyle(
-                              fontSize: 15,
-                              height: 1.5,
-                              color: AppThemeColors.textPrimary(context),
-                            ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: MathText(
+                          e.value,
+                          style: TextStyle(
+                            fontSize: 15,
+                            height: 1.5,
+                            color: AppThemeColors.textPrimary(context),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ],
       ),
@@ -657,17 +703,17 @@ class TopicIntroScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Material(
-        color: AppColors.accent,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(AppRadius.md),
         child: InkWell(
           onTap: () {
-              SoundService.hapticMedium();
-              SoundService.playStart();
-              context.pushReplacement(
-                '/learn/topic',
-                extra: {'name': topicName, 'tasks': tasks},
-              );
-            },
+            SoundService.hapticMedium();
+            SoundService.playStart();
+            context.pushReplacement(
+              '/learn/topic',
+              extra: {'name': topicName, 'tasks': tasks, 'restart': restart},
+            );
+          },
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: SizedBox(
             width: double.infinity,
@@ -699,5 +745,4 @@ class TopicIntroScreen extends StatelessWidget {
       ),
     );
   }
-
 }

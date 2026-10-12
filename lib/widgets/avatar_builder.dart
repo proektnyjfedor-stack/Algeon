@@ -10,7 +10,6 @@ import '../services/language_service.dart';
 import 'avatars.dart';
 
 class AvatarBuilderSheet extends StatefulWidget {
-
   const AvatarBuilderSheet({
     super.key,
     required this.initialAvatar,
@@ -62,7 +61,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
           // Handle
           const SizedBox(height: 12),
           Container(
-            width: 40, height: 4,
+            width: 40,
+            height: 4,
             decoration: BoxDecoration(
               color: AppThemeColors.border(context),
               borderRadius: BorderRadius.circular(2),
@@ -71,14 +71,22 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
           const SizedBox(height: 16),
 
           // Title
-          Text(t('profile.openAvatarBuilder'), style: TextStyle(
-            fontSize: isLandscape ? 18 : 20, fontWeight: FontWeight.w700,
-            color: AppThemeColors.textPrimary(context),
-          )),
+          Text(
+            t('profile.openAvatarBuilder'),
+            style: TextStyle(
+              fontSize: isLandscape ? 18 : 20,
+              fontWeight: FontWeight.w700,
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
           SizedBox(height: isLandscape ? 12 : 16),
 
           // Preview
-          AvatarWidget(avatarData: _avatar, size: isLandscape ? 96 : 120, showBorder: true),
+          AvatarWidget(
+            avatarData: _avatar,
+            size: isLandscape ? 96 : 120,
+            showBorder: true,
+          ),
           SizedBox(height: isLandscape ? 10 : 16),
 
           // Tabs
@@ -98,25 +106,30 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         decoration: BoxDecoration(
                           color: _selectedTab == i
-                              ? AppColors.accent
+                              ? Theme.of(context).colorScheme.primary
                               : AppThemeColors.borderLight(context),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Row(
                           children: [
-                            Icon(_tabs[i].$2,
-                                size: 16,
-                                color: _selectedTab == i
-                                    ? Colors.white
-                                    : AppThemeColors.textSecondary(context)),
-                            const SizedBox(width: 6),
-                            Text(t(_tabs[i].$1), style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                            Icon(
+                              _tabs[i].$2,
+                              size: 16,
                               color: _selectedTab == i
                                   ? Colors.white
                                   : AppThemeColors.textSecondary(context),
-                            )),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              t(_tabs[i].$1),
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: _selectedTab == i
+                                    ? Colors.white
+                                    : AppThemeColors.textSecondary(context),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -159,21 +172,51 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
 
   Widget _buildOptions() {
     switch (_selectedTab) {
-      case 0: return _buildColorGrid(avatarBgColors, _avatar.bgColor, (c) => setState(() => _avatar = _avatar.copyWith(bgColor: c)));
-      case 1: return _buildColorGrid(avatarSkinColors, _avatar.skinColor, (c) => setState(() => _avatar = _avatar.copyWith(skinColor: c)));
-      case 2: return _buildHairStyleGrid();
-      case 3: return _buildColorGrid(avatarHairColors, _avatar.hairColor, (c) => setState(() => _avatar = _avatar.copyWith(hairColor: c)));
-      case 4: return _buildColorGrid(avatarShirtColors, _avatar.shirtColor, (c) => setState(() => _avatar = _avatar.copyWith(shirtColor: c)));
-      case 5: return _buildAccessoryGrid();
-      case 6: return _buildExpressionGrid();
-      default: return const SizedBox();
+      case 0:
+        return _buildColorGrid(
+          avatarBgColors,
+          _avatar.bgColor,
+          (c) => setState(() => _avatar = _avatar.copyWith(bgColor: c)),
+        );
+      case 1:
+        return _buildColorGrid(
+          avatarSkinColors,
+          _avatar.skinColor,
+          (c) => setState(() => _avatar = _avatar.copyWith(skinColor: c)),
+        );
+      case 2:
+        return _buildHairStyleGrid();
+      case 3:
+        return _buildColorGrid(
+          avatarHairColors,
+          _avatar.hairColor,
+          (c) => setState(() => _avatar = _avatar.copyWith(hairColor: c)),
+        );
+      case 4:
+        return _buildColorGrid(
+          avatarShirtColors,
+          _avatar.shirtColor,
+          (c) => setState(() => _avatar = _avatar.copyWith(shirtColor: c)),
+        );
+      case 5:
+        return _buildAccessoryGrid();
+      case 6:
+        return _buildExpressionGrid();
+      default:
+        return const SizedBox();
     }
   }
 
-  Widget _buildColorGrid(List<Color> colors, Color selected, ValueChanged<Color> onSelect) {
+  Widget _buildColorGrid(
+    List<Color> colors,
+    Color selected,
+    ValueChanged<Color> onSelect,
+  ) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, mainAxisSpacing: 12, crossAxisSpacing: 12,
+        crossAxisCount: 4,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
       ),
       itemCount: colors.length,
       itemBuilder: (_, i) {
@@ -187,7 +230,9 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               color: colors[i],
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? AppColors.accent : Colors.transparent,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
                 width: 3,
               ),
             ),
@@ -203,7 +248,10 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   Widget _buildHairStyleGrid() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.9,
+        crossAxisCount: 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.9,
       ),
       itemCount: avatarHairStyles.length,
       itemBuilder: (_, i) {
@@ -211,7 +259,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
         final isSelected = _avatar.hairStyle == style;
         final preview = _avatar.copyWith(hairStyle: style, id: 'preview');
         return GestureDetector(
-          onTap: () => setState(() => _avatar = _avatar.copyWith(hairStyle: style)),
+          onTap: () =>
+              setState(() => _avatar = _avatar.copyWith(hairStyle: style)),
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -219,7 +268,9 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               color: AppThemeColors.borderLight(context),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? AppColors.accent : Colors.transparent,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
                 width: 3,
               ),
             ),
@@ -228,10 +279,16 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               children: [
                 AvatarWidget(avatarData: preview, size: 56),
                 const SizedBox(height: 6),
-                Text(hairStyleNames[style] ?? style, style: TextStyle(
-                  fontSize: 11, fontWeight: FontWeight.w600,
-                  color: isSelected ? AppColors.accent : AppThemeColors.textSecondary(context),
-                )),
+                Text(
+                  hairStyleNames[style] ?? style,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : AppThemeColors.textSecondary(context),
+                  ),
+                ),
               ],
             ),
           ),
@@ -243,7 +300,10 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   Widget _buildAccessoryGrid() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.9,
+        crossAxisCount: 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.9,
       ),
       itemCount: avatarAccessories.length,
       itemBuilder: (_, i) {
@@ -251,7 +311,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
         final isSelected = _avatar.accessory == acc;
         final preview = _avatar.copyWith(accessory: acc, id: 'preview');
         return GestureDetector(
-          onTap: () => setState(() => _avatar = _avatar.copyWith(accessory: acc)),
+          onTap: () =>
+              setState(() => _avatar = _avatar.copyWith(accessory: acc)),
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -259,7 +320,9 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               color: AppThemeColors.borderLight(context),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? AppColors.accent : Colors.transparent,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
                 width: 3,
               ),
             ),
@@ -268,10 +331,16 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               children: [
                 AvatarWidget(avatarData: preview, size: 56),
                 const SizedBox(height: 6),
-                Text(accessoryNames[acc] ?? acc, style: TextStyle(
-                  fontSize: 11, fontWeight: FontWeight.w600,
-                  color: isSelected ? AppColors.accent : AppThemeColors.textSecondary(context),
-                )),
+                Text(
+                  accessoryNames[acc] ?? acc,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : AppThemeColors.textSecondary(context),
+                  ),
+                ),
               ],
             ),
           ),
@@ -283,7 +352,10 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
   Widget _buildExpressionGrid() {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, mainAxisSpacing: 12, crossAxisSpacing: 12, childAspectRatio: 0.9,
+        crossAxisCount: 3,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 0.9,
       ),
       itemCount: avatarExpressions.length,
       itemBuilder: (_, i) {
@@ -291,7 +363,8 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
         final isSelected = _avatar.expression == expr;
         final preview = _avatar.copyWith(expression: expr, id: 'preview');
         return GestureDetector(
-          onTap: () => setState(() => _avatar = _avatar.copyWith(expression: expr)),
+          onTap: () =>
+              setState(() => _avatar = _avatar.copyWith(expression: expr)),
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -299,7 +372,9 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               color: AppThemeColors.borderLight(context),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isSelected ? AppColors.accent : Colors.transparent,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
                 width: 3,
               ),
             ),
@@ -308,10 +383,16 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
               children: [
                 AvatarWidget(avatarData: preview, size: 56),
                 const SizedBox(height: 6),
-                Text(expressionNames[expr] ?? expr, style: TextStyle(
-                  fontSize: 11, fontWeight: FontWeight.w600,
-                  color: isSelected ? AppColors.accent : AppThemeColors.textSecondary(context),
-                )),
+                Text(
+                  expressionNames[expr] ?? expr,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : AppThemeColors.textSecondary(context),
+                  ),
+                ),
               ],
             ),
           ),
@@ -319,5 +400,4 @@ class _AvatarBuilderSheetState extends State<AvatarBuilderSheet> {
       },
     );
   }
-
 }

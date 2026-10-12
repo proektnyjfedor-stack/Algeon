@@ -4,6 +4,8 @@
 /// Быстрый тест + статистика
 library;
 
+import 'study_hub_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +52,7 @@ class _PracticeTabState extends State<PracticeTab> {
                           borderRadius: BorderRadius.circular(2),
                           color: Theme.of(context).brightness == Brightness.dark
                               ? const Color(0xFF60A5FA)
-                              : AppColors.accent,
+                              : Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -64,16 +66,9 @@ class _PracticeTabState extends State<PracticeTab> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    t('practice.subtitle'),
-                    style: AppTypography.bodySmall.copyWith(
-                      color: AppThemeColors.textSecondary(context),
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-
+                  const SizedBox(height: 20),
+                  const StudyLinks(),
+                  const SizedBox(height: 16),
                   // Быстрый тест
                   _buildQuickTestCard(),
 
@@ -102,12 +97,14 @@ class _PracticeTabState extends State<PracticeTab> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.accent,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(AppRadius.xl),
         border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.accent.withValues(alpha: 0.35),
+            color: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.35),
             blurRadius: 18,
             offset: const Offset(0, 7),
           ),
@@ -124,11 +121,7 @@ class _PracticeTabState extends State<PracticeTab> {
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
-                  Icons.bolt,
-                  color: Colors.white,
-                  size: 24,
-                ),
+                child: const Icon(Icons.bolt, color: Colors.white, size: 24),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -192,8 +185,9 @@ class _PracticeTabState extends State<PracticeTab> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color:
-                                isSelected ? AppColors.accent : Colors.white,
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.white,
                           ),
                         ),
                       ),
@@ -218,7 +212,7 @@ class _PracticeTabState extends State<PracticeTab> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: AppColors.accent,
+                foregroundColor: Theme.of(context).colorScheme.primary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
@@ -226,7 +220,10 @@ class _PracticeTabState extends State<PracticeTab> {
               ),
               child: Text(
                 t('practice.start'),
-                style: const TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.3),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3,
+                ),
               ),
             ),
           ),
@@ -257,10 +254,12 @@ class _PracticeTabState extends State<PracticeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(t('practice.continue'),
-            style: AppTypography.h3.copyWith(
-              color: AppThemeColors.textPrimary(context),
-            )),
+        Text(
+          t('practice.continue'),
+          style: AppTypography.h3.copyWith(
+            color: AppThemeColors.textPrimary(context),
+          ),
+        ),
         const SizedBox(height: 12),
         ...incompleteTopics.take(3).map((topic) {
           final tasks = getTasksByGradeAndTopic(grade, topic.name);
@@ -288,7 +287,9 @@ class _PracticeTabState extends State<PracticeTab> {
                   color: AppThemeColors.surface(context),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                      color: AppThemeColors.border(context), width: 2),
+                    color: AppThemeColors.border(context),
+                    width: 2,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -300,8 +301,11 @@ class _PracticeTabState extends State<PracticeTab> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
-                        child: Icon(topic.icon,
-                            color: AppColors.accent, size: 22),
+                        child: Icon(
+                          topic.icon,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 22,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -309,20 +313,24 @@ class _PracticeTabState extends State<PracticeTab> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(displayTopic,
-                              textAlign: TextAlign.left,
-                              style: AppTypography.bodyMedium.copyWith(
-                                color: AppThemeColors.textPrimary(context),
-                              )),
+                          Text(
+                            displayTopic,
+                            textAlign: TextAlign.left,
+                            style: AppTypography.bodyMedium.copyWith(
+                              color: AppThemeColors.textPrimary(context),
+                            ),
+                          ),
                           const SizedBox(height: 6),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(4),
                             child: LinearProgressIndicator(
                               value: progress,
-                              backgroundColor:
-                                  AppThemeColors.borderLight(context),
-                              valueColor: const AlwaysStoppedAnimation(
-                                  AppColors.accent),
+                              backgroundColor: AppThemeColors.borderLight(
+                                context,
+                              ),
+                              valueColor: AlwaysStoppedAnimation(
+                                Theme.of(context).colorScheme.primary,
+                              ),
                               minHeight: 6,
                             ),
                           ),
@@ -332,10 +340,10 @@ class _PracticeTabState extends State<PracticeTab> {
                     const SizedBox(width: 12),
                     Text(
                       '$solved/${topic.taskCount}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.accent,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
@@ -360,17 +368,18 @@ class _PracticeTabState extends State<PracticeTab> {
       decoration: BoxDecoration(
         color: AppThemeColors.surface(context),
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border:
-            Border.all(color: AppThemeColors.border(context), width: 1.6),
+        border: Border.all(color: AppThemeColors.border(context), width: 1.6),
         boxShadow: AppShadows.soft(context),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(t('practice.stats'),
-              style: AppTypography.h3.copyWith(
-                color: AppThemeColors.textPrimary(context),
-              )),
+          Text(
+            t('practice.stats'),
+            style: AppTypography.h3.copyWith(
+              color: AppThemeColors.textPrimary(context),
+            ),
+          ),
           const SizedBox(height: 16),
           LayoutBuilder(
             builder: (context, constraints) {
@@ -438,7 +447,12 @@ class _PracticeTabState extends State<PracticeTab> {
     );
   }
 
-  Widget _buildStatItem(String label, String value, IconData icon, Color iconColor) {
+  Widget _buildStatItem(
+    String label,
+    String value,
+    IconData icon,
+    Color iconColor,
+  ) {
     return Expanded(
       child: Column(
         children: [
@@ -481,18 +495,15 @@ class _PracticeTabState extends State<PracticeTab> {
           extra: {'name': t('practice.quickTestTopic'), 'tasks': selected},
         )
         .then((_) {
-      if (mounted) setState(() {});
-    });
+          if (mounted) setState(() {});
+        });
   }
 
   void _openTopic(String topicName, List<Task> tasks) {
     context
-        .push(
-          '/learn/topic',
-          extra: {'name': topicName, 'tasks': tasks},
-        )
+        .push('/learn/topic', extra: {'name': topicName, 'tasks': tasks})
         .then((_) {
-      if (mounted) setState(() {});
-    });
+          if (mounted) setState(() {});
+        });
   }
 }

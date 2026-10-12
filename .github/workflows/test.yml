@@ -17,7 +17,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.0'
+        flutter-version: '3.41.7'
         channel: 'stable'
         cache: true
 
@@ -41,7 +41,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.0'
+        flutter-version: '3.41.7'
         channel: 'stable'
         cache: true
 
@@ -49,7 +49,7 @@ jobs:
       run: flutter pub get
 
     - name: Build Web (CanvasKit, same-origin)
-      run: flutter build web --release --no-web-resources-cdn
+      run: bash tool/build_web.sh
 
     - name: Upload Web build
       uses: actions/upload-artifact@v4

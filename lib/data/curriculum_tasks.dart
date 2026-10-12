@@ -447,7 +447,7 @@ final List<Task> curriculumTasks = [
   const Task(id:'cur_g9_qa2',grade:9,topic:'Функция y=ax²',question:'Вершина параболы y = (x-2)²+1 находится в точке (2, ?)',type:TaskType.textInput,answer:'1'),
   const Task(id:'cur_g9_qa3',grade:9,topic:'Функция y=ax²',question:'Парабола y = -x². Ветви направлены',type:TaskType.multipleChoice,options:['вверх','вниз','вправо','влево'],answer:'вниз'),
   const Task(id:'cur_g9_qa4',grade:9,topic:'Функция y=ax²',question:'y = 2x². При x = -3, y = ?',type:TaskType.textInput,answer:'18'),
-  const Task(id:'cur_g9_qa5',grade:9,topic:'Функция y=ax²',question:'y = x² - 6x + 9 = (x - ?)². Корень вершины',type:TaskType.textInput,answer:'3'),
+  const Task(id:'cur_g9_qa5',grade:9,topic:'Функция y=ax²',question:'Заполните пропуск: y = x² - 6x + 9 = (x - ?)²',type:TaskType.textInput,answer:'3'),
   const Task(id:'cur_g9_qa6',grade:9,topic:'Функция y=ax²',question:'y = x² - 4. Нули функции: x = ±?',type:TaskType.textInput,answer:'2'),
   const Task(id:'cur_g9_qa7',grade:9,topic:'Функция y=ax²',question:'При каком a парабола y=ax² направлена вверх?',type:TaskType.multipleChoice,options:['a = -2','a = -1','a = 0','a = 3'],answer:'a = 3'),
   const Task(id:'cur_g9_qa8',grade:9,topic:'Функция y=ax²',question:'Ось симметрии параболы y = x² - 4x + 3: x = ?',type:TaskType.textInput,answer:'2'),

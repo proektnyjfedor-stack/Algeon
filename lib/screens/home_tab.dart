@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../data/tasks_data.dart';
 import '../models/task.dart';
+import '../services/learning_service.dart';
 import '../services/progress_service.dart';
+import '../services/study_session_service.dart';
 import '../services/sound_service.dart';
 import '../services/language_service.dart';
 import '../data/topic_titles_en.dart';
@@ -48,9 +50,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       case 'skin_neon_blue':
       default:
         return (
-          primary: AppColors.accent,
-          secondary: const Color(0xFF1E40AF),
-          soft: const Color(0xFFEAF2FF),
+          primary: Theme.of(context).colorScheme.primary,
+          secondary: Theme.of(context).colorScheme.primary,
+          soft: AppThemeColors.accentLight(context),
         );
     }
   }
@@ -91,7 +93,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     return Scaffold(
       backgroundColor: AppThemeColors.background(context),
       body: RefreshIndicator(
-        color: AppColors.accent,
+        color: Theme.of(context).colorScheme.primary,
         edgeOffset: 8,
         onRefresh: () async {
           SoundService.hapticLight();
@@ -104,21 +106,74 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             parent: kIsWeb ? ClampingScrollPhysics() : BouncingScrollPhysics(),
           ),
           slivers: [
-            SliverToBoxAdapter(
-              child: _buildInstallAppBanner(),
-            ),
+            SliverToBoxAdapter(child: _buildInstallAppBanner()),
             SliverToBoxAdapter(
               child: _buildLearningOverview(topics, todayCompleted),
             ),
+            SliverToBoxAdapter(child: _buildDailyGoal(todayCompleted)),
             SliverToBoxAdapter(
-              child: _buildDailyGoal(todayCompleted),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.search_rounded),
+                    title: const Text('Найти тему или задание'),
+                    trailing: IconButton(
+                      tooltip: 'Закладки',
+                      icon: const Icon(Icons.bookmarks_outlined),
+                      onPressed: () => context.push('/library?saved=1'),
+                    ),
+                    onTap: () => context.push('/library'),
+                  ),
+                ),
+              ),
             ),
-            SliverToBoxAdapter(
-              child: _buildNextTopicCard(topics),
-            ),
-            SliverToBoxAdapter(
-              child: _buildQuickActions(topics),
-            ),
+            if (StudySessionService.current != null &&
+                StudySessionService.tasks.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      final saved = StudySessionService.current!;
+                      context
+                          .push(
+                            '/learn/topic',
+                            extra: {
+                              'name': saved['topic'],
+                              'tasks': StudySessionService.tasks,
+                            },
+                          )
+                          .then((_) => _refresh());
+                    },
+                    icon: const Icon(Icons.play_arrow_rounded),
+                    label: Text(
+                      context.watch<LanguageService>().isEnglish
+                          ? 'Continue unfinished practice'
+                          : 'Продолжить: ${StudySessionService.current!["topic"]} · ${(StudySessionService.current!["index"] as int) + 1}/${StudySessionService.tasks.length}',
+                    ),
+                  ),
+                ),
+              ),
+            if (LearningService.instance.diagnostic.isEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  child: Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.explore_outlined),
+                      title: const Text('С чего начать?'),
+                      subtitle: const Text('Определи уровень за 9 заданий'),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => context.push('/diagnostic'),
+                    ),
+                  ),
+                ),
+              ),
+            SliverToBoxAdapter(child: _buildNextTopicCard(topics)),
 
             // Section title
             SliverToBoxAdapter(
@@ -131,7 +186,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       height: 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: AppColors.accent,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -158,10 +213,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                         context.watch<LanguageService>().isEnglish
                             ? '${topics.length} topics'
                             : '${topics.length} тем',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.accent,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -194,8 +249,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     final lang = context.watch<LanguageService>();
     final t = lang.t;
     final userName = ProgressService.getUserName().trim();
-    final displayName =
-        userName.isEmpty ? (lang.isEnglish ? 'Student' : 'Ученик') : userName;
+    final displayName = userName.isEmpty
+        ? (lang.isEnglish ? 'Student' : 'Ученик')
+        : userName;
     final gradeTasks = getTasksByGrade(_grade);
     final gradeSolved = ProgressService.getSolvedCountForGrade(
       _grade,
@@ -308,7 +364,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                     icon: Icons.today_rounded,
                     label: t('home.todayShort'),
                     value: '$todayCompleted',
-                    color: AppColors.accent,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ];
                 if (narrow) {
@@ -317,18 +373,20 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                       Row(
                         children: stats
                             .take(2)
-                            .map((stat) => Expanded(
-                                  child: _OverviewStat(stat: stat),
-                                ))
+                            .map(
+                              (stat) =>
+                                  Expanded(child: _OverviewStat(stat: stat)),
+                            )
                             .toList(),
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: stats
                             .skip(2)
-                            .map((stat) => Expanded(
-                                  child: _OverviewStat(stat: stat),
-                                ))
+                            .map(
+                              (stat) =>
+                                  Expanded(child: _OverviewStat(stat: stat)),
+                            )
                             .toList(),
                       ),
                     ],
@@ -431,45 +489,38 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             LayoutBuilder(
               builder: (context, constraints) {
                 final narrow = constraints.maxWidth < 560;
-                final children = [
-                  Expanded(
-                    child: _InstallStepsCard(
-                      icon: Icons.ios_share_rounded,
-                      title: t('install.iosTitle'),
-                      steps: [
-                        t('install.iosStep1'),
-                        t('install.iosStep2'),
-                        t('install.iosStep3'),
-                      ],
-                    ),
+                final cards = [
+                  _InstallStepsCard(
+                    icon: Icons.ios_share_rounded,
+                    title: t('install.iosTitle'),
+                    steps: [
+                      t('install.iosStep1'),
+                      t('install.iosStep2'),
+                      t('install.iosStep3'),
+                    ],
                   ),
-                  Expanded(
-                    child: _InstallStepsCard(
-                      icon: Icons.more_vert_rounded,
-                      title: t('install.androidTitle'),
-                      steps: [
-                        t('install.androidStep1'),
-                        t('install.androidStep2'),
-                        t('install.androidStep3'),
-                      ],
-                    ),
+                  _InstallStepsCard(
+                    icon: Icons.more_vert_rounded,
+                    title: t('install.androidTitle'),
+                    steps: [
+                      t('install.androidStep1'),
+                      t('install.androidStep2'),
+                      t('install.androidStep3'),
+                    ],
                   ),
                 ];
                 if (narrow) {
                   return Column(
-                    children: [
-                      children[0],
-                      const SizedBox(height: 10),
-                      children[1],
-                    ],
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [cards[0], const SizedBox(height: 10), cards[1]],
                   );
                 }
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    children[0],
+                    Expanded(child: cards[0]),
                     const SizedBox(width: 10),
-                    children[1],
+                    Expanded(child: cards[1]),
                   ],
                 );
               },
@@ -511,8 +562,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             color: goalReached
                 ? AppColors.success.withValues(alpha: 0.55)
                 : (isDark
-                    ? AppThemeColors.border(context)
-                    : palette.primary.withValues(alpha: 0.42)),
+                      ? AppThemeColors.border(context)
+                      : palette.primary.withValues(alpha: 0.42)),
             width: 1.4,
           ),
           boxShadow: [
@@ -537,9 +588,10 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Text(
-                  goalReached ? '🏆' : '🎯',
-                  style: const TextStyle(fontSize: 22),
+                child: Icon(
+                  goalReached ? Icons.emoji_events_rounded : Icons.flag_rounded,
+                  size: 24,
+                  color: goalReached ? AppColors.success : palette.primary,
                 ),
               ),
             ),
@@ -551,22 +603,25 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        t('home.dailyGoal'),
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppThemeColors.textPrimary(context),
+                      Expanded(
+                        child: Text(
+                          t('home.dailyGoal'),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppThemeColors.textPrimary(context),
+                          ),
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 8),
                       Text(
                         '$done / $dailyGoal',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
-                          color:
-                              goalReached ? AppColors.success : palette.primary,
+                          color: goalReached
+                              ? AppColors.success
+                              : palette.primary,
                         ),
                       ),
                     ],
@@ -578,15 +633,17 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                         ? LinearProgressIndicator(
                             value: progress,
                             minHeight: 7,
-                            backgroundColor:
-                                palette.primary.withValues(alpha: 0.16),
+                            backgroundColor: palette.primary.withValues(
+                              alpha: 0.16,
+                            ),
                             valueColor: AlwaysStoppedAnimation(
                               goalReached ? AppColors.success : palette.primary,
                             ),
                           )
                         : TweenAnimationBuilder<double>(
                             key: ValueKey(
-                                'daily_goal_${progress.toStringAsFixed(3)}'),
+                              'daily_goal_${progress.toStringAsFixed(3)}',
+                            ),
                             tween: Tween(begin: 0, end: progress),
                             duration: const Duration(milliseconds: 560),
                             curve: Curves.easeOutCubic,
@@ -594,8 +651,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                               return LinearProgressIndicator(
                                 value: animatedProgress,
                                 minHeight: 7,
-                                backgroundColor:
-                                    palette.primary.withValues(alpha: 0.16),
+                                backgroundColor: palette.primary.withValues(
+                                  alpha: 0.16,
+                                ),
                                 valueColor: AlwaysStoppedAnimation(
                                   goalReached
                                       ? AppColors.success
@@ -619,65 +677,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildQuickActions(List<TopicInfo> topics) {
-    final t = context.watch<LanguageService>().t;
-    final actions = [
-      _QuickHomeButton(
-        icon: Icons.play_arrow_rounded,
-        title: t('home.continue'),
-        subtitle: t('home.continueSub'),
-        onTap: () {
-          SoundService.playStart();
-          _continueLearning(topics);
-        },
-      ),
-      _QuickHomeButton(
-        icon: Icons.bolt_rounded,
-        title: t('home.practice'),
-        subtitle: t('home.practiceSub'),
-        onTap: () {
-          SoundService.playNavigate();
-          context.go('/practice');
-        },
-      ),
-      _QuickHomeButton(
-        icon: Icons.emoji_events_rounded,
-        title: t('nav.achievements'),
-        subtitle: t('home.achievementsSub'),
-        onTap: () {
-          SoundService.playNavigate();
-          context.go('/achievements');
-        },
-      ),
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth >= 700) {
-            return Row(
-              children: [
-                for (var i = 0; i < actions.length; i++) ...[
-                  Expanded(child: actions[i]),
-                  if (i != actions.length - 1) const SizedBox(width: 10),
-                ],
-              ],
-            );
-          }
-          return Column(
-            children: [
-              for (var i = 0; i < actions.length; i++) ...[
-                actions[i],
-                if (i != actions.length - 1) const SizedBox(height: 10),
-              ],
-            ],
-          );
-        },
       ),
     );
   }
@@ -717,8 +716,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
       );
     }
 
-    final displayTopic =
-        lang.isEnglish ? topicTitleEn(target.name) : target.name;
+    final displayTopic = lang.isEnglish
+        ? topicTitleEn(target.name)
+        : target.name;
     final total = targetTasks.length;
     final progress = total == 0 ? 0.0 : solved / total;
 
@@ -746,11 +746,7 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                   color: AppThemeColors.accentLight(context),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: Icon(
-                  target.icon,
-                  color: palette.primary,
-                  size: 24,
-                ),
+                child: Icon(target.icon, color: palette.primary, size: 24),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -774,17 +770,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: AppThemeColors.textPrimary(context),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _topicShortDescription(target.name, lang.isEnglish),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12,
-                        height: 1.25,
-                        color: AppThemeColors.textSecondary(context),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -827,32 +812,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _continueLearning(List<TopicInfo> topics) {
-    TopicInfo? target;
-    List<Task> targetTasks = const [];
-
-    for (final topic in topics) {
-      final tasks = getTasksByGradeAndTopic(_grade, topic.name);
-      final solved = ProgressService.getSolvedCountForTopic(
-        topic.name,
-        tasks.map((t) => t.id).toList(),
-      );
-      if (solved < tasks.length) {
-        target = topic;
-        targetTasks = tasks;
-        break;
-      }
-    }
-
-    if (target == null && topics.isNotEmpty) {
-      target = topics.first;
-      targetTasks = getTasksByGradeAndTopic(_grade, target.name);
-    }
-
-    if (target == null || targetTasks.isEmpty) return;
-    _openTopic(target.name, targetTasks);
-  }
-
   Widget _buildTopicCard({
     required TopicInfo topic,
     required int index,
@@ -871,20 +830,23 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
     final status = isComplete
         ? context.watch<LanguageService>().t('home.statusDone')
         : isStarted
-            ? context.watch<LanguageService>().t('home.statusInProgress')
-            : context.watch<LanguageService>().t('home.statusStart');
-    final description = _topicShortDescription(topic.name, isEnglish);
+        ? context.watch<LanguageService>().t('home.statusInProgress')
+        : context.watch<LanguageService>().t('home.statusStart');
 
     final delay = (index * 0.08).clamp(0.0, 0.55);
-    final interval = Interval(delay, (delay + 0.4).clamp(0.0, 1.0),
-        curve: Curves.easeOutCubic);
-    final fadeAnim = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _listAnim, curve: interval),
+    final interval = Interval(
+      delay,
+      (delay + 0.4).clamp(0.0, 1.0),
+      curve: Curves.easeOutCubic,
     );
-    final slideAnim =
-        Tween<Offset>(begin: const Offset(0, 0.15), end: Offset.zero).animate(
-      CurvedAnimation(parent: _listAnim, curve: interval),
-    );
+    final fadeAnim = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _listAnim, curve: interval));
+    final slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.15),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _listAnim, curve: interval));
 
     final card = Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -902,8 +864,8 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
               color: isComplete
                   ? AppColors.success.withValues(alpha: 0.5)
                   : isStarted
-                      ? accent.withValues(alpha: 0.38)
-                      : AppThemeColors.border(context),
+                  ? accent.withValues(alpha: 0.38)
+                  : AppThemeColors.border(context),
               width: isComplete ? 1.5 : 1,
             ),
             boxShadow: AppShadows.soft(context),
@@ -939,17 +901,6 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                         color: AppThemeColors.textPrimary(context),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12,
-                        height: 1.25,
-                        color: AppThemeColors.textSecondary(context),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -994,8 +945,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                           ? LinearProgressIndicator(
                               value: progress,
                               minHeight: 4,
-                              backgroundColor:
-                                  AppThemeColors.borderLight(context),
+                              backgroundColor: AppThemeColors.borderLight(
+                                context,
+                              ),
                               valueColor: AlwaysStoppedAnimation(
                                 isComplete ? AppColors.success : accent,
                               ),
@@ -1011,8 +963,9 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
                                 return LinearProgressIndicator(
                                   value: animatedProgress,
                                   minHeight: 4,
-                                  backgroundColor:
-                                      AppThemeColors.borderLight(context),
+                                  backgroundColor: AppThemeColors.borderLight(
+                                    context,
+                                  ),
                                   valueColor: AlwaysStoppedAnimation(
                                     isComplete ? AppColors.success : accent,
                                   ),
@@ -1040,36 +993,16 @@ class _HomeTabState extends State<HomeTab> with SingleTickerProviderStateMixin {
 
     return FadeTransition(
       opacity: fadeAnim,
-      child: SlideTransition(
-        position: slideAnim,
-        child: card,
-      ),
+      child: SlideTransition(position: slideAnim, child: card),
     );
   }
 
   void _openTopic(String topicName, List<Task> tasks) {
     SoundService.playNavigate();
     SoundService.hapticMedium();
-    context.push('/learn/intro',
-        extra: {'name': topicName, 'tasks': tasks}).then((_) => _refresh());
-  }
-
-  String _topicShortDescription(String topicName, bool english) {
-    if (english) {
-      final title = topicTitleEn(topicName);
-      return 'Definitions, examples, and practice for $title.';
-    }
-    final raw = getTopicDescription(topicName);
-    if (raw == null || raw.trim().isEmpty) {
-      return 'Короткая теория, примеры и задачи по теме.';
-    }
-    final first = raw.split('\n').map((line) => line.trim()).firstWhere(
-          (line) => line.isNotEmpty && !line.startsWith('•'),
-          orElse: () => 'Короткая теория, примеры и задачи по теме.',
-        );
-    final cleaned = first.replaceAll(RegExp(r'\s+'), ' ').trim();
-    if (cleaned.length <= 118) return cleaned;
-    return '${cleaned.substring(0, 115).trimRight()}...';
+    context
+        .push('/learn/intro', extra: {'name': topicName, 'tasks': tasks})
+        .then((_) => _refresh());
   }
 }
 
@@ -1168,7 +1101,11 @@ class _InstallStepsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: AppColors.accent, size: 18),
+              Icon(
+                icon,
+                color: Theme.of(context).colorScheme.primary,
+                size: 18,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -1199,10 +1136,10 @@ class _InstallStepsCard extends StatelessWidget {
                     ),
                     child: Text(
                       '${i + 1}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.accent,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
@@ -1294,82 +1231,8 @@ class _OverviewStat extends StatelessWidget {
   }
 }
 
-class _QuickHomeButton extends StatelessWidget {
-  const _QuickHomeButton({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return _PressableScale(
-      onTap: () {
-        SoundService.hapticMedium();
-        onTap();
-      },
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 56),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          color: AppThemeColors.surface(context),
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          border: Border.all(color: AppThemeColors.border(context)),
-          boxShadow: AppShadows.soft(context),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: AppThemeColors.accentLight(context),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Icon(icon, color: AppColors.accent, size: 18),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: AppThemeColors.textPrimary(context),
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: AppThemeColors.textSecondary(context),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _PressableScale extends StatefulWidget {
-  const _PressableScale({
-    required this.child,
-    required this.onTap,
-  });
+  const _PressableScale({required this.child, required this.onTap});
   final Widget child;
   final VoidCallback onTap;
 

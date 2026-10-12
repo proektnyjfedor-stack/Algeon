@@ -936,7 +936,7 @@ final List<Task> _grade1Tasks = [
     explanationSteps: [
       'У Маши: 3 яблока',
       'У Пети: 2 яблока',
-      '3 + 2 = 5 яблок'
+      '3 + 2 = 5 яблок',
     ],
   ),
   const Task(
@@ -3876,7 +3876,7 @@ final List<Task> _grade4Tasks = [
     id: 'g4_eq_20',
     grade: 4,
     topic: 'Уравнения',
-    question: 'x × x = 64. Найди x.',
+    question: 'x × x = 64. Найди натуральное число x.',
     type: TaskType.textInput,
     answer: '8',
   ),
@@ -4369,7 +4369,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'У Кати: 2 куклы',
       'У Маши больше на 3',
-      '2 + 3 = 5 кукол'
+      '2 + 3 = 5 кукол',
     ],
   ),
   const Task(
@@ -4425,7 +4425,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Карандашей: 24',
       'Это в 3 раза больше ручек',
-      '24 ÷ 3 = 8 ручек'
+      '24 ÷ 3 = 8 ручек',
     ],
   ),
   const Task(
@@ -4440,7 +4440,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Книга: 30 руб',
       'Ручка в 5 раз дешевле',
-      '30 ÷ 5 = 6 руб'
+      '30 ÷ 5 = 6 руб',
     ],
   ),
   const Task(
@@ -4493,7 +4493,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'P = 4 × сторона',
       '36 = 4 × сторона',
-      'Сторона = 36 ÷ 4 = 9 см'
+      'Сторона = 36 ÷ 4 = 9 см',
     ],
   ),
   const Task(
@@ -4507,7 +4507,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'S = длина × ширина',
       '48 = длина × 6',
-      'Длина = 48 ÷ 6 = 8 см'
+      'Длина = 48 ÷ 6 = 8 см',
     ],
   ),
   const Task(
@@ -4521,7 +4521,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       '50 ÷ 7 = 7 (остаток 1)',
       'Каждому по 7 конфет',
-      'Осталось: 50 - 49 = 1'
+      'Осталось: 50 - 49 = 1',
     ],
   ),
   const Task(
@@ -4544,7 +4544,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Петя: 1 м 35 см = 135 см',
       'Катя: 145 см',
-      '145 - 135 = 10 см'
+      '145 - 135 = 10 см',
     ],
   ),
   const Task(
@@ -4559,7 +4559,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Арбуз: 5200 г',
       'Дыня: 3800 г',
-      '5200 - 3800 = 1400 г = 1 кг 400 г'
+      '5200 - 3800 = 1400 г = 1 кг 400 г',
     ],
   ),
 
@@ -4576,7 +4576,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Скорость сближения: 80 + 70 = 150 км/ч',
       'Расстояние: 300 км',
-      'Время = 300 ÷ 150 = 2 часа'
+      'Время = 300 ÷ 150 = 2 часа',
     ],
   ),
   const Task(
@@ -4590,7 +4590,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Весь торт: 12/12',
       'Съели: 5/12',
-      'Осталось: 12/12 - 5/12 = 7/12'
+      'Осталось: 12/12 - 5/12 = 7/12',
     ],
   ),
   const Task(
@@ -4616,7 +4616,7 @@ final List<Task> _extraTasks = [
     explanationSteps: [
       'Сумма цифр должна делиться на 3',
       '3 + * + 5 + 6 = 14 + *',
-      '14 + 4 = 18, делится на 3'
+      '14 + 4 = 18, делится на 3',
     ],
   ),
   const Task(
@@ -4694,10 +4694,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите значение: 125 × 8',
     type: TaskType.textInput,
     answer: '1000',
-    explanationSteps: [
-      '125 × 8 = 1000',
-      'Знаем: 125 × 8 = 1000 (мнемоника)',
-    ],
+    explanationSteps: ['125 × 8 = 1000', 'Знаем: 125 × 8 = 1000 (мнемоника)'],
   ),
   const Task(
     id: 'g5_nat_5',
@@ -4740,10 +4737,7 @@ final List<Task> _grade5Tasks = [
     question: 'Какое наибольшее трёхзначное число?',
     type: TaskType.textInput,
     answer: '999',
-    explanationSteps: [
-      'Трёхзначные числа: от 100 до 999',
-      'Наибольшее = 999',
-    ],
+    explanationSteps: ['Трёхзначные числа: от 100 до 999', 'Наибольшее = 999'],
   ),
   const Task(
     id: 'g5_nat_9',
@@ -4775,9 +4769,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите: 5³',
     type: TaskType.textInput,
     answer: '125',
-    explanationSteps: [
-      '5³ = 5 × 5 × 5 = 125',
-    ],
+    explanationSteps: ['5³ = 5 × 5 × 5 = 125'],
   ),
   const Task(
     id: 'g5_nat_12',
@@ -4804,11 +4796,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 48 ÷ (8 - 2) × 3',
     type: TaskType.textInput,
     answer: '24',
-    explanationSteps: [
-      'Скобки: 8 - 2 = 6',
-      '48 ÷ 6 = 8',
-      '8 × 3 = 24',
-    ],
+    explanationSteps: ['Скобки: 8 - 2 = 6', '48 ÷ 6 = 8', '8 × 3 = 24'],
   ),
   const Task(
     id: 'g5_nat_15',
@@ -4820,7 +4808,7 @@ final List<Task> _grade5Tasks = [
       'Да',
       'Нет, делится на 3',
       'Нет, делится на 7',
-      'Нет, делится на 9'
+      'Нет, делится на 9',
     ],
     answer: 'Нет, делится на 3',
   ),
@@ -4831,10 +4819,7 @@ final List<Task> _grade5Tasks = [
     question: 'НОД(24, 36) = ?',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      '24 = 2³ × 3, 36 = 2² × 3²',
-      'НОД = 2² × 3 = 12',
-    ],
+    explanationSteps: ['24 = 2³ × 3, 36 = 2² × 3²', 'НОД = 2² × 3 = 12'],
   ),
   const Task(
     id: 'g5_nat_17',
@@ -4843,10 +4828,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите: 2⁴ + 3² - 1',
     type: TaskType.textInput,
     answer: '24',
-    explanationSteps: [
-      '2⁴ = 16, 3² = 9',
-      '16 + 9 - 1 = 24',
-    ],
+    explanationSteps: ['2⁴ = 16, 3² = 9', '16 + 9 - 1 = 24'],
   ),
   const Task(
     id: 'g5_nat_18',
@@ -4858,7 +4840,7 @@ final List<Task> _grade5Tasks = [
       '998, 999, 1001, 1010',
       '999, 998, 1001, 1010',
       '998, 999, 1010, 1001',
-      '1001, 1010, 999, 998'
+      '1001, 1010, 999, 998',
     ],
     answer: '998, 999, 1001, 1010',
   ),
@@ -4869,9 +4851,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите: 360 ÷ 15',
     type: TaskType.textInput,
     answer: '24',
-    explanationSteps: [
-      '360 ÷ 15 = 360 ÷ 5 ÷ 3 = 72 ÷ 3 = 24',
-    ],
+    explanationSteps: ['360 ÷ 15 = 360 ÷ 5 ÷ 3 = 72 ÷ 3 = 24'],
   ),
   const Task(
     id: 'g5_nat_20',
@@ -4880,9 +4860,7 @@ final List<Task> _grade5Tasks = [
     question: 'Сумма цифр числа 4 527 равна:',
     type: TaskType.textInput,
     answer: '18',
-    explanationSteps: [
-      '4 + 5 + 2 + 7 = 18',
-    ],
+    explanationSteps: ['4 + 5 + 2 + 7 = 18'],
   ),
 
   // ==================== ОБЫКНОВЕННЫЕ ДРОБИ (20 задач) ====================
@@ -4921,10 +4899,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 1/3 + 1/6',
     type: TaskType.textInput,
     answer: '1/2',
-    explanationSteps: [
-      'Общий знаменатель = 6',
-      '2/6 + 1/6 = 3/6 = 1/2',
-    ],
+    explanationSteps: ['Общий знаменатель = 6', '2/6 + 1/6 = 3/6 = 1/2'],
   ),
   const Task(
     id: 'g5_frac_4',
@@ -4933,10 +4908,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 3/4 - 1/6',
     type: TaskType.textInput,
     answer: '7/12',
-    explanationSteps: [
-      'Общий знаменатель = 12',
-      '9/12 - 2/12 = 7/12',
-    ],
+    explanationSteps: ['Общий знаменатель = 12', '9/12 - 2/12 = 7/12'],
   ),
   const Task(
     id: 'g5_frac_5',
@@ -4944,7 +4916,7 @@ final List<Task> _grade5Tasks = [
     topic: 'Обыкновенные дроби',
     question: 'Вычислите: 2/3 × 3/4',
     type: TaskType.multipleChoice,
-    options: ['5/7', '1/2', '6/12', '2/4'],
+    options: ['5/7', '1/2', '3/4', '2/3'],
     answer: '1/2',
   ),
   const Task(
@@ -4979,10 +4951,7 @@ final List<Task> _grade5Tasks = [
     question: 'Переведите в смешанное число: 17/4',
     type: TaskType.textInput,
     answer: '4 1/4',
-    explanationSteps: [
-      '17 ÷ 4 = 4 остаток 1',
-      '17/4 = 4 1/4',
-    ],
+    explanationSteps: ['17 ÷ 4 = 4 остаток 1', '17/4 = 4 1/4'],
   ),
   const Task(
     id: 'g5_frac_9',
@@ -5013,9 +4982,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 3/4 от числа 80',
     type: TaskType.textInput,
     answer: '60',
-    explanationSteps: [
-      '80 × 3/4 = 80 ÷ 4 × 3 = 20 × 3 = 60',
-    ],
+    explanationSteps: ['80 × 3/4 = 80 ÷ 4 × 3 = 20 × 3 = 60'],
   ),
   const Task(
     id: 'g5_frac_12',
@@ -5045,9 +5012,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 4/5 × 10',
     type: TaskType.textInput,
     answer: '8',
-    explanationSteps: [
-      '4/5 × 10 = 40/5 = 8',
-    ],
+    explanationSteps: ['4/5 × 10 = 40/5 = 8'],
   ),
   const Task(
     id: 'g5_frac_15',
@@ -5056,10 +5021,7 @@ final List<Task> _grade5Tasks = [
     question: 'Число 12 является 3/4 от какого числа?',
     type: TaskType.textInput,
     answer: '16',
-    explanationSteps: [
-      'x × 3/4 = 12',
-      'x = 12 × 4/3 = 16',
-    ],
+    explanationSteps: ['x × 3/4 = 12', 'x = 12 × 4/3 = 16'],
   ),
   const Task(
     id: 'g5_frac_16',
@@ -5068,10 +5030,7 @@ final List<Task> _grade5Tasks = [
     question: 'Сократите: 18/24',
     type: TaskType.textInput,
     answer: '3/4',
-    explanationSteps: [
-      'НОД(18, 24) = 6',
-      '18/24 = 3/4',
-    ],
+    explanationSteps: ['НОД(18, 24) = 6', '18/24 = 3/4'],
   ),
   const Task(
     id: 'g5_frac_17',
@@ -5080,9 +5039,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 2/7 + 3/7',
     type: TaskType.textInput,
     answer: '5/7',
-    explanationSteps: [
-      'Знаменатели одинаковы: 2/7 + 3/7 = 5/7',
-    ],
+    explanationSteps: ['Знаменатели одинаковы: 2/7 + 3/7 = 5/7'],
   ),
   const Task(
     id: 'g5_frac_18',
@@ -5091,11 +5048,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите дробь, равную 2/3, с знаменателем 12',
     type: TaskType.textInput,
     answer: '8/12',
-    explanationSteps: [
-      '12 ÷ 3 = 4',
-      '2 × 4 = 8',
-      '2/3 = 8/12',
-    ],
+    explanationSteps: ['12 ÷ 3 = 4', '2 × 4 = 8', '2/3 = 8/12'],
   ),
   const Task(
     id: 'g5_frac_19',
@@ -5104,9 +5057,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 5 ÷ (1/2)',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      '5 ÷ 1/2 = 5 × 2 = 10',
-    ],
+    explanationSteps: ['5 ÷ 1/2 = 5 × 2 = 10'],
   ),
   const Task(
     id: 'g5_frac_20',
@@ -5115,9 +5066,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: (2/3)²',
     type: TaskType.textInput,
     answer: '4/9',
-    explanationSteps: [
-      '(2/3)² = 2²/3² = 4/9',
-    ],
+    explanationSteps: ['(2/3)² = 2²/3² = 4/9'],
   ),
 
   // ==================== ПРОЦЕНТЫ (20 задач) ====================
@@ -5128,9 +5077,7 @@ final List<Task> _grade5Tasks = [
     question: 'Запишите 0.35 в процентах',
     type: TaskType.textInput,
     answer: '35%',
-    explanationSteps: [
-      '0.35 × 100% = 35%',
-    ],
+    explanationSteps: ['0.35 × 100% = 35%'],
   ),
   const Task(
     id: 'g5_pct_2',
@@ -5139,9 +5086,7 @@ final List<Task> _grade5Tasks = [
     question: 'Запишите 45% в виде дроби (сокращённой)',
     type: TaskType.textInput,
     answer: '9/20',
-    explanationSteps: [
-      '45% = 45/100 = 9/20',
-    ],
+    explanationSteps: ['45% = 45/100 = 9/20'],
   ),
   const Task(
     id: 'g5_pct_3',
@@ -5150,9 +5095,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 20% от числа 150',
     type: TaskType.textInput,
     answer: '30',
-    explanationSteps: [
-      '150 × 0.20 = 30',
-    ],
+    explanationSteps: ['150 × 0.20 = 30'],
   ),
   const Task(
     id: 'g5_pct_4',
@@ -5161,10 +5104,7 @@ final List<Task> _grade5Tasks = [
     question: 'Число 18 составляет 30% от какого числа?',
     type: TaskType.textInput,
     answer: '60',
-    explanationSteps: [
-      'x × 0.30 = 18',
-      'x = 18 ÷ 0.30 = 60',
-    ],
+    explanationSteps: ['x × 0.30 = 18', 'x = 18 ÷ 0.30 = 60'],
   ),
   const Task(
     id: 'g5_pct_5',
@@ -5173,9 +5113,7 @@ final List<Task> _grade5Tasks = [
     question: 'Какой процент составляет 12 от 48?',
     type: TaskType.textInput,
     answer: '25%',
-    explanationSteps: [
-      '12/48 = 0.25 = 25%',
-    ],
+    explanationSteps: ['12/48 = 0.25 = 25%'],
   ),
   const Task(
     id: 'g5_pct_6',
@@ -5184,10 +5122,7 @@ final List<Task> _grade5Tasks = [
     question: 'Цена 500 руб. выросла на 10%. Новая цена:',
     type: TaskType.textInput,
     answer: '550',
-    explanationSteps: [
-      '10% от 500 = 50',
-      '500 + 50 = 550 руб.',
-    ],
+    explanationSteps: ['10% от 500 = 50', '500 + 50 = 550 руб.'],
   ),
   const Task(
     id: 'g5_pct_7',
@@ -5196,10 +5131,7 @@ final List<Task> _grade5Tasks = [
     question: 'Цена 400 руб. снизилась на 25%. Новая цена:',
     type: TaskType.textInput,
     answer: '300',
-    explanationSteps: [
-      '25% от 400 = 100',
-      '400 - 100 = 300 руб.',
-    ],
+    explanationSteps: ['25% от 400 = 100', '400 - 100 = 300 руб.'],
   ),
   const Task(
     id: 'g5_pct_8',
@@ -5208,9 +5140,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 1% от 7 500',
     type: TaskType.textInput,
     answer: '75',
-    explanationSteps: [
-      '1% = 7500 ÷ 100 = 75',
-    ],
+    explanationSteps: ['1% = 7500 ÷ 100 = 75'],
   ),
   const Task(
     id: 'g5_pct_9',
@@ -5220,10 +5150,7 @@ final List<Task> _grade5Tasks = [
     type: TaskType.multipleChoice,
     options: ['3/5', '4/5', '3/4', '7/9'],
     answer: '3/4',
-    explanationSteps: [
-      '75% = 75/100.',
-      'Сокращаем на 25: 75/100 = 3/4.',
-    ],
+    explanationSteps: ['75% = 75/100.', 'Сокращаем на 25: 75/100 = 3/4.'],
   ),
   const Task(
     id: 'g5_pct_10',
@@ -5232,9 +5159,7 @@ final List<Task> _grade5Tasks = [
     question: 'В классе 30 учеников, 40% из них девочки. Сколько девочек?',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      '30 × 0.40 = 12 девочек',
-    ],
+    explanationSteps: ['30 × 0.40 = 12 девочек'],
   ),
   const Task(
     id: 'g5_pct_11',
@@ -5243,9 +5168,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 5% от 200',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      '200 × 0.05 = 10',
-    ],
+    explanationSteps: ['200 × 0.05 = 10'],
   ),
   const Task(
     id: 'g5_pct_12',
@@ -5254,9 +5177,7 @@ final List<Task> _grade5Tasks = [
     question: '1/4 = ?%',
     type: TaskType.textInput,
     answer: '25%',
-    explanationSteps: [
-      '1/4 = 0.25 = 25%',
-    ],
+    explanationSteps: ['1/4 = 0.25 = 25%'],
   ),
   const Task(
     id: 'g5_pct_13',
@@ -5265,9 +5186,7 @@ final List<Task> _grade5Tasks = [
     question: 'Скидка 15% на товар за 800 руб. Сколько сэкономите?',
     type: TaskType.textInput,
     answer: '120',
-    explanationSteps: [
-      '800 × 0.15 = 120 руб.',
-    ],
+    explanationSteps: ['800 × 0.15 = 120 руб.'],
   ),
   const Task(
     id: 'g5_pct_14',
@@ -5276,10 +5195,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 100% если 30% = 21',
     type: TaskType.textInput,
     answer: '70',
-    explanationSteps: [
-      '1% = 21 ÷ 30 = 0.7',
-      '100% = 0.7 × 100 = 70',
-    ],
+    explanationSteps: ['1% = 21 ÷ 30 = 0.7', '100% = 0.7 × 100 = 70'],
   ),
   const Task(
     id: 'g5_pct_15',
@@ -5288,9 +5204,7 @@ final List<Task> _grade5Tasks = [
     question: '0.07 = ?%',
     type: TaskType.textInput,
     answer: '7%',
-    explanationSteps: [
-      '0.07 × 100% = 7%',
-    ],
+    explanationSteps: ['0.07 × 100% = 7%'],
   ),
   const Task(
     id: 'g5_pct_16',
@@ -5299,9 +5213,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 150% от 60',
     type: TaskType.textInput,
     answer: '90',
-    explanationSteps: [
-      '60 × 1.5 = 90',
-    ],
+    explanationSteps: ['60 × 1.5 = 90'],
   ),
   const Task(
     id: 'g5_pct_17',
@@ -5310,10 +5222,7 @@ final List<Task> _grade5Tasks = [
     question: 'Цена выросла с 200 до 250 руб. На сколько процентов?',
     type: TaskType.textInput,
     answer: '25%',
-    explanationSteps: [
-      'Рост: 50 руб.',
-      '50/200 = 0.25 = 25%',
-    ],
+    explanationSteps: ['Рост: 50 руб.', '50/200 = 0.25 = 25%'],
   ),
   const Task(
     id: 'g5_pct_18',
@@ -5322,20 +5231,16 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 0.5% от 1000',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      '1000 × 0.005 = 5',
-    ],
+    explanationSteps: ['1000 × 0.005 = 5'],
   ),
   const Task(
     id: 'g5_pct_19',
     grade: 5,
     topic: 'Проценты',
-    question: 'В банке 120 книг. 25% — фантастика. Сколько книг фантастики?',
+    question: 'В библиотеке 120 книг. 25% — фантастика. Сколько книг фантастики?',
     type: TaskType.textInput,
     answer: '30',
-    explanationSteps: [
-      '120 × 0.25 = 30',
-    ],
+    explanationSteps: ['120 × 0.25 = 30'],
   ),
   const Task(
     id: 'g5_pct_20',
@@ -5344,9 +5249,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 3/5 в процентах',
     type: TaskType.textInput,
     answer: '60%',
-    explanationSteps: [
-      '3/5 = 0.6 = 60%',
-    ],
+    explanationSteps: ['3/5 = 0.6 = 60%'],
   ),
 
   // ==================== ГЕОМЕТРИЯ: ПЕРИМЕТР И ПЛОЩАДЬ (20 задач) ====================
@@ -5357,9 +5260,7 @@ final List<Task> _grade5Tasks = [
     question: 'Периметр прямоугольника 5×3 равен:',
     type: TaskType.textInput,
     answer: '16',
-    explanationSteps: [
-      'P = 2(a + b) = 2(5 + 3) = 16',
-    ],
+    explanationSteps: ['P = 2(a + b) = 2(5 + 3) = 16'],
   ),
   const Task(
     id: 'g5_geo_2',
@@ -5368,9 +5269,7 @@ final List<Task> _grade5Tasks = [
     question: 'Площадь прямоугольника 7×4 равна:',
     type: TaskType.textInput,
     answer: '28',
-    explanationSteps: [
-      'S = a × b = 7 × 4 = 28',
-    ],
+    explanationSteps: ['S = a × b = 7 × 4 = 28'],
   ),
   const Task(
     id: 'g5_geo_3',
@@ -5379,9 +5278,7 @@ final List<Task> _grade5Tasks = [
     question: 'Площадь квадрата со стороной 6 равна:',
     type: TaskType.textInput,
     answer: '36',
-    explanationSteps: [
-      'S = a² = 6² = 36',
-    ],
+    explanationSteps: ['S = a² = 6² = 36'],
   ),
   const Task(
     id: 'g5_geo_4',
@@ -5390,10 +5287,7 @@ final List<Task> _grade5Tasks = [
     question: 'Периметр квадрата с площадью 25 равен:',
     type: TaskType.textInput,
     answer: '20',
-    explanationSteps: [
-      'S = a² = 25 → a = 5',
-      'P = 4a = 20',
-    ],
+    explanationSteps: ['S = a² = 25 → a = 5', 'P = 4a = 20'],
   ),
   const Task(
     id: 'g5_geo_5',
@@ -5402,9 +5296,7 @@ final List<Task> _grade5Tasks = [
     question: 'Площадь треугольника с основанием 8 и высотой 5 равна:',
     type: TaskType.textInput,
     answer: '20',
-    explanationSteps: [
-      'S = (a × h) / 2 = (8 × 5) / 2 = 20',
-    ],
+    explanationSteps: ['S = (a × h) / 2 = (8 × 5) / 2 = 20'],
   ),
   const Task(
     id: 'g5_geo_6',
@@ -5413,9 +5305,7 @@ final List<Task> _grade5Tasks = [
     question: 'Периметр равностороннего треугольника со стороной 9 равен:',
     type: TaskType.textInput,
     answer: '27',
-    explanationSteps: [
-      'P = 3 × a = 3 × 9 = 27',
-    ],
+    explanationSteps: ['P = 3 × a = 3 × 9 = 27'],
   ),
   const Task(
     id: 'g5_geo_7',
@@ -5424,9 +5314,7 @@ final List<Task> _grade5Tasks = [
     question: 'Длина стороны квадрата, если его периметр 28:',
     type: TaskType.textInput,
     answer: '7',
-    explanationSteps: [
-      'P = 4a → a = P/4 = 28/4 = 7',
-    ],
+    explanationSteps: ['P = 4a → a = P/4 = 28/4 = 7'],
   ),
   const Task(
     id: 'g5_geo_8',
@@ -5447,9 +5335,7 @@ final List<Task> _grade5Tasks = [
     question: 'Площадь фигуры, составленной из двух квадратов 3×3 и 4×4:',
     type: TaskType.textInput,
     answer: '25',
-    explanationSteps: [
-      '3² + 4² = 9 + 16 = 25',
-    ],
+    explanationSteps: ['3² + 4² = 9 + 16 = 25'],
   ),
   const Task(
     id: 'g5_geo_10',
@@ -5458,9 +5344,7 @@ final List<Task> _grade5Tasks = [
     question: 'Объём куба со стороной 4 равен:',
     type: TaskType.textInput,
     answer: '64',
-    explanationSteps: [
-      'V = a³ = 4³ = 64',
-    ],
+    explanationSteps: ['V = a³ = 4³ = 64'],
   ),
   const Task(
     id: 'g5_geo_11',
@@ -5481,10 +5365,7 @@ final List<Task> _grade5Tasks = [
     question: 'Выразите 3 м 40 см в сантиметрах.',
     type: TaskType.textInput,
     answer: '340',
-    explanationSteps: [
-      '1 м = 100 см.',
-      '3 м = 300 см, 300 + 40 = 340 см.',
-    ],
+    explanationSteps: ['1 м = 100 см.', '3 м = 300 см, 300 + 40 = 340 см.'],
   ),
   const Task(
     id: 'g5_geo_13',
@@ -5544,10 +5425,7 @@ final List<Task> _grade5Tasks = [
     question: 'Объём куба со стороной 4 равен:',
     type: TaskType.textInput,
     answer: '64',
-    explanationSteps: [
-      'У куба все рёбра равны.',
-      'V = a³ = 4 × 4 × 4 = 64.',
-    ],
+    explanationSteps: ['У куба все рёбра равны.', 'V = a³ = 4 × 4 × 4 = 64.'],
   ),
   const Task(
     id: 'g5_geo_18',
@@ -5608,9 +5486,7 @@ final List<Task> _grade5Tasks = [
     question: 'Расстояние между точками -4 и 3 на числовой прямой:',
     type: TaskType.textInput,
     answer: '7',
-    explanationSteps: [
-      '|(-4) - 3| = |-7| = 7',
-    ],
+    explanationSteps: ['|(-4) - 3| = |-7| = 7'],
   ),
   const Task(
     id: 'g5_coord_3',
@@ -5619,9 +5495,7 @@ final List<Task> _grade5Tasks = [
     question: '|-5| = ?',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'Модуль числа — расстояние до нуля = 5',
-    ],
+    explanationSteps: ['Модуль числа — расстояние до нуля = 5'],
   ),
   const Task(
     id: 'g5_coord_4',
@@ -5639,10 +5513,7 @@ final List<Task> _grade5Tasks = [
     question: 'Координата точки, симметричной точке 5 относительно нуля:',
     type: TaskType.textInput,
     answer: '-5',
-    explanationSteps: [
-      'Симметрия относительно нуля: меняем знак',
-      '5 → -5',
-    ],
+    explanationSteps: ['Симметрия относительно нуля: меняем знак', '5 → -5'],
   ),
   const Task(
     id: 'g5_coord_6',
@@ -5660,9 +5531,7 @@ final List<Task> _grade5Tasks = [
     question: '|0| = ?',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'Модуль нуля равен нулю',
-    ],
+    explanationSteps: ['Модуль нуля равен нулю'],
   ),
   const Task(
     id: 'g5_coord_8',
@@ -5680,9 +5549,7 @@ final List<Task> _grade5Tasks = [
     question: 'Середина отрезка от -2 до 6:',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      'Середина = (-2 + 6) / 2 = 4/2 = 2',
-    ],
+    explanationSteps: ['Середина = (-2 + 6) / 2 = 4/2 = 2'],
   ),
   const Task(
     id: 'g5_coord_10',
@@ -5691,9 +5558,7 @@ final List<Task> _grade5Tasks = [
     question: 'Противоположное число для -3/4:',
     type: TaskType.textInput,
     answer: '3/4',
-    explanationSteps: [
-      'Противоположное = меняем знак: 3/4',
-    ],
+    explanationSteps: ['Противоположное = меняем знак: 3/4'],
   ),
   const Task(
     id: 'g5_coord_11',
@@ -5702,9 +5567,7 @@ final List<Task> _grade5Tasks = [
     question: 'Расстояние между -1.5 и 2.5:',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '|-1.5 - 2.5| = |-4| = 4',
-    ],
+    explanationSteps: ['|-1.5 - 2.5| = |-4| = 4'],
   ),
   const Task(
     id: 'g5_coord_12',
@@ -5713,9 +5576,7 @@ final List<Task> _grade5Tasks = [
     question: '|-3| + |4| = ?',
     type: TaskType.textInput,
     answer: '7',
-    explanationSteps: [
-      '3 + 4 = 7',
-    ],
+    explanationSteps: ['3 + 4 = 7'],
   ),
   const Task(
     id: 'g5_coord_13',
@@ -5733,9 +5594,7 @@ final List<Task> _grade5Tasks = [
     question: 'Сколько целых чисел находится на отрезке [-3; 2]?',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      '-3, -2, -1, 0, 1, 2 — это 6 целых чисел',
-    ],
+    explanationSteps: ['-3, -2, -1, 0, 1, 2 — это 6 целых чисел'],
   ),
   const Task(
     id: 'g5_coord_15',
@@ -5756,7 +5615,7 @@ final List<Task> _grade5Tasks = [
       'Равные числа',
       'Противоположные числа',
       'Соседние числа',
-      'Взаимно обратные'
+      'Взаимно обратные',
     ],
     answer: 'Противоположные числа',
   ),
@@ -5770,7 +5629,7 @@ final List<Task> _grade5Tasks = [
       'Начало координат',
       'Правее начала',
       'Левее начала',
-      'Произвольная'
+      'Произвольная',
     ],
     answer: 'Начало координат',
   ),
@@ -5781,9 +5640,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите: |-8| - |-3|',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      '8 - 3 = 5',
-    ],
+    explanationSteps: ['8 - 3 = 5'],
   ),
   const Task(
     id: 'g5_coord_19',
@@ -5801,9 +5658,7 @@ final List<Task> _grade5Tasks = [
     question: 'Точка A(−4) и точка B(2). Длина AB:',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      '|(-4) - 2| = |-6| = 6',
-    ],
+    explanationSteps: ['|(-4) - 2| = |-6| = 6'],
   ),
 ];
 
@@ -5832,10 +5687,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-7) + 3',
     type: TaskType.textInput,
     answer: '-4',
-    explanationSteps: [
-      'Разные знаки: |−7| − |3| = 4, знак "-"',
-      '-7 + 3 = -4',
-    ],
+    explanationSteps: ['Разные знаки: |−7| − |3| = 4, знак "-"', '-7 + 3 = -4'],
   ),
   const Task(
     id: 'g6_rat_3',
@@ -5844,9 +5696,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 4 - (-6)',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      '4 - (-6) = 4 + 6 = 10',
-    ],
+    explanationSteps: ['4 - (-6) = 4 + 6 = 10'],
   ),
   const Task(
     id: 'g6_rat_4',
@@ -5855,10 +5705,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-3) × (-4)',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      'Минус на минус = плюс',
-      '(-3) × (-4) = 12',
-    ],
+    explanationSteps: ['Минус на минус = плюс', '(-3) × (-4) = 12'],
   ),
   const Task(
     id: 'g6_rat_5',
@@ -5867,10 +5714,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-15) ÷ 3',
     type: TaskType.textInput,
     answer: '-5',
-    explanationSteps: [
-      'Минус на плюс = минус',
-      '-15 ÷ 3 = -5',
-    ],
+    explanationSteps: ['Минус на плюс = минус', '-15 ÷ 3 = -5'],
   ),
   const Task(
     id: 'g6_rat_6',
@@ -5879,9 +5723,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)³',
     type: TaskType.textInput,
     answer: '-8',
-    explanationSteps: [
-      '(-2)³ = (-2) × (-2) × (-2) = 4 × (-2) = -8',
-    ],
+    explanationSteps: ['(-2)³ = (-2) × (-2) × (-2) = 4 × (-2) = -8'],
   ),
   const Task(
     id: 'g6_rat_7',
@@ -5890,9 +5732,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)⁴',
     type: TaskType.textInput,
     answer: '16',
-    explanationSteps: [
-      '(-2)⁴ = ((-2)²)² = 4² = 16',
-    ],
+    explanationSteps: ['(-2)⁴ = ((-2)²)² = 4² = 16'],
   ),
   const Task(
     id: 'g6_rat_8',
@@ -5901,10 +5741,7 @@ final List<Task> _grade6Tasks = [
     question: 'Упростите: -(-(-3))',
     type: TaskType.textInput,
     answer: '-3',
-    explanationSteps: [
-      '-(-(-3)): нечётное число минусов',
-      'Ответ: -3',
-    ],
+    explanationSteps: ['-(-(-3)): нечётное число минусов', 'Ответ: -3'],
   ),
   const Task(
     id: 'g6_rat_9',
@@ -5913,9 +5750,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-1/2) × 4',
     type: TaskType.textInput,
     answer: '-2',
-    explanationSteps: [
-      '(-1/2) × 4 = -4/2 = -2',
-    ],
+    explanationSteps: ['(-1/2) × 4 = -4/2 = -2'],
   ),
   const Task(
     id: 'g6_rat_10',
@@ -5924,9 +5759,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-3/4) ÷ (-3/8)',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '(-3/4) × (-8/3) = 24/12 = 2',
-    ],
+    explanationSteps: ['(-3/4) × (-8/3) = 24/12 = 2'],
   ),
   const Task(
     id: 'g6_rat_11',
@@ -5935,9 +5768,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 2.5 + (-1.3)',
     type: TaskType.textInput,
     answer: '1.2',
-    explanationSteps: [
-      '2.5 - 1.3 = 1.2',
-    ],
+    explanationSteps: ['2.5 - 1.3 = 1.2'],
   ),
   const Task(
     id: 'g6_rat_12',
@@ -5946,9 +5777,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-0.4) × (-0.5)',
     type: TaskType.textInput,
     answer: '0.2',
-    explanationSteps: [
-      '(-0.4) × (-0.5) = 0.2 (минус × минус = плюс)',
-    ],
+    explanationSteps: ['(-0.4) × (-0.5) = 0.2 (минус × минус = плюс)'],
   ),
   const Task(
     id: 'g6_rat_13',
@@ -5966,10 +5795,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 3 - 5 + 2 - 4',
     type: TaskType.textInput,
     answer: '-4',
-    explanationSteps: [
-      '3 + 2 = 5, 5 + 4 = 9',
-      '5 - 9 = -4',
-    ],
+    explanationSteps: ['3 + 2 = 5, 5 + 4 = 9', '5 - 9 = -4'],
   ),
   const Task(
     id: 'g6_rat_15',
@@ -5978,10 +5804,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-6) ÷ (-2) × (-3)',
     type: TaskType.textInput,
     answer: '-9',
-    explanationSteps: [
-      '(-6) ÷ (-2) = 3',
-      '3 × (-3) = -9',
-    ],
+    explanationSteps: ['(-6) ÷ (-2) = 3', '3 × (-3) = -9'],
   ),
   const Task(
     id: 'g6_rat_16',
@@ -5999,9 +5822,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-5) + 5',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'Противоположные числа дают 0',
-    ],
+    explanationSteps: ['Противоположные числа дают 0'],
   ),
   const Task(
     id: 'g6_rat_18',
@@ -6019,10 +5840,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: |(-3) + (-4)|',
     type: TaskType.textInput,
     answer: '7',
-    explanationSteps: [
-      '(-3) + (-4) = -7',
-      '|-7| = 7',
-    ],
+    explanationSteps: ['(-3) + (-4) = -7', '|-7| = 7'],
   ),
   const Task(
     id: 'g6_rat_20',
@@ -6031,10 +5849,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)² - (-2)³',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      '(-2)² = 4, (-2)³ = -8',
-      '4 - (-8) = 4 + 8 = 12',
-    ],
+    explanationSteps: ['(-2)² = 4, (-2)³ = -8', '4 - (-8) = 4 + 8 = 12'],
   ),
 
   // ==================== ПРОПОРЦИИ (20 задач) ====================
@@ -6045,10 +5860,7 @@ final List<Task> _grade6Tasks = [
     question: 'Составьте пропорцию: 3:6 = ?:10',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      '3/6 = x/10',
-      'x = 3 × 10 / 6 = 5',
-    ],
+    explanationSteps: ['3/6 = x/10', 'x = 3 × 10 / 6 = 5'],
   ),
   const Task(
     id: 'g6_prop_2',
@@ -6057,9 +5869,7 @@ final List<Task> _grade6Tasks = [
     question: 'Найдите x: 4/x = 8/6',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'x = 4 × 6 / 8 = 3',
-    ],
+    explanationSteps: ['x = 4 × 6 / 8 = 3'],
   ),
   const Task(
     id: 'g6_prop_3',
@@ -6068,10 +5878,7 @@ final List<Task> _grade6Tasks = [
     question: '5 кг стоят 150 руб. Сколько стоят 8 кг?',
     type: TaskType.textInput,
     answer: '240',
-    explanationSteps: [
-      '1 кг = 150/5 = 30 руб.',
-      '8 кг = 30 × 8 = 240 руб.',
-    ],
+    explanationSteps: ['1 кг = 150/5 = 30 руб.', '8 кг = 30 × 8 = 240 руб.'],
   ),
   const Task(
     id: 'g6_prop_4',
@@ -6080,9 +5887,7 @@ final List<Task> _grade6Tasks = [
     question: 'Масштаб 1:100. На карте 3 см — это в реальности:',
     type: TaskType.textInput,
     answer: '300',
-    explanationSteps: [
-      '3 × 100 = 300 см = 3 м (но ответ в см = 300)',
-    ],
+    explanationSteps: ['3 × 100 = 300 см = 3 м (но ответ в см = 300)'],
   ),
   const Task(
     id: 'g6_prop_5',
@@ -6091,9 +5896,7 @@ final List<Task> _grade6Tasks = [
     question: 'Прямая пропорциональность: y = kx. Если x=3, y=12, то k=?',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      'k = y/x = 12/3 = 4',
-    ],
+    explanationSteps: ['k = y/x = 12/3 = 4'],
   ),
   const Task(
     id: 'g6_prop_6',
@@ -6123,11 +5926,7 @@ final List<Task> _grade6Tasks = [
     question: 'Разделите 60 в отношении 2:3',
     type: TaskType.textInput,
     answer: '24 и 36',
-    explanationSteps: [
-      'Части: 2+3=5',
-      '60/5=12',
-      '2 части: 24, 3 части: 36',
-    ],
+    explanationSteps: ['Части: 2+3=5', '60/5=12', '2 части: 24, 3 части: 36'],
   ),
   const Task(
     id: 'g6_prop_9',
@@ -6136,10 +5935,7 @@ final List<Task> _grade6Tasks = [
     question: 'Машина едет 240 км за 3 ч. За 5 часов проедет:',
     type: TaskType.textInput,
     answer: '400',
-    explanationSteps: [
-      'Скорость = 240/3 = 80 км/ч',
-      '80 × 5 = 400 км',
-    ],
+    explanationSteps: ['Скорость = 240/3 = 80 км/ч', '80 × 5 = 400 км'],
   ),
   const Task(
     id: 'g6_prop_10',
@@ -6148,10 +5944,7 @@ final List<Task> _grade6Tasks = [
     question: 'Если 4:x = 2:5, то x=?',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      '4 × 5 = 2 × x',
-      'x = 20/2 = 10',
-    ],
+    explanationSteps: ['4 × 5 = 2 × x', 'x = 20/2 = 10'],
   ),
   const Task(
     id: 'g6_prop_11',
@@ -6173,9 +5966,7 @@ final List<Task> _grade6Tasks = [
     question: 'Обратная пропорция: xy=12. Если x=3, то y=?',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '3 × y = 12 → y = 4',
-    ],
+    explanationSteps: ['3 × y = 12 → y = 4'],
   ),
   const Task(
     id: 'g6_prop_13',
@@ -6184,10 +5975,7 @@ final List<Task> _grade6Tasks = [
     question: '3 пакета сока стоят 90 руб. 5 пакетов стоят:',
     type: TaskType.textInput,
     answer: '150',
-    explanationSteps: [
-      '1 пакет = 30 руб.',
-      '5 × 30 = 150 руб.',
-    ],
+    explanationSteps: ['1 пакет = 30 руб.', '5 × 30 = 150 руб.'],
   ),
   const Task(
     id: 'g6_prop_14',
@@ -6196,9 +5984,7 @@ final List<Task> _grade6Tasks = [
     question: 'Масштаб 1:50000. 4 см на карте = ? км',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '4 × 50000 = 200000 см = 2000 м = 2 км',
-    ],
+    explanationSteps: ['4 × 50000 = 200000 см = 2000 м = 2 км'],
   ),
   const Task(
     id: 'g6_prop_15',
@@ -6216,9 +6002,7 @@ final List<Task> _grade6Tasks = [
     question: 'Найдите четвёртый пропорциональный: 6:9 = 8:x',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      'x = 9 × 8 / 6 = 72/6 = 12',
-    ],
+    explanationSteps: ['x = 9 × 8 / 6 = 72/6 = 12'],
   ),
   const Task(
     id: 'g6_prop_17',
@@ -6227,9 +6011,7 @@ final List<Task> _grade6Tasks = [
     question: 'При скорости 60 км/ч путь 180 км займёт:',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      't = S/v = 180/60 = 3 ч',
-    ],
+    explanationSteps: ['t = S/v = 180/60 = 3 ч'],
   ),
   const Task(
     id: 'g6_prop_18',
@@ -6238,10 +6020,7 @@ final List<Task> _grade6Tasks = [
     question: 'Три числа относятся как 1:2:3, их сумма 24. Найдите наибольшее.',
     type: TaskType.textInput,
     answer: '12',
-    explanationSteps: [
-      '1+2+3=6, 24/6=4',
-      'Наибольшее: 3×4=12',
-    ],
+    explanationSteps: ['1+2+3=6, 24/6=4', 'Наибольшее: 3×4=12'],
   ),
   const Task(
     id: 'g6_prop_19',
@@ -6250,10 +6029,7 @@ final List<Task> _grade6Tasks = [
     question: 'Если y обратно пропорционально x, и y=6 при x=4, то y при x=8:',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'xy = const = 6 × 4 = 24',
-      'y = 24/8 = 3',
-    ],
+    explanationSteps: ['xy = const = 6 × 4 = 24', 'y = 24/8 = 3'],
   ),
   const Task(
     id: 'g6_prop_20',
@@ -6273,10 +6049,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 2x + 6 = 14',
     type: TaskType.textInput,
     answer: 'x = 4',
-    explanationSteps: [
-      '2x = 14 - 6 = 8',
-      'x = 4',
-    ],
+    explanationSteps: ['2x = 14 - 6 = 8', 'x = 4'],
   ),
   const Task(
     id: 'g6_eq_2',
@@ -6285,10 +6058,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 3x - 9 = 0',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      '3x = 9',
-      'x = 3',
-    ],
+    explanationSteps: ['3x = 9', 'x = 3'],
   ),
   const Task(
     id: 'g6_eq_3',
@@ -6297,9 +6067,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: x/4 = 7',
     type: TaskType.textInput,
     answer: 'x = 28',
-    explanationSteps: [
-      'x = 7 × 4 = 28',
-    ],
+    explanationSteps: ['x = 7 × 4 = 28'],
   ),
   const Task(
     id: 'g6_eq_4',
@@ -6308,11 +6076,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 5x + 3 = 3x + 11',
     type: TaskType.textInput,
     answer: 'x = 4',
-    explanationSteps: [
-      '5x - 3x = 11 - 3',
-      '2x = 8',
-      'x = 4',
-    ],
+    explanationSteps: ['5x - 3x = 11 - 3', '2x = 8', 'x = 4'],
   ),
   const Task(
     id: 'g6_eq_5',
@@ -6321,9 +6085,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: -2x = 10',
     type: TaskType.textInput,
     answer: 'x = -5',
-    explanationSteps: [
-      'x = 10 / (-2) = -5',
-    ],
+    explanationSteps: ['x = 10 / (-2) = -5'],
   ),
   const Task(
     id: 'g6_eq_6',
@@ -6332,10 +6094,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: x/3 + 2 = 5',
     type: TaskType.textInput,
     answer: 'x = 9',
-    explanationSteps: [
-      'x/3 = 5 - 2 = 3',
-      'x = 9',
-    ],
+    explanationSteps: ['x/3 = 5 - 2 = 3', 'x = 9'],
   ),
   const Task(
     id: 'g6_eq_7',
@@ -6344,10 +6103,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 4(x - 3) = 8',
     type: TaskType.textInput,
     answer: 'x = 5',
-    explanationSteps: [
-      'x - 3 = 2',
-      'x = 5',
-    ],
+    explanationSteps: ['x - 3 = 2', 'x = 5'],
   ),
   const Task(
     id: 'g6_eq_8',
@@ -6356,10 +6112,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 2(x + 1) = 3(x - 2)',
     type: TaskType.textInput,
     answer: 'x = 8',
-    explanationSteps: [
-      '2x + 2 = 3x - 6',
-      '8 = x',
-    ],
+    explanationSteps: ['2x + 2 = 3x - 6', '8 = x'],
   ),
   const Task(
     id: 'g6_eq_9',
@@ -6368,9 +6121,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: x - 0.5 = 2.3',
     type: TaskType.textInput,
     answer: 'x = 2.8',
-    explanationSteps: [
-      'x = 2.3 + 0.5 = 2.8',
-    ],
+    explanationSteps: ['x = 2.3 + 0.5 = 2.8'],
   ),
   const Task(
     id: 'g6_eq_10',
@@ -6379,9 +6130,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 3x/2 = 9',
     type: TaskType.textInput,
     answer: 'x = 6',
-    explanationSteps: [
-      'x = 9 × 2/3 = 6',
-    ],
+    explanationSteps: ['x = 9 × 2/3 = 6'],
   ),
   const Task(
     id: 'g6_eq_11',
@@ -6390,10 +6139,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: x + 2x + 3x = 24',
     type: TaskType.textInput,
     answer: 'x = 4',
-    explanationSteps: [
-      '6x = 24',
-      'x = 4',
-    ],
+    explanationSteps: ['6x = 24', 'x = 4'],
   ),
   const Task(
     id: 'g6_eq_12',
@@ -6402,10 +6148,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 7 - 3x = 1',
     type: TaskType.textInput,
     answer: 'x = 2',
-    explanationSteps: [
-      '-3x = 1 - 7 = -6',
-      'x = 2',
-    ],
+    explanationSteps: ['-3x = 1 - 7 = -6', 'x = 2'],
   ),
   const Task(
     id: 'g6_eq_13',
@@ -6414,9 +6157,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 0.2x = 4',
     type: TaskType.textInput,
     answer: 'x = 20',
-    explanationSteps: [
-      'x = 4 / 0.2 = 20',
-    ],
+    explanationSteps: ['x = 4 / 0.2 = 20'],
   ),
   const Task(
     id: 'g6_eq_14',
@@ -6425,10 +6166,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: x/5 - 1 = 3',
     type: TaskType.textInput,
     answer: 'x = 20',
-    explanationSteps: [
-      'x/5 = 4',
-      'x = 20',
-    ],
+    explanationSteps: ['x/5 = 4', 'x = 20'],
   ),
   const Task(
     id: 'g6_eq_15',
@@ -6437,11 +6175,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 5 - (x + 2) = 0',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      '5 - x - 2 = 0',
-      '3 - x = 0',
-      'x = 3',
-    ],
+    explanationSteps: ['5 - x - 2 = 0', '3 - x = 0', 'x = 3'],
   ),
   const Task(
     id: 'g6_eq_16',
@@ -6450,11 +6184,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 4x - (2x - 6) = 18',
     type: TaskType.textInput,
     answer: 'x = 6',
-    explanationSteps: [
-      '4x - 2x + 6 = 18',
-      '2x = 12',
-      'x = 6',
-    ],
+    explanationSteps: ['4x - 2x + 6 = 18', '2x = 12', 'x = 6'],
   ),
   const Task(
     id: 'g6_eq_17',
@@ -6463,9 +6193,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: -x = -7',
     type: TaskType.textInput,
     answer: 'x = 7',
-    explanationSteps: [
-      '-x = -7 → x = 7',
-    ],
+    explanationSteps: ['-x = -7 → x = 7'],
   ),
   const Task(
     id: 'g6_eq_18',
@@ -6474,10 +6202,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 2x + 1 = 1 - 2x',
     type: TaskType.textInput,
     answer: 'x = 0',
-    explanationSteps: [
-      '4x = 0',
-      'x = 0',
-    ],
+    explanationSteps: ['4x = 0', 'x = 0'],
   ),
   const Task(
     id: 'g6_eq_19',
@@ -6486,10 +6211,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: (x + 3)/2 = 4',
     type: TaskType.textInput,
     answer: 'x = 5',
-    explanationSteps: [
-      'x + 3 = 8',
-      'x = 5',
-    ],
+    explanationSteps: ['x + 3 = 8', 'x = 5'],
   ),
   const Task(
     id: 'g6_eq_20',
@@ -6498,10 +6220,7 @@ final List<Task> _grade6Tasks = [
     question: 'Решите: 6x - 2 = 4x + 6',
     type: TaskType.textInput,
     answer: 'x = 4',
-    explanationSteps: [
-      '2x = 8',
-      'x = 4',
-    ],
+    explanationSteps: ['2x = 8', 'x = 4'],
   ),
 
   // ==================== ГЕОМЕТРИЯ: КООРДИНАТЫ НА ПЛОСКОСТИ (20 задач) ====================
@@ -6554,7 +6273,7 @@ final List<Task> _grade6Tasks = [
       'Начало координат',
       'Точка на оси OX',
       'Точка на оси OY',
-      'Точка в I квадранте'
+      'Точка в I квадранте',
     ],
     answer: 'Начало координат',
   ),
@@ -6691,7 +6410,7 @@ final List<Task> _grade6Tasks = [
       'Левее оси OY и выше оси OX',
       'Правее оси OY и выше оси OX',
       'Левее оси OY и ниже оси OX',
-      'На оси OX'
+      'На оси OX',
     ],
     answer: 'Левее оси OY и выше оси OX',
   ),
@@ -6741,9 +6460,7 @@ final List<Task> _grade7Tasks = [
         'Найдите угловой коэффициент прямой, проходящей через (0,2) и (3,8)',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      'k = (y₂ - y₁)/(x₂ - x₁) = (8 - 2)/(3 - 0) = 6/3 = 2',
-    ],
+    explanationSteps: ['k = (y₂ - y₁)/(x₂ - x₁) = (8 - 2)/(3 - 0) = 6/3 = 2'],
   ),
   const Task(
     id: 'g7_lin_2',
@@ -6752,9 +6469,7 @@ final List<Task> _grade7Tasks = [
     question: 'y = 2x - 3. При x = 4, y = ?',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'y = 2 × 4 - 3 = 8 - 3 = 5',
-    ],
+    explanationSteps: ['y = 2 × 4 - 3 = 8 - 3 = 5'],
   ),
   const Task(
     id: 'g7_lin_3',
@@ -6763,10 +6478,7 @@ final List<Task> _grade7Tasks = [
     question: 'При каком x прямая y = 3x + 6 пересекает ось OX?',
     type: TaskType.textInput,
     answer: '-2',
-    explanationSteps: [
-      'y = 0: 3x + 6 = 0',
-      'x = -2',
-    ],
+    explanationSteps: ['y = 0: 3x + 6 = 0', 'x = -2'],
   ),
   const Task(
     id: 'g7_lin_4',
@@ -6796,7 +6508,7 @@ final List<Task> _grade7Tasks = [
       'Параллельными',
       'Пересекающимися',
       'Совпадающими',
-      'Перпендикулярными'
+      'Перпендикулярными',
     ],
     answer: 'Параллельными',
   ),
@@ -6810,7 +6522,7 @@ final List<Task> _grade7Tasks = [
       'Горизонтальной прямой',
       'Вертикальной прямой',
       'Параболой',
-      'Пустым'
+      'Пустым',
     ],
     answer: 'Горизонтальной прямой',
   ),
@@ -6821,10 +6533,7 @@ final List<Task> _grade7Tasks = [
     question: 'Найдите b в y = 3x + b, если график проходит через (2, 10)',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '10 = 3 × 2 + b',
-      'b = 10 - 6 = 4',
-    ],
+    explanationSteps: ['10 = 3 × 2 + b', 'b = 10 - 6 = 4'],
   ),
   const Task(
     id: 'g7_lin_9',
@@ -6850,7 +6559,7 @@ final List<Task> _grade7Tasks = [
       'Да',
       'Нет, это линейная функция',
       'Нет, это квадратная',
-      'Нет, это гипербола'
+      'Нет, это гипербола',
     ],
     answer: 'Да',
   ),
@@ -6861,10 +6570,7 @@ final List<Task> _grade7Tasks = [
     question: 'При каком k прямые y = kx + 3 и y = 2x - 1 параллельны?',
     type: TaskType.textInput,
     answer: 'k = 2',
-    explanationSteps: [
-      'Параллельны при равных угловых коэффициентах',
-      'k = 2',
-    ],
+    explanationSteps: ['Параллельны при равных угловых коэффициентах', 'k = 2'],
   ),
   const Task(
     id: 'g7_lin_12',
@@ -6882,9 +6588,7 @@ final List<Task> _grade7Tasks = [
     question: 'Угловой коэффициент прямой y = -4x + 7:',
     type: TaskType.textInput,
     answer: '-4',
-    explanationSteps: [
-      'В форме y = kx + b: k = -4',
-    ],
+    explanationSteps: ['В форме y = kx + b: k = -4'],
   ),
   const Task(
     id: 'g7_lin_14',
@@ -6903,10 +6607,7 @@ final List<Task> _grade7Tasks = [
         'Уравнение прямой, проходящей через (0,3) с угловым коэффициентом 2:',
     type: TaskType.textInput,
     answer: 'y = 2x + 3',
-    explanationSteps: [
-      'y = kx + b, k=2, b=3',
-      'y = 2x + 3',
-    ],
+    explanationSteps: ['y = kx + b, k=2, b=3', 'y = 2x + 3'],
   ),
   const Task(
     id: 'g7_lin_16',
@@ -6915,11 +6616,7 @@ final List<Task> _grade7Tasks = [
     question: 'При каком x: y = 2x - 4 > 0?',
     type: TaskType.textInput,
     answer: 'x > 2',
-    explanationSteps: [
-      '2x - 4 > 0',
-      '2x > 4',
-      'x > 2',
-    ],
+    explanationSteps: ['2x - 4 > 0', '2x > 4', 'x > 2'],
   ),
   const Task(
     id: 'g7_lin_17',
@@ -6928,10 +6625,7 @@ final List<Task> _grade7Tasks = [
     question: 'Найдите x при y = 0 в функции y = -5x + 15:',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      '-5x + 15 = 0',
-      'x = 3',
-    ],
+    explanationSteps: ['-5x + 15 = 0', 'x = 3'],
   ),
   const Task(
     id: 'g7_lin_18',
@@ -6943,7 +6637,7 @@ final List<Task> _grade7Tasks = [
       'Прямая пересекает OY выше нуля',
       'Прямая пересекает OY ниже нуля',
       'Прямая не пересекает OY',
-      'Прямая горизонтальна'
+      'Прямая горизонтальна',
     ],
     answer: 'Прямая пересекает OY ниже нуля',
   ),
@@ -6954,10 +6648,7 @@ final List<Task> _grade7Tasks = [
     question: 'Запишите уравнение прямой через точки (0,0) и (3,6):',
     type: TaskType.textInput,
     answer: 'y = 2x',
-    explanationSteps: [
-      'k = 6/3 = 2, b = 0',
-      'y = 2x',
-    ],
+    explanationSteps: ['k = 6/3 = 2, b = 0', 'y = 2x'],
   ),
   const Task(
     id: 'g7_lin_20',
@@ -6966,11 +6657,7 @@ final List<Task> _grade7Tasks = [
     question: 'Прямые y = x + 1 и y = -x + 3 пересекаются в точке:',
     type: TaskType.textInput,
     answer: '(1, 2)',
-    explanationSteps: [
-      'x + 1 = -x + 3',
-      '2x = 2, x = 1',
-      'y = 2',
-    ],
+    explanationSteps: ['x + 1 = -x + 3', '2x = 2, x = 1', 'y = 2'],
   ),
 
   // ==================== СТЕПЕНИ И ОДНОЧЛЕНЫ (20 задач) ====================
@@ -6981,10 +6668,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: a³ × a⁴',
     type: TaskType.textInput,
     answer: 'a⁷',
-    explanationSteps: [
-      'aᵐ × aⁿ = aᵐ⁺ⁿ',
-      'a³ × a⁴ = a⁷',
-    ],
+    explanationSteps: ['aᵐ × aⁿ = aᵐ⁺ⁿ', 'a³ × a⁴ = a⁷'],
   ),
   const Task(
     id: 'g7_pow_2',
@@ -6993,10 +6677,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: b⁶ ÷ b²',
     type: TaskType.textInput,
     answer: 'b⁴',
-    explanationSteps: [
-      'aᵐ ÷ aⁿ = aᵐ⁻ⁿ',
-      'b⁶ ÷ b² = b⁴',
-    ],
+    explanationSteps: ['aᵐ ÷ aⁿ = aᵐ⁻ⁿ', 'b⁶ ÷ b² = b⁴'],
   ),
   const Task(
     id: 'g7_pow_3',
@@ -7005,10 +6686,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: (c²)³',
     type: TaskType.textInput,
     answer: 'c⁶',
-    explanationSteps: [
-      '(aᵐ)ⁿ = aᵐⁿ',
-      '(c²)³ = c⁶',
-    ],
+    explanationSteps: ['(aᵐ)ⁿ = aᵐⁿ', '(c²)³ = c⁶'],
   ),
   const Task(
     id: 'g7_pow_4',
@@ -7017,9 +6695,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите: 2³ × 2²',
     type: TaskType.textInput,
     answer: '32',
-    explanationSteps: [
-      '2³ × 2² = 2⁵ = 32',
-    ],
+    explanationSteps: ['2³ × 2² = 2⁵ = 32'],
   ),
   const Task(
     id: 'g7_pow_5',
@@ -7028,10 +6704,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: 3x² × 2x³',
     type: TaskType.textInput,
     answer: '6x⁵',
-    explanationSteps: [
-      '3 × 2 = 6, x² × x³ = x⁵',
-      '6x⁵',
-    ],
+    explanationSteps: ['3 × 2 = 6, x² × x³ = x⁵', '6x⁵'],
   ),
   const Task(
     id: 'g7_pow_6',
@@ -7043,7 +6716,7 @@ final List<Task> _grade7Tasks = [
       'Произведение числа и переменных',
       'Сумма одночленов',
       'Любое выражение',
-      'Только число'
+      'Только число',
     ],
     answer: 'Произведение числа и переменных',
   ),
@@ -7054,9 +6727,7 @@ final List<Task> _grade7Tasks = [
     question: 'Степень одночлена 4x²y³:',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'Сумма показателей: 2 + 3 = 5',
-    ],
+    explanationSteps: ['Сумма показателей: 2 + 3 = 5'],
   ),
   const Task(
     id: 'g7_pow_8',
@@ -7065,9 +6736,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: (2x)³',
     type: TaskType.textInput,
     answer: '8x³',
-    explanationSteps: [
-      '(2x)³ = 2³ × x³ = 8x³',
-    ],
+    explanationSteps: ['(2x)³ = 2³ × x³ = 8x³'],
   ),
   const Task(
     id: 'g7_pow_9',
@@ -7076,9 +6745,7 @@ final List<Task> _grade7Tasks = [
     question: 'a⁰ = ? (при a ≠ 0)',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'Любое ненулевое число в степени 0 равно 1',
-    ],
+    explanationSteps: ['Любое ненулевое число в степени 0 равно 1'],
   ),
   const Task(
     id: 'g7_pow_10',
@@ -7087,12 +6754,7 @@ final List<Task> _grade7Tasks = [
     question: 'Умножьте одночлены: 5ab × 3a²b',
     type: TaskType.textInput,
     answer: '15a³b²',
-    explanationSteps: [
-      '5 × 3 = 15',
-      'a × a² = a³',
-      'b × b = b²',
-      '15a³b²',
-    ],
+    explanationSteps: ['5 × 3 = 15', 'a × a² = a³', 'b × b = b²', '15a³b²'],
   ),
   const Task(
     id: 'g7_pow_11',
@@ -7101,9 +6763,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите: (-3)²',
     type: TaskType.textInput,
     answer: '9',
-    explanationSteps: [
-      '(-3)² = 9 (чётная степень — положительный результат)',
-    ],
+    explanationSteps: ['(-3)² = 9 (чётная степень — положительный результат)'],
   ),
   const Task(
     id: 'g7_pow_12',
@@ -7112,10 +6772,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: 12x⁴ ÷ (4x²)',
     type: TaskType.textInput,
     answer: '3x²',
-    explanationSteps: [
-      '12/4 = 3, x⁴/x² = x²',
-      '3x²',
-    ],
+    explanationSteps: ['12/4 = 3, x⁴/x² = x²', '3x²'],
   ),
   const Task(
     id: 'g7_pow_13',
@@ -7124,9 +6781,7 @@ final List<Task> _grade7Tasks = [
     question: '(ab)³ = ?',
     type: TaskType.textInput,
     answer: 'a³b³',
-    explanationSteps: [
-      '(ab)³ = a³b³',
-    ],
+    explanationSteps: ['(ab)³ = a³b³'],
   ),
   const Task(
     id: 'g7_pow_14',
@@ -7135,9 +6790,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите: 10⁴',
     type: TaskType.textInput,
     answer: '10000',
-    explanationSteps: [
-      '10⁴ = 10000',
-    ],
+    explanationSteps: ['10⁴ = 10000'],
   ),
   const Task(
     id: 'g7_pow_15',
@@ -7146,9 +6799,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: x⁵ × x⁻³ (при x ≠ 0)',
     type: TaskType.textInput,
     answer: 'x²',
-    explanationSteps: [
-      'x⁵ × x⁻³ = x^(5-3) = x²',
-    ],
+    explanationSteps: ['x⁵ × x⁻³ = x^(5-3) = x²'],
   ),
   const Task(
     id: 'g7_pow_16',
@@ -7157,9 +6808,7 @@ final List<Task> _grade7Tasks = [
     question: 'Коэффициент одночлена -7x³y:',
     type: TaskType.textInput,
     answer: '-7',
-    explanationSteps: [
-      'Числовой множитель = -7',
-    ],
+    explanationSteps: ['Числовой множитель = -7'],
   ),
   const Task(
     id: 'g7_pow_17',
@@ -7168,11 +6817,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите: (3²)² × 3⁰',
     type: TaskType.textInput,
     answer: '81',
-    explanationSteps: [
-      '(3²)² = 3⁴ = 81',
-      '3⁰ = 1',
-      '81 × 1 = 81',
-    ],
+    explanationSteps: ['(3²)² = 3⁴ = 81', '3⁰ = 1', '81 × 1 = 81'],
   ),
   const Task(
     id: 'g7_pow_18',
@@ -7190,9 +6835,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите: 2⁵ ÷ 2³',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '2⁵ ÷ 2³ = 2² = 4',
-    ],
+    explanationSteps: ['2⁵ ÷ 2³ = 2² = 4'],
   ),
   const Task(
     id: 'g7_pow_20',
@@ -7201,10 +6844,7 @@ final List<Task> _grade7Tasks = [
     question: 'Упростите: (2a²b)³',
     type: TaskType.textInput,
     answer: '8a⁶b³',
-    explanationSteps: [
-      '2³ = 8, (a²)³ = a⁶, b³',
-      '8a⁶b³',
-    ],
+    explanationSteps: ['2³ = 8, (a²)³ = a⁶, b³', '8a⁶b³'],
   ),
 
   // ==================== МНОГОЧЛЕНЫ (20 задач) ====================
@@ -7215,11 +6855,7 @@ final List<Task> _grade7Tasks = [
     question: 'Сложите: (3x + 2) + (x - 5)',
     type: TaskType.textInput,
     answer: '4x - 3',
-    explanationSteps: [
-      '3x + x = 4x',
-      '2 + (-5) = -3',
-      '4x - 3',
-    ],
+    explanationSteps: ['3x + x = 4x', '2 + (-5) = -3', '4x - 3'],
   ),
   const Task(
     id: 'g7_poly_2',
@@ -7228,11 +6864,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычтите: (5x² - 3x) - (2x² + x)',
     type: TaskType.textInput,
     answer: '3x² - 4x',
-    explanationSteps: [
-      '5x² - 2x² = 3x²',
-      '-3x - x = -4x',
-      '3x² - 4x',
-    ],
+    explanationSteps: ['5x² - 2x² = 3x²', '-3x - x = -4x', '3x² - 4x'],
   ),
   const Task(
     id: 'g7_poly_3',
@@ -7241,11 +6873,7 @@ final List<Task> _grade7Tasks = [
     question: 'Умножьте: 2x(3x - 4)',
     type: TaskType.textInput,
     answer: '6x² - 8x',
-    explanationSteps: [
-      '2x × 3x = 6x²',
-      '2x × (-4) = -8x',
-      '6x² - 8x',
-    ],
+    explanationSteps: ['2x × 3x = 6x²', '2x × (-4) = -8x', '6x² - 8x'],
   ),
   const Task(
     id: 'g7_poly_4',
@@ -7267,9 +6895,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: (a + b)²',
     type: TaskType.textInput,
     answer: 'a² + 2ab + b²',
-    explanationSteps: [
-      'Формула: (a+b)² = a² + 2ab + b²',
-    ],
+    explanationSteps: ['Формула: (a+b)² = a² + 2ab + b²'],
   ),
   const Task(
     id: 'g7_poly_6',
@@ -7278,9 +6904,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: (a - b)²',
     type: TaskType.textInput,
     answer: 'a² - 2ab + b²',
-    explanationSteps: [
-      'Формула: (a-b)² = a² - 2ab + b²',
-    ],
+    explanationSteps: ['Формула: (a-b)² = a² - 2ab + b²'],
   ),
   const Task(
     id: 'g7_poly_7',
@@ -7289,9 +6913,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: (a + b)(a - b)',
     type: TaskType.textInput,
     answer: 'a² - b²',
-    explanationSteps: [
-      'Формула разности квадратов: (a+b)(a-b) = a² - b²',
-    ],
+    explanationSteps: ['Формула разности квадратов: (a+b)(a-b) = a² - b²'],
   ),
   const Task(
     id: 'g7_poly_8',
@@ -7300,10 +6922,7 @@ final List<Task> _grade7Tasks = [
     question: 'Разложите на множители: x² - 9',
     type: TaskType.textInput,
     answer: '(x - 3)(x + 3)',
-    explanationSteps: [
-      'a² - b² = (a-b)(a+b)',
-      'x² - 9 = (x-3)(x+3)',
-    ],
+    explanationSteps: ['a² - b² = (a-b)(a+b)', 'x² - 9 = (x-3)(x+3)'],
   ),
   const Task(
     id: 'g7_poly_9',
@@ -7312,10 +6931,7 @@ final List<Task> _grade7Tasks = [
     question: 'Разложите на множители: 2x² + 6x',
     type: TaskType.textInput,
     answer: '2x(x + 3)',
-    explanationSteps: [
-      'Выносим общий множитель: 2x',
-      '2x(x + 3)',
-    ],
+    explanationSteps: ['Выносим общий множитель: 2x', '2x(x + 3)'],
   ),
   const Task(
     id: 'g7_poly_10',
@@ -7324,9 +6940,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: (x + 1)²',
     type: TaskType.textInput,
     answer: 'x² + 2x + 1',
-    explanationSteps: [
-      '(x+1)² = x² + 2×x×1 + 1 = x² + 2x + 1',
-    ],
+    explanationSteps: ['(x+1)² = x² + 2×x×1 + 1 = x² + 2x + 1'],
   ),
   const Task(
     id: 'g7_poly_11',
@@ -7335,9 +6949,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите 99² с помощью формулы: (100-1)²',
     type: TaskType.textInput,
     answer: '9801',
-    explanationSteps: [
-      '(100-1)² = 10000 - 200 + 1 = 9801',
-    ],
+    explanationSteps: ['(100-1)² = 10000 - 200 + 1 = 9801'],
   ),
   const Task(
     id: 'g7_poly_12',
@@ -7346,9 +6958,7 @@ final List<Task> _grade7Tasks = [
     question: 'Вычислите 101 × 99 как (100+1)(100-1):',
     type: TaskType.textInput,
     answer: '9999',
-    explanationSteps: [
-      '(100+1)(100-1) = 100² - 1² = 10000 - 1 = 9999',
-    ],
+    explanationSteps: ['(100+1)(100-1) = 100² - 1² = 10000 - 1 = 9999'],
   ),
   const Task(
     id: 'g7_poly_13',
@@ -7357,9 +6967,7 @@ final List<Task> _grade7Tasks = [
     question: 'Разложите: 4x² - 1',
     type: TaskType.textInput,
     answer: '(2x - 1)(2x + 1)',
-    explanationSteps: [
-      '4x² - 1 = (2x)² - 1² = (2x-1)(2x+1)',
-    ],
+    explanationSteps: ['4x² - 1 = (2x)² - 1² = (2x-1)(2x+1)'],
   ),
   const Task(
     id: 'g7_poly_14',
@@ -7368,9 +6976,7 @@ final List<Task> _grade7Tasks = [
     question: 'Степень многочлена 3x⁴ - 2x² + x - 5:',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      'Степень = наибольший показатель = 4',
-    ],
+    explanationSteps: ['Степень = наибольший показатель = 4'],
   ),
   const Task(
     id: 'g7_poly_15',
@@ -7379,9 +6985,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: -(x - 3)',
     type: TaskType.textInput,
     answer: '-x + 3',
-    explanationSteps: [
-      'Меняем знаки каждого слагаемого: -x + 3',
-    ],
+    explanationSteps: ['Меняем знаки каждого слагаемого: -x + 3'],
   ),
   const Task(
     id: 'g7_poly_16',
@@ -7417,10 +7021,7 @@ final List<Task> _grade7Tasks = [
     question: 'Разложите: ax + ay',
     type: TaskType.textInput,
     answer: 'a(x + y)',
-    explanationSteps: [
-      'Выносим общий множитель a',
-      'a(x + y)',
-    ],
+    explanationSteps: ['Выносим общий множитель a', 'a(x + y)'],
   ),
   const Task(
     id: 'g7_poly_19',
@@ -7429,10 +7030,7 @@ final List<Task> _grade7Tasks = [
     question: 'Раскройте: (2x + y)²',
     type: TaskType.textInput,
     answer: '4x² + 4xy + y²',
-    explanationSteps: [
-      '(2x)² + 2×2x×y + y²',
-      '4x² + 4xy + y²',
-    ],
+    explanationSteps: ['(2x)² + 2×2x×y + y²', '4x² + 4xy + y²'],
   ),
   const Task(
     id: 'g7_poly_20',
@@ -7455,10 +7053,7 @@ final List<Task> _grade7Tasks = [
     question: 'В треугольнике углы 40° и 70°. Третий угол:',
     type: TaskType.textInput,
     answer: '70',
-    explanationSteps: [
-      'Сумма углов = 180°',
-      '180 - 40 - 70 = 70°',
-    ],
+    explanationSteps: ['Сумма углов = 180°', '180 - 40 - 70 = 70°'],
   ),
   const Task(
     id: 'g7_tri_2',
@@ -7468,9 +7063,7 @@ final List<Task> _grade7Tasks = [
         'В равнобедренном треугольнике основание 4, боковая сторона 5. Периметр:',
     type: TaskType.textInput,
     answer: '14',
-    explanationSteps: [
-      'P = 4 + 5 + 5 = 14',
-    ],
+    explanationSteps: ['P = 4 + 5 + 5 = 14'],
   ),
   const Task(
     id: 'g7_tri_3',
@@ -7483,7 +7076,7 @@ final List<Task> _grade7Tasks = [
       'Первый (сторона-угол-сторона)',
       'Второй (угол-сторона-угол)',
       'Третий (три стороны)',
-      'Четвёртый'
+      'Четвёртый',
     ],
     answer: 'Второй (угол-сторона-угол)',
   ),
@@ -7508,10 +7101,7 @@ final List<Task> _grade7Tasks = [
         'В прямоугольном треугольнике один острый угол 35°. Второй острый угол:',
     type: TaskType.textInput,
     answer: '55',
-    explanationSteps: [
-      'Сумма острых углов = 90°',
-      '90° - 35° = 55°',
-    ],
+    explanationSteps: ['Сумма острых углов = 90°', '90° - 35° = 55°'],
   ),
   const Task(
     id: 'g7_tri_6',
@@ -7523,7 +7113,7 @@ final List<Task> _grade7Tasks = [
       'Высота к основанию',
       'Отрезок от вершины до середины противоположной стороны',
       'Биссектриса',
-      'Перпендикуляр из вершины'
+      'Перпендикуляр из вершины',
     ],
     answer: 'Отрезок от вершины до середины противоположной стороны',
   ),
@@ -7586,7 +7176,7 @@ final List<Task> _grade7Tasks = [
       'делит угол пополам',
       'делит сторону пополам',
       'перпендикулярен стороне',
-      'соединяет середины сторон'
+      'соединяет середины сторон',
     ],
     answer: 'делит угол пополам',
   ),
@@ -7600,7 +7190,7 @@ final List<Task> _grade7Tasks = [
       'Прямоугольным',
       'Тупоугольным',
       'Равносторонним',
-      'Равнобедренным'
+      'Равнобедренным',
     ],
     answer: 'Равносторонним',
   ),
@@ -7624,7 +7214,7 @@ final List<Task> _grade7Tasks = [
       'перпендикулярно к прямой, содержащей противоположную сторону',
       'обязательно к середине стороны',
       'только в равностороннем треугольнике',
-      'параллельно основанию'
+      'параллельно основанию',
     ],
     answer: 'перпендикулярно к прямой, содержащей противоположную сторону',
   ),
@@ -7638,7 +7228,7 @@ final List<Task> _grade7Tasks = [
       'Да',
       'Нет — нарушено неравенство треугольника',
       'Только при прямом угле',
-      'Можно, но он вырожденный'
+      'Можно, но он вырожденный',
     ],
     answer: 'Нет — нарушено неравенство треугольника',
   ),
@@ -7652,7 +7242,7 @@ final List<Task> _grade7Tasks = [
       'Равенстве одной стороны',
       'Равенстве двух сторон',
       'Равенстве трёх сторон',
-      'Равенстве всех углов'
+      'Равенстве всех углов',
     ],
     answer: 'Равенстве трёх сторон',
   ),
@@ -7666,7 +7256,7 @@ final List<Task> _grade7Tasks = [
       'двух сторон и угла между ними',
       'трёх углов',
       'одной стороны',
-      'двух высот'
+      'двух высот',
     ],
     answer: 'двух сторон и угла между ними',
   ),
@@ -7689,9 +7279,7 @@ final List<Task> _grade7Tasks = [
     question: 'Сумма углов любого треугольника:',
     type: TaskType.textInput,
     answer: '180',
-    explanationSteps: [
-      'Сумма углов треугольника = 180°',
-    ],
+    explanationSteps: ['Сумма углов треугольника = 180°'],
   ),
 
   // ==================== СИСТЕМЫ УРАВНЕНИЙ (20 задач) ====================
@@ -7702,10 +7290,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: x + y = 5, x - y = 1',
     type: TaskType.textInput,
     answer: 'x=3, y=2',
-    explanationSteps: [
-      'Складываем: 2x = 6 → x = 3',
-      'y = 5 - 3 = 2',
-    ],
+    explanationSteps: ['Складываем: 2x = 6 → x = 3', 'y = 5 - 3 = 2'],
   ),
   const Task(
     id: 'g7_sys_2',
@@ -7714,10 +7299,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: 2x + y = 8, x + y = 5',
     type: TaskType.textInput,
     answer: 'x=3, y=2',
-    explanationSteps: [
-      'Вычитаем второе из первого: x = 3',
-      'y = 5 - 3 = 2',
-    ],
+    explanationSteps: ['Вычитаем второе из первого: x = 3', 'y = 5 - 3 = 2'],
   ),
   const Task(
     id: 'g7_sys_3',
@@ -7726,10 +7308,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите подстановкой: y = 2x, x + y = 9',
     type: TaskType.textInput,
     answer: 'x=3, y=6',
-    explanationSteps: [
-      'x + 2x = 9 → 3x = 9 → x = 3',
-      'y = 2 × 3 = 6',
-    ],
+    explanationSteps: ['x + 2x = 9 → 3x = 9 → x = 3', 'y = 2 × 3 = 6'],
   ),
   const Task(
     id: 'g7_sys_4',
@@ -7747,9 +7326,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: 3x - 2y = 5, x = 1',
     type: TaskType.textInput,
     answer: 'x=1, y=-1',
-    explanationSteps: [
-      'При x=1: 3 - 2y = 5 → -2y = 2 → y = -1',
-    ],
+    explanationSteps: ['При x=1: 3 - 2y = 5 → -2y = 2 → y = -1'],
   ),
   const Task(
     id: 'g7_sys_6',
@@ -7758,9 +7335,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: x = 4, y = x + 3',
     type: TaskType.textInput,
     answer: 'x=4, y=7',
-    explanationSteps: [
-      'x = 4, y = 4 + 3 = 7',
-    ],
+    explanationSteps: ['x = 4, y = 4 + 3 = 7'],
   ),
   const Task(
     id: 'g7_sys_7',
@@ -7769,10 +7344,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: 2x + 3y = 12, 2x - y = 4',
     type: TaskType.textInput,
     answer: 'x=3, y=2',
-    explanationSteps: [
-      'Вычитаем: 4y = 8 → y = 2',
-      '2x = 4 + 2 = 6 → x = 3',
-    ],
+    explanationSteps: ['Вычитаем: 4y = 8 → y = 2', '2x = 4 + 2 = 6 → x = 3'],
   ),
   const Task(
     id: 'g7_sys_8',
@@ -7785,7 +7357,7 @@ final List<Task> _grade7Tasks = [
       'Складываем уравнения',
       'Подставляем в другое',
       'Умножаем оба уравнения',
-      'Вычитаем'
+      'Вычитаем',
     ],
     answer: 'Подставляем в другое',
   ),
@@ -7818,9 +7390,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: x - y = 0, x + y = 6',
     type: TaskType.textInput,
     answer: 'x=3, y=3',
-    explanationSteps: [
-      'x = y, x + x = 6 → x = 3',
-    ],
+    explanationSteps: ['x = y, x + x = 6 → x = 3'],
   ),
   const Task(
     id: 'g7_sys_12',
@@ -7832,7 +7402,7 @@ final List<Task> _grade7Tasks = [
       'Коэффициенты стали равны',
       'Коэффициенты стали противоположными',
       'Уравнения совпали',
-      'Ни одно из перечисленного'
+      'Ни одно из перечисленного',
     ],
     answer: 'Коэффициенты стали противоположными',
   ),
@@ -7843,11 +7413,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: y = 3x - 1, y = x + 3',
     type: TaskType.textInput,
     answer: 'x=2, y=5',
-    explanationSteps: [
-      '3x - 1 = x + 3',
-      '2x = 4 → x = 2',
-      'y = 5',
-    ],
+    explanationSteps: ['3x - 1 = x + 3', '2x = 4 → x = 2', 'y = 5'],
   ),
   const Task(
     id: 'g7_sys_14',
@@ -7856,9 +7422,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: 5x + y = 15, y = 0',
     type: TaskType.textInput,
     answer: 'x=3, y=0',
-    explanationSteps: [
-      'y = 0 → 5x = 15 → x = 3',
-    ],
+    explanationSteps: ['y = 0 → 5x = 15 → x = 3'],
   ),
   const Task(
     id: 'g7_sys_15',
@@ -7867,9 +7431,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: 4x + 2y = 20, x = 3',
     type: TaskType.textInput,
     answer: 'x=3, y=4',
-    explanationSteps: [
-      '12 + 2y = 20 → 2y = 8 → y = 4',
-    ],
+    explanationSteps: ['12 + 2y = 20 → 2y = 8 → y = 4'],
   ),
   const Task(
     id: 'g7_sys_16',
@@ -7879,10 +7441,7 @@ final List<Task> _grade7Tasks = [
         'Возраст двух людей: вместе 50 лет, разница 10 лет. Сколько лет старшему?',
     type: TaskType.textInput,
     answer: '30',
-    explanationSteps: [
-      'x + y = 50, x - y = 10',
-      '2x = 60 → x = 30',
-    ],
+    explanationSteps: ['x + y = 50, x - y = 10', '2x = 60 → x = 30'],
   ),
   const Task(
     id: 'g7_sys_17',
@@ -7891,10 +7450,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: x = 2y, 3x - y = 15',
     type: TaskType.textInput,
     answer: 'x=6, y=3',
-    explanationSteps: [
-      '3×2y - y = 15 → 5y = 15 → y = 3',
-      'x = 6',
-    ],
+    explanationSteps: ['3×2y - y = 15 → 5y = 15 → y = 3', 'x = 6'],
   ),
   const Task(
     id: 'g7_sys_18',
@@ -7903,10 +7459,7 @@ final List<Task> _grade7Tasks = [
     question: 'Решите: x + y = 7, 2x - y = 2',
     type: TaskType.textInput,
     answer: 'x=3, y=4',
-    explanationSteps: [
-      'Складываем: 3x = 9 → x = 3',
-      'y = 4',
-    ],
+    explanationSteps: ['Складываем: 3x = 9 → x = 3', 'y = 4'],
   ),
   const Task(
     id: 'g7_sys_19',
@@ -7918,7 +7471,7 @@ final List<Task> _grade7Tasks = [
       'Да',
       'Нет',
       'Только для первого уравнения',
-      'Только для второго'
+      'Только для второго',
     ],
     answer: 'Да',
   ),
@@ -7959,11 +7512,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x² + 5x + 6 = 0',
     type: TaskType.textInput,
     answer: 'x = -2, x = -3',
-    explanationSteps: [
-      'D = 25 - 24 = 1',
-      'x = (-5 ± 1)/2',
-      'x₁ = -2, x₂ = -3',
-    ],
+    explanationSteps: ['D = 25 - 24 = 1', 'x = (-5 ± 1)/2', 'x₁ = -2, x₂ = -3'],
   ),
   const Task(
     id: 'g8_quad_3',
@@ -7972,11 +7521,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x² - 5x + 6 = 0',
     type: TaskType.textInput,
     answer: 'x = 2, x = 3',
-    explanationSteps: [
-      'D = 25 - 24 = 1',
-      'x = (5 ± 1)/2',
-      'x₁ = 3, x₂ = 2',
-    ],
+    explanationSteps: ['D = 25 - 24 = 1', 'x = (5 ± 1)/2', 'x₁ = 3, x₂ = 2'],
   ),
   const Task(
     id: 'g8_quad_4',
@@ -7985,9 +7530,7 @@ final List<Task> _grade8Tasks = [
     question: 'Дискриминант x² - 4x + 4:',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'D = b² - 4ac = 16 - 16 = 0',
-    ],
+    explanationSteps: ['D = b² - 4ac = 16 - 16 = 0'],
   ),
   const Task(
     id: 'g8_quad_5',
@@ -8005,11 +7548,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: 2x² - 8 = 0',
     type: TaskType.textInput,
     answer: 'x = ±2',
-    explanationSteps: [
-      '2x² = 8',
-      'x² = 4',
-      'x = ±2',
-    ],
+    explanationSteps: ['2x² = 8', 'x² = 4', 'x = ±2'],
   ),
   const Task(
     id: 'g8_quad_7',
@@ -8027,10 +7566,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x² - 4x = 0',
     type: TaskType.textInput,
     answer: 'x = 0, x = 4',
-    explanationSteps: [
-      'x(x - 4) = 0',
-      'x = 0 или x = 4',
-    ],
+    explanationSteps: ['x(x - 4) = 0', 'x = 0 или x = 4'],
   ),
   const Task(
     id: 'g8_quad_9',
@@ -8039,9 +7575,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x² = 25',
     type: TaskType.textInput,
     answer: 'x = ±5',
-    explanationSteps: [
-      'x = ±√25 = ±5',
-    ],
+    explanationSteps: ['x = ±√25 = ±5'],
   ),
   const Task(
     id: 'g8_quad_10',
@@ -8050,10 +7584,7 @@ final List<Task> _grade8Tasks = [
     question: 'Корни уравнения x² - 6x + 9 = 0:',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      'D = 0 → один корень',
-      'x = 6/2 = 3',
-    ],
+    explanationSteps: ['D = 0 → один корень', 'x = 6/2 = 3'],
   ),
   const Task(
     id: 'g8_quad_11',
@@ -8062,9 +7593,7 @@ final List<Task> _grade8Tasks = [
     question: 'По теореме Виета: сумма корней x² - 5x + 6 = 0:',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'x₁ + x₂ = -b/a = 5',
-    ],
+    explanationSteps: ['x₁ + x₂ = -b/a = 5'],
   ),
   const Task(
     id: 'g8_quad_12',
@@ -8073,9 +7602,7 @@ final List<Task> _grade8Tasks = [
     question: 'По теореме Виета: произведение корней x² - 5x + 6 = 0:',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      'x₁ × x₂ = c/a = 6',
-    ],
+    explanationSteps: ['x₁ × x₂ = c/a = 6'],
   ),
   const Task(
     id: 'g8_quad_13',
@@ -8096,10 +7623,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: 3x² - 12x = 0',
     type: TaskType.textInput,
     answer: 'x = 0, x = 4',
-    explanationSteps: [
-      '3x(x - 4) = 0',
-      'x = 0 или x = 4',
-    ],
+    explanationSteps: ['3x(x - 4) = 0', 'x = 0 или x = 4'],
   ),
   const Task(
     id: 'g8_quad_15',
@@ -8117,10 +7641,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x² + 6x + 9 = 0',
     type: TaskType.textInput,
     answer: 'x = -3',
-    explanationSteps: [
-      '(x + 3)² = 0',
-      'x = -3',
-    ],
+    explanationSteps: ['(x + 3)² = 0', 'x = -3'],
   ),
   const Task(
     id: 'g8_quad_17',
@@ -8145,7 +7666,7 @@ final List<Task> _grade8Tasks = [
       'Дискриминант положительный',
       'При подстановке уравнение обращается в тождество',
       'Оно меньше дискриминанта',
-      'Оно положительное'
+      'Оно положительное',
     ],
     answer: 'При подстановке уравнение обращается в тождество',
   ),
@@ -8169,10 +7690,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: (x-2)² = 9',
     type: TaskType.textInput,
     answer: 'x = 5, x = -1',
-    explanationSteps: [
-      'x - 2 = ±3',
-      'x = 5 или x = -1',
-    ],
+    explanationSteps: ['x - 2 = ±3', 'x = 5 или x = -1'],
   ),
 
   // ==================== АЛГЕБРАИЧЕСКИЕ ДРОБИ (20 задач) ====================
@@ -8183,9 +7701,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: x²/x',
     type: TaskType.textInput,
     answer: 'x',
-    explanationSteps: [
-      'x²/x = x (при x ≠ 0)',
-    ],
+    explanationSteps: ['x²/x = x (при x ≠ 0)'],
   ),
   const Task(
     id: 'g8_algfrac_2',
@@ -8194,10 +7710,7 @@ final List<Task> _grade8Tasks = [
     question: 'Сократите: (x² - 4)/(x - 2)',
     type: TaskType.textInput,
     answer: 'x + 2',
-    explanationSteps: [
-      'x² - 4 = (x-2)(x+2)',
-      '(x-2)(x+2)/(x-2) = x + 2',
-    ],
+    explanationSteps: ['x² - 4 = (x-2)(x+2)', '(x-2)(x+2)/(x-2) = x + 2'],
   ),
   const Task(
     id: 'g8_algfrac_3',
@@ -8206,10 +7719,7 @@ final List<Task> _grade8Tasks = [
     question: 'Сложите: 1/x + 1/y',
     type: TaskType.textInput,
     answer: '(x + y)/(xy)',
-    explanationSteps: [
-      'Общий знаменатель xy',
-      'y/(xy) + x/(xy) = (x+y)/(xy)',
-    ],
+    explanationSteps: ['Общий знаменатель xy', 'y/(xy) + x/(xy) = (x+y)/(xy)'],
   ),
   const Task(
     id: 'g8_algfrac_4',
@@ -8218,9 +7728,7 @@ final List<Task> _grade8Tasks = [
     question: 'ОДЗ для выражения 1/(x-3):',
     type: TaskType.textInput,
     answer: 'x ≠ 3',
-    explanationSteps: [
-      'Знаменатель ≠ 0: x - 3 ≠ 0 → x ≠ 3',
-    ],
+    explanationSteps: ['Знаменатель ≠ 0: x - 3 ≠ 0 → x ≠ 3'],
   ),
   const Task(
     id: 'g8_algfrac_5',
@@ -8229,9 +7737,7 @@ final List<Task> _grade8Tasks = [
     question: 'Умножьте: (a/b) × (b/c)',
     type: TaskType.textInput,
     answer: 'a/c',
-    explanationSteps: [
-      '(a × b)/(b × c) = a/c',
-    ],
+    explanationSteps: ['(a × b)/(b × c) = a/c'],
   ),
   const Task(
     id: 'g8_algfrac_6',
@@ -8240,9 +7746,7 @@ final List<Task> _grade8Tasks = [
     question: 'Разделите: (2x)/(3) ÷ (x²)/(6)',
     type: TaskType.textInput,
     answer: '4/x',
-    explanationSteps: [
-      '2x/3 × 6/x² = 12x/(3x²) = 4/x',
-    ],
+    explanationSteps: ['2x/3 × 6/x² = 12x/(3x²) = 4/x'],
   ),
   const Task(
     id: 'g8_algfrac_7',
@@ -8251,9 +7755,7 @@ final List<Task> _grade8Tasks = [
     question: 'Сократите: (2x + 4)/(x + 2)',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '(2(x+2))/(x+2) = 2',
-    ],
+    explanationSteps: ['(2(x+2))/(x+2) = 2'],
   ),
   const Task(
     id: 'g8_algfrac_8',
@@ -8262,9 +7764,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: x/2 = 3/4',
     type: TaskType.textInput,
     answer: 'x = 3/2',
-    explanationSteps: [
-      'x = 3/4 × 2 = 3/2',
-    ],
+    explanationSteps: ['x = 3/4 × 2 = 3/2'],
   ),
   const Task(
     id: 'g8_algfrac_9',
@@ -8273,9 +7773,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычтите: 3/(x+1) - 1/(x+1)',
     type: TaskType.textInput,
     answer: '2/(x+1)',
-    explanationSteps: [
-      '(3-1)/(x+1) = 2/(x+1)',
-    ],
+    explanationSteps: ['(3-1)/(x+1) = 2/(x+1)'],
   ),
   const Task(
     id: 'g8_algfrac_10',
@@ -8284,9 +7782,7 @@ final List<Task> _grade8Tasks = [
     question: 'Сократите: (x² - x)/(x)',
     type: TaskType.textInput,
     answer: 'x - 1',
-    explanationSteps: [
-      'x(x-1)/x = x - 1',
-    ],
+    explanationSteps: ['x(x-1)/x = x - 1'],
   ),
   const Task(
     id: 'g8_algfrac_11',
@@ -8295,9 +7791,7 @@ final List<Task> _grade8Tasks = [
     question: 'Сложите: x/(x-1) + 1/(x-1)',
     type: TaskType.textInput,
     answer: '(x+1)/(x-1)',
-    explanationSteps: [
-      '(x + 1)/(x-1)',
-    ],
+    explanationSteps: ['(x + 1)/(x-1)'],
   ),
   const Task(
     id: 'g8_algfrac_12',
@@ -8306,9 +7800,7 @@ final List<Task> _grade8Tasks = [
     question: 'ОДЗ для √(x-2):',
     type: TaskType.textInput,
     answer: 'x ≥ 2',
-    explanationSteps: [
-      'Подкоренное выражение ≥ 0: x - 2 ≥ 0 → x ≥ 2',
-    ],
+    explanationSteps: ['Подкоренное выражение ≥ 0: x - 2 ≥ 0 → x ≥ 2'],
   ),
   const Task(
     id: 'g8_algfrac_13',
@@ -8317,9 +7809,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: (a² - b²)/((a-b)²)',
     type: TaskType.textInput,
     answer: '(a+b)/(a-b)',
-    explanationSteps: [
-      '(a-b)(a+b)/(a-b)² = (a+b)/(a-b)',
-    ],
+    explanationSteps: ['(a-b)(a+b)/(a-b)² = (a+b)/(a-b)'],
   ),
   const Task(
     id: 'g8_algfrac_14',
@@ -8328,9 +7818,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите уравнение: 1/x = 4',
     type: TaskType.textInput,
     answer: 'x = 1/4',
-    explanationSteps: [
-      'x = 1/4',
-    ],
+    explanationSteps: ['x = 1/4'],
   ),
   const Task(
     id: 'g8_algfrac_15',
@@ -8339,10 +7827,7 @@ final List<Task> _grade8Tasks = [
     question: 'Разложите числитель и сократите: (x² + 3x + 2)/(x + 1)',
     type: TaskType.textInput,
     answer: 'x + 2',
-    explanationSteps: [
-      'x² + 3x + 2 = (x+1)(x+2)',
-      '(x+1)(x+2)/(x+1) = x + 2',
-    ],
+    explanationSteps: ['x² + 3x + 2 = (x+1)(x+2)', '(x+1)(x+2)/(x+1) = x + 2'],
   ),
   const Task(
     id: 'g8_algfrac_16',
@@ -8351,9 +7836,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: 5/(2x) - 3/(2x)',
     type: TaskType.textInput,
     answer: '1/x',
-    explanationSteps: [
-      '(5-3)/(2x) = 2/(2x) = 1/x',
-    ],
+    explanationSteps: ['(5-3)/(2x) = 2/(2x) = 1/x'],
   ),
   const Task(
     id: 'g8_algfrac_17',
@@ -8362,10 +7845,7 @@ final List<Task> _grade8Tasks = [
     question: 'Решите: 3/x - 1 = 0 (x ≠ 0)',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      '3/x = 1',
-      'x = 3',
-    ],
+    explanationSteps: ['3/x = 1', 'x = 3'],
   ),
   const Task(
     id: 'g8_algfrac_18',
@@ -8386,9 +7866,7 @@ final List<Task> _grade8Tasks = [
     question: 'Умножьте: (x-1)/(x+1) × (x+1)/(x-2)',
     type: TaskType.textInput,
     answer: '(x-1)/(x-2)',
-    explanationSteps: [
-      '(x-1)(x+1)/((x+1)(x-2)) = (x-1)/(x-2)',
-    ],
+    explanationSteps: ['(x-1)(x+1)/((x+1)(x-2)) = (x-1)/(x-2)'],
   ),
   const Task(
     id: 'g8_algfrac_20',
@@ -8397,11 +7875,7 @@ final List<Task> _grade8Tasks = [
     question: 'ОДЗ для 1/(x² - 4):',
     type: TaskType.textInput,
     answer: 'x ≠ ±2',
-    explanationSteps: [
-      'x² - 4 ≠ 0',
-      '(x-2)(x+2) ≠ 0',
-      'x ≠ 2 и x ≠ -2',
-    ],
+    explanationSteps: ['x² - 4 ≠ 0', '(x-2)(x+2) ≠ 0', 'x ≠ 2 и x ≠ -2'],
   ),
 
   // ==================== КВАДРАТИЧНАЯ ФУНКЦИЯ (20 задач) ====================
@@ -8443,9 +7917,7 @@ final List<Task> _grade8Tasks = [
     question: 'Ось симметрии параболы y = (x-3)²:',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      'Вершина при x = 3, ось симметрии x = 3',
-    ],
+    explanationSteps: ['Вершина при x = 3, ось симметрии x = 3'],
   ),
   const Task(
     id: 'g8_parab_5',
@@ -8454,9 +7926,7 @@ final List<Task> _grade8Tasks = [
     question: 'Нули функции y = x² - 4:',
     type: TaskType.textInput,
     answer: 'x = ±2',
-    explanationSteps: [
-      'x² - 4 = 0 → x² = 4 → x = ±2',
-    ],
+    explanationSteps: ['x² - 4 = 0 → x² = 4 → x = ±2'],
   ),
   const Task(
     id: 'g8_parab_6',
@@ -8465,10 +7935,7 @@ final List<Task> _grade8Tasks = [
     question: 'Минимум функции y = x² - 6x + 10:',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'x₀ = 3',
-      'y_min = 9 - 18 + 10 = 1',
-    ],
+    explanationSteps: ['x₀ = 3', 'y_min = 9 - 18 + 10 = 1'],
   ),
   const Task(
     id: 'g8_parab_7',
@@ -8486,9 +7953,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вершина параболы y = -(x+1)² + 3:',
     type: TaskType.textInput,
     answer: '(-1, 3)',
-    explanationSteps: [
-      'Вершина: (-1, 3) (из формы y = a(x-h)² + k)',
-    ],
+    explanationSteps: ['Вершина: (-1, 3) (из формы y = a(x-h)² + k)'],
   ),
   const Task(
     id: 'g8_parab_9',
@@ -8497,10 +7962,7 @@ final List<Task> _grade8Tasks = [
     question: 'Функция y = -x² + 4 имеет максимум:',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      'При a < 0 — максимум в вершине',
-      'x = 0 → y_max = 4',
-    ],
+    explanationSteps: ['При a < 0 — максимум в вершине', 'x = 0 → y_max = 4'],
   ),
   const Task(
     id: 'g8_parab_10',
@@ -8519,9 +7981,7 @@ final List<Task> _grade8Tasks = [
     question: 'Парабола y = 2(x-1)² + 3 имеет вершину:',
     type: TaskType.textInput,
     answer: '(1, 3)',
-    explanationSteps: [
-      'y = a(x-h)² + k: h=1, k=3',
-    ],
+    explanationSteps: ['y = a(x-h)² + k: h=1, k=3'],
   ),
   const Task(
     id: 'g8_parab_12',
@@ -8530,9 +7990,7 @@ final List<Task> _grade8Tasks = [
     question: 'Ось симметрии параболы y = 2x² - 4x + 1:',
     type: TaskType.textInput,
     answer: 'x = 1',
-    explanationSteps: [
-      'x = -b/(2a) = 4/4 = 1',
-    ],
+    explanationSteps: ['x = -b/(2a) = 4/4 = 1'],
   ),
   const Task(
     id: 'g8_parab_13',
@@ -8570,11 +8028,7 @@ final List<Task> _grade8Tasks = [
     question: 'Нули y = x² - x - 6:',
     type: TaskType.textInput,
     answer: 'x = -2, x = 3',
-    explanationSteps: [
-      'D = 1 + 24 = 25',
-      'x = (1 ± 5)/2',
-      'x₁ = 3, x₂ = -2',
-    ],
+    explanationSteps: ['D = 1 + 24 = 25', 'x = (1 ± 5)/2', 'x₁ = 3, x₂ = -2'],
   ),
   const Task(
     id: 'g8_parab_17',
@@ -8592,9 +8046,7 @@ final List<Task> _grade8Tasks = [
     question: 'Значение y = 3x² - 2 при x = 2:',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      'y = 3 × 4 - 2 = 12 - 2 = 10',
-    ],
+    explanationSteps: ['y = 3 × 4 - 2 = 12 - 2 = 10'],
   ),
   const Task(
     id: 'g8_parab_19',
@@ -8603,9 +8055,7 @@ final List<Task> _grade8Tasks = [
     question: 'Парабола y = x² - 2x + 1 = (x-1)². Сколько нулей?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'D = 0 → один нуль: x = 1',
-    ],
+    explanationSteps: ['D = 0 → один нуль: x = 1'],
   ),
   const Task(
     id: 'g8_parab_20',
@@ -8617,7 +8067,7 @@ final List<Task> _grade8Tasks = [
       'Сдвинется вверх на 2',
       'Сдвинется вправо на 2',
       'Сдвинется влево на 2',
-      'Растянется'
+      'Растянется',
     ],
     answer: 'Сдвинется вправо на 2',
   ),
@@ -8630,9 +8080,7 @@ final List<Task> _grade8Tasks = [
     question: '√36 = ?',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      '√36 = 6, так как 6² = 36',
-    ],
+    explanationSteps: ['√36 = 6, так как 6² = 36'],
   ),
   const Task(
     id: 'g8_roots_2',
@@ -8641,9 +8089,7 @@ final List<Task> _grade8Tasks = [
     question: '√(a²) = ? (при a ≥ 0)',
     type: TaskType.textInput,
     answer: 'a',
-    explanationSteps: [
-      '√(a²) = |a| = a (при a ≥ 0)',
-    ],
+    explanationSteps: ['√(a²) = |a| = a (при a ≥ 0)'],
   ),
   const Task(
     id: 'g8_roots_3',
@@ -8652,9 +8098,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: √50',
     type: TaskType.textInput,
     answer: '5√2',
-    explanationSteps: [
-      '√50 = √(25 × 2) = 5√2',
-    ],
+    explanationSteps: ['√50 = √(25 × 2) = 5√2'],
   ),
   const Task(
     id: 'g8_roots_4',
@@ -8663,10 +8107,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: √12 + √3',
     type: TaskType.textInput,
     answer: '3√3',
-    explanationSteps: [
-      '√12 = 2√3',
-      '2√3 + √3 = 3√3',
-    ],
+    explanationSteps: ['√12 = 2√3', '2√3 + √3 = 3√3'],
   ),
   const Task(
     id: 'g8_roots_5',
@@ -8675,9 +8116,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: √(x⁴) (x ≥ 0)',
     type: TaskType.textInput,
     answer: 'x²',
-    explanationSteps: [
-      '√(x⁴) = x²',
-    ],
+    explanationSteps: ['√(x⁴) = x²'],
   ),
   const Task(
     id: 'g8_roots_6',
@@ -8686,9 +8125,7 @@ final List<Task> _grade8Tasks = [
     question: '∛27 = ?',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '3³ = 27, поэтому ∛27 = 3',
-    ],
+    explanationSteps: ['3³ = 27, поэтому ∛27 = 3'],
   ),
   const Task(
     id: 'g8_roots_7',
@@ -8697,9 +8134,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: √(3) × √(3)',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '√a × √a = a',
-    ],
+    explanationSteps: ['√a × √a = a'],
   ),
   const Task(
     id: 'g8_roots_8',
@@ -8708,9 +8143,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: √(18/2)',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '√(9) = 3',
-    ],
+    explanationSteps: ['√(9) = 3'],
   ),
   const Task(
     id: 'g8_roots_9',
@@ -8719,9 +8152,7 @@ final List<Task> _grade8Tasks = [
     question: 'a^(1/2) = ?',
     type: TaskType.textInput,
     answer: '√a',
-    explanationSteps: [
-      'a^(1/2) = √a',
-    ],
+    explanationSteps: ['a^(1/2) = √a'],
   ),
   const Task(
     id: 'g8_roots_10',
@@ -8730,9 +8161,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: 8^(1/3)',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '8^(1/3) = ∛8 = 2',
-    ],
+    explanationSteps: ['8^(1/3) = ∛8 = 2'],
   ),
   const Task(
     id: 'g8_roots_11',
@@ -8741,9 +8170,7 @@ final List<Task> _grade8Tasks = [
     question: 'a^(-1) = ?',
     type: TaskType.textInput,
     answer: '1/a',
-    explanationSteps: [
-      'Отрицательная степень: a^(-n) = 1/aⁿ',
-    ],
+    explanationSteps: ['Отрицательная степень: a^(-n) = 1/aⁿ'],
   ),
   const Task(
     id: 'g8_roots_12',
@@ -8752,9 +8179,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: 4^(-1/2)',
     type: TaskType.textInput,
     answer: '1/2',
-    explanationSteps: [
-      '4^(-1/2) = 1/√4 = 1/2',
-    ],
+    explanationSteps: ['4^(-1/2) = 1/√4 = 1/2'],
   ),
   const Task(
     id: 'g8_roots_13',
@@ -8763,9 +8188,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вынесите из-под знака корня: √(75)',
     type: TaskType.textInput,
     answer: '5√3',
-    explanationSteps: [
-      '√75 = √(25×3) = 5√3',
-    ],
+    explanationSteps: ['√75 = √(25×3) = 5√3'],
   ),
   const Task(
     id: 'g8_roots_14',
@@ -8774,9 +8197,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: (√5)² + (√3)²',
     type: TaskType.textInput,
     answer: '8',
-    explanationSteps: [
-      '5 + 3 = 8',
-    ],
+    explanationSteps: ['5 + 3 = 8'],
   ),
   const Task(
     id: 'g8_roots_15',
@@ -8785,9 +8206,7 @@ final List<Task> _grade8Tasks = [
     question: 'Рационализируйте знаменатель: 1/√2',
     type: TaskType.textInput,
     answer: '√2/2',
-    explanationSteps: [
-      '1/√2 × √2/√2 = √2/2',
-    ],
+    explanationSteps: ['1/√2 × √2/√2 = √2/2'],
   ),
   const Task(
     id: 'g8_roots_16',
@@ -8796,9 +8215,7 @@ final List<Task> _grade8Tasks = [
     question: '√(4 × 9) = ?',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      '√36 = 6 или √4 × √9 = 2 × 3 = 6',
-    ],
+    explanationSteps: ['√36 = 6 или √4 × √9 = 2 × 3 = 6'],
   ),
   const Task(
     id: 'g8_roots_17',
@@ -8816,9 +8233,7 @@ final List<Task> _grade8Tasks = [
     question: 'Вычислите: 27^(2/3)',
     type: TaskType.textInput,
     answer: '9',
-    explanationSteps: [
-      '27^(2/3) = (∛27)² = 3² = 9',
-    ],
+    explanationSteps: ['27^(2/3) = (∛27)² = 3² = 9'],
   ),
   const Task(
     id: 'g8_roots_19',
@@ -8827,10 +8242,7 @@ final List<Task> _grade8Tasks = [
     question: 'Упростите: √(x²y⁴) при x ≥ 0',
     type: TaskType.textInput,
     answer: 'xy²',
-    explanationSteps: [
-      '√(x²) = x, √(y⁴) = y²',
-      'xy²',
-    ],
+    explanationSteps: ['√(x²) = x, √(y⁴) = y²', 'xy²'],
   ),
   const Task(
     id: 'g8_roots_20',
@@ -8839,9 +8251,7 @@ final List<Task> _grade8Tasks = [
     question: 'Значение выражения √(16/25):',
     type: TaskType.textInput,
     answer: '4/5',
-    explanationSteps: [
-      '√16/√25 = 4/5',
-    ],
+    explanationSteps: ['√16/√25 = 4/5'],
   ),
 ];
 
@@ -8993,10 +8403,7 @@ final List<Task> _grade9Tasks = [
     question: 'Решите неравенство: x² ≤ 25',
     type: TaskType.textInput,
     answer: '-5 ≤ x ≤ 5',
-    explanationSteps: [
-      'x² ≤ 25 равносильно |x| ≤ 5',
-      'Ответ: -5 ≤ x ≤ 5',
-    ],
+    explanationSteps: ['x² ≤ 25 равносильно |x| ≤ 5', 'Ответ: -5 ≤ x ≤ 5'],
   ),
   const Task(
     id: 'g9_ineq_16',
@@ -9032,11 +8439,7 @@ final List<Task> _grade9Tasks = [
     question: 'Решите неравенство: 4x - 3 ≥ 2x + 7',
     type: TaskType.textInput,
     answer: 'x ≥ 5',
-    explanationSteps: [
-      'Переносим члены: 4x - 2x ≥ 7 + 3',
-      '2x ≥ 10',
-      'x ≥ 5',
-    ],
+    explanationSteps: ['Переносим члены: 4x - 2x ≥ 7 + 3', '2x ≥ 10', 'x ≥ 5'],
   ),
   const Task(
     id: 'g9_ineq_20',
@@ -9080,10 +8483,7 @@ final List<Task> _grade9Tasks = [
     question: 'В геометрической прогрессии b₁ = 2, q = 3. Найдите b₄.',
     type: TaskType.textInput,
     answer: '54',
-    explanationSteps: [
-      'Формула: bₙ = b₁·q^(n-1)',
-      'b₄ = 2·3³ = 2·27 = 54',
-    ],
+    explanationSteps: ['Формула: bₙ = b₁·q^(n-1)', 'b₄ = 2·3³ = 2·27 = 54'],
   ),
   const Task(
     id: 'g9_prog_4',
@@ -9092,11 +8492,7 @@ final List<Task> _grade9Tasks = [
     question: 'Разность АП, если a₁ = 5 и a₇ = 17. Найдите d.',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      'a₇ = a₁ + 6d',
-      '17 = 5 + 6d',
-      '6d = 12, d = 2',
-    ],
+    explanationSteps: ['a₇ = a₁ + 6d', '17 = 5 + 6d', '6d = 12, d = 2'],
   ),
   const Task(
     id: 'g9_prog_5',
@@ -9166,7 +8562,7 @@ final List<Task> _grade9Tasks = [
       'Геометрическая прогрессия',
       'Арифметическая прогрессия',
       'Ни та, ни другая',
-      'Гармоническая прогрессия'
+      'Гармоническая прогрессия',
     ],
     answer: 'Геометрическая прогрессия',
   ),
@@ -9189,10 +8585,7 @@ final List<Task> _grade9Tasks = [
     question: 'В АП три первых члена: 2, x, 8. Найдите x.',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'Средний член АП: x = (a₁ + a₃)/2',
-      'x = (2 + 8)/2 = 5',
-    ],
+    explanationSteps: ['Средний член АП: x = (a₁ + a₃)/2', 'x = (2 + 8)/2 = 5'],
   ),
   const Task(
     id: 'g9_prog_13',
@@ -9213,10 +8606,7 @@ final List<Task> _grade9Tasks = [
     question: 'В ГП b₁ = 81, q = 1/3. Найдите b₅.',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'b₅ = b₁·q⁴ = 81·(1/3)⁴',
-      '= 81·(1/81) = 1',
-    ],
+    explanationSteps: ['b₅ = b₁·q⁴ = 81·(1/3)⁴', '= 81·(1/81) = 1'],
   ),
   const Task(
     id: 'g9_prog_15',
@@ -9259,11 +8649,7 @@ final List<Task> _grade9Tasks = [
     question: 'В ГП b₂ = 6 и b₅ = 162. Найдите q.',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'b₅/b₂ = q³',
-      '162/6 = 27 = q³',
-      'q = 3',
-    ],
+    explanationSteps: ['b₅/b₂ = q³', '162/6 = 27 = q³', 'q = 3'],
   ),
   const Task(
     id: 'g9_prog_19',
@@ -9275,7 +8661,7 @@ final List<Task> _grade9Tasks = [
       'Нет, не является прогрессией',
       'Арифметическая прогрессия',
       'Геометрическая прогрессия',
-      'Обе сразу'
+      'Обе сразу',
     ],
     answer: 'Нет, не является прогрессией',
   ),
@@ -9318,10 +8704,7 @@ final List<Task> _grade9Tasks = [
     question: 'Найдите tg 45°',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'tg 45° = sin 45° / cos 45°',
-      '= (√2/2) / (√2/2) = 1',
-    ],
+    explanationSteps: ['tg 45° = sin 45° / cos 45°', '= (√2/2) / (√2/2) = 1'],
   ),
   const Task(
     id: 'g9_trig_4',
@@ -9426,9 +8809,7 @@ final List<Task> _grade9Tasks = [
     question: 'Чему равен tg 0°?',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'tg 0° = sin 0° / cos 0° = 0/1 = 0',
-    ],
+    explanationSteps: ['tg 0° = sin 0° / cos 0° = 0/1 = 0'],
   ),
   const Task(
     id: 'g9_trig_14',
@@ -9598,10 +8979,7 @@ final List<Task> _grade9Tasks = [
         'Вероятность события А = 0,4. Какова вероятность противоположного события?',
     type: TaskType.textInput,
     answer: '0.6',
-    explanationSteps: [
-      'P(Ā) = 1 - P(A)',
-      'P(Ā) = 1 - 0,4 = 0,6',
-    ],
+    explanationSteps: ['P(Ā) = 1 - P(A)', 'P(Ā) = 1 - 0,4 = 0,6'],
   ),
   const Task(
     id: 'g9_prob_9',
@@ -9754,10 +9132,7 @@ final List<Task> _grade9Tasks = [
     question: 'Радиус окружности 5 см. Найдите длину окружности.',
     type: TaskType.textInput,
     answer: '10π',
-    explanationSteps: [
-      'Длина окружности: C = 2πr',
-      'C = 2π·5 = 10π см',
-    ],
+    explanationSteps: ['Длина окружности: C = 2πr', 'C = 2π·5 = 10π см'],
   ),
   const Task(
     id: 'g9_circ_2',
@@ -9766,10 +9141,7 @@ final List<Task> _grade9Tasks = [
     question: 'Радиус окружности 4 см. Найдите площадь круга.',
     type: TaskType.textInput,
     answer: '16π',
-    explanationSteps: [
-      'Площадь круга: S = πr²',
-      'S = π·4² = 16π см²',
-    ],
+    explanationSteps: ['Площадь круга: S = πr²', 'S = π·4² = 16π см²'],
   ),
   const Task(
     id: 'g9_circ_3',
@@ -9805,7 +9177,7 @@ final List<Task> _grade9Tasks = [
       'Они равны',
       'Один в два раза больше другого',
       'Их сумма равна 180°',
-      'Они дополняют друг друга до 90°'
+      'Они дополняют друг друга до 90°',
     ],
     answer: 'Они равны',
   ),
@@ -9841,10 +9213,7 @@ final List<Task> _grade9Tasks = [
     question: 'Диаметр окружности 14 см. Найдите площадь круга.',
     type: TaskType.textInput,
     answer: '49π',
-    explanationSteps: [
-      'r = d/2 = 7 см',
-      'S = πr² = π·49 = 49π см²',
-    ],
+    explanationSteps: ['r = d/2 = 7 см', 'S = πr² = π·49 = 49π см²'],
   ),
   const Task(
     id: 'g9_circ_9',
@@ -9868,7 +9237,7 @@ final List<Task> _grade9Tasks = [
       'Они равны',
       'Одна в два раза длиннее',
       'Они перпендикулярны',
-      'Нельзя определить'
+      'Нельзя определить',
     ],
     answer: 'Они равны',
   ),
@@ -9879,11 +9248,7 @@ final List<Task> _grade9Tasks = [
     question: 'Площадь круга равна 36π. Найдите радиус.',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      'S = πr² = 36π',
-      'r² = 36',
-      'r = 6',
-    ],
+    explanationSteps: ['S = πr² = 36π', 'r² = 36', 'r = 6'],
   ),
   const Task(
     id: 'g9_circ_12',
@@ -9892,10 +9257,7 @@ final List<Task> _grade9Tasks = [
     question: 'Длина окружности равна 20π. Найдите радиус.',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      'C = 2πr = 20π',
-      'r = 10',
-    ],
+    explanationSteps: ['C = 2πr = 20π', 'r = 10'],
   ),
   const Task(
     id: 'g9_circ_13',
@@ -9908,7 +9270,7 @@ final List<Task> _grade9Tasks = [
       'Верно',
       'Неверно',
       'Верно только для единичной окружности',
-      'Верно только при угле 45°'
+      'Верно только при угле 45°',
     ],
     answer: 'Верно',
   ),
@@ -10007,8 +9369,9 @@ final List<Task> _grade10Tasks = [
     id: 'g10_trig_1',
     grade: 10,
     topic: 'Тригонометрические функции',
-    question: 'Каков период функции y = sin x?',
-    type: TaskType.textInput,
+    question: 'Каков наименьший положительный период функции y = sin x?',
+    type: TaskType.multipleChoice,
+    options: ['π', '2π', 'π/2', '4π'],
     answer: '2π',
     explanationSteps: [
       'Функция sin x повторяется через каждые 2π',
@@ -10019,13 +9382,11 @@ final List<Task> _grade10Tasks = [
     id: 'g10_trig_2',
     grade: 10,
     topic: 'Тригонометрические функции',
-    question: 'Каков период функции y = cos 2x?',
-    type: TaskType.textInput,
+    question: 'Каков наименьший положительный период функции y = cos 2x?',
+    type: TaskType.multipleChoice,
+    options: ['π', '2π', 'π/2', '4π'],
     answer: 'π',
-    explanationSteps: [
-      'Для y = cos(ωx) период T = 2π/ω',
-      'T = 2π/2 = π',
-    ],
+    explanationSteps: ['Для y = cos(ωx) период T = 2π/ω', 'T = 2π/2 = π'],
   ),
   const Task(
     id: 'g10_trig_3',
@@ -10057,7 +9418,7 @@ final List<Task> _grade10Tasks = [
     topic: 'Тригонометрические функции',
     question: 'Функция y = sin x нечётная или чётная?',
     type: TaskType.multipleChoice,
-    options: ['Нечётная', 'Чётная', 'Ни та, ни другая', 'Периодическая'],
+    options: ['Нечётная', 'Чётная', 'Ни чётная, ни нечётная'],
     answer: 'Нечётная',
   ),
   const Task(
@@ -10066,15 +9427,16 @@ final List<Task> _grade10Tasks = [
     topic: 'Тригонометрические функции',
     question: 'Функция y = cos x чётная или нечётная?',
     type: TaskType.multipleChoice,
-    options: ['Чётная', 'Нечётная', 'Ни та, ни другая', 'Ограниченная'],
+    options: ['Чётная', 'Нечётная', 'Ни чётная, ни нечётная'],
     answer: 'Чётная',
   ),
   const Task(
     id: 'g10_trig_7',
     grade: 10,
     topic: 'Тригонометрические функции',
-    question: 'Каков период функции y = tg x?',
-    type: TaskType.textInput,
+    question: 'Каков наименьший положительный период функции y = tg x?',
+    type: TaskType.multipleChoice,
+    options: ['π', '2π', 'π/2', '4π'],
     answer: 'π',
     explanationSteps: [
       'Функция tg x повторяется через каждые π',
@@ -10094,13 +9456,11 @@ final List<Task> _grade10Tasks = [
     id: 'g10_trig_9',
     grade: 10,
     topic: 'Тригонометрические функции',
-    question: 'Найдите период y = sin(x/3)',
-    type: TaskType.textInput,
+    question: 'Найдите наименьший положительный период y = sin(x/3)',
+    type: TaskType.multipleChoice,
+    options: ['6π', '2π/3', '3π', '2π'],
     answer: '6π',
-    explanationSteps: [
-      'Для y = sin(x/3) ω = 1/3',
-      'T = 2π/ω = 2π/(1/3) = 6π',
-    ],
+    explanationSteps: ['Для y = sin(x/3) ω = 1/3', 'T = 2π/ω = 2π/(1/3) = 6π'],
   ),
   const Task(
     id: 'g10_trig_10',
@@ -10136,8 +9496,9 @@ final List<Task> _grade10Tasks = [
     id: 'g10_trig_13',
     grade: 10,
     topic: 'Тригонометрические функции',
-    question: 'Каков период y = cos(3x + 1)?',
-    type: TaskType.textInput,
+    question: 'Каков наименьший положительный период y = cos(3x + 1)?',
+    type: TaskType.multipleChoice,
+    options: ['2π/3', '3π', '2π', 'π/3'],
     answer: '2π/3',
     explanationSteps: [
       'Период зависит только от коэффициента при x',
@@ -10221,10 +9582,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: 2ˣ = 8',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '8 = 2³',
-      '2ˣ = 2³ => x = 3',
-    ],
+    explanationSteps: ['8 = 2³', '2ˣ = 2³ => x = 3'],
   ),
   const Task(
     id: 'g10_exp_2',
@@ -10233,10 +9591,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: 3ˣ = 81',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '81 = 3⁴',
-      '3ˣ = 3⁴ => x = 4',
-    ],
+    explanationSteps: ['81 = 3⁴', '3ˣ = 3⁴ => x = 4'],
   ),
   const Task(
     id: 'g10_exp_3',
@@ -10245,10 +9600,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: 5ˣ = 1',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      '1 = 5⁰',
-      '5ˣ = 5⁰ => x = 0',
-    ],
+    explanationSteps: ['1 = 5⁰', '5ˣ = 5⁰ => x = 0'],
   ),
   const Task(
     id: 'g10_exp_4',
@@ -10341,10 +9693,7 @@ final List<Task> _grade10Tasks = [
     question: 'Чему равно e⁰?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'Любое число в степени 0 равно 1',
-      'e⁰ = 1',
-    ],
+    explanationSteps: ['Любое число в степени 0 равно 1', 'e⁰ = 1'],
   ),
   const Task(
     id: 'g10_exp_12',
@@ -10356,7 +9705,7 @@ final List<Task> _grade10Tasks = [
       'x = 0 или x = 2',
       'x = 1 или x = 2',
       'x = 0 или x = 1',
-      'x = 2 или x = 3'
+      'x = 2 или x = 3',
     ],
     answer: 'x = 0 или x = 2',
   ),
@@ -10367,10 +9716,7 @@ final List<Task> _grade10Tasks = [
     question: 'При каком x функция y = 2ˣ принимает значение 1/8?',
     type: TaskType.textInput,
     answer: '-3',
-    explanationSteps: [
-      '1/8 = 2⁻³',
-      '2ˣ = 2⁻³ => x = -3',
-    ],
+    explanationSteps: ['1/8 = 2⁻³', '2ˣ = 2⁻³ => x = -3'],
   ),
   const Task(
     id: 'g10_exp_14',
@@ -10379,10 +9725,7 @@ final List<Task> _grade10Tasks = [
     question: 'График y = aˣ (a > 1) проходит через точку (3, 8). Найдите a.',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      'a³ = 8',
-      'a = ∛8 = 2',
-    ],
+    explanationSteps: ['a³ = 8', 'a = ∛8 = 2'],
   ),
   const Task(
     id: 'g10_exp_15',
@@ -10403,11 +9746,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: 7^(x-1) = 49',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '49 = 7²',
-      '7^(x-1) = 7²',
-      'x - 1 = 2 => x = 3',
-    ],
+    explanationSteps: ['49 = 7²', '7^(x-1) = 7²', 'x - 1 = 2 => x = 3'],
   ),
   const Task(
     id: 'g10_exp_17',
@@ -10419,7 +9758,7 @@ final List<Task> _grade10Tasks = [
       'Возрастает',
       'Убывает',
       'Постоянная',
-      'Сначала убывает, затем возрастает'
+      'Сначала убывает, затем возрастает',
     ],
     answer: 'Возрастает',
   ),
@@ -10443,9 +9782,7 @@ final List<Task> _grade10Tasks = [
     question: 'Чему равна y = (√2)⁸?',
     type: TaskType.textInput,
     answer: '16',
-    explanationSteps: [
-      '(√2)⁸ = (2^(1/2))⁸ = 2⁴ = 16',
-    ],
+    explanationSteps: ['(√2)⁸ = (2^(1/2))⁸ = 2⁴ = 16'],
   ),
   const Task(
     id: 'g10_exp_20',
@@ -10457,7 +9794,7 @@ final List<Task> _grade10Tasks = [
       'x = 0 или x = 2',
       'x = 1 или x = 2',
       'x = 0 или x = -2',
-      'x = 2'
+      'x = 2',
     ],
     answer: 'x = 0 или x = 2',
   ),
@@ -10470,10 +9807,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите log₂8',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'log₂8 = x означает 2ˣ = 8 = 2³',
-      'x = 3',
-    ],
+    explanationSteps: ['log₂8 = x означает 2ˣ = 8 = 2³', 'x = 3'],
   ),
   const Task(
     id: 'g10_log_2',
@@ -10482,10 +9816,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите log₃81',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      'log₃81 = x означает 3ˣ = 81 = 3⁴',
-      'x = 4',
-    ],
+    explanationSteps: ['log₃81 = x означает 3ˣ = 81 = 3⁴', 'x = 4'],
   ),
   const Task(
     id: 'g10_log_3',
@@ -10494,10 +9825,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите lg 100 (десятичный логарифм)',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      'lg 100 = log₁₀100',
-      '10² = 100 => lg 100 = 2',
-    ],
+    explanationSteps: ['lg 100 = log₁₀100', '10² = 100 => lg 100 = 2'],
   ),
   const Task(
     id: 'g10_log_4',
@@ -10506,10 +9834,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите log₅1',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'log₅1 = x означает 5ˣ = 1 = 5⁰',
-      'x = 0',
-    ],
+    explanationSteps: ['log₅1 = x означает 5ˣ = 1 = 5⁰', 'x = 0'],
   ),
   const Task(
     id: 'g10_log_5',
@@ -10543,10 +9868,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: log₂x = 5',
     type: TaskType.textInput,
     answer: '32',
-    explanationSteps: [
-      'log₂x = 5 означает x = 2⁵',
-      'x = 32',
-    ],
+    explanationSteps: ['log₂x = 5 означает x = 2⁵', 'x = 32'],
   ),
   const Task(
     id: 'g10_log_8',
@@ -10555,10 +9877,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: log₃(x + 1) = 2',
     type: TaskType.textInput,
     answer: '8',
-    explanationSteps: [
-      'x + 1 = 3² = 9',
-      'x = 8',
-    ],
+    explanationSteps: ['x + 1 = 3² = 9', 'x = 8'],
   ),
   const Task(
     id: 'g10_log_9',
@@ -10567,10 +9886,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите log₄(1/16)',
     type: TaskType.textInput,
     answer: '-2',
-    explanationSteps: [
-      '1/16 = 4⁻²',
-      'log₄(4⁻²) = -2',
-    ],
+    explanationSteps: ['1/16 = 4⁻²', 'log₄(4⁻²) = -2'],
   ),
   const Task(
     id: 'g10_log_10',
@@ -10579,10 +9895,7 @@ final List<Task> _grade10Tasks = [
     question: 'Упростите: 3·log₂5 - log₂125',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      '3·log₂5 = log₂(5³) = log₂125',
-      'log₂125 - log₂125 = 0',
-    ],
+    explanationSteps: ['3·log₂5 = log₂(5³) = log₂125', 'log₂125 - log₂125 = 0'],
   ),
   const Task(
     id: 'g10_log_11',
@@ -10603,11 +9916,7 @@ final List<Task> _grade10Tasks = [
     question: 'Решите уравнение: log₅(2x - 1) = 2',
     type: TaskType.textInput,
     answer: '13',
-    explanationSteps: [
-      '2x - 1 = 5² = 25',
-      '2x = 26',
-      'x = 13',
-    ],
+    explanationSteps: ['2x - 1 = 5² = 25', '2x = 26', 'x = 13'],
   ),
   const Task(
     id: 'g10_log_13',
@@ -10616,10 +9925,7 @@ final List<Task> _grade10Tasks = [
     question: 'Упростите: log₆36',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '36 = 6²',
-      'log₆36 = log₆(6²) = 2',
-    ],
+    explanationSteps: ['36 = 6²', 'log₆36 = log₆(6²) = 2'],
   ),
   const Task(
     id: 'g10_log_14',
@@ -10637,10 +9943,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите lg 0,001',
     type: TaskType.textInput,
     answer: '-3',
-    explanationSteps: [
-      '0,001 = 10⁻³',
-      'lg 0,001 = -3',
-    ],
+    explanationSteps: ['0,001 = 10⁻³', 'lg 0,001 = -3'],
   ),
   const Task(
     id: 'g10_log_16',
@@ -10661,10 +9964,7 @@ final List<Task> _grade10Tasks = [
     question: 'Упростите: log₂(32/4)',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'log₂(32/4) = log₂8',
-      '8 = 2³, поэтому log₂8 = 3',
-    ],
+    explanationSteps: ['log₂(32/4) = log₂8', '8 = 2³, поэтому log₂8 = 3'],
   ),
   const Task(
     id: 'g10_log_18',
@@ -10673,11 +9973,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите x: 2·log₃x = log₃81',
     type: TaskType.textInput,
     answer: '9',
-    explanationSteps: [
-      'log₃81 = 4',
-      '2·log₃x = 4 => log₃x = 2',
-      'x = 3² = 9',
-    ],
+    explanationSteps: ['log₃81 = 4', '2·log₃x = 4 => log₃x = 2', 'x = 3² = 9'],
   ),
   const Task(
     id: 'g10_log_19',
@@ -10706,10 +10002,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = x³',
     type: TaskType.textInput,
     answer: '3x²',
-    explanationSteps: [
-      'Правило степени: (xⁿ)\' = n·x^(n-1)',
-      '(x³)\' = 3x²',
-    ],
+    explanationSteps: ['Правило степени: (xⁿ)\' = n·x^(n-1)', '(x³)\' = 3x²'],
   ),
   const Task(
     id: 'g10_der_2',
@@ -10718,9 +10011,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = 5x²',
     type: TaskType.textInput,
     answer: '10x',
-    explanationSteps: [
-      '(5x²)\' = 5·(x²)\' = 5·2x = 10x',
-    ],
+    explanationSteps: ['(5x²)\' = 5·(x²)\' = 5·2x = 10x'],
   ),
   const Task(
     id: 'g10_der_3',
@@ -10743,9 +10034,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = sin x',
     type: TaskType.textInput,
     answer: 'cos x',
-    explanationSteps: [
-      'Стандартная формула: (sin x)\' = cos x',
-    ],
+    explanationSteps: ['Стандартная формула: (sin x)\' = cos x'],
   ),
   const Task(
     id: 'g10_der_5',
@@ -10754,9 +10043,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = cos x',
     type: TaskType.textInput,
     answer: '-sin x',
-    explanationSteps: [
-      'Стандартная формула: (cos x)\' = -sin x',
-    ],
+    explanationSteps: ['Стандартная формула: (cos x)\' = -sin x'],
   ),
   const Task(
     id: 'g10_der_6',
@@ -10777,9 +10064,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = ln x',
     type: TaskType.textInput,
     answer: '1/x',
-    explanationSteps: [
-      'Стандартная формула: (ln x)\' = 1/x',
-    ],
+    explanationSteps: ['Стандартная формула: (ln x)\' = 1/x'],
   ),
   const Task(
     id: 'g10_der_8',
@@ -10788,10 +10073,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = 7 (константа)',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'Производная константы равна нулю',
-      '(7)\' = 0',
-    ],
+    explanationSteps: ['Производная константы равна нулю', '(7)\' = 0'],
   ),
   const Task(
     id: 'g10_der_9',
@@ -10800,9 +10082,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = x (линейная функция)',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      '(x)\' = 1',
-    ],
+    explanationSteps: ['(x)\' = 1'],
   ),
   const Task(
     id: 'g10_der_10',
@@ -10833,10 +10113,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = 1/x',
     type: TaskType.textInput,
     answer: '-1/x²',
-    explanationSteps: [
-      'y = x⁻¹',
-      'y\' = -1·x⁻² = -1/x²',
-    ],
+    explanationSteps: ['y = x⁻¹', 'y\' = -1·x⁻² = -1/x²'],
   ),
   const Task(
     id: 'g10_der_13',
@@ -10845,10 +10122,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = √x',
     type: TaskType.textInput,
     answer: '1/(2√x)',
-    explanationSteps: [
-      'y = x^(1/2)',
-      'y\' = (1/2)·x^(-1/2) = 1/(2√x)',
-    ],
+    explanationSteps: ['y = x^(1/2)', 'y\' = (1/2)·x^(-1/2) = 1/(2√x)'],
   ),
   const Task(
     id: 'g10_der_14',
@@ -10879,9 +10153,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите производную: y = 4x⁵',
     type: TaskType.textInput,
     answer: '20x⁴',
-    explanationSteps: [
-      '(4x⁵)\' = 4·5x⁴ = 20x⁴',
-    ],
+    explanationSteps: ['(4x⁵)\' = 4·5x⁴ = 20x⁴'],
   ),
   const Task(
     id: 'g10_der_17',
@@ -10893,7 +10165,7 @@ final List<Task> _grade10Tasks = [
       'Возможный экстремум',
       'Точно максимум',
       'Точно минимум',
-      'Точка перегиба'
+      'Точка перегиба',
     ],
     answer: 'Возможный экстремум',
   ),
@@ -10936,10 +10208,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите объём куба со стороной 3 см.',
     type: TaskType.textInput,
     answer: '27',
-    explanationSteps: [
-      'V = a³',
-      'V = 3³ = 27 см³',
-    ],
+    explanationSteps: ['V = a³', 'V = 3³ = 27 см³'],
   ),
   const Task(
     id: 'g10_stereo_2',
@@ -10960,10 +10229,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите объём прямоугольного параллелепипеда: 3 × 4 × 5',
     type: TaskType.textInput,
     answer: '60',
-    explanationSteps: [
-      'V = a·b·c',
-      'V = 3·4·5 = 60 см³',
-    ],
+    explanationSteps: ['V = a·b·c', 'V = 3·4·5 = 60 см³'],
   ),
   const Task(
     id: 'g10_stereo_4',
@@ -10994,10 +10260,7 @@ final List<Task> _grade10Tasks = [
     question: 'Объём пирамиды с площадью основания 24 и высотой 5:',
     type: TaskType.textInput,
     answer: '40',
-    explanationSteps: [
-      'V = (1/3)·S·h',
-      'V = (1/3)·24·5 = 40',
-    ],
+    explanationSteps: ['V = (1/3)·S·h', 'V = (1/3)·24·5 = 40'],
   ),
   const Task(
     id: 'g10_stereo_7',
@@ -11053,9 +10316,7 @@ final List<Task> _grade10Tasks = [
     question: 'Сколько вершин у правильной треугольной пирамиды?',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '3 вершины основания + 1 вершина пирамиды = 4 вершины',
-    ],
+    explanationSteps: ['3 вершины основания + 1 вершина пирамиды = 4 вершины'],
   ),
   const Task(
     id: 'g10_stereo_12',
@@ -11064,10 +10325,7 @@ final List<Task> _grade10Tasks = [
     question: 'Куб со стороной 2 вписан в сферу. Найдите радиус сферы.',
     type: TaskType.textInput,
     answer: '√3',
-    explanationSteps: [
-      'Диагональ куба: d = a√3 = 2√3',
-      'R = d/2 = √3',
-    ],
+    explanationSteps: ['Диагональ куба: d = a√3 = 2√3', 'R = d/2 = √3'],
   ),
   const Task(
     id: 'g10_stereo_13',
@@ -11085,9 +10343,7 @@ final List<Task> _grade10Tasks = [
     question: 'Полная поверхность куба со стороной 5:',
     type: TaskType.textInput,
     answer: '150',
-    explanationSteps: [
-      'S = 6a² = 6·25 = 150',
-    ],
+    explanationSteps: ['S = 6a² = 6·25 = 150'],
   ),
   const Task(
     id: 'g10_stereo_15',
@@ -11096,9 +10352,7 @@ final List<Task> _grade10Tasks = [
     question: 'Сколько граней у прямоугольного параллелепипеда?',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      'Параллелепипед ограничен 6 прямоугольными гранями',
-    ],
+    explanationSteps: ['Параллелепипед ограничен 6 прямоугольными гранями'],
   ),
   const Task(
     id: 'g10_stereo_16',
@@ -11108,10 +10362,7 @@ final List<Task> _grade10Tasks = [
         'Объём пирамиды равен 30. Высоту увеличили в 2 раза, основание не изменилось. Новый объём?',
     type: TaskType.textInput,
     answer: '60',
-    explanationSteps: [
-      'V = (1/3)·S·h',
-      'V_new = (1/3)·S·2h = 2·V = 60',
-    ],
+    explanationSteps: ['V = (1/3)·S·h', 'V_new = (1/3)·S·2h = 2·V = 60'],
   ),
   const Task(
     id: 'g10_stereo_17',
@@ -11123,7 +10374,7 @@ final List<Task> _grade10Tasks = [
       'Высота боковой грани',
       'Ребро пирамиды',
       'Высота пирамиды',
-      'Медиана основания'
+      'Медиана основания',
     ],
     answer: 'Высота боковой грани',
   ),
@@ -11134,10 +10385,7 @@ final List<Task> _grade10Tasks = [
     question: 'Найдите объём куба, если площадь одной грани равна 9.',
     type: TaskType.textInput,
     answer: '27',
-    explanationSteps: [
-      'Площадь грани куба: a² = 9 => a = 3',
-      'V = a³ = 27',
-    ],
+    explanationSteps: ['Площадь грани куба: a² = 9 => a = 3', 'V = a³ = 27'],
   ),
   const Task(
     id: 'g10_stereo_19',
@@ -11172,10 +10420,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = x³',
     type: TaskType.textInput,
     answer: "f'(x) = 3x²",
-    explanationSteps: [
-      "(xⁿ)' = n·xⁿ⁻¹",
-      "(x³)' = 3x²",
-    ],
+    explanationSteps: ["(xⁿ)' = n·xⁿ⁻¹", "(x³)' = 3x²"],
   ),
   const Task(
     id: 'g11_deriv_2',
@@ -11198,9 +10443,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = sin x',
     type: TaskType.textInput,
     answer: "f'(x) = cos x",
-    explanationSteps: [
-      "(sin x)' = cos x",
-    ],
+    explanationSteps: ["(sin x)' = cos x"],
   ),
   const Task(
     id: 'g11_deriv_4',
@@ -11209,9 +10452,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = eˣ',
     type: TaskType.textInput,
     answer: "f'(x) = eˣ",
-    explanationSteps: [
-      "(eˣ)' = eˣ",
-    ],
+    explanationSteps: ["(eˣ)' = eˣ"],
   ),
   const Task(
     id: 'g11_deriv_5',
@@ -11220,9 +10461,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = ln x',
     type: TaskType.textInput,
     answer: "f'(x) = 1/x",
-    explanationSteps: [
-      "(ln x)' = 1/x (x > 0)",
-    ],
+    explanationSteps: ["(ln x)' = 1/x (x > 0)"],
   ),
   const Task(
     id: 'g11_deriv_6',
@@ -11231,9 +10470,7 @@ final List<Task> _grade11Tasks = [
     question: 'Производная постоянной функции f(x) = C:',
     type: TaskType.textInput,
     answer: "f'(x) = 0",
-    explanationSteps: [
-      "Производная константы равна нулю",
-    ],
+    explanationSteps: ["Производная константы равна нулю"],
   ),
   const Task(
     id: 'g11_deriv_7',
@@ -11242,9 +10479,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = cos x',
     type: TaskType.textInput,
     answer: "f'(x) = -sin x",
-    explanationSteps: [
-      "(cos x)' = -sin x",
-    ],
+    explanationSteps: ["(cos x)' = -sin x"],
   ),
   const Task(
     id: 'g11_deriv_8',
@@ -11253,11 +10488,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = x⁵ - 2x³ + x',
     type: TaskType.textInput,
     answer: "f'(x) = 5x⁴ - 6x² + 1",
-    explanationSteps: [
-      "(x⁵)' = 5x⁴",
-      "(-2x³)' = -6x²",
-      "(x)' = 1",
-    ],
+    explanationSteps: ["(x⁵)' = 5x⁴", "(-2x³)' = -6x²", "(x)' = 1"],
   ),
   const Task(
     id: 'g11_deriv_9',
@@ -11275,9 +10506,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = x·sin x',
     type: TaskType.textInput,
     answer: "f'(x) = sin x + x·cos x",
-    explanationSteps: [
-      "(x·sin x)' = x'·sin x + x·(sin x)' = sin x + x·cos x",
-    ],
+    explanationSteps: ["(x·sin x)' = x'·sin x + x·(sin x)' = sin x + x·cos x"],
   ),
   const Task(
     id: 'g11_deriv_11',
@@ -11286,9 +10515,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = (3x + 1)²',
     type: TaskType.textInput,
     answer: "f'(x) = 6(3x + 1)",
-    explanationSteps: [
-      "Правило цепочки: 2(3x+1) × 3 = 6(3x+1)",
-    ],
+    explanationSteps: ["Правило цепочки: 2(3x+1) × 3 = 6(3x+1)"],
   ),
   const Task(
     id: 'g11_deriv_12',
@@ -11324,10 +10551,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = √x (x > 0)',
     type: TaskType.textInput,
     answer: "f'(x) = 1/(2√x)",
-    explanationSteps: [
-      "√x = x^(1/2)",
-      "(x^(1/2))' = 1/2 × x^(-1/2) = 1/(2√x)",
-    ],
+    explanationSteps: ["√x = x^(1/2)", "(x^(1/2))' = 1/2 × x^(-1/2) = 1/(2√x)"],
   ),
   const Task(
     id: 'g11_deriv_16',
@@ -11336,10 +10560,7 @@ final List<Task> _grade11Tasks = [
     question: 'Наибольшее значение f(x) = -x² + 4x - 1 на [0, 4]:',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      "f'(x) = -2x + 4 = 0 → x = 2",
-      "f(2) = -4 + 8 - 1 = 3",
-    ],
+    explanationSteps: ["f'(x) = -2x + 4 = 0 → x = 2", "f(2) = -4 + 8 - 1 = 3"],
   ),
   const Task(
     id: 'g11_deriv_17',
@@ -11361,9 +10582,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную: f(x) = tg x',
     type: TaskType.textInput,
     answer: "f'(x) = 1/cos²x",
-    explanationSteps: [
-      "(tg x)' = 1/cos²x",
-    ],
+    explanationSteps: ["(tg x)' = 1/cos²x"],
   ),
   const Task(
     id: 'g11_deriv_19',
@@ -11372,9 +10591,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите производную f(x) = e^(2x)',
     type: TaskType.textInput,
     answer: "f'(x) = 2e^(2x)",
-    explanationSteps: [
-      "Правило цепочки: e^(2x) × (2x)' = 2e^(2x)",
-    ],
+    explanationSteps: ["Правило цепочки: e^(2x) × (2x)' = 2e^(2x)"],
   ),
   const Task(
     id: 'g11_deriv_20',
@@ -11383,10 +10600,7 @@ final List<Task> _grade11Tasks = [
     question: 'Найдите критические точки f(x) = x³ - 3x',
     type: TaskType.textInput,
     answer: 'x = ±1',
-    explanationSteps: [
-      "f'(x) = 3x² - 3 = 0",
-      "x² = 1 → x = ±1",
-    ],
+    explanationSteps: ["f'(x) = 3x² - 3 = 0", "x² = 1 → x = ±1"],
   ),
 
   // ==================== ИНТЕГРАЛ (20 задач) ====================
@@ -11397,10 +10611,7 @@ final List<Task> _grade11Tasks = [
     question: '∫x dx = ?',
     type: TaskType.textInput,
     answer: 'x²/2 + C',
-    explanationSteps: [
-      '∫xⁿ dx = xⁿ⁺¹/(n+1) + C',
-      '∫x dx = x²/2 + C',
-    ],
+    explanationSteps: ['∫xⁿ dx = xⁿ⁺¹/(n+1) + C', '∫x dx = x²/2 + C'],
   ),
   const Task(
     id: 'g11_integ_2',
@@ -11409,9 +10620,7 @@ final List<Task> _grade11Tasks = [
     question: '∫3x² dx = ?',
     type: TaskType.textInput,
     answer: 'x³ + C',
-    explanationSteps: [
-      '∫3x² dx = 3 × x³/3 + C = x³ + C',
-    ],
+    explanationSteps: ['∫3x² dx = 3 × x³/3 + C = x³ + C'],
   ),
   const Task(
     id: 'g11_integ_3',
@@ -11420,9 +10629,7 @@ final List<Task> _grade11Tasks = [
     question: '∫sin x dx = ?',
     type: TaskType.textInput,
     answer: '-cos x + C',
-    explanationSteps: [
-      '∫sin x dx = -cos x + C',
-    ],
+    explanationSteps: ['∫sin x dx = -cos x + C'],
   ),
   const Task(
     id: 'g11_integ_4',
@@ -11431,9 +10638,7 @@ final List<Task> _grade11Tasks = [
     question: '∫cos x dx = ?',
     type: TaskType.textInput,
     answer: 'sin x + C',
-    explanationSteps: [
-      '∫cos x dx = sin x + C',
-    ],
+    explanationSteps: ['∫cos x dx = sin x + C'],
   ),
   const Task(
     id: 'g11_integ_5',
@@ -11442,9 +10647,7 @@ final List<Task> _grade11Tasks = [
     question: '∫eˣ dx = ?',
     type: TaskType.textInput,
     answer: 'eˣ + C',
-    explanationSteps: [
-      '∫eˣ dx = eˣ + C',
-    ],
+    explanationSteps: ['∫eˣ dx = eˣ + C'],
   ),
   const Task(
     id: 'g11_integ_6',
@@ -11453,9 +10656,7 @@ final List<Task> _grade11Tasks = [
     question: 'Вычислите определённый интеграл: ∫₀² x dx',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '[x²/2]₀² = 4/2 - 0 = 2',
-    ],
+    explanationSteps: ['[x²/2]₀² = 4/2 - 0 = 2'],
   ),
   const Task(
     id: 'g11_integ_7',
@@ -11473,9 +10674,7 @@ final List<Task> _grade11Tasks = [
     question: '∫1/x dx = ?',
     type: TaskType.textInput,
     answer: 'ln|x| + C',
-    explanationSteps: [
-      '∫1/x dx = ln|x| + C',
-    ],
+    explanationSteps: ['∫1/x dx = ln|x| + C'],
   ),
   const Task(
     id: 'g11_integ_9',
@@ -11493,9 +10692,7 @@ final List<Task> _grade11Tasks = [
     question: 'Вычислите: ∫₀¹ (2x + 1) dx',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '[x² + x]₀¹ = (1 + 1) - 0 = 2',
-    ],
+    explanationSteps: ['[x² + x]₀¹ = (1 + 1) - 0 = 2'],
   ),
   const Task(
     id: 'g11_integ_11',
@@ -11513,9 +10710,7 @@ final List<Task> _grade11Tasks = [
     question: '∫ 5 dx = ?',
     type: TaskType.textInput,
     answer: '5x + C',
-    explanationSteps: [
-      '∫c dx = cx + C',
-    ],
+    explanationSteps: ['∫c dx = cx + C'],
   ),
   const Task(
     id: 'g11_integ_13',
@@ -11524,9 +10719,7 @@ final List<Task> _grade11Tasks = [
     question: 'Вычислите площадь под y = x² на [0, 3]:',
     type: TaskType.textInput,
     answer: '9',
-    explanationSteps: [
-      '∫₀³ x² dx = [x³/3]₀³ = 27/3 = 9',
-    ],
+    explanationSteps: ['∫₀³ x² dx = [x³/3]₀³ = 27/3 = 9'],
   ),
   const Task(
     id: 'g11_integ_14',
@@ -11547,9 +10740,7 @@ final List<Task> _grade11Tasks = [
     question: '∫₁² (1/x) dx = ?',
     type: TaskType.textInput,
     answer: 'ln 2',
-    explanationSteps: [
-      '[ln|x|]₁² = ln 2 - ln 1 = ln 2 - 0 = ln 2',
-    ],
+    explanationSteps: ['[ln|x|]₁² = ln 2 - ln 1 = ln 2 - 0 = ln 2'],
   ),
   const Task(
     id: 'g11_integ_16',
@@ -11558,9 +10749,7 @@ final List<Task> _grade11Tasks = [
     question: 'Площадь фигуры, ограниченной y = x² и y = x (на [0,1]):',
     type: TaskType.textInput,
     answer: '1/6',
-    explanationSteps: [
-      '∫₀¹ (x - x²) dx = [x²/2 - x³/3]₀¹ = 1/2 - 1/3 = 1/6',
-    ],
+    explanationSteps: ['∫₀¹ (x - x²) dx = [x²/2 - x³/3]₀¹ = 1/2 - 1/3 = 1/6'],
   ),
   const Task(
     id: 'g11_integ_17',
@@ -11569,9 +10758,7 @@ final List<Task> _grade11Tasks = [
     question: 'Линейность интеграла: ∫(f + g) dx = ?',
     type: TaskType.textInput,
     answer: '∫f dx + ∫g dx',
-    explanationSteps: [
-      'Интеграл суммы = сумма интегралов',
-    ],
+    explanationSteps: ['Интеграл суммы = сумма интегралов'],
   ),
   const Task(
     id: 'g11_integ_18',
@@ -11580,9 +10767,7 @@ final List<Task> _grade11Tasks = [
     question: '∫₀^π sin x dx = ?',
     type: TaskType.textInput,
     answer: '2',
-    explanationSteps: [
-      '[-cos x]₀^π = -cos π + cos 0 = 1 + 1 = 2',
-    ],
+    explanationSteps: ['[-cos x]₀^π = -cos π + cos 0 = 1 + 1 = 2'],
   ),
   const Task(
     id: 'g11_integ_19',
@@ -11591,9 +10776,7 @@ final List<Task> _grade11Tasks = [
     question: '∫ 2eˣ dx = ?',
     type: TaskType.textInput,
     answer: '2eˣ + C',
-    explanationSteps: [
-      '2∫eˣ dx = 2eˣ + C',
-    ],
+    explanationSteps: ['2∫eˣ dx = 2eˣ + C'],
   ),
   const Task(
     id: 'g11_integ_20',
@@ -11613,9 +10796,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: 2ˣ = 8',
     type: TaskType.textInput,
     answer: 'x = 3',
-    explanationSteps: [
-      '2ˣ = 2³ → x = 3',
-    ],
+    explanationSteps: ['2ˣ = 2³ → x = 3'],
   ),
   const Task(
     id: 'g11_explog_2',
@@ -11624,9 +10805,7 @@ final List<Task> _grade11Tasks = [
     question: 'log₂ 16 = ?',
     type: TaskType.textInput,
     answer: '4',
-    explanationSteps: [
-      '2⁴ = 16 → log₂ 16 = 4',
-    ],
+    explanationSteps: ['2⁴ = 16 → log₂ 16 = 4'],
   ),
   const Task(
     id: 'g11_explog_3',
@@ -11635,9 +10814,7 @@ final List<Task> _grade11Tasks = [
     question: 'ln e = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'ln e = log_e(e) = 1',
-    ],
+    explanationSteps: ['ln e = log_e(e) = 1'],
   ),
   const Task(
     id: 'g11_explog_4',
@@ -11646,10 +10823,7 @@ final List<Task> _grade11Tasks = [
     question: 'Упростите: log₃ 9 + log₃ 3',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      'log₃ 9 = 2, log₃ 3 = 1',
-      '2 + 1 = 3',
-    ],
+    explanationSteps: ['log₃ 9 = 2, log₃ 3 = 1', '2 + 1 = 3'],
   ),
   const Task(
     id: 'g11_explog_5',
@@ -11658,9 +10832,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: log₂(x) = 5',
     type: TaskType.textInput,
     answer: 'x = 32',
-    explanationSteps: [
-      'x = 2⁵ = 32',
-    ],
+    explanationSteps: ['x = 2⁵ = 32'],
   ),
   const Task(
     id: 'g11_explog_6',
@@ -11669,9 +10841,7 @@ final List<Task> _grade11Tasks = [
     question: 'Упростите: log_a(a) = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'log_a(a) = 1 (по определению)',
-    ],
+    explanationSteps: ['log_a(a) = 1 (по определению)'],
   ),
   const Task(
     id: 'g11_explog_7',
@@ -11683,7 +10853,7 @@ final List<Task> _grade11Tasks = [
       'log_a(m) × log_a(n)',
       'log_a(m) + log_a(n)',
       'log_a(m) - log_a(n)',
-      'log_a(m) / log_a(n)'
+      'log_a(m) / log_a(n)',
     ],
     answer: 'log_a(m) + log_a(n)',
   ),
@@ -11694,10 +10864,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: 3^(x+1) = 27',
     type: TaskType.textInput,
     answer: 'x = 2',
-    explanationSteps: [
-      '3^(x+1) = 3³',
-      'x+1 = 3 → x = 2',
-    ],
+    explanationSteps: ['3^(x+1) = 3³', 'x+1 = 3 → x = 2'],
   ),
   const Task(
     id: 'g11_explog_9',
@@ -11706,9 +10873,7 @@ final List<Task> _grade11Tasks = [
     question: 'log₁₀ 1000 = ?',
     type: TaskType.textInput,
     answer: '3',
-    explanationSteps: [
-      '10³ = 1000 → log₁₀ 1000 = 3',
-    ],
+    explanationSteps: ['10³ = 1000 → log₁₀ 1000 = 3'],
   ),
   const Task(
     id: 'g11_explog_10',
@@ -11720,7 +10885,7 @@ final List<Task> _grade11Tasks = [
       'Убывает к 0',
       'Растёт к +∞',
       'Остаётся постоянной',
-      'Осциллирует'
+      'Осциллирует',
     ],
     answer: 'Растёт к +∞',
   ),
@@ -11734,7 +10899,7 @@ final List<Task> _grade11Tasks = [
       'log_a(m) + log_a(n)',
       'log_a(m) - log_a(n)',
       'log_a(m) × log_a(n)',
-      'log_a(m/n²)'
+      'log_a(m/n²)',
     ],
     answer: 'log_a(m) - log_a(n)',
   ),
@@ -11745,9 +10910,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: ln(x) = 0',
     type: TaskType.textInput,
     answer: 'x = 1',
-    explanationSteps: [
-      'ln 1 = 0 → x = 1',
-    ],
+    explanationSteps: ['ln 1 = 0 → x = 1'],
   ),
   const Task(
     id: 'g11_explog_13',
@@ -11756,9 +10919,7 @@ final List<Task> _grade11Tasks = [
     question: 'Упростите: log₂(2⁵)',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'log_a(aⁿ) = n',
-    ],
+    explanationSteps: ['log_a(aⁿ) = n'],
   ),
   const Task(
     id: 'g11_explog_14',
@@ -11770,7 +10931,7 @@ final List<Task> _grade11Tasks = [
       'Любым числом',
       'Положительным и ≠ 1',
       'Только целым числом',
-      'Больше 1'
+      'Больше 1',
     ],
     answer: 'Положительным и ≠ 1',
   ),
@@ -11790,10 +10951,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: 5ˣ = 1/25',
     type: TaskType.textInput,
     answer: 'x = -2',
-    explanationSteps: [
-      '1/25 = 5^(-2)',
-      'x = -2',
-    ],
+    explanationSteps: ['1/25 = 5^(-2)', 'x = -2'],
   ),
   const Task(
     id: 'g11_explog_17',
@@ -11802,9 +10960,7 @@ final List<Task> _grade11Tasks = [
     question: 'Область допустимых значений ln(x - 3):',
     type: TaskType.textInput,
     answer: 'x > 3',
-    explanationSteps: [
-      'Аргумент логарифма > 0: x - 3 > 0 → x > 3',
-    ],
+    explanationSteps: ['Аргумент логарифма > 0: x - 3 > 0 → x > 3'],
   ),
   const Task(
     id: 'g11_explog_18',
@@ -11813,10 +10969,7 @@ final List<Task> _grade11Tasks = [
     question: 'Решите: log₃(x+1) = 2',
     type: TaskType.textInput,
     answer: 'x = 8',
-    explanationSteps: [
-      'x + 1 = 3² = 9',
-      'x = 8',
-    ],
+    explanationSteps: ['x + 1 = 3² = 9', 'x = 8'],
   ),
   const Task(
     id: 'g11_explog_19',
@@ -11825,10 +10978,7 @@ final List<Task> _grade11Tasks = [
     question: 'Упростите: e^(ln 5)',
     type: TaskType.textInput,
     answer: '5',
-    explanationSteps: [
-      'e^(ln a) = a',
-      'e^(ln 5) = 5',
-    ],
+    explanationSteps: ['e^(ln a) = a', 'e^(ln 5) = 5'],
   ),
   const Task(
     id: 'g11_explog_20',
@@ -11857,9 +11007,7 @@ final List<Task> _grade11Tasks = [
     question: '5! = ?',
     type: TaskType.textInput,
     answer: '120',
-    explanationSteps: [
-      '5! = 5 × 4 × 3 × 2 × 1 = 120',
-    ],
+    explanationSteps: ['5! = 5 × 4 × 3 × 2 × 1 = 120'],
   ),
   const Task(
     id: 'g11_comb_3',
@@ -11868,9 +11016,7 @@ final List<Task> _grade11Tasks = [
     question: 'Число перестановок из 4 элементов:',
     type: TaskType.textInput,
     answer: '24',
-    explanationSteps: [
-      'P₄ = 4! = 24',
-    ],
+    explanationSteps: ['P₄ = 4! = 24'],
   ),
   const Task(
     id: 'g11_comb_4',
@@ -11879,9 +11025,7 @@ final List<Task> _grade11Tasks = [
     question: 'Число размещений A(5, 2) = ?',
     type: TaskType.textInput,
     answer: '20',
-    explanationSteps: [
-      'A(5,2) = 5!/(5-2)! = 5×4 = 20',
-    ],
+    explanationSteps: ['A(5,2) = 5!/(5-2)! = 5×4 = 20'],
   ),
   const Task(
     id: 'g11_comb_5',
@@ -11890,9 +11034,7 @@ final List<Task> _grade11Tasks = [
     question: 'C(5, 2) = ?',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      'C(5,2) = 5!/(2!×3!) = 10',
-    ],
+    explanationSteps: ['C(5,2) = 5!/(2!×3!) = 10'],
   ),
   const Task(
     id: 'g11_comb_6',
@@ -11901,9 +11043,7 @@ final List<Task> _grade11Tasks = [
     question: 'C(n, 0) = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'C(n,0) = 1 по определению',
-    ],
+    explanationSteps: ['C(n,0) = 1 по определению'],
   ),
   const Task(
     id: 'g11_comb_7',
@@ -11912,9 +11052,7 @@ final List<Task> _grade11Tasks = [
     question: 'C(6, 6) = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'C(n,n) = 1',
-    ],
+    explanationSteps: ['C(n,n) = 1'],
   ),
   const Task(
     id: 'g11_comb_8',
@@ -11923,9 +11061,7 @@ final List<Task> _grade11Tasks = [
     question: 'Из 10 человек выбирают 3. Число способов:',
     type: TaskType.textInput,
     answer: '120',
-    explanationSteps: [
-      'C(10,3) = 10!/(3!×7!) = 120',
-    ],
+    explanationSteps: ['C(10,3) = 10!/(3!×7!) = 120'],
   ),
   const Task(
     id: 'g11_comb_9',
@@ -11935,9 +11071,7 @@ final List<Task> _grade11Tasks = [
         'Сумма всех биномиальных коэффициентов C(n,0) + C(n,1) + ... + C(n,n):',
     type: TaskType.textInput,
     answer: '2ⁿ',
-    explanationSteps: [
-      '(1+1)ⁿ = 2ⁿ = сумма биномиальных коэффициентов',
-    ],
+    explanationSteps: ['(1+1)ⁿ = 2ⁿ = сумма биномиальных коэффициентов'],
   ),
   const Task(
     id: 'g11_comb_10',
@@ -11947,9 +11081,7 @@ final List<Task> _grade11Tasks = [
         'Правило умножения: если событие A происходит m способами, а B — n способами, то вместе:',
     type: TaskType.textInput,
     answer: 'm × n',
-    explanationSteps: [
-      'Правило произведения: m × n способов',
-    ],
+    explanationSteps: ['Правило произведения: m × n способов'],
   ),
   const Task(
     id: 'g11_comb_11',
@@ -11958,9 +11090,7 @@ final List<Task> _grade11Tasks = [
     question: 'Сколькими способами можно расставить 3 книги на полке?',
     type: TaskType.textInput,
     answer: '6',
-    explanationSteps: [
-      'P₃ = 3! = 6',
-    ],
+    explanationSteps: ['P₃ = 3! = 6'],
   ),
   const Task(
     id: 'g11_comb_12',
@@ -11969,9 +11099,7 @@ final List<Task> _grade11Tasks = [
     question: '0! = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      '0! = 1 по соглашению',
-    ],
+    explanationSteps: ['0! = 1 по соглашению'],
   ),
   const Task(
     id: 'g11_comb_13',
@@ -11983,7 +11111,7 @@ final List<Task> _grade11Tasks = [
       'В сочетании порядок важен',
       'В сочетании порядок не важен',
       'Размещение всегда меньше',
-      'Нет разницы'
+      'Нет разницы',
     ],
     answer: 'В сочетании порядок не важен',
   ),
@@ -11994,9 +11122,7 @@ final List<Task> _grade11Tasks = [
     question: 'C(n, k) = C(n, n-k). C(8, 6) = ?',
     type: TaskType.textInput,
     answer: '28',
-    explanationSteps: [
-      'C(8,6) = C(8,2) = 8×7/2 = 28',
-    ],
+    explanationSteps: ['C(8,6) = C(8,2) = 8×7/2 = 28'],
   ),
   const Task(
     id: 'g11_comb_15',
@@ -12005,9 +11131,7 @@ final List<Task> _grade11Tasks = [
     question: 'Правило сложения: если A и B несовместимы, то A или B:',
     type: TaskType.textInput,
     answer: 'm + n',
-    explanationSteps: [
-      'Правило суммы: m + n',
-    ],
+    explanationSteps: ['Правило суммы: m + n'],
   ),
   const Task(
     id: 'g11_comb_16',
@@ -12016,9 +11140,7 @@ final List<Task> _grade11Tasks = [
     question: 'Из 5 красных и 3 синих шаров выбирают 2 красных. Способов:',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: [
-      'C(5,2) = 10',
-    ],
+    explanationSteps: ['C(5,2) = 10'],
   ),
   const Task(
     id: 'g11_comb_17',
@@ -12038,9 +11160,7 @@ final List<Task> _grade11Tasks = [
         'В классе 30 учеников. Сколько способов назначить старосту и его зама?',
     type: TaskType.textInput,
     answer: '870',
-    explanationSteps: [
-      'A(30,2) = 30 × 29 = 870',
-    ],
+    explanationSteps: ['A(30,2) = 30 × 29 = 870'],
   ),
   const Task(
     id: 'g11_comb_19',
@@ -12052,7 +11172,7 @@ final List<Task> _grade11Tasks = [
       'C(n,k) + C(n,k-1)',
       'C(n,k) + C(n+1,k-1)',
       'C(n-1,k) + C(n,k)',
-      'C(n,k)²'
+      'C(n,k)²',
     ],
     answer: 'C(n,k) + C(n,k-1)',
   ),
@@ -12077,9 +11197,7 @@ final List<Task> _grade11Tasks = [
     question: 'Вероятность невозможного события:',
     type: TaskType.textInput,
     answer: '0',
-    explanationSteps: [
-      'P(невозможного) = 0',
-    ],
+    explanationSteps: ['P(невозможного) = 0'],
   ),
   const Task(
     id: 'g11_prob_2',
@@ -12088,9 +11206,7 @@ final List<Task> _grade11Tasks = [
     question: 'Вероятность достоверного события:',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'P(достоверного) = 1',
-    ],
+    explanationSteps: ['P(достоверного) = 1'],
   ),
   const Task(
     id: 'g11_prob_3',
@@ -12099,9 +11215,7 @@ final List<Task> _grade11Tasks = [
     question: 'В урне 3 красных и 7 синих шаров. Вероятность вытащить красный:',
     type: TaskType.textInput,
     answer: '0.3',
-    explanationSteps: [
-      'P = 3/10 = 0.3',
-    ],
+    explanationSteps: ['P = 3/10 = 0.3'],
   ),
   const Task(
     id: 'g11_prob_4',
@@ -12110,9 +11224,7 @@ final List<Task> _grade11Tasks = [
     question: 'P(A) + P(Ā) = ?',
     type: TaskType.textInput,
     answer: '1',
-    explanationSteps: [
-      'Событие и его противоположное исчерпывают все исходы',
-    ],
+    explanationSteps: ['Событие и его противоположное исчерпывают все исходы'],
   ),
   const Task(
     id: 'g11_prob_5',
@@ -12121,9 +11233,7 @@ final List<Task> _grade11Tasks = [
     question: 'Монету бросают 2 раза. Вероятность двух орлов:',
     type: TaskType.textInput,
     answer: '0.25',
-    explanationSteps: [
-      'P(О) × P(О) = 0.5 × 0.5 = 0.25',
-    ],
+    explanationSteps: ['P(О) × P(О) = 0.5 × 0.5 = 0.25'],
   ),
   const Task(
     id: 'g11_prob_6',
@@ -12135,7 +11245,7 @@ final List<Task> _grade11Tasks = [
       'Любых событий',
       'Несовместных событий',
       'Зависимых событий',
-      'Независимых событий'
+      'Независимых событий',
     ],
     answer: 'Несовместных событий',
   ),
@@ -12149,7 +11259,7 @@ final List<Task> _grade11Tasks = [
       'Любых событий',
       'Совместных событий',
       'Независимых событий',
-      'Несовместных событий'
+      'Несовместных событий',
     ],
     answer: 'Независимых событий',
   ),
@@ -12160,10 +11270,7 @@ final List<Task> _grade11Tasks = [
     question: 'Бросают кубик. Вероятность выпадения чётного числа:',
     type: TaskType.textInput,
     answer: '1/2',
-    explanationSteps: [
-      'Чётные: 2, 4, 6 → 3 исхода из 6',
-      'P = 3/6 = 1/2',
-    ],
+    explanationSteps: ['Чётные: 2, 4, 6 → 3 исхода из 6', 'P = 3/6 = 1/2'],
   ),
   const Task(
     id: 'g11_prob_9',
@@ -12172,10 +11279,7 @@ final List<Task> _grade11Tasks = [
     question: 'Из 52 карт вытаскивают одну. Вероятность туза:',
     type: TaskType.textInput,
     answer: '1/13',
-    explanationSteps: [
-      '4 туза из 52 карт',
-      'P = 4/52 = 1/13',
-    ],
+    explanationSteps: ['4 туза из 52 карт', 'P = 4/52 = 1/13'],
   ),
   const Task(
     id: 'g11_prob_10',
@@ -12187,7 +11291,7 @@ final List<Task> _grade11Tasks = [
       'Все события равновероятны',
       'Известны условные вероятности относительно гипотез',
       'События независимы',
-      'Событий нет'
+      'Событий нет',
     ],
     answer: 'Известны условные вероятности относительно гипотез',
   ),
@@ -12201,7 +11305,7 @@ final List<Task> _grade11Tasks = [
       'P(A) × P(B)',
       'Вероятность A при условии B',
       'P(A) + P(B)',
-      'P(A ∪ B)'
+      'P(A ∪ B)',
     ],
     answer: 'Вероятность A при условии B',
   ),
@@ -12215,7 +11319,7 @@ final List<Task> _grade11Tasks = [
       'Максимальное значение X',
       'Взвешенная сумма: ΣxᵢP(xᵢ)',
       'Дисперсия X',
-      'P(X > 0)'
+      'P(X > 0)',
     ],
     answer: 'Взвешенная сумма: ΣxᵢP(xᵢ)',
   ),
@@ -12238,10 +11342,7 @@ final List<Task> _grade11Tasks = [
     question: 'Бросают 2 кубика. Вероятность суммы 12:',
     type: TaskType.textInput,
     answer: '1/36',
-    explanationSteps: [
-      'Только (6,6) даёт 12',
-      'P = 1/36',
-    ],
+    explanationSteps: ['Только (6,6) даёт 12', 'P = 1/36'],
   ),
   const Task(
     id: 'g11_prob_15',
@@ -12250,9 +11351,7 @@ final List<Task> _grade11Tasks = [
     question: 'Если P(A) = 0.7, то P(Ā) = ?',
     type: TaskType.textInput,
     answer: '0.3',
-    explanationSteps: [
-      'P(Ā) = 1 - P(A) = 1 - 0.7 = 0.3',
-    ],
+    explanationSteps: ['P(Ā) = 1 - P(A) = 1 - 0.7 = 0.3'],
   ),
   const Task(
     id: 'g11_prob_16',
@@ -12264,7 +11363,7 @@ final List<Task> _grade11Tasks = [
       'Числе исходов',
       'Отношении мер (длин, площадей)',
       'Числе испытаний',
-      'Частоте события'
+      'Частоте события',
     ],
     answer: 'Отношении мер (длин, площадей)',
   ),
@@ -12276,9 +11375,7 @@ final List<Task> _grade11Tasks = [
         'Из 10 вопросов студент знает 7. Берут 1 вопрос. Вероятность знает:',
     type: TaskType.textInput,
     answer: '0.7',
-    explanationSteps: [
-      'P = 7/10 = 0.7',
-    ],
+    explanationSteps: ['P = 7/10 = 0.7'],
   ),
   const Task(
     id: 'g11_prob_18',
@@ -12297,10 +11394,7 @@ final List<Task> _grade11Tasks = [
         'Дисперсия: D(X) = M(X²) - (M(X))². Для монеты (0 или 1 с P=0.5): D=?',
     type: TaskType.textInput,
     answer: '0.25',
-    explanationSteps: [
-      'M(X) = 0.5, M(X²) = 0.5',
-      'D = 0.5 - 0.25 = 0.25',
-    ],
+    explanationSteps: ['M(X) = 0.5, M(X²) = 0.5', 'D = 0.5 - 0.25 = 0.25'],
   ),
   const Task(
     id: 'g11_prob_20',
@@ -12319,7 +11413,7 @@ final List<Task> _grade11Tasks = [
 /// ============================================================
 
 /// Все задачи
-List<Task> getAllTasks() {
+List<Task> _createAllTasks() {
   final all = <Task>[
     ..._grade1Tasks,
     ..._grade2Tasks,
@@ -12335,8 +11429,15 @@ List<Task> getAllTasks() {
     ..._grade11Tasks,
     ...curriculumTasks,
   ];
-  return all.where((t) => t.grade >= 1 && t.grade <= 11).toList();
+  return List.unmodifiable(all.where((t) => t.grade >= 1 && t.grade <= 11));
 }
+
+final List<Task> _allTasks = _createAllTasks();
+final Map<String, Task> _tasksById = {
+  for (final task in _allTasks) task.id: task,
+};
+List<Task> getAllTasks() => _allTasks;
+Task? getTaskById(String id) => _tasksById[id];
 
 /// Задачи по классу
 List<Task> getTasksByGrade(int grade) {
@@ -12515,11 +11616,13 @@ List<TopicInfo> getTopicsInfoByGrade(int grade) {
   }
 
   return topicsMap.entries
-      .map((e) => TopicInfo(
-            name: e.key,
-            icon: getTopicIcon(e.key),
-            taskCount: e.value,
-          ))
+      .map(
+        (e) => TopicInfo(
+          name: e.key,
+          icon: getTopicIcon(e.key),
+          taskCount: e.value,
+        ),
+      )
       .toList();
 }
 

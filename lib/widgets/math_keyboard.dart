@@ -2,6 +2,8 @@
 /// Заменяет системную клавиатуру для ввода числовых ответов
 library;
 
+import 'formula_answer_field.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
@@ -24,127 +26,30 @@ class MathKeyboard extends StatelessWidget {
     SoundService.hapticSelection();
     SoundService.playKey();
 
-    final text = controller.text;
-
-    switch (key) {
-      case 'backspace':
-        if (text.isNotEmpty) {
-          controller.text = text.substring(0, text.length - 1);
-          controller.selection =
-              TextSelection.collapsed(offset: controller.text.length);
-        }
-        return;
-
-      case 'clear':
-        controller.clear();
-        return;
-
-      case '±':
-        if (text.startsWith('-')) {
-          controller.text = text.substring(1);
-        } else if (text.isNotEmpty) {
-          controller.text = '-$text';
-        }
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '.':
-        if (text.contains('.')) return;
-        if (text.isEmpty || text == '-') {
-          controller.text = '${text}0.';
-        } else {
-          controller.text = '$text.';
-        }
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '/':
-        if (text.contains('/')) return;
-        if (text.isEmpty || text == '-') return;
-        controller.text = '$text/';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case 'space':
-        controller.text = '$text ';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '√':
-        controller.text = '$text√(';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case 'x=':
-      case 'y=':
-      case 'z=':
-        controller.text = '$text$key';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '^':
-      case '(':
-      case ')':
-      case '[':
-      case ']':
-      case 'x':
-      case 'y':
-      case 'z':
-      case 'a':
-      case 'b':
-      case 'c':
-      case 'n':
-      case 'π':
-      case '+':
-      case '-':
-      case '*':
-      case ',':
-      case ';':
-      case '²':
-      case '³':
-        controller.text = '$text$key';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '>':
-      case '<':
-      case '=':
-        controller.text = '$text$key';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '≥':
-        controller.text = '$text>=';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '≤':
-        controller.text = '$text<=';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      case '≠':
-        controller.text = '$text!=';
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
-        return;
-
-      default:
-        // Digit
-        controller.text = text + key;
-        controller.selection =
-            TextSelection.collapsed(offset: controller.text.length);
+    if (key == 'clear') {
+      controller.clear();
+      return;
     }
+    if (key == 'backspace') {
+      FormulaEditing.backspace(controller);
+      return;
+    }
+    if (key == '±') {
+      final text = controller.text;
+      controller.text = text.startsWith('-') ? text.substring(1) : '-$text';
+      controller.selection = TextSelection.collapsed(
+        offset: controller.text.length,
+      );
+      return;
+    }
+    FormulaEditing.insert(controller, switch (key) {
+      'space' => ' ',
+      '√' => '√(',
+      '≥' => '>=',
+      '≤' => '<=',
+      '≠' => '!=',
+      _ => key,
+    });
   }
 
   @override
@@ -157,13 +62,18 @@ class MathKeyboard extends StatelessWidget {
     );
   }
 
-  static Widget buildKey(BuildContext context, String key, bool isUltraCompact,
-      VoidCallback onTap) {
+  static Widget buildKey(
+    BuildContext context,
+    String key,
+    bool isUltraCompact,
+    VoidCallback onTap,
+  ) {
     final t = context.read<LanguageService>().t;
     final isBackspace = key == 'backspace';
     final isClear = key == 'clear';
     final isSpace = key == 'space';
-    final isSpecial = key == '-' ||
+    final isSpecial =
+        key == '-' ||
         key == '+' ||
         key == '/' ||
         key == '*' ||
@@ -203,8 +113,11 @@ class MathKeyboard extends StatelessWidget {
     if (isBackspace) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
-      child = Icon(Icons.backspace_rounded,
-          color: AppColors.error, size: isUltraCompact ? 18 : 20);
+      child = Icon(
+        Icons.backspace_rounded,
+        color: AppColors.error,
+        size: isUltraCompact ? 18 : 20,
+      );
     } else if (isClear) {
       bgColor = AppColors.error.withValues(alpha: 0.08);
       borderColor = AppColors.error.withValues(alpha: 0.25);
@@ -229,7 +142,9 @@ class MathKeyboard extends StatelessWidget {
       );
     } else if (isSpecial) {
       bgColor = AppThemeColors.accentLight(context);
-      borderColor = AppColors.accent.withValues(alpha: 0.3);
+      borderColor = Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.3);
       final display = switch (key) {
         '-' => '−',
         '*' => '×',
@@ -243,7 +158,7 @@ class MathKeyboard extends StatelessWidget {
               ? (isUltraCompact ? 14 : 16)
               : (isUltraCompact ? 18 : 20),
           fontWeight: FontWeight.w700,
-          color: AppColors.accent,
+          color: Theme.of(context).colorScheme.primary,
         ),
       );
     } else {
@@ -317,7 +232,7 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
     final isUltraCompact = h < 780 || isLandscape;
     final rowGap = isUltraCompact ? 4.0 : 6.0;
     final keyGap = isUltraCompact ? 4.0 : 6.0;
-    final maxHeight = isUltraCompact ? 238.0 : 276.0;
+    final maxHeight = isUltraCompact ? 244.0 : 288.0;
 
     return SizedBox(
       height: maxHeight,
@@ -375,8 +290,12 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
     ];
   }
 
-  Widget _buildRow(BuildContext context, List<String> keys, double keyGap,
-      bool isUltraCompact) {
+  Widget _buildRow(
+    BuildContext context,
+    List<String> keys,
+    double keyGap,
+    bool isUltraCompact,
+  ) {
     return Row(
       children: [
         for (int i = 0; i < keys.length; i++) ...[
@@ -414,7 +333,9 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: active
-                  ? AppColors.accent.withValues(alpha: 0.35)
+                  ? Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.35)
                   : AppThemeColors.border(context),
             ),
           ),
@@ -425,7 +346,7 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
                 fontSize: isUltraCompact ? 11 : 12,
                 fontWeight: FontWeight.w700,
                 color: active
-                    ? AppColors.accent
+                    ? Theme.of(context).colorScheme.primary
                     : AppThemeColors.textSecondary(context),
               ),
             ),

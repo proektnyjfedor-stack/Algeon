@@ -1,11 +1,14 @@
 /// Algeon — математика с пониманием
 ///
-/// Приложение для обучения математике (5–11 класс)
+/// Приложение для обучения математике (1–11 класс)
 /// Web-only, GoRouter, Provider
 ///
 /// Важно для Web: не вызывать `await` тяжёлых сервисов в `main()` до [runApp].
 /// Иначе событие `flutter-first-frame` не наступает и долго висит пустой экран.
 library;
+
+import 'services/learning_service.dart';
+import 'services/bookmark_service.dart';
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -16,6 +19,7 @@ import 'theme/app_theme.dart';
 import 'theme/theme_provider.dart';
 import 'router/app_router.dart';
 import 'services/progress_service.dart';
+import 'services/study_session_service.dart';
 import 'services/achievements_service.dart';
 import 'services/sound_service.dart';
 import 'services/language_service.dart';
@@ -23,6 +27,9 @@ import 'widgets/app_logo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  configureStartupLocation(
+    WidgetsBinding.instance.platformDispatcher.defaultRouteName,
+  );
 
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
@@ -59,14 +66,19 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
     try {
       await Future.wait([
         ProgressService.init(),
+        BookmarkService.instance.init(),
+        LearningService.instance.init(),
+        StudySessionService.init(),
         AchievementsService.init(),
         SoundService.init(),
         LanguageService.instance.init(),
       ]).timeout(_initTimeout);
     } on TimeoutException catch (e) {
       if (mounted) {
-        setState(() => _initError =
-            'Превышено время ожидания (${_initTimeout.inSeconds} с). $e');
+        setState(
+          () => _initError =
+              'Превышено время ожидания (${_initTimeout.inSeconds} с). $e',
+        );
       }
       return;
     } catch (e, st) {
@@ -247,10 +259,7 @@ class _BrandSplashScreenState extends State<BrandSplashScreen>
                 offset: _zoomController.isAnimating
                     ? Offset.zero
                     : _floatOffset.value,
-                child: Transform.scale(
-                  scale: _zoom.value,
-                  child: child,
-                ),
+                child: Transform.scale(scale: _zoom.value, child: child),
               ),
             );
           },
@@ -275,33 +284,42 @@ class AlgeonApp extends StatelessWidget {
           ),
         ],
         child: Consumer2<ThemeProvider, LanguageService>(
-            builder: (context, themeProvider, languageService, _) {
-          final isDark = themeProvider.themeMode == ThemeMode.dark ||
-              (themeProvider.themeMode == ThemeMode.system &&
-                  MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+          builder: (context, themeProvider, languageService, _) {
+            final isDark =
+                themeProvider.themeMode == ThemeMode.dark ||
+                (themeProvider.themeMode == ThemeMode.system &&
+                    MediaQuery.platformBrightnessOf(context) ==
+                        Brightness.dark);
 
-          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness:
-                isDark ? Brightness.light : Brightness.dark,
-            statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarDividerColor: Colors.transparent,
-            systemNavigationBarIconBrightness:
-                isDark ? Brightness.light : Brightness.dark,
-          ));
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle(
+                statusBarColor: Colors.transparent,
+                statusBarIconBrightness: isDark
+                    ? Brightness.light
+                    : Brightness.dark,
+                statusBarBrightness: isDark
+                    ? Brightness.dark
+                    : Brightness.light,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarDividerColor: Colors.transparent,
+                systemNavigationBarIconBrightness: isDark
+                    ? Brightness.light
+                    : Brightness.dark,
+              ),
+            );
 
-          return MaterialApp.router(
-            title: 'Algeon',
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: const _NoGlowScrollBehavior(),
-            theme: buildLightTheme(),
-            darkTheme: buildDarkTheme(),
-            themeMode: themeProvider.themeMode,
-            locale: Locale(languageService.isEnglish ? 'en' : 'ru'),
-            routerConfig: appRouter,
-          );
-        }),
+            return MaterialApp.router(
+              title: 'Algeon',
+              debugShowCheckedModeBanner: false,
+              scrollBehavior: const _NoGlowScrollBehavior(),
+              theme: buildLightTheme(accentColor: themeProvider.accentColor),
+              darkTheme: buildDarkTheme(accentColor: themeProvider.accentColor),
+              themeMode: themeProvider.themeMode,
+              locale: Locale(languageService.isEnglish ? 'en' : 'ru'),
+              routerConfig: appRouter,
+            );
+          },
+        ),
       ),
     );
   }

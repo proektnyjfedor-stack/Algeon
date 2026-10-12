@@ -112,8 +112,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               children: [
                 // Progress bar + Skip
                 Padding(
-                  padding: EdgeInsets.fromLTRB(landscape ? 16 : 24,
-                      landscape ? 10 : 16, landscape ? 16 : 24, 0),
+                  padding: EdgeInsets.fromLTRB(
+                    landscape ? 16 : 24,
+                    landscape ? 10 : 16,
+                    landscape ? 16 : 24,
+                    0,
+                  ),
                   child: Row(
                     children: [
                       if (_currentPage > 0)
@@ -178,8 +182,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                   child: _currentPage == 0
                       ? _buildCustomizePage()
                       : _currentPage == 1
-                          ? _buildNamePage()
-                          : _buildGradePage(),
+                      ? _buildNamePage()
+                      : _buildGradePage(),
                 ),
               ],
             ),
@@ -200,7 +204,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
               color: isActive
-                  ? AppColors.accent
+                  ? Theme.of(context).colorScheme.primary
                   : AppThemeColors.borderLight(context),
             ),
           ),
@@ -223,10 +227,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppThemeColors.border(context)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: children),
     );
   }
 
@@ -244,7 +245,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             Icon(
               Icons.auto_awesome_rounded,
               size: landscape ? 26 : 30,
-              color: AppColors.accent,
+              color: Theme.of(context).colorScheme.primary,
             ),
             SizedBox(height: landscape ? 6 : 8),
             Text(
@@ -269,7 +270,9 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               boxShadow: AppShadows.soft(context),
             ),
             child: AvatarWidget(
-                avatarData: _avatarData, size: landscape ? 82 : 96),
+              avatarData: _avatarData,
+              size: landscape ? 82 : 96,
+            ),
           ),
 
           SizedBox(height: landscape ? 10 : 16),
@@ -279,7 +282,9 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                 child: OutlinedButton.icon(
                   onPressed: _randomizeAvatar,
                   icon: const Icon(Icons.auto_fix_high_rounded, size: 18),
-                  label: Text(context.watch<LanguageService>().t('onboarding.random')),
+                  label: Text(
+                    context.watch<LanguageService>().t('onboarding.random'),
+                  ),
                 ),
               ),
             ],
@@ -295,7 +300,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
               _buildSelectionChip(
                 context.watch<LanguageService>().t('onboarding.expression'),
-                expressionNames[_avatarData.expression] ?? _avatarData.expression,
+                expressionNames[_avatarData.expression] ??
+                    _avatarData.expression,
               ),
               _buildSelectionChip(
                 context.watch<LanguageService>().t('onboarding.accessory'),
@@ -331,8 +337,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarSkinColors,
                       _avatarData.skinColor,
-                      (color) => setState(() =>
-                          _avatarData = _avatarData.copyWith(skinColor: color)),
+                      (color) => setState(
+                        () => _avatarData = _avatarData.copyWith(
+                          skinColor: color,
+                        ),
+                      ),
                     ),
                   ),
 
@@ -343,8 +352,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarHairColors,
                       _avatarData.hairColor,
-                      (color) => setState(() =>
-                          _avatarData = _avatarData.copyWith(hairColor: color)),
+                      (color) => setState(
+                        () => _avatarData = _avatarData.copyWith(
+                          hairColor: color,
+                        ),
+                      ),
                     ),
                   ),
 
@@ -355,8 +367,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarShirtColors,
                       _avatarData.shirtColor,
-                      (color) => setState(() => _avatarData =
-                          _avatarData.copyWith(shirtColor: color)),
+                      (color) => setState(
+                        () => _avatarData = _avatarData.copyWith(
+                          shirtColor: color,
+                        ),
+                      ),
                     ),
                   ),
 
@@ -374,8 +389,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                     _buildColorRow(
                       avatarBgColors,
                       _avatarData.bgColor,
-                      (color) => setState(() =>
-                          _avatarData = _avatarData.copyWith(bgColor: color)),
+                      (color) => setState(
+                        () =>
+                            _avatarData = _avatarData.copyWith(bgColor: color),
+                      ),
                     ),
                   ),
                 ],
@@ -397,7 +414,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
               child: Text(
                 context.watch<LanguageService>().t('common.continue'),
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
@@ -415,8 +435,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         children: [
           Row(
             children: [
-              Icon(icon,
-                  size: 16, color: AppThemeColors.textSecondary(context)),
+              Icon(
+                icon,
+                size: 16,
+                color: AppThemeColors.textSecondary(context),
+              ),
               const SizedBox(width: 6),
               Text(
                 title,
@@ -455,7 +478,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   }
 
   Widget _buildColorRow(
-      List<Color> colors, Color selected, Function(Color) onSelect) {
+    List<Color> colors,
+    Color selected,
+    Function(Color) onSelect,
+  ) {
     // SingleChildScrollView + Row — reliable tap handling on Flutter Web mobile
     // (ListView can swallow taps due to scroll gesture disambiguation)
     return SizedBox(
@@ -466,8 +492,11 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           children: [
             for (int i = 0; i < colors.length; i++) ...[
               if (i > 0) const SizedBox(width: 8),
-              _buildColorCircle(colors[i],
-                  colors[i].toARGB32() == selected.toARGB32(), onSelect),
+              _buildColorCircle(
+                colors[i],
+                colors[i].toARGB32() == selected.toARGB32(),
+                onSelect,
+              ),
             ],
           ],
         ),
@@ -476,7 +505,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
   }
 
   Widget _buildColorCircle(
-      Color color, bool isSelected, Function(Color) onSelect) {
+    Color color,
+    bool isSelected,
+    Function(Color) onSelect,
+  ) {
     return GestureDetector(
       onTap: () {
         SoundService.hapticLight();
@@ -492,15 +524,20 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           color: color,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? AppColors.accent : Colors.transparent,
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Colors.transparent,
             width: 3,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                      color: AppColors.accent.withValues(alpha: 0.4),
-                      blurRadius: 6,
-                      spreadRadius: 1)
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.4),
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                  ),
                 ]
               : null,
         ),
@@ -551,12 +588,13 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.accent.withValues(alpha: 0.15)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-                isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -578,7 +616,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected
-                    ? AppColors.accent
+                    ? Theme.of(context).colorScheme.primary
                     : AppThemeColors.textSecondary(context),
               ),
             ),
@@ -629,19 +667,21 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         SoundService.hapticLight();
         SoundService.playTap();
         setState(
-            () => _avatarData = _avatarData.copyWith(expression: expression));
+          () => _avatarData = _avatarData.copyWith(expression: expression),
+        );
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.accent.withValues(alpha: 0.15)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-                isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -651,7 +691,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
             color: isSelected
-                ? AppColors.accent
+                ? Theme.of(context).colorScheme.primary
                 : AppThemeColors.textSecondary(context),
           ),
         ),
@@ -666,7 +706,8 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         SoundService.hapticLight();
         SoundService.playTap();
         setState(
-            () => _avatarData = _avatarData.copyWith(accessory: accessory));
+          () => _avatarData = _avatarData.copyWith(accessory: accessory),
+        );
       },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
@@ -674,12 +715,13 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.accent.withValues(alpha: 0.15)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
               : AppThemeColors.surface(context),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color:
-                isSelected ? AppColors.accent : AppThemeColors.border(context),
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : AppThemeColors.border(context),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -701,7 +743,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                 fontSize: 10,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 color: isSelected
-                    ? AppColors.accent
+                    ? Theme.of(context).colorScheme.primary
                     : AppThemeColors.textSecondary(context),
               ),
             ),
@@ -767,32 +809,43 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               color: AppThemeColors.textPrimary(context),
             ),
             decoration: InputDecoration(
-              hintText: context.watch<LanguageService>().t('onboarding.enterName'),
+              hintText: context.watch<LanguageService>().t(
+                'onboarding.enterName',
+              ),
               filled: true,
               fillColor: AppThemeColors.surface(context),
               prefixIcon: Container(
                 margin: const EdgeInsets.only(left: 12, right: 8),
-                child: const Icon(
+                child: Icon(
                   Icons.person_rounded,
-                  color: AppColors.accent,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide:
-                    BorderSide(color: AppThemeColors.border(context), width: 2),
+                borderSide: BorderSide(
+                  color: AppThemeColors.border(context),
+                  width: 2,
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide:
-                    BorderSide(color: AppThemeColors.border(context), width: 2),
+                borderSide: BorderSide(
+                  color: AppThemeColors.border(context),
+                  width: 2,
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: AppColors.accent, width: 2),
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 2,
+                ),
               ),
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16, vertical: landscape ? 14 : 18),
+                horizontal: 16,
+                vertical: landscape ? 14 : 18,
+              ),
             ),
             onChanged: (_) => setState(() {}),
           ),
@@ -804,11 +857,12 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
             width: double.infinity,
             height: landscape ? 50 : 56,
             child: ElevatedButton(
-              onPressed:
-                  _nameController.text.trim().isNotEmpty ? _nextPage : null,
+              onPressed: _nameController.text.trim().isNotEmpty
+                  ? _nextPage
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: _nameController.text.trim().isNotEmpty
-                    ? AppColors.accent
+                    ? Theme.of(context).colorScheme.primary
                     : AppThemeColors.disabled(context),
                 foregroundColor: _nameController.text.trim().isNotEmpty
                     ? Colors.white
@@ -819,7 +873,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
               child: Text(
                 context.watch<LanguageService>().t('common.continue'),
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
@@ -861,7 +918,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
           _onboardingSoftHeader([
             Icon(
               Icons.school_rounded,
-              color: AppColors.accent,
+              color: Theme.of(context).colorScheme.primary,
               size: landscape ? 32 : 36,
             ),
             SizedBox(height: landscape ? 8 : 10),
@@ -908,7 +965,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: isSelected
-                              ? AppColors.accent
+                              ? Theme.of(context).colorScheme.primary
                               : AppThemeColors.border(context),
                           width: isSelected ? 2.5 : 1.5,
                         ),
@@ -920,7 +977,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                             height: landscape ? 46 : 52,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.accent
+                                  ? Theme.of(context).colorScheme.primary
                                   : AppThemeColors.borderLight(context),
                               borderRadius: BorderRadius.circular(14),
                             ),
@@ -950,7 +1007,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                                     fontSize: landscape ? 16 : 18,
                                     fontWeight: FontWeight.w700,
                                     color: isSelected
-                                        ? AppColors.accent
+                                        ? Theme.of(context).colorScheme.primary
                                         : AppThemeColors.textPrimary(context),
                                   ),
                                 ),
@@ -959,8 +1016,9 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                                   descriptions[grade] ?? '',
                                   style: TextStyle(
                                     fontSize: landscape ? 13 : 14,
-                                    color:
-                                        AppThemeColors.textSecondary(context),
+                                    color: AppThemeColors.textSecondary(
+                                      context,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -972,19 +1030,22 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
                             height: 28,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.accent
+                                  ? Theme.of(context).colorScheme.primary
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
                                 color: isSelected
-                                    ? AppColors.accent
+                                    ? Theme.of(context).colorScheme.primary
                                     : AppThemeColors.border(context),
                                 width: 2,
                               ),
                             ),
                             child: isSelected
-                                ? const Icon(Icons.check,
-                                    color: Colors.white, size: 18)
+                                ? const Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 18,
+                                  )
                                 : null,
                           ),
                         ],
@@ -1002,7 +1063,7 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               onPressed: _selectedGrade != null ? _finish : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: _selectedGrade != null
-                    ? AppColors.accent
+                    ? Theme.of(context).colorScheme.primary
                     : AppThemeColors.disabled(context),
                 foregroundColor: _selectedGrade != null
                     ? Colors.white
@@ -1013,7 +1074,10 @@ class _OnboardingWelcomeScreenState extends State<OnboardingWelcomeScreen> {
               ),
               child: Text(
                 context.watch<LanguageService>().t('onboarding.startLearning'),
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),

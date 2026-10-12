@@ -9,9 +9,11 @@ import '../services/language_service.dart';
 import '../services/progress_service.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_provider.dart';
+import '../widgets/accent_color_settings.dart';
 import '../widgets/avatar_builder.dart';
 import '../widgets/avatars.dart';
 import '../widgets/user_avatar_display.dart';
+import '../widgets/progress_backup_dialog.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({super.key});
@@ -94,14 +96,35 @@ class _ProfileTabState extends State<ProfileTab> {
     super.dispose();
   }
 
+  Future<void> _openBackup() async {
+    final theme = context.read<ThemeProvider>();
+    final restored = await showDialog<bool>(
+      context: context,
+      builder: (_) => const ProgressBackupDialog(),
+    );
+    if (restored != true || !mounted) return;
+    await LanguageService.instance.init();
+    await theme.reload();
+    if (mounted) {
+      setState(() {});
+      _showSnack(
+        context.read<LanguageService>().isEnglish
+            ? 'Progress restored'
+            : 'Прогресс восстановлен',
+      );
+    }
+  }
+
   Future<void> _editName() async {
     final t = context.read<LanguageService>().t;
-    final controller =
-        TextEditingController(text: ProgressService.getUserName());
+    final controller = TextEditingController(
+      text: ProgressService.getUserName(),
+    );
     final saved = await showDialog<bool>(
       context: context,
       builder: (context) {
-        final isLandscape = MediaQuery.of(context).size.width >
+        final isLandscape =
+            MediaQuery.of(context).size.width >
             MediaQuery.of(context).size.height;
         return AlertDialog(
           backgroundColor: AppThemeColors.surface(context),
@@ -175,7 +198,8 @@ class _ProfileTabState extends State<ProfileTab> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        final isLandscape = MediaQuery.of(context).size.width >
+        final isLandscape =
+            MediaQuery.of(context).size.width >
             MediaQuery.of(context).size.height;
         return StatefulBuilder(
           builder: (context, setModalState) {
@@ -188,8 +212,9 @@ class _ProfileTabState extends State<ProfileTab> {
               padding: EdgeInsets.fromLTRB(20, isLandscape ? 12 : 16, 20, 20),
               decoration: BoxDecoration(
                 color: AppThemeColors.surface(context),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(24)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
               ),
               child: SafeArea(
                 top: false,
@@ -243,10 +268,12 @@ class _ProfileTabState extends State<ProfileTab> {
                         child: ElevatedButton(
                           onPressed: () => Navigator.pop(context, true),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
                           ),
                           child: Text(t('profile.saveGrade')),
                         ),
@@ -287,13 +314,13 @@ class _ProfileTabState extends State<ProfileTab> {
             children: [
               _ActionTile(
                 icon: Icons.language_rounded,
-                iconColor: AppColors.accent,
+                iconColor: Theme.of(context).colorScheme.primary,
                 title: lang.t('lang.ru'),
                 onTap: () => Navigator.pop(context, AppLanguage.ru),
               ),
               _ActionTile(
                 icon: Icons.language_rounded,
-                iconColor: AppColors.accent,
+                iconColor: Theme.of(context).colorScheme.primary,
                 title: lang.t('lang.en'),
                 onTap: () => Navigator.pop(context, AppLanguage.en),
               ),
@@ -340,12 +367,14 @@ class _ProfileTabState extends State<ProfileTab> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        final isLandscape = MediaQuery.of(context).size.width >
+        final isLandscape =
+            MediaQuery.of(context).size.width >
             MediaQuery.of(context).size.height;
-        final unlockedSkins =
-            AchievementsService.getUnlockedAvatarSkinIds().toSet();
-        final maxHeight =
-            isLandscape ? MediaQuery.of(context).size.height * 0.9 : 420.0;
+        final unlockedSkins = AchievementsService.getUnlockedAvatarSkinIds()
+            .toSet();
+        final maxHeight = isLandscape
+            ? MediaQuery.of(context).size.height * 0.9
+            : 420.0;
         return Container(
           constraints: BoxConstraints(maxHeight: maxHeight),
           padding: EdgeInsets.fromLTRB(20, isLandscape ? 12 : 16, 20, 20),
@@ -393,8 +422,10 @@ class _ProfileTabState extends State<ProfileTab> {
                             children: [
                               Opacity(
                                 opacity: isUnlocked ? 1 : 0.45,
-                                child:
-                                    AvatarWidget(avatarId: avatar.id, size: 56),
+                                child: AvatarWidget(
+                                  avatarId: avatar.id,
+                                  size: 56,
+                                ),
                               ),
                               if (!isUnlocked)
                                 Positioned.fill(
@@ -403,10 +434,12 @@ class _ProfileTabState extends State<ProfileTab> {
                                       width: 22,
                                       height: 22,
                                       decoration: BoxDecoration(
-                                        color:
-                                            Colors.black.withValues(alpha: 0.6),
-                                        borderRadius:
-                                            BorderRadius.circular(999),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.6,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          999,
+                                        ),
                                       ),
                                       child: const Icon(
                                         Icons.lock_rounded,
@@ -471,9 +504,9 @@ class _ProfileTabState extends State<ProfileTab> {
                 _ActionTile(
                   icon: Icons.grid_view_rounded,
                   iconColor: AppColors.purple,
-                  title: context
-                      .read<LanguageService>()
-                      .t('profile.choosePresetAvatar'),
+                  title: context.read<LanguageService>().t(
+                    'profile.choosePresetAvatar',
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     _openPresetAvatars();
@@ -482,9 +515,9 @@ class _ProfileTabState extends State<ProfileTab> {
                 _ActionTile(
                   icon: Icons.auto_fix_high_rounded,
                   iconColor: AppColors.orange,
-                  title: context
-                      .read<LanguageService>()
-                      .t('profile.openAvatarBuilder'),
+                  title: context.read<LanguageService>().t(
+                    'profile.openAvatarBuilder',
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     _openAvatarBuilder();
@@ -492,9 +525,10 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
                 _ActionTile(
                   icon: Icons.photo_library_rounded,
-                  iconColor: AppColors.accent,
-                  title:
-                      context.read<LanguageService>().t('profile.uploadPhoto'),
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  title: context.read<LanguageService>().t(
+                    'profile.uploadPhoto',
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                     _pickPhotoFromGallery();
@@ -597,7 +631,9 @@ class _ProfileTabState extends State<ProfileTab> {
                       child: Stack(
                         children: [
                           UserAvatarDisplay(
-                              size: isPhone ? 82 : 92, showBorder: true),
+                            size: isPhone ? 82 : 92,
+                            showBorder: true,
+                          ),
                           Positioned(
                             right: 0,
                             bottom: 0,
@@ -658,7 +694,9 @@ class _ProfileTabState extends State<ProfileTab> {
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 10),
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: skinSoft.withValues(alpha: isDark ? 0.18 : 0.55),
                         borderRadius: BorderRadius.circular(12),
@@ -698,19 +736,25 @@ class _ProfileTabState extends State<ProfileTab> {
                         _HeroMiniBadge(
                           icon: Icons.military_tech_rounded,
                           label: t('profile.level').replaceAll(
-                              '{level}', '${ProgressService.getLevel()}'),
+                            '{level}',
+                            '${ProgressService.getLevel()}',
+                          ),
                           accent: const Color(0xFFFBBF24),
                         ),
                         _HeroMiniBadge(
                           icon: Icons.emoji_events_rounded,
-                          label: t('profile.rewardsCount').replaceAll('{count}',
-                              '${AchievementsService.getUnlockedCount()}'),
+                          label: t('profile.rewardsCount').replaceAll(
+                            '{count}',
+                            '${AchievementsService.getUnlockedCount()}',
+                          ),
                           accent: const Color(0xFF34D399),
                         ),
                         _HeroMiniBadge(
                           icon: Icons.today_rounded,
-                          label: t('profile.todayPlus').replaceAll('{count}',
-                              '${ProgressService.getTodayCompletedCount()}'),
+                          label: t('profile.todayPlus').replaceAll(
+                            '{count}',
+                            '${ProgressService.getTodayCompletedCount()}',
+                          ),
                           accent: const Color(0xFFA78BFA),
                         ),
                       ],
@@ -724,7 +768,7 @@ class _ProfileTabState extends State<ProfileTab> {
               delayMs: 260,
               child: _SectionTitle(
                 title: t('settings.title'),
-                barColors: const [Color(0xFF64748B), Color(0xFF3B82F6)],
+                barColors: [const Color(0xFF64748B), colorScheme.primary],
               ),
             ),
             const SizedBox(height: 12),
@@ -777,6 +821,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       actionLabel: t('common.edit'),
                     ),
                     const _DividerLine(),
+                    const AccentColorSettings(),
+                    const _DividerLine(),
                     SwitchListTile(
                       value: themeProvider.followSystem,
                       onChanged: (value) =>
@@ -800,8 +846,8 @@ class _ProfileTabState extends State<ProfileTab> {
                         themeProvider.followSystem
                             ? Icons.brightness_auto_rounded
                             : (isDark
-                                ? Icons.dark_mode_rounded
-                                : Icons.light_mode_rounded),
+                                  ? Icons.dark_mode_rounded
+                                  : Icons.light_mode_rounded),
                         color: quickAccentC,
                       ),
                       activeThumbColor: colorScheme.primary,
@@ -839,6 +885,40 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      lang.isEnglish ? 'Your progress' : 'Твой прогресс',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      lang.isEnglish
+                          ? 'Saved in this browser. Back it up to continue on another device.'
+                          : 'Сохрани копию для переноса на другое устройство.',
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: _openBackup,
+                      icon: const Icon(Icons.save_alt_rounded),
+                      label: Text(
+                        lang.isEnglish
+                            ? 'Back up and restore'
+                            : 'Сохранить и восстановить',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             const SizedBox(height: 96),
           ],
         ),
@@ -866,20 +946,15 @@ class _ProfileBackgroundOption {
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({
-    required this.title,
-    this.barColors,
-  });
+  const _SectionTitle({required this.title, this.barColors});
   final String title;
   final List<Color>? barColors;
 
   @override
   Widget build(BuildContext context) {
-    final colors = barColors ??
-        <Color>[
-          AppColors.accent,
-          AppColors.purple,
-        ];
+    final colors =
+        barColors ??
+        <Color>[Theme.of(context).colorScheme.primary, AppColors.purple];
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -946,10 +1021,7 @@ class _HeroMiniBadge extends StatelessWidget {
 }
 
 class _EntranceSection extends StatefulWidget {
-  const _EntranceSection({
-    required this.child,
-    this.delayMs = 0,
-  });
+  const _EntranceSection({required this.child, this.delayMs = 0});
   final Widget child;
   final int delayMs;
 
@@ -986,10 +1058,7 @@ class _EntranceSectionState extends State<_EntranceSection> {
 }
 
 class _CompactProfileStat extends StatelessWidget {
-  const _CompactProfileStat({
-    required this.value,
-    required this.label,
-  });
+  const _CompactProfileStat({required this.value, required this.label});
 
   final String value;
   final String label;
@@ -1056,17 +1125,13 @@ class _SettingsTile extends StatelessWidget {
         ),
         subtitle: Text(
           subtitle,
-          style: TextStyle(
-            color: AppThemeColors.textSecondary(context),
-          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(color: AppThemeColors.textSecondary(context)),
         ),
-        trailing: Text(
-          actionLabel,
-          style: const TextStyle(
-            color: AppColors.accent,
-            fontWeight: FontWeight.w700,
-            fontSize: 14,
-          ),
+        trailing: Tooltip(
+          message: actionLabel,
+          child: const Icon(Icons.chevron_right_rounded),
         ),
       ),
     );
@@ -1121,10 +1186,7 @@ class _DividerLine extends StatelessWidget {
 }
 
 class _InteractiveListTileShell extends StatefulWidget {
-  const _InteractiveListTileShell({
-    required this.child,
-    this.onTap,
-  });
+  const _InteractiveListTileShell({required this.child, this.onTap});
   final Widget child;
   final VoidCallback? onTap;
 
@@ -1151,10 +1213,7 @@ class _InteractiveListTileShellState extends State<_InteractiveListTileShell> {
           color: Colors.transparent,
           child: widget.onTap == null
               ? widget.child
-              : InkWell(
-                  onTap: widget.onTap,
-                  child: widget.child,
-                ),
+              : InkWell(onTap: widget.onTap, child: widget.child),
         ),
       ),
     );

@@ -14,7 +14,6 @@ import '../data/topic_titles_en.dart';
 import '../services/sound_service.dart';
 
 class SummaryScreen extends StatefulWidget {
-
   const SummaryScreen({
     super.key,
     required this.topicName,
@@ -34,10 +33,14 @@ class SummaryScreen extends StatefulWidget {
       correctCount: map['correctCount'] as int? ?? 0,
       wrongCount: map['wrongCount'] as int? ?? 0,
       skippedCount: map['skippedCount'] as int? ?? 0,
-      wrongTasks: (map['wrongTasks'] as List?)?.cast<Task>() ?? [],
+      wrongTasks:
+          (map['wrongTasks'] as List?)?.whereType<Task>().toList() ?? [],
       elapsedTime: map['elapsedTime'] as Duration?,
       newAchievements:
-          (map['newAchievements'] as List?)?.cast<Achievement>() ?? [],
+          (map['newAchievements'] as List?)
+              ?.whereType<Achievement>()
+              .toList() ??
+          [],
     );
   }
   final String topicName;
@@ -102,7 +105,7 @@ class _SummaryScreenState extends State<SummaryScreen>
   Color get _primaryColor {
     if (_isPerfect) return AppColors.gold;
     if (_isGood) return AppColors.success;
-    return AppColors.accent;
+    return Theme.of(context).colorScheme.primary;
   }
 
   IconData get _primaryIcon {
@@ -169,14 +172,15 @@ class _SummaryScreenState extends State<SummaryScreen>
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.close_rounded,
-                    color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.close_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ),
           ),
-
           const SizedBox(height: 4),
-
           Container(
             width: 80,
             height: 80,
@@ -186,9 +190,7 @@ class _SummaryScreenState extends State<SummaryScreen>
             ),
             child: Icon(_primaryIcon, color: Colors.white, size: 44),
           ),
-
           const SizedBox(height: 16),
-
           Text(
             _getTitle(t),
             style: const TextStyle(
@@ -271,9 +273,21 @@ class _SummaryScreenState extends State<SummaryScreen>
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildScoreStatChip('${widget.correctCount}', t('summary.correct'), AppColors.success),
-                _buildScoreStatChip('${widget.wrongCount}', t('summary.wrong'), AppColors.error),
-                _buildScoreStatChip('${widget.totalCount}', t('summary.tasks'), AppColors.accent),
+                _buildScoreStatChip(
+                  '${widget.correctCount}',
+                  t('summary.correct'),
+                  AppColors.success,
+                ),
+                _buildScoreStatChip(
+                  '${widget.wrongCount}',
+                  t('summary.wrong'),
+                  AppColors.error,
+                ),
+                _buildScoreStatChip(
+                  '${widget.totalCount}',
+                  t('summary.tasks'),
+                  Theme.of(context).colorScheme.primary,
+                ),
                 if (widget.elapsedTime != null)
                   _buildScoreStatChip(
                     _formatDuration(widget.elapsedTime!),
@@ -331,7 +345,7 @@ class _SummaryScreenState extends State<SummaryScreen>
           _buildPillCard(
             icon: Icons.bolt_rounded,
             value: '+$xpEarned XP',
-            color: AppColors.accent,
+            color: Theme.of(context).colorScheme.primary,
             bg: AppThemeColors.accentLight(context),
           ),
           const SizedBox(width: 10),
@@ -363,12 +377,16 @@ class _SummaryScreenState extends State<SummaryScreen>
           children: [
             Icon(icon, color: color, size: 20),
             const SizedBox(width: 8),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: color,
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
               ),
             ),
           ],
@@ -392,7 +410,11 @@ class _SummaryScreenState extends State<SummaryScreen>
           children: [
             Row(
               children: [
-                const Icon(Icons.emoji_events_rounded, color: AppColors.gold, size: 20),
+                const Icon(
+                  Icons.emoji_events_rounded,
+                  color: AppColors.gold,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   t('summary.newAchievements'),
@@ -405,45 +427,47 @@ class _SummaryScreenState extends State<SummaryScreen>
               ],
             ),
             const SizedBox(height: 14),
-            ...widget.newAchievements.map((a) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: AppColors.gold,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(a.icon, color: Colors.white, size: 20),
+            ...widget.newAchievements.map(
+              (a) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.gold,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              a.title,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                                color: AppThemeColors.textPrimary(context),
-                              ),
+                      child: Icon(a.icon, color: Colors.white, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            a.title,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: AppThemeColors.textPrimary(context),
                             ),
-                            Text(
-                              a.description,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppThemeColors.textSecondary(context),
-                              ),
+                          ),
+                          Text(
+                            a.description,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppThemeColors.textSecondary(context),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -468,20 +492,27 @@ class _SummaryScreenState extends State<SummaryScreen>
                   },
                   icon: const Icon(Icons.replay_rounded, size: 20),
                   label: Text(
-                    t('summary.retryWrong')
-                        .replaceAll('{count}', '${widget.wrongTasks.length}'),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    t(
+                      'summary.retryWrong',
+                    ).replaceAll('{count}', '${widget.wrongTasks.length}'),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.error.withValues(alpha: 0.5), width: 1.5),
+                    side: BorderSide(
+                      color: AppColors.error.withValues(alpha: 0.5),
+                      width: 1.5,
+                    ),
                     foregroundColor: AppColors.error,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ),
             ),
-
           SizedBox(
             width: double.infinity,
             height: 54,
@@ -494,12 +525,18 @@ class _SummaryScreenState extends State<SummaryScreen>
               icon: const Icon(Icons.home_rounded, size: 20),
               label: Text(
                 t('summary.toHome'),
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isGood ? AppColors.success : AppColors.accent,
+                backgroundColor: _isGood
+                    ? AppColors.success
+                    : Theme.of(context).colorScheme.primary,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             ),
           ),

@@ -10,7 +10,6 @@ import 'avatars.dart';
 import '../services/progress_service.dart';
 
 class UserAvatarDisplay extends StatelessWidget {
-
   const UserAvatarDisplay({
     super.key,
     this.size = 80,
@@ -40,8 +39,11 @@ class UserAvatarDisplay extends StatelessWidget {
               height: size,
               fit: BoxFit.cover,
               gaplessPlayback: true,
-              errorBuilder: (_, __, ___) =>
-                  AvatarWidget(avatarId: 'boy_blue', size: size, showBorder: showBorder),
+              errorBuilder: (_, _, _) => AvatarWidget(
+                avatarId: 'boy_blue',
+                size: size,
+                showBorder: showBorder,
+              ),
             ),
           );
         } catch (_) {
@@ -82,7 +84,6 @@ class UserAvatarDisplay extends StatelessWidget {
 
 /// Рамка для фото (такой же скруглённый контейнер, как у AvatarWidget)
 class _PhotoFrame extends StatelessWidget {
-
   const _PhotoFrame({
     required this.size,
     required this.showBorder,
@@ -102,9 +103,7 @@ class _PhotoFrame extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        border: showBorder
-            ? Border.all(color: borderColor, width: 3)
-            : null,
+        border: showBorder ? Border.all(color: borderColor, width: 3) : null,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),

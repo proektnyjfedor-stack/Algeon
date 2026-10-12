@@ -41,6 +41,12 @@ const List<_NavDestination> _destinations = [
     route: '/practice',
   ),
   _NavDestination(
+    labelKey: 'nav.exams',
+    icon: Icons.school_outlined,
+    activeIcon: Icons.school_rounded,
+    route: '/exams',
+  ),
+  _NavDestination(
     labelKey: 'nav.achievements',
     icon: Icons.emoji_events_outlined,
     activeIcon: Icons.emoji_events_rounded,
@@ -88,7 +94,10 @@ class MainScreen extends StatelessWidget {
           children: [
             _buildNavigationRail(context, language, extended: true),
             VerticalDivider(
-                width: 1, thickness: 1, color: AppThemeColors.border(context)),
+              width: 1,
+              thickness: 1,
+              color: AppThemeColors.border(context),
+            ),
             Expanded(child: _buildTabContent()),
           ],
         ),
@@ -105,7 +114,10 @@ class MainScreen extends StatelessWidget {
           children: [
             _buildNavigationRail(context, language, extended: false),
             VerticalDivider(
-                width: 1, thickness: 1, color: AppThemeColors.border(context)),
+              width: 1,
+              thickness: 1,
+              color: AppThemeColors.border(context),
+            ),
             Expanded(child: _buildTabContent()),
           ],
         ),
@@ -138,7 +150,7 @@ class MainScreen extends StatelessWidget {
     LanguageService language, {
     required bool extended,
   }) {
-    final railWidth = extended ? 236.0 : 82.0;
+    final railWidth = extended ? 224.0 : 80.0;
     final primary = Theme.of(context).colorScheme.primary;
 
     return SizedBox(
@@ -202,9 +214,7 @@ class MainScreen extends StatelessWidget {
   }
 
   Widget _buildTabContent() {
-    return RepaintBoundary(
-      child: child,
-    );
+    return RepaintBoundary(child: child);
   }
 }
 
@@ -233,8 +243,9 @@ class _SidebarDestinationTile extends StatelessWidget {
     final foreground = selected ? primary : muted;
 
     final tileDecoration = BoxDecoration(
-      color:
-          selected ? AppThemeColors.accentLight(context) : Colors.transparent,
+      color: selected
+          ? AppThemeColors.accentLight(context)
+          : Colors.transparent,
       borderRadius: BorderRadius.circular(14),
       border: Border.all(
         color: selected ? primary.withValues(alpha: 0.35) : Colors.transparent,
@@ -262,16 +273,20 @@ class _SidebarDestinationTile extends StatelessWidget {
             child: extended
                 ? Row(
                     children: [
-                      Icon(iconData,
-                          color: foreground, size: selected ? 26 : 24),
+                      Icon(
+                        iconData,
+                        color: foreground,
+                        size: selected ? 26 : 24,
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           language.t(destination.labelKey),
                           style: TextStyle(
                             fontSize: 14,
-                            fontWeight:
-                                selected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: selected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                             color: foreground,
                           ),
                           maxLines: 1,
@@ -280,26 +295,17 @@ class _SidebarDestinationTile extends StatelessWidget {
                       ),
                     ],
                   )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(iconData,
-                          color: foreground, size: selected ? 26 : 24),
-                      if (selected) ...[
-                        const SizedBox(height: 5),
-                        Text(
-                          language.t(destination.labelKey),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: foreground,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ],
+                : Tooltip(
+                    message: language.t(destination.labelKey),
+                    child: Semantics(
+                      label: language.t(destination.labelKey),
+                      selected: selected,
+                      button: true,
+                      child: SizedBox(
+                        height: 30,
+                        child: Icon(iconData, color: foreground, size: 26),
+                      ),
+                    ),
                   ),
           ),
         ),
@@ -366,8 +372,10 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
           ? const Duration(milliseconds: 1)
           : const Duration(milliseconds: 380),
     );
-    _snapAnim =
-        CurvedAnimation(parent: _snapController, curve: Curves.easeOutExpo);
+    _snapAnim = CurvedAnimation(
+      parent: _snapController,
+      curve: Curves.easeOutExpo,
+    );
     _snapAnim.addListener(() => setState(() {}));
   }
 
@@ -479,66 +487,76 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
             ),
           ],
         ),
-        child: LayoutBuilder(builder: (ctx, constraints) {
-          _itemWidth = constraints.maxWidth / _count;
-          // Инициализируем при первом build (itemWidth только теперь известен)
-          if (_committedX == 0 && widget.currentIndex == 0) {
-            // первый таб — всё верно
-          } else if (!_isDragging && !_snapController.isAnimating) {
-            // синхронизируем committedX если itemWidth изменился (ресайз)
-            _committedX = widget.currentIndex * _itemWidth;
-            _snapTo = _committedX;
-          }
+        child: LayoutBuilder(
+          builder: (ctx, constraints) {
+            _itemWidth = constraints.maxWidth / _count;
+            // Инициализируем при первом build (itemWidth только теперь известен)
+            if (_committedX == 0 && widget.currentIndex == 0) {
+              // первый таб — всё верно
+            } else if (!_isDragging && !_snapController.isAnimating) {
+              // синхронизируем committedX если itemWidth изменился (ресайз)
+              _committedX = widget.currentIndex * _itemWidth;
+              _snapTo = _committedX;
+            }
 
-          final pillX = _currentPillX.clamp(0.0, _maxPillX);
+            final pillX = _currentPillX.clamp(0.0, _maxPillX);
 
-          // Активный таб — тот под пилюлей во время drag, иначе widget.currentIndex
-          final visualActiveIndex =
-              _isDragging ? _dragHoverIndex : widget.currentIndex;
+            // Активный таб — тот под пилюлей во время drag, иначе widget.currentIndex
+            final visualActiveIndex = _isDragging
+                ? _dragHoverIndex
+                : widget.currentIndex;
 
-          return GestureDetector(
-            onPanStart: kIsWeb ? null : _onPanStart,
-            onPanUpdate: kIsWeb ? null : _onPanUpdate,
-            onPanEnd: kIsWeb ? null : _onPanEnd,
-            behavior: HitTestBehavior.translucent,
-            child: Stack(
-              children: [
-                // ── Пилюля ──
-                Positioned(
-                  left: pillX + 6,
-                  top: 8,
-                  width: _itemWidth - 12,
-                  height: 48,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.accent.withValues(alpha: 0.28)
-                          : AppColors.accent.withValues(alpha: 0.13),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: AppColors.accent.withValues(alpha: 0.4),
-                        width: 1,
+            return GestureDetector(
+              onPanStart: kIsWeb ? null : _onPanStart,
+              onPanUpdate: kIsWeb ? null : _onPanUpdate,
+              onPanEnd: kIsWeb ? null : _onPanEnd,
+              behavior: HitTestBehavior.translucent,
+              child: Stack(
+                children: [
+                  // ── Пилюля ──
+                  Positioned(
+                    left: pillX + 6,
+                    top: 8,
+                    width: _itemWidth - 12,
+                    height: 48,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isDark
+                            ? Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.28)
+                            : Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.13),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.4),
+                          width: 1,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // ── Nav items ──
-                Row(
-                  children: List.generate(
+                  // ── Nav items ──
+                  Row(
+                    children: List.generate(
                       _count,
                       (i) => _buildItem(
-                            context: context,
-                            index: i,
-                            isDark: isDark,
-                            isCompact: isCompact,
-                            visualActiveIndex: visualActiveIndex,
-                          )),
-                ),
-              ],
-            ),
-          );
-        }),
+                        context: context,
+                        index: i,
+                        isDark: isDark,
+                        isCompact: isCompact,
+                        visualActiveIndex: visualActiveIndex,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -555,10 +573,10 @@ class _LiquidGlassNavState extends State<_LiquidGlassNav>
     final dest = _destinations[index];
 
     final Color iconColor = isActive
-        ? AppColors.accent
+        ? Theme.of(context).colorScheme.primary
         : (isDark
-            ? Colors.white.withValues(alpha: 0.45)
-            : Colors.black.withValues(alpha: 0.38));
+              ? Colors.white.withValues(alpha: 0.45)
+              : Colors.black.withValues(alpha: 0.38));
 
     return Expanded(
       child: GestureDetector(

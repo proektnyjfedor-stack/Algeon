@@ -36,7 +36,6 @@ enum AchievementType {
 
 /// Модель достижения
 class Achievement {
-
   Achievement({
     required this.type,
     required this.title,
@@ -68,16 +67,16 @@ class AchievementsService {
   ];
   static const Map<AchievementType, String> _achievementAvatarSkins =
       <AchievementType, String>{
-    AchievementType.firstTask: 'boy_orange',
-    AchievementType.tasksSolved10: 'girl_red',
-    AchievementType.streak3: 'boy_dark',
-    AchievementType.accuracy80: 'girl_teal',
-    AchievementType.tasksSolved50: 'robot',
-    AchievementType.tasksSolved150: 'girl_purple',
-    AchievementType.tasksSolved300: 'boy_green',
-    AchievementType.perfectSession: 'cat',
-  };
-  
+        AchievementType.firstTask: 'boy_orange',
+        AchievementType.tasksSolved10: 'girl_red',
+        AchievementType.streak3: 'boy_dark',
+        AchievementType.accuracy80: 'girl_teal',
+        AchievementType.tasksSolved50: 'robot',
+        AchievementType.tasksSolved150: 'girl_purple',
+        AchievementType.tasksSolved300: 'boy_green',
+        AchievementType.perfectSession: 'cat',
+      };
+
   /// Инициализация
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -85,7 +84,7 @@ class AchievementsService {
     _loadUnlocked();
     _log('Initialized with ${_achievements.length} achievements');
   }
-  
+
   /// Создание списка достижений
   static void _initAchievements() {
     _achievements.clear();
@@ -210,8 +209,7 @@ class AchievementsService {
       Achievement(
         type: AchievementType.accuracy90,
         title: 'Снайпер',
-        description:
-            'Достигни точности 90% или выше при минимум 20 попытках.',
+        description: 'Достигни точности 90% или выше при минимум 20 попытках.',
         icon: Icons.track_changes_rounded,
         target: 90,
       ),
@@ -235,7 +233,7 @@ class AchievementsService {
       ),
     ]);
   }
-  
+
   /// Загрузка разблокированных
   static void _loadUnlocked() {
     for (final a in _achievements) {
@@ -246,62 +244,65 @@ class AchievementsService {
       }
     }
   }
-  
+
   /// Получить все достижения
   static List<Achievement> getAll() {
     return List.unmodifiable(_achievements);
   }
-  
+
   /// Получить разблокированные
   static List<Achievement> getUnlocked() {
     return _achievements.where((a) => a.isUnlocked).toList();
   }
-  
+
   /// Получить заблокированные
   static List<Achievement> getLocked() {
     return _achievements.where((a) => !a.isUnlocked).toList();
   }
-  
+
   /// Количество разблокированных
   static int getUnlockedCount() {
     return _achievements.where((a) => a.isUnlocked).length;
   }
-  
+
   /// Всего достижений
   static int getTotalCount() {
     return _achievements.length;
   }
-  
+
   /// Прогресс (0.0 - 1.0)
   static double getProgress() {
-    return getUnlockedCount() / getTotalCount();
+    final total = getTotalCount();
+    return total == 0 ? 0 : getUnlockedCount() / total;
   }
-  
+
   /// Разблокировать достижение
   static Future<Achievement?> unlock(AchievementType type) async {
     final achievement = _achievements.firstWhere(
       (a) => a.type == type,
       orElse: () => throw Exception('Achievement not found: $type'),
     );
-    
+
     if (achievement.isUnlocked) return null;
-    
+
     achievement.isUnlocked = true;
     achievement.unlockedAt = DateTime.now();
-    
+
     await _prefs?.setInt(
-      achievement.key, 
+      achievement.key,
       achievement.unlockedAt!.millisecondsSinceEpoch,
     );
-    
+
     _log('Unlocked: ${achievement.title}');
     return achievement;
   }
-  
+
   /// Проверить и разблокировать достижения по задачам
-  static Future<List<Achievement>> checkTaskAchievements(int totalSolved) async {
+  static Future<List<Achievement>> checkTaskAchievements(
+    int totalSolved,
+  ) async {
     final unlocked = <Achievement>[];
-    
+
     if (totalSolved >= 1) {
       final a = await unlock(AchievementType.firstTask);
       if (a != null) unlocked.add(a);
@@ -338,14 +339,14 @@ class AchievementsService {
       final a = await unlock(AchievementType.tasksSolved300);
       if (a != null) unlocked.add(a);
     }
-    
+
     return unlocked;
   }
-  
+
   /// Проверить и разблокировать достижения по streak
   static Future<List<Achievement>> checkStreakAchievements(int streak) async {
     final unlocked = <Achievement>[];
-    
+
     if (streak >= 3) {
       final a = await unlock(AchievementType.streak3);
       if (a != null) unlocked.add(a);
@@ -362,20 +363,20 @@ class AchievementsService {
       final a = await unlock(AchievementType.streak30);
       if (a != null) unlocked.add(a);
     }
-    
+
     return unlocked;
   }
-  
+
   /// Проверить точность
   static Future<List<Achievement>> checkAccuracyAchievements(
-    double accuracy, 
+    double accuracy,
     int totalAttempts,
   ) async {
     final unlocked = <Achievement>[];
-    
+
     // Минимум 20 попыток для достижений точности
     if (totalAttempts < 20) return unlocked;
-    
+
     if (accuracy >= 80) {
       final a = await unlock(AchievementType.accuracy80);
       if (a != null) unlocked.add(a);
@@ -388,12 +389,15 @@ class AchievementsService {
       final a = await unlock(AchievementType.accuracy100);
       if (a != null) unlocked.add(a);
     }
-    
+
     return unlocked;
   }
-  
+
   /// Проверить идеальную сессию
-  static Future<Achievement?> checkPerfectSession(int correct, int total) async {
+  static Future<Achievement?> checkPerfectSession(
+    int correct,
+    int total,
+  ) async {
     if (correct == total && total >= 5) {
       return unlock(AchievementType.perfectSession);
     }
@@ -424,7 +428,7 @@ class AchievementsService {
 
     return unlocked;
   }
-  
+
   /// Сброс достижений
   static Future<void> reset() async {
     for (final a in _achievements) {
@@ -434,7 +438,7 @@ class AchievementsService {
     }
     _log('Reset all achievements');
   }
-  
+
   static void _log(String msg) {
     // ignore: avoid_print
     print('[Achievements] $msg');

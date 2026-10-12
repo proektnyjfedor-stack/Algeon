@@ -6,9 +6,14 @@ on:
     paths:
       - 'lib/**'
       - 'web/**'
+      - 'web_landing/**'
+      - 'tool/**'
       - 'assets/**'
       - 'pubspec.yaml'
       - 'pubspec.lock'
+      - 'test/**'
+      - 'firebase.json'
+      - '.github/workflows/deploy-web.yml'
 
 jobs:
   deploy:
@@ -22,7 +27,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.41.7'
           channel: 'stable'
           cache: true
 
@@ -32,9 +37,12 @@ jobs:
       - name: Analyze code
         run: flutter analyze --no-fatal-infos
 
+      - name: Run tests
+        run: flutter test
+
       # CanvasKit с того же origin — иначе блокировщики (gstatic) дают пустой экран в Safari
       - name: Build Web (release, local CanvasKit)
-        run: flutter build web --release --no-web-resources-cdn
+        run: bash tool/build_web.sh
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
@@ -42,4 +50,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: mathpilot-app
+          projectId: algeon-66295

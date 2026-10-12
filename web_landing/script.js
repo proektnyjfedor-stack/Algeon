@@ -10,7 +10,7 @@ function getTheme() {
 
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(THEME_KEY, theme);
+  try { localStorage.setItem(THEME_KEY, theme); } catch (_) {}
 }
 
 function toggleTheme() {
@@ -189,5 +189,32 @@ tabs.forEach((tab) => {
 document.querySelectorAll('.grade-card').forEach((card) => {
   card.addEventListener('mouseenter', () => {
     card.style.setProperty('--hover', '1');
+  });
+});
+
+// Keep the menu and showcase usable from a keyboard.
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && mobileNav?.classList.contains('is-open')) {
+    mobileNav.classList.remove('is-open');
+    mobileNav.hidden = true;
+    menuToggle?.setAttribute('aria-expanded', 'false');
+    menuToggle?.focus();
+  }
+});
+tabs.forEach((tab, index) => {
+  tab.tabIndex = tab.classList.contains('active') ? 0 : -1;
+  tab.addEventListener('click', () => tabs.forEach((item) => {
+    item.tabIndex = item === tab ? 0 : -1;
+  }));
+  tab.addEventListener('keydown', (event) => {
+    let next;
+    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+    if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = tabs.length - 1;
+    if (next === undefined) return;
+    event.preventDefault();
+    tabs[next].click();
+    tabs[next].focus();
   });
 });
