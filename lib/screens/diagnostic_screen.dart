@@ -180,37 +180,7 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                       ),
                       const SizedBox(height: 24),
                       FilledButton(
-                        onPressed: busy
-                            ? null
-                            : () async {
-                                final confirmed = await showDialog<bool>(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: const Text(
-                                      'Пройти диагностику заново?',
-                                    ),
-                                    content: const Text(
-                                      'Текущий результат заменится. История решений и ошибки сохранятся.',
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, false),
-                                        child: const Text('Отмена'),
-                                      ),
-                                      FilledButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
-                                        child: const Text('Пройти заново'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                if (confirmed == true && mounted) {
-                                  selectedGrade = session['grade'] as int;
-                                  await start();
-                                }
-                              },
+                        onPressed: busy ? null : start,
                         child: const Text('Начать диагностику'),
                       ),
                     ] else if (task != null) ...[
@@ -266,6 +236,16 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                       else
                         FormulaAnswerField(
                           controller: input,
+                          readOnly: busy,
+                          decoration: InputDecoration(
+                            labelText: 'Ответ',
+                            suffixText: task.unit,
+                            helperText: task.unit == null
+                                ? null
+                                : 'Введи число без единицы измерения',
+                            helperMaxLines: 2,
+                            border: const OutlineInputBorder(),
+                          ),
                           onSubmitted: (_) => submit(),
                         ),
                       const SizedBox(height: 14),
@@ -299,7 +279,9 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
 
   List<Widget> result() {
     final wrong = tasks.where((t) => answers[t.id]['correct'] != true).toList();
-    final weak = wrong.map((t) => t.topic).toSet();
+    final weak = <String, Task>{
+      for (final task in wrong) LearningService.taskTopic(task): task,
+    };
     return [
       Text(
         'Твоя отправная точка',
@@ -326,23 +308,25 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
         'Это короткая проверка, а не оценка знаний за весь класс. Для точных выводов нужно больше практики.',
       ),
       const SizedBox(height: 16),
-      for (final topic in weak)
+      for (final entry in weak.entries)
         Card(
           child: ListTile(
             leading: const Icon(Icons.school_outlined),
-            title: Text(topic),
-            subtitle: const Text('Повторить правило и закрепить'),
+            title: Text(entry.value.topic),
+            subtitle: Text(
+              '${entry.value.grade} класс · повторить и закрепить',
+            ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
-              final task = wrong.firstWhere((t) => t.topic == topic);
+              final task = entry.value;
               context.push(
                 '/learn/intro',
                 extra: {
-                  'name': topic,
+                  'name': task.topic,
                   'restart': true,
                   'tasks': getTasksByGradeAndTopic(
                     task.grade,
-                    topic,
+                    task.topic,
                   ).take(5).toList(),
                 },
               );
@@ -383,7 +367,9 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text('Правильный ответ:'),
-                    MathText(t.answer),
+                    MathText(
+                      '${t.answer}${t.unit == null ? '' : ' ${t.unit}'}',
+                    ),
                     TextButton(
                       onPressed: () => context.push(
                         '/learn/intro',

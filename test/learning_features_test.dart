@@ -187,6 +187,30 @@ void main() {
   });
 
   test(
+    'Diagnostics cover as many distinct topics as their per-class allocation permits',
+    () {
+      for (var grade = 1; grade <= 11; grade++) {
+        final selected = LearningService.diagnosticTasks(grade);
+        for (final g in grade == 1 ? [1] : [grade - 1, grade]) {
+          final available = getTasksByGrade(
+            g,
+          ).map((t) => t.topic).toSet().length;
+          final allocation = g == grade ? (grade == 1 ? 9 : 6) : 3;
+          expect(
+            selected
+                .where((t) => t.grade == g)
+                .map((t) => t.topic)
+                .toSet()
+                .length,
+            available < allocation ? available : allocation,
+            reason: 'Diagnostic for class $grade, material of class $g',
+          );
+        }
+      }
+    },
+  );
+
+  test(
     'Diagnostic uses nine unique tasks from different topics and persists',
     () async {
       for (final grade in [1, 5, 11]) {
@@ -406,6 +430,97 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
+  testWidgets(
+    'A first diagnostic starts in the selected class without replacing a result',
+    (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: DiagnosticScreen()));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(DropdownButtonFormField<int>));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('7 класс').last);
+      await tester.tap(find.text('7 класс').last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Начать диагностику'));
+      await tester.tap(find.text('Начать диагностику'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(h.diagnostic['grade'], 7);
+      expect(find.textContaining('Задание 1 из 9'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'Restarting a completed diagnostic can be cancelled and preserves the selected class',
+    (tester) async {
+      final tasks = LearningService.diagnosticTasks(7);
+      await h.saveDiagnostic({
+        'ids': tasks.map((t) => t.id).toList(),
+        'answers': {
+          for (final t in tasks) t.id: {'correct': true, 'input': t.answer},
+        },
+        'grade': 7,
+        'startedAt': '2026-10-12T12:00:00',
+      });
+      await tester.pumpWidget(const MaterialApp(home: DiagnosticScreen()));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Пройти ещё раз'),
+        300,
+      );
+      await tester.tap(find.text('Пройти ещё раз'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Отмена'));
+      await tester.pumpAndSettle();
+      expect((h.diagnostic['answers'] as Map).length, 9);
+      await tester.tap(find.text('Пройти ещё раз'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Пройти заново'));
+      await tester.pumpAndSettle();
+      expect(h.diagnostic['grade'], 7);
+      expect(h.diagnostic['answers'], isEmpty);
+      expect(find.textContaining('Задание 1 из 9'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'Recommendations keep the same topic in different classes separate',
+    (tester) async {
+      final all = getAllTasks();
+      final first = all.firstWhere(
+        (a) => all.any((b) => b.topic == a.topic && b.grade != a.grade),
+      );
+      final second = all.firstWhere(
+        (b) => b.topic == first.topic && b.grade != first.grade,
+      );
+      await h.saveDiagnostic({
+        'ids': [first.id, second.id],
+        'answers': {
+          for (final t in [first, second])
+            t.id: {'correct': false, 'input': ''},
+        },
+        'grade': 11,
+        'startedAt': '2026-10-12T12:00:00',
+      });
+      await tester.pumpWidget(const MaterialApp(home: DiagnosticScreen()));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('${first.grade} класс · повторить и закрепить'),
+        findsOneWidget,
+      );
+      await tester.scrollUntilVisible(
+        find.text('${second.grade} класс · повторить и закрепить'),
+        200,
+      );
+      expect(
+        find.text('${second.grade} класс · повторить и закрепить'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets(
     'Diagnostic resumes saved answers and finishes with a real error review',
     (tester) async {
