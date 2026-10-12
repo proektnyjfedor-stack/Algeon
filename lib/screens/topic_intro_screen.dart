@@ -109,7 +109,7 @@ class TopicIntroScreen extends StatelessWidget {
                             displayTopic,
                           ),
                         const SizedBox(height: 8),
-                        if (!isEnglish && tasks.length >= 2)
+                        if (!isEnglish && tasks.isNotEmpty)
                           TopicQuickCheck(
                             key: ValueKey(topicName),
                             tasks: tasks,

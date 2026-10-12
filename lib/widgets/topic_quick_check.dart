@@ -16,7 +16,9 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
   final answer = TextEditingController();
   bool open = false, checked = false;
   int index = 0;
-  late final List<Task> questions =
+  late List<Task> questions;
+
+  List<Task> selectQuestions() =>
       (List<Task>.from(widget.tasks)..sort(
             (a, b) => AdaptivePractice.complexity(
               a,
@@ -25,6 +27,27 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
           .take(2)
           .toList();
   @override
+  void initState() {
+    super.initState();
+    questions = selectQuestions();
+  }
+
+  @override
+  void didUpdateWidget(covariant TopicQuickCheck oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tasks.length != widget.tasks.length ||
+        Iterable<int>.generate(
+          widget.tasks.length,
+        ).any((i) => !identical(oldWidget.tasks[i], widget.tasks[i]))) {
+      questions = selectQuestions();
+      answer.clear();
+      index = 0;
+      checked = false;
+      open = false;
+    }
+  }
+
+  @override
   void dispose() {
     answer.dispose();
     super.dispose();
@@ -32,11 +55,14 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
 
   @override
   Widget build(BuildContext context) {
+    if (questions.isEmpty) return const SizedBox.shrink();
     if (!open) {
       return OutlinedButton.icon(
         onPressed: () => setState(() => open = true),
         icon: const Icon(Icons.fact_check_outlined),
-        label: const Text('Проверить понимание · 2 вопроса'),
+        label: Text(
+          'Проверить понимание · ${questions.length} ${questions.length == 1 ? 'вопрос' : 'вопроса'}',
+        ),
       );
     }
     if (index >= questions.length) {
@@ -87,6 +113,15 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
               FormulaAnswerField(
                 controller: answer,
                 readOnly: checked,
+                decoration: InputDecoration(
+                  labelText: 'Ответ',
+                  suffixText: task.unit,
+                  helperText: task.unit == null
+                      ? null
+                      : 'Введи число без единицы измерения',
+                  helperMaxLines: 2,
+                  border: const OutlineInputBorder(),
+                ),
                 onSubmitted: (_) {
                   if (answer.text.trim().isNotEmpty) {
                     setState(() => checked = true);
@@ -107,7 +142,9 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
                   child: MathText(s),
                 ),
               ),
-              MathText('Ответ: ${task.answer}'),
+              MathText(
+                'Ответ: ${task.answer}${task.unit == null ? '' : ' ${task.unit}'}',
+              ),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () => setState(() {
