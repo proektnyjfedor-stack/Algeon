@@ -1,4 +1,5 @@
 import '../widgets/learning_note.dart';
+import '../widgets/day_boundary_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../data/exam_catalog.dart';
@@ -14,7 +15,8 @@ class StudyLinks extends StatefulWidget {
   State<StudyLinks> createState() => _StudyLinksState();
 }
 
-class _StudyLinksState extends State<StudyLinks> with WidgetsBindingObserver {
+class _StudyLinksState extends State<StudyLinks>
+    with WidgetsBindingObserver, DayBoundaryObserver {
   String? loadedDay;
   final history = LearningService.instance;
   List<Map<String, dynamic>> daily = [];
@@ -23,22 +25,15 @@ class _StudyLinksState extends State<StudyLinks> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     refresh();
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  DateTime get dayClock => history.clock();
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        mounted &&
-        loadedDay != null &&
-        loadedDay != history.today) {
+  void onDayBoundary() {
+    if (mounted && loadedDay != null && loadedDay != history.today) {
       refresh();
     }
   }
@@ -275,7 +270,7 @@ class StudyHubScreen extends StatefulWidget {
 }
 
 class _StudyHubScreenState extends State<StudyHubScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, DayBoundaryObserver {
   String? loadedDay;
   final history = LearningService.instance;
   ExamCatalog? catalog;
@@ -285,22 +280,15 @@ class _StudyHubScreenState extends State<StudyHubScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     load();
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  DateTime get dayClock => history.clock();
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed &&
-        mounted &&
-        loadedDay != null &&
-        loadedDay != history.today) {
+  void onDayBoundary() {
+    if (mounted && loadedDay != null && loadedDay != history.today) {
       load();
     }
   }

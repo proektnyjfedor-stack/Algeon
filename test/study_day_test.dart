@@ -44,6 +44,67 @@ void main() {
     (await SharedPreferences.getInstance()).getString(LearningService.key)!,
   )['dailyPlan']['day'];
 
+  testWidgets('An idle visible plan refreshes at local midnight', (
+    tester,
+  ) async {
+    await tester.runAsync(ExamCatalog.load);
+    await tester.pumpWidget(const MaterialApp(home: StudyHubScreen()));
+    await tester.pumpAndSettle();
+    await completeToday(tester);
+    expect(await cachedDay(), '2026-10-12');
+    h.clock = () => DateTime(2026, 10, 13, 0, 1);
+    await tester.pump(const Duration(minutes: 11));
+    await tester.pumpAndSettle();
+    expect(await cachedDay(), '2026-10-13');
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
+    'An idle overview refreshes, and its timer stops after disposal',
+    (tester) async {
+      await tester.runAsync(ExamCatalog.load);
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: SingleChildScrollView(child: StudyLinks())),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await completeToday(tester);
+      h.clock = () => DateTime(2026, 10, 13, 0, 1);
+      await tester.pump(const Duration(minutes: 11));
+      await tester.pumpAndSettle();
+      expect(await cachedDay(), '2026-10-13');
+      await tester.pumpWidget(const SizedBox());
+      h.clock = () => DateTime(2026, 10, 14, 0, 1);
+      await tester.pump(const Duration(days: 1));
+      expect(await cachedDay(), '2026-10-13');
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('A hidden subtree suspends its midnight timer', (tester) async {
+    await tester.runAsync(ExamCatalog.load);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: TickerMode(enabled: false, child: StudyHubScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    h.clock = () => DateTime(2026, 10, 13, 0, 1);
+    await tester.pump(const Duration(minutes: 11));
+    await tester.pumpAndSettle();
+    expect(await cachedDay(), '2026-10-12');
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: TickerMode(enabled: true, child: StudyHubScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(await cachedDay(), '2026-10-13');
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('Returning from a training after midnight refreshes the plan', (
     tester,
   ) async {
