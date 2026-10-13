@@ -35,11 +35,22 @@ class TaskTeaching {
     if (!q.contains('x') || !RegExp(r'^[\dx\s.,+−\-*/×÷:()=]+$').hasMatch(q)) {
       return null;
     }
-    q = q.replaceAll('×', '*').replaceAll('÷', '/').replaceAll(':', '/');
+    q = q
+        .replaceAll('×', '*')
+        .replaceAll('÷', '/')
+        .replaceAll(':', '/')
+        .replaceAll('−', '-');
     final sides = q.split('=');
     if (sides.length != 2 || sides.any((s) => s.trim().isEmpty)) return null;
     // Products of unknowns and unknowns in denominators are not linear.
-    if (RegExp(r'x\s*[*/]\s*x|/\s*x|[()]').hasMatch(q)) return null;
+    final compact = q.replaceAll(RegExp(r'\s'), '');
+    if (RegExp(r'/[+\-]*x|[()]').hasMatch(compact)) return null;
+    // Unary signs after multiplication/division do not separate terms.
+    // Each multiplicative term may contain at most one unknown.
+    final terms = compact
+        .replaceAllMapped(RegExp(r'([*/])[+\-]+'), (m) => m[1]!)
+        .split(RegExp(r'[+\-=]'));
+    if (terms.any((term) => 'x'.allMatches(term).length > 1)) return null;
     q = q.replaceAllMapped(RegExp(r'(\d)\s*x'), (m) => '${m[1]}*x');
     final normalized = q.split('=');
     try {
