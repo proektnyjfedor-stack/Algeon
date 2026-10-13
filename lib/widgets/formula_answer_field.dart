@@ -58,64 +58,70 @@ class MathInputToolbar extends StatelessWidget {
     final value = await showDialog<String>(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: const Text('Обыкновенная дробь'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: numerator,
-                  autofocus: true,
-                  decoration: const InputDecoration(labelText: 'Числитель'),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(thickness: 2),
-                ),
-                TextField(
-                  controller: denominator,
-                  decoration: InputDecoration(
-                    labelText: 'Знаменатель',
-                    errorText: error,
+        builder: (context, setState) {
+          void submit() {
+            final d = denominator.text.trim();
+            if (numerator.text.trim().isEmpty ||
+                d.isEmpty ||
+                double.tryParse(d.replaceAll(',', '.')) == 0) {
+              setState(
+                () => error = 'Заполните оба поля. Знаменатель не равен нулю.',
+              );
+              return;
+            }
+            Navigator.pop(context, FormulaEditing.fraction(numerator.text, d));
+          }
+
+          return AlertDialog(
+            title: const Text('Дробь'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: numerator,
+                    autofocus: true,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(labelText: 'Числитель'),
                   ),
-                ),
-              ],
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Divider(thickness: 2),
+                  ),
+                  TextField(
+                    controller: denominator,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) => submit(),
+                    decoration: InputDecoration(
+                      labelText: 'Знаменатель',
+                      errorText: error,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Отмена'),
-            ),
-            FilledButton(
-              onPressed: () {
-                final d = denominator.text.trim();
-                if (numerator.text.trim().isEmpty ||
-                    d.isEmpty ||
-                    double.tryParse(d.replaceAll(',', '.')) == 0) {
-                  setState(
-                    () => error =
-                        'Заполните оба поля. Знаменатель не равен нулю.',
-                  );
-                  return;
-                }
-                Navigator.pop(
-                  context,
-                  FormulaEditing.fraction(numerator.text, d),
-                );
-              },
-              child: const Text('Вставить'),
-            ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Отмена'),
+              ),
+              FilledButton(onPressed: submit, child: const Text('Вставить')),
+            ],
+          );
+        },
       ),
     );
     // Controllers remain alive while the dialog's closing animation runs.
     await Future<void>.delayed(const Duration(milliseconds: 300));
     numerator.dispose();
     denominator.dispose();
-    if (value != null) insert(value);
+    if (value == null || !context.mounted) return;
+    final current = context.widget;
+    if (current is MathInputToolbar &&
+        current.enabled &&
+        identical(current.controller, controller)) {
+      current.insert(value);
+    }
   }
 
   @override
@@ -125,7 +131,11 @@ class MathInputToolbar extends StatelessWidget {
     children: [
       OutlinedButton(
         onPressed: enabled ? () => fraction(context) : null,
-        child: const MathText(r'$\frac{a}{b}$'),
+        child: Semantics(
+          label: 'Вставить дробь',
+          excludeSemantics: true,
+          child: const MathText(r'$\frac{a}{b}$'),
+        ),
       ),
       for (final entry in {
         'x²': '^2',
@@ -154,7 +164,17 @@ class MathInputToolbar extends StatelessWidget {
                   }
                 }
               : null,
-          child: Text(entry.key),
+          child: Semantics(
+            label: const {
+              'x²': 'Возвести в квадрат',
+              '√': 'Квадратный корень',
+              '(': 'Открыть скобку',
+              ')': 'Закрыть скобку',
+              '−': 'Минус',
+            }[entry.key],
+            excludeSemantics: true,
+            child: Text(entry.key),
+          ),
         ),
     ],
   );
