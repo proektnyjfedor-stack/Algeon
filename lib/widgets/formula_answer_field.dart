@@ -16,9 +16,12 @@ class FormulaEditing {
   static void backspace(TextEditingController controller) {
     final s = controller.selection;
     final end = s.isValid ? s.end : controller.text.length;
+    // A visible symbol can span multiple UTF-16 units (𝑥) or include
+    // combining marks. Never leave half a character in the answer.
+    final prefix = controller.text.substring(0, end);
     final start = s.isValid && !s.isCollapsed
         ? s.start
-        : (end - 1).clamp(0, end);
+        : end - (prefix.isEmpty ? 0 : prefix.characters.last.length);
     controller.value = TextEditingValue(
       text: controller.text.replaceRange(start, end, ''),
       selection: TextSelection.collapsed(offset: start),
