@@ -53,7 +53,7 @@ class TaskTeaching {
       final root = negativeB / a;
       return Calculation(q, root, [
         'Соберём слагаемые с x слева, числа справа: $a × x = $negativeB.',
-        'Разделим обе части на $a: x = $negativeB ÷ $a = $root.',
+        'Разделим обе части на $a: x = ${negativeB.operand} ÷ ${a.operand} = $root.',
         'Подстановка x = $root в исходное равенство даёт одинаковые значения слева и справа.',
       ]);
     } on FormatException {
@@ -155,6 +155,11 @@ class Rational {
     return Rational(numerator * b.denominator, denominator * b.numerator);
   }
 
+  /// Keep signed and fractional operands unambiguous in plain-text steps.
+  String get operand => numerator.isNegative || denominator != BigInt.one
+      ? '($this)'
+      : toString();
+
   @override
   String toString() =>
       denominator == BigInt.one ? '$numerator' : '$numerator/$denominator';
@@ -185,7 +190,7 @@ class _ArithmeticParser {
       final op = tokens[index++];
       final b = term();
       final result = op == '+' ? a + b : a - b;
-      steps.add('$a $op $b = $result');
+      steps.add('${a.operand} $op ${b.operand} = $result');
       a = result;
     }
     return a;
@@ -197,7 +202,7 @@ class _ArithmeticParser {
       final op = tokens[index++];
       final b = atom();
       final result = op == '*' ? a * b : a / b;
-      steps.add('$a ${op == '*' ? '×' : '÷'} $b = $result');
+      steps.add('${a.operand} ${op == '*' ? '×' : '÷'} ${b.operand} = $result');
       a = result;
     }
     return a;
