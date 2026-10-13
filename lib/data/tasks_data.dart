@@ -5077,6 +5077,8 @@ final List<Task> _grade5Tasks = [
     question: 'Запишите 0.35 в процентах',
     type: TaskType.textInput,
     answer: '35%',
+    hint:
+        'Чтобы перевести десятичную дробь в проценты, умножь её на 100 и добавь знак %.',
     explanationSteps: ['0.35 × 100% = 35%'],
   ),
   const Task(
@@ -5086,6 +5088,8 @@ final List<Task> _grade5Tasks = [
     question: 'Запишите 45% в виде дроби (сокращённой)',
     type: TaskType.textInput,
     answer: '9/20',
+    hint:
+        'Запиши 45/100, затем раздели числитель и знаменатель на общий делитель.',
     explanationSteps: ['45% = 45/100 = 9/20'],
   ),
   const Task(
@@ -5095,6 +5099,8 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 20% от числа 150',
     type: TaskType.textInput,
     answer: '30',
+    hint:
+        '150 — это целое, то есть 100%. Чтобы найти 20%, умножь 150 на 20/100.',
     explanationSteps: ['150 × 0.20 = 30'],
   ),
   const Task(
@@ -5104,7 +5110,14 @@ final List<Task> _grade5Tasks = [
     question: 'Число 18 составляет 30% от какого числа?',
     type: TaskType.textInput,
     answer: '60',
-    explanationSteps: ['x × 0.30 = 18', 'x = 18 ÷ 0.30 = 60'],
+    hint:
+        '18 — это только 30% целого. Чтобы найти целое, раздели 18 на 30/100.',
+    explanationSteps: [
+      'Обозначим целое через x. Тогда 30% от x равны 18.',
+      '30% = 30/100 = 0.30, поэтому x × 0.30 = 18.',
+      'Делим на 0.30: x = 18 ÷ 0.30 = 60.',
+      'Проверка: 60 × 0.30 = 18.',
+    ],
   ),
   const Task(
     id: 'g5_pct_5',
@@ -5113,6 +5126,7 @@ final List<Task> _grade5Tasks = [
     question: 'Какой процент составляет 12 от 48?',
     type: TaskType.textInput,
     answer: '25%',
+    hint: 'Раздели часть 12 на целое 48, затем умножь полученную долю на 100%.',
     explanationSteps: ['12/48 = 0.25 = 25%'],
   ),
   const Task(
@@ -5122,6 +5136,7 @@ final List<Task> _grade5Tasks = [
     question: 'Цена 500 руб. выросла на 10%. Новая цена:',
     type: TaskType.textInput,
     answer: '550',
+    hint: 'Найди 10% от старой цены и прибавь прибавку к 500 рублям.',
     explanationSteps: ['10% от 500 = 50', '500 + 50 = 550 руб.'],
   ),
   const Task(
@@ -5131,6 +5146,7 @@ final List<Task> _grade5Tasks = [
     question: 'Цена 400 руб. снизилась на 25%. Новая цена:',
     type: TaskType.textInput,
     answer: '300',
+    hint: 'Найди 25% от старой цены и вычти эту скидку из 400 рублей.',
     explanationSteps: ['25% от 400 = 100', '400 - 100 = 300 руб.'],
   ),
   const Task(
@@ -5140,16 +5156,19 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 1% от 7 500',
     type: TaskType.textInput,
     answer: '75',
-    explanationSteps: ['1% = 7500 ÷ 100 = 75'],
+    hint: 'Один процент — одна сотая целого. Раздели 7500 на 100.',
+    explanationSteps: ['1% = 1/100.', '1% от 7500: 7500 ÷ 100 = 75.'],
   ),
   const Task(
     id: 'g5_pct_9',
     grade: 5,
     topic: 'Проценты',
-    question: '75% = ?',
+    question: 'Запишите 75% обыкновенной дробью.',
     type: TaskType.multipleChoice,
     options: ['3/5', '4/5', '3/4', '7/9'],
     answer: '3/4',
+    hint:
+        'Запиши 75/100 и сократи числитель и знаменатель на один общий делитель.',
     explanationSteps: ['75% = 75/100.', 'Сокращаем на 25: 75/100 = 3/4.'],
   ),
   const Task(
@@ -5159,6 +5178,8 @@ final List<Task> _grade5Tasks = [
     question: 'В классе 30 учеников, 40% из них девочки. Сколько девочек?',
     type: TaskType.textInput,
     answer: '12',
+    hint:
+        'Все 30 учеников — это 100%. Число девочек равно 40/100 от общего количества.',
     explanationSteps: ['30 × 0.40 = 12 девочек'],
   ),
   const Task(
@@ -5168,6 +5189,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 5% от 200',
     type: TaskType.textInput,
     answer: '10',
+    hint: 'Переведи 5% в дробь 5/100 и умножь её на 200.',
     explanationSteps: ['200 × 0.05 = 10'],
   ),
   const Task(
@@ -5177,6 +5199,7 @@ final List<Task> _grade5Tasks = [
     question: '1/4 = ?%',
     type: TaskType.textInput,
     answer: '25%',
+    hint: 'Сначала вычисли 1 ÷ 4, затем умножь полученную долю на 100%.',
     explanationSteps: ['1/4 = 0.25 = 25%'],
   ),
   const Task(
@@ -5186,15 +5209,19 @@ final List<Task> _grade5Tasks = [
     question: 'Скидка 15% на товар за 800 руб. Сколько сэкономите?',
     type: TaskType.textInput,
     answer: '120',
+    hint:
+        'Нужна сумма экономии, а не цена после скидки: найди 15/100 от 800 рублей.',
     explanationSteps: ['800 × 0.15 = 120 руб.'],
   ),
   const Task(
     id: 'g5_pct_14',
     grade: 5,
     topic: 'Проценты',
-    question: 'Найдите 100% если 30% = 21',
+    question: '30% числа равны 21. Найдите это число.',
     type: TaskType.textInput,
     answer: '70',
+    hint:
+        '21 соответствует 30%. Раздели 21 на 30, чтобы найти 1%, затем умножь на 100.',
     explanationSteps: ['1% = 21 ÷ 30 = 0.7', '100% = 0.7 × 100 = 70'],
   ),
   const Task(
@@ -5204,6 +5231,7 @@ final List<Task> _grade5Tasks = [
     question: '0.07 = ?%',
     type: TaskType.textInput,
     answer: '7%',
+    hint: 'При переводе десятичной дроби в проценты умножай на 100, а не дели.',
     explanationSteps: ['0.07 × 100% = 7%'],
   ),
   const Task(
@@ -5213,6 +5241,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 150% от 60',
     type: TaskType.textInput,
     answer: '90',
+    hint: '150% больше целого: запиши 150/100 и умножь на 60.',
     explanationSteps: ['60 × 1.5 = 90'],
   ),
   const Task(
@@ -5222,7 +5251,14 @@ final List<Task> _grade5Tasks = [
     question: 'Цена выросла с 200 до 250 руб. На сколько процентов?',
     type: TaskType.textInput,
     answer: '25%',
-    explanationSteps: ['Рост: 50 руб.', '50/200 = 0.25 = 25%'],
+    hint:
+        'Сначала найди прибавку 250 − 200. Раздели её на старую цену 200 и умножь на 100%.',
+    explanationSteps: [
+      'Прибавка: 250 − 200 = 50 руб.',
+      'Процент роста считаем от старой цены 200 руб., а не от новой.',
+      'Доля прибавки: 50/200 = 1/4 = 0.25.',
+      'Переводим в проценты: 0.25 × 100% = 25%.',
+    ],
   ),
   const Task(
     id: 'g5_pct_18',
@@ -5231,15 +5267,18 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 0.5% от 1000',
     type: TaskType.textInput,
     answer: '5',
+    hint: '0.5% — это 0.5/100 целого. Умножь эту долю на 1000.',
     explanationSteps: ['1000 × 0.005 = 5'],
   ),
   const Task(
     id: 'g5_pct_19',
     grade: 5,
     topic: 'Проценты',
-    question: 'В библиотеке 120 книг. 25% — фантастика. Сколько книг фантастики?',
+    question:
+        'В библиотеке 120 книг. 25% — фантастика. Сколько книг фантастики?',
     type: TaskType.textInput,
     answer: '30',
+    hint: 'Все 120 книг — это целое. Найди 25/100 от общего числа книг.',
     explanationSteps: ['120 × 0.25 = 30'],
   ),
   const Task(
@@ -5249,6 +5288,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 3/5 в процентах',
     type: TaskType.textInput,
     answer: '60%',
+    hint: 'Раздели 3 на 5, затем умножь полученную долю на 100%.',
     explanationSteps: ['3/5 = 0.6 = 60%'],
   ),
 

@@ -134,6 +134,23 @@ void main() {
       );
       await tester.pumpAndSettle();
       await capture('search');
+      final percent = getTaskById('g5_pct_4')!;
+      appRouter.push(
+        '/learn/topic',
+        extra: {
+          'name': percent.topic,
+          'tasks': [percent],
+          'restart': true,
+        },
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Подсказка'));
+      await tester.pumpAndSettle();
+      expect(
+        find.byWidgetPredicate((w) => w is MathText && w.text == percent.hint),
+        findsOneWidget,
+      );
+      await capture('percent-hint');
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpAndSettle();
     },

@@ -73,6 +73,7 @@ class TaskTeaching {
   }
 
   static List<String> hints(Task task) {
+    if (task.hint?.trim().isNotEmpty ?? false) return [task.hint!.trim()];
     final q = task.question;
     if (linearCalculation(task) != null) {
       return [
@@ -113,7 +114,6 @@ class TaskTeaching {
         'Чтобы найти p% от a, вычисли a × p/100. Чтобы найти долю в процентах, раздели часть на целое и умножь на 100.',
       ];
     }
-    if (task.hint?.trim().isNotEmpty ?? false) return [task.hint!.trim()];
     return const [];
   }
 }
