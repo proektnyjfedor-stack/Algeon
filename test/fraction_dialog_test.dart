@@ -143,4 +143,93 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     visible.dispose();
   });
+  testWidgets('An answer changed while the dialog is open is not overwritten', (
+    tester,
+  ) async {
+    final controller = TextEditingController(text: '12');
+    controller.selection = const TextSelection(baseOffset: 0, extentOffset: 2);
+    var edits = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: MathInputToolbar(
+            controller: controller,
+            onChanged: (_) => edits++,
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.bySemanticsLabel('Вставить дробь'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '2');
+    controller.text = '7';
+    await tester.tap(find.text('Вставить'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(controller.text, '7');
+    expect(edits, 0);
+    await tester.pumpWidget(const SizedBox());
+    controller.dispose();
+  });
+
+  testWidgets(
+    'Fraction insertion uses the original selection after focus moves',
+    (tester) async {
+      final controller = TextEditingController(text: '12+5');
+      controller.selection = const TextSelection(
+        baseOffset: 0,
+        extentOffset: 2,
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: MathInputToolbar(controller: controller)),
+        ),
+      );
+      await tester.tap(find.bySemanticsLabel('Вставить дробь'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, '2');
+      controller.selection = const TextSelection.collapsed(offset: 4);
+      await tester.tap(find.text('Вставить'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(controller.text, '12/2+5');
+      expect(controller.selection.baseOffset, 4);
+      await tester.pumpWidget(const SizedBox());
+      controller.dispose();
+    },
+  );
+  testWidgets(
+    'Replacing the answer controller while a dialog is open preserves the new answer',
+    (tester) async {
+      final first = TextEditingController(text: '1');
+      first.selection = const TextSelection(baseOffset: 0, extentOffset: 1);
+      final second = TextEditingController(text: '9');
+      final active = ValueNotifier(first);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ValueListenableBuilder<TextEditingController>(
+              valueListenable: active,
+              builder: (_, controller, _) =>
+                  MathInputToolbar(controller: controller),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.bySemanticsLabel('Вставить дробь'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, '2');
+      active.value = second;
+      await tester.pump();
+      first.dispose();
+      await tester.tap(find.text('Вставить'));
+      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(second.text, '9');
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      active.dispose();
+      second.dispose();
+    },
+  );
 }

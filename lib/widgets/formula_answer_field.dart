@@ -3,8 +3,12 @@ import 'math_text.dart';
 
 /// All toolbar edits respect the current selection, including replacements.
 class FormulaEditing {
-  static void insert(TextEditingController controller, String text) {
-    final selection = controller.selection;
+  static void insert(
+    TextEditingController controller,
+    String text, {
+    TextSelection? selection,
+  }) {
+    selection ??= controller.selection;
     final start = selection.isValid ? selection.start : controller.text.length;
     final end = selection.isValid ? selection.end : controller.text.length;
     controller.value = TextEditingValue(
@@ -45,15 +49,16 @@ class MathInputToolbar extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String>? onChanged;
   final bool enabled;
-  void insert(String value) {
-    FormulaEditing.insert(controller, value);
+  void insert(String value, {TextSelection? selection}) {
+    FormulaEditing.insert(controller, value, selection: selection);
     onChanged?.call(controller.text);
   }
 
   Future<void> fraction(BuildContext context) async {
+    final original = controller.value;
     final numerator = TextEditingController(
-      text: controller.selection.isValid
-          ? controller.selection.textInside(controller.text)
+      text: original.selection.isValid
+          ? original.selection.textInside(original.text)
           : '',
     );
     final denominator = TextEditingController();
@@ -123,7 +128,15 @@ class MathInputToolbar extends StatelessWidget {
     if (current is MathInputToolbar &&
         current.enabled &&
         identical(current.controller, controller)) {
-      current.insert(value);
+      if (controller.text != original.text) {
+        ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+          const SnackBar(
+            content: Text('Ответ изменился. Вставьте дробь ещё раз.'),
+          ),
+        );
+        return;
+      }
+      current.insert(value, selection: original.selection);
     }
   }
 
