@@ -66,8 +66,9 @@ class MathKeyboard extends StatelessWidget {
     BuildContext context,
     String key,
     bool isUltraCompact,
-    VoidCallback onTap,
-  ) {
+    VoidCallback onTap, {
+    bool enabled = true,
+  }) {
     final t = context.read<LanguageService>().t;
     final isBackspace = key == 'backspace';
     final isClear = key == 'clear';
@@ -174,17 +175,61 @@ class MathKeyboard extends StatelessWidget {
       );
     }
 
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        height: isUltraCompact ? 36 : 42,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(isUltraCompact ? 10 : 12),
-          border: Border.all(color: borderColor, width: 1.4),
+    final label = switch (key) {
+      'backspace' => 'Удалить предыдущий символ',
+      'clear' => 'Очистить ответ',
+      'space' => 'Пробел',
+      '-' => 'Минус',
+      '+' => 'Плюс',
+      '*' => 'Умножить',
+      '/' => 'Разделить',
+      '=' => 'Равно',
+      '>' => 'Больше',
+      '<' => 'Меньше',
+      '≥' => 'Больше или равно',
+      '≤' => 'Меньше или равно',
+      '≠' => 'Не равно',
+      '^' => 'Степень',
+      '²' => 'Квадрат',
+      '³' => 'Куб',
+      '√' => 'Квадратный корень',
+      'π' => 'Число пи',
+      '±' => 'Сменить знак',
+      '(' => 'Открыть круглую скобку',
+      ')' => 'Закрыть круглую скобку',
+      '[' => 'Открыть квадратную скобку',
+      ']' => 'Закрыть квадратную скобку',
+      '.' => 'Десятичная точка',
+      ',' => 'Запятая',
+      ';' => 'Точка с запятой',
+      'x=' => 'Икс равно',
+      'y=' => 'Игрек равно',
+      'z=' => 'Зет равно',
+      _ => key,
+    };
+    return Semantics(
+      label: label,
+      button: true,
+      enabled: enabled,
+      child: Tooltip(
+        message: label,
+        excludeFromSemantics: true,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: enabled ? onTap : null,
+            borderRadius: BorderRadius.circular(isUltraCompact ? 10 : 12),
+            child: Ink(
+              height: isUltraCompact ? 36 : 42,
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(isUltraCompact ? 10 : 12),
+                border: Border.all(color: borderColor, width: 1.4),
+              ),
+              child: Center(child: ExcludeSemantics(child: child)),
+            ),
+          ),
         ),
-        child: Center(child: child),
       ),
     );
   }
@@ -311,7 +356,8 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
       context,
       key,
       isUltraCompact,
-      widget.enabled ? () => widget.onPress(key) : () {},
+      () => widget.onPress(key),
+      enabled: widget.enabled,
     );
   }
 
@@ -321,33 +367,48 @@ class _MathKeyboardBodyState extends State<_MathKeyboardBody> {
     final isUltraCompact = h < 780 || size.width > size.height;
     final active = _tab == index;
     return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _tab = index),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          padding: EdgeInsets.symmetric(vertical: isUltraCompact ? 4 : 6),
-          decoration: BoxDecoration(
-            color: active
-                ? AppThemeColors.accentLight(context)
-                : AppThemeColors.surface(context),
+      child: Semantics(
+        label: const [
+          'Числа и действия',
+          'Переменные и степени',
+          'Неравенства',
+        ][index],
+        button: true,
+        selected: active,
+        enabled: widget.enabled,
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: widget.enabled ? () => setState(() => _tab = index) : null,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: active
-                  ? Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.35)
-                  : AppThemeColors.border(context),
-            ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: isUltraCompact ? 11 : 12,
-                fontWeight: FontWeight.w700,
+            child: Ink(
+              padding: EdgeInsets.symmetric(vertical: isUltraCompact ? 4 : 6),
+              decoration: BoxDecoration(
                 color: active
-                    ? Theme.of(context).colorScheme.primary
-                    : AppThemeColors.textSecondary(context),
+                    ? AppThemeColors.accentLight(context)
+                    : AppThemeColors.surface(context),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: active
+                      ? Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.35)
+                      : AppThemeColors.border(context),
+                ),
+              ),
+              child: Center(
+                child: ExcludeSemantics(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: isUltraCompact ? 11 : 12,
+                      fontWeight: FontWeight.w700,
+                      color: active
+                          ? Theme.of(context).colorScheme.primary
+                          : AppThemeColors.textSecondary(context),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
