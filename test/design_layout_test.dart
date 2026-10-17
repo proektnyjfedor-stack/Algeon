@@ -95,6 +95,7 @@ void main() {
           '/learn',
           '/practice',
           '/library',
+          '/formulas',
           '/library?saved=1',
           '/exams',
           '/achievements',

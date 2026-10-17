@@ -12,12 +12,24 @@ class TaskTeaching {
   }
 
   static Calculation? calculation(Task task) {
-    final match = RegExp(
-      r'^(?:Вычислите:?\s*)?([\d\s.,+−\-*/×÷:()]+)\s*=\s*\?$',
-    ).firstMatch(task.question.trim());
-    if (match == null) return null;
+    var source = task.question.trim();
+    final hasPrefix = RegExp(r'^Вычисли(?:те)?:?\s*').hasMatch(source);
+    if (!hasPrefix && !RegExp(r'=\s*\?$').hasMatch(source)) return null;
+    source = source
+        .replaceFirst(RegExp(r'^Вычисли(?:те)?:?\s*'), '')
+        .replaceFirst(RegExp(r'\s*=\s*\?$'), '')
+        .replaceFirst(RegExp(r'\?\s*$'), '')
+        .trim();
+    if (!RegExp(r'^[\d\s.,+−\-*/×÷:()]+$').hasMatch(source)) return null;
+    // A written fraction after ÷ is one operand, not two chained divisions.
+    if (source.contains('÷') || source.contains(':')) {
+      source = source.replaceAllMapped(
+        RegExp(r'\d+(?:[.,]\d+)?\s*/\s*\d+(?:[.,]\d+)?'),
+        (m) => '(${m[0]})',
+      );
+    }
     try {
-      return Calculation.parse(match[1]!.trim());
+      return Calculation.parse(source);
     } on FormatException {
       return null;
     }

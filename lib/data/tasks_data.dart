@@ -4872,6 +4872,7 @@ final List<Task> _grade5Tasks = [
     type: TaskType.multipleChoice,
     options: ['1/2', '3/4', '2/3', '4/6'],
     answer: '3/4',
+    hint: 'Раздели числитель и знаменатель на одно и то же число 2.',
     explanationSteps: [
       'У чисел 6 и 8 общий делитель 2.',
       '6 ÷ 2 = 3, 8 ÷ 2 = 4.',
@@ -4886,6 +4887,7 @@ final List<Task> _grade5Tasks = [
     type: TaskType.multipleChoice,
     options: ['3/4 > 5/6', '3/4 < 5/6', '3/4 = 5/6', 'Нельзя сравнить'],
     answer: '3/4 < 5/6',
+    hint: 'Приведи обе дроби к знаменателю 12 и сравни числители.',
     explanationSteps: [
       'Приводим к общему знаменателю 12.',
       '3/4 = 9/12, 5/6 = 10/12.',
@@ -4899,6 +4901,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 1/3 + 1/6',
     type: TaskType.textInput,
     answer: '1/2',
+    hint: 'Замени 1/3 равной дробью со знаменателем 6, затем сложи числители.',
     explanationSteps: ['Общий знаменатель = 6', '2/6 + 1/6 = 3/6 = 1/2'],
   ),
   const Task(
@@ -4908,6 +4911,8 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 3/4 - 1/6',
     type: TaskType.textInput,
     answer: '7/12',
+    hint:
+        'Приведи дроби к знаменателю 12. Вычитай числители, знаменатель сохраняй.',
     explanationSteps: ['Общий знаменатель = 12', '9/12 - 2/12 = 7/12'],
   ),
   const Task(
@@ -4918,6 +4923,12 @@ final List<Task> _grade5Tasks = [
     type: TaskType.multipleChoice,
     options: ['5/7', '1/2', '3/4', '2/3'],
     answer: '1/2',
+    hint: 'Перемножь числители и знаменатели, затем сократи результат.',
+    explanationSteps: [
+      'При умножении дробей перемножаем числители и знаменатели.',
+      '(2/3) × (3/4) = (2 × 3)/(3 × 4) = 6/12.',
+      'Делим числитель и знаменатель на 6: 6/12 = 1/2.',
+    ],
   ),
   const Task(
     id: 'g5_frac_6',
@@ -4926,6 +4937,8 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 5/6 ÷ 5/3',
     type: TaskType.textInput,
     answer: '1/2',
+    hint:
+        'Оставь первую дробь без изменения, а вторую переверни и замени деление умножением.',
     explanationSteps: [
       'Деление — умножение на обратную дробь',
       '5/6 × 3/5 = 15/30 = 1/2',
@@ -4938,6 +4951,8 @@ final List<Task> _grade5Tasks = [
     question: 'Переведите в неправильную дробь: 2 3/5',
     type: TaskType.textInput,
     answer: '13/5',
+    hint:
+        'Умножь целую часть на знаменатель и прибавь числитель. Знаменатель не меняется.',
     explanationSteps: [
       '2 × 5 + 3 = 13',
       'Знаменатель остаётся 5',
@@ -4951,6 +4966,8 @@ final List<Task> _grade5Tasks = [
     question: 'Переведите в смешанное число: 17/4',
     type: TaskType.textInput,
     answer: '4 1/4',
+    hint:
+        'Раздели 17 на 4 с остатком. Частное станет целой частью, остаток — числителем.',
     explanationSteps: ['17 ÷ 4 = 4 остаток 1', '17/4 = 4 1/4'],
   ),
   const Task(
@@ -4960,6 +4977,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 1 1/2 + 2 1/3',
     type: TaskType.textInput,
     answer: '3 5/6',
+    hint: 'Сложи целые части отдельно, дробные приведи к общему знаменателю 6.',
     explanationSteps: [
       '1 + 2 = 3',
       '1/2 + 1/3 = 3/6 + 2/6 = 5/6',
@@ -4974,6 +4992,12 @@ final List<Task> _grade5Tasks = [
     type: TaskType.multipleChoice,
     options: ['7/8', '11/12', 'Равны', 'Нельзя определить'],
     answer: '11/12',
+    hint: 'Приведи обе дроби к знаменателю 24 и сравни числители.',
+    explanationSteps: [
+      'Общий знаменатель 8 и 12 — 24.',
+      '7/8 = 21/24, а 11/12 = 22/24.',
+      '22/24 > 21/24, поэтому больше 11/12.',
+    ],
   ),
   const Task(
     id: 'g5_frac_11',
@@ -4982,6 +5006,7 @@ final List<Task> _grade5Tasks = [
     question: 'Найдите 3/4 от числа 80',
     type: TaskType.textInput,
     answer: '60',
+    hint: 'Раздели 80 на 4 равные части и возьми 3 такие части.',
     explanationSteps: ['80 × 3/4 = 80 ÷ 4 × 3 = 20 × 3 = 60'],
   ),
   const Task(
@@ -4991,19 +5016,27 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 3 1/4 - 1 3/4',
     type: TaskType.textInput,
     answer: '3/2',
+    hint:
+        'Переведи оба смешанных числа в неправильные дроби со знаменателем 4.',
     explanationSteps: [
-      '3 1/4 - 1 3/4',
-      'Заимствуем: 2 5/4 - 1 3/4 = 1 2/4 = 1 1/2 = 3/2',
+      'Переводим смешанные числа: 3 1/4 = 13/4, 1 3/4 = 7/4.',
+      'Вычитаем числители: 13/4 − 7/4 = 6/4.',
+      'Сокращаем на 2: 6/4 = 3/2 = 1 1/2.',
     ],
   ),
   const Task(
     id: 'g5_frac_13',
     grade: 5,
     topic: 'Обыкновенные дроби',
-    question: 'Какой из дробей равна 0.5?',
+    question: 'Какая дробь равна 0.5?',
     type: TaskType.multipleChoice,
     options: ['1/4', '2/5', '1/2', '3/5'],
     answer: '1/2',
+    hint: 'Запиши 0.5 как 5/10 и сократи дробь.',
+    explanationSteps: [
+      '0.5 — пять десятых: 5/10.',
+      'Делим числитель и знаменатель на 5: 5/10 = 1/2.',
+    ],
   ),
   const Task(
     id: 'g5_frac_14',
@@ -5012,6 +5045,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 4/5 × 10',
     type: TaskType.textInput,
     answer: '8',
+    hint: 'Умножь 4 на 10 и раздели результат на 5.',
     explanationSteps: ['4/5 × 10 = 40/5 = 8'],
   ),
   const Task(
@@ -5021,6 +5055,7 @@ final List<Task> _grade5Tasks = [
     question: 'Число 12 является 3/4 от какого числа?',
     type: TaskType.textInput,
     answer: '16',
+    hint: '12 — только 3/4 целого. Раздели 12 на 3/4, а не умножай.',
     explanationSteps: ['x × 3/4 = 12', 'x = 12 × 4/3 = 16'],
   ),
   const Task(
@@ -5030,6 +5065,8 @@ final List<Task> _grade5Tasks = [
     question: 'Сократите: 18/24',
     type: TaskType.textInput,
     answer: '3/4',
+    hint:
+        'Найди общий делитель 18 и 24, затем раздели на него числитель и знаменатель.',
     explanationSteps: ['НОД(18, 24) = 6', '18/24 = 3/4'],
   ),
   const Task(
@@ -5039,15 +5076,18 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 2/7 + 3/7',
     type: TaskType.textInput,
     answer: '5/7',
+    hint: 'Знаменатели уже одинаковы. Складывай только числители.',
     explanationSteps: ['Знаменатели одинаковы: 2/7 + 3/7 = 5/7'],
   ),
   const Task(
     id: 'g5_frac_18',
     grade: 5,
     topic: 'Обыкновенные дроби',
-    question: 'Найдите дробь, равную 2/3, с знаменателем 12',
+    question: 'Запишите дробь, равную 2/3, со знаменателем 12',
     type: TaskType.textInput,
     answer: '8/12',
+    hint:
+        'Чтобы получить знаменатель 12, умножь знаменатель 3 на 4. Числитель умножь на то же число.',
     explanationSteps: ['12 ÷ 3 = 4', '2 × 4 = 8', '2/3 = 8/12'],
   ),
   const Task(
@@ -5057,7 +5097,12 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: 5 ÷ (1/2)',
     type: TaskType.textInput,
     answer: '10',
-    explanationSteps: ['5 ÷ 1/2 = 5 × 2 = 10'],
+    hint:
+        'Сколько половинок помещается в пяти целых? Деление на 1/2 замени умножением на 2.',
+    explanationSteps: [
+      'Деление на дробь заменяем умножением на обратную: 5 ÷ (1/2) = 5 × 2.',
+      '5 × 2 = 10. Проверка: 10 × (1/2) = 5.',
+    ],
   ),
   const Task(
     id: 'g5_frac_20',
@@ -5066,6 +5111,7 @@ final List<Task> _grade5Tasks = [
     question: 'Вычислите: (2/3)²',
     type: TaskType.textInput,
     answer: '4/9',
+    hint: 'В квадрат возводятся и числитель, и знаменатель.',
     explanationSteps: ['(2/3)² = 2²/3² = 4/9'],
   ),
 
@@ -5715,6 +5761,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-5) + (-3)',
     type: TaskType.textInput,
     answer: '-8',
+    hint:
+        'При сложении двух отрицательных чисел сложи их модули и оставь минус.',
     explanationSteps: [
       'Числа одного знака: складываем модули, сохраняем знак',
       '-5 + (-3) = -8',
@@ -5727,6 +5775,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-7) + 3',
     type: TaskType.textInput,
     answer: '-4',
+    hint:
+        'Вычти меньший модуль из большего. Знак возьми у числа с большим модулем.',
     explanationSteps: ['Разные знаки: |−7| − |3| = 4, знак "-"', '-7 + 3 = -4'],
   ),
   const Task(
@@ -5736,6 +5786,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 4 - (-6)',
     type: TaskType.textInput,
     answer: '10',
+    hint:
+        'Вычитание отрицательного числа замени прибавлением противоположного.',
     explanationSteps: ['4 - (-6) = 4 + 6 = 10'],
   ),
   const Task(
@@ -5745,6 +5797,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-3) × (-4)',
     type: TaskType.textInput,
     answer: '12',
+    hint:
+        'Произведение двух отрицательных чисел положительно. Затем перемножь модули.',
     explanationSteps: ['Минус на минус = плюс', '(-3) × (-4) = 12'],
   ),
   const Task(
@@ -5754,6 +5808,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-15) ÷ 3',
     type: TaskType.textInput,
     answer: '-5',
+    hint:
+        'При делении чисел разных знаков результат отрицателен. Раздели модули.',
     explanationSteps: ['Минус на плюс = минус', '-15 ÷ 3 = -5'],
   ),
   const Task(
@@ -5763,6 +5819,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)³',
     type: TaskType.textInput,
     answer: '-8',
+    hint:
+        'Куб — три одинаковых множителя. У трёх отрицательных множителей произведение отрицательно.',
     explanationSteps: ['(-2)³ = (-2) × (-2) × (-2) = 4 × (-2) = -8'],
   ),
   const Task(
@@ -5772,6 +5830,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)⁴',
     type: TaskType.textInput,
     answer: '16',
+    hint:
+        'Чётная степень отрицательного числа положительна: отрицательные множители образуют пары.',
     explanationSteps: ['(-2)⁴ = ((-2)²)² = 4² = 16'],
   ),
   const Task(
@@ -5781,7 +5841,13 @@ final List<Task> _grade6Tasks = [
     question: 'Упростите: -(-(-3))',
     type: TaskType.textInput,
     answer: '-3',
-    explanationSteps: ['-(-(-3)): нечётное число минусов', 'Ответ: -3'],
+    hint:
+        'Раскрывай вложенные скобки изнутри наружу. Каждый внешний минус меняет знак.',
+    explanationSteps: [
+      'Начинаем с внутреннего числа -3.',
+      'Противоположное ему: -(-3) = 3.',
+      'Ещё один внешний минус: -(3) = -3.',
+    ],
   ),
   const Task(
     id: 'g6_rat_9',
@@ -5790,6 +5856,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-1/2) × 4',
     type: TaskType.textInput,
     answer: '-2',
+    hint: 'Сначала определи знак, затем умножь числитель на 4 и сократи дробь.',
     explanationSteps: ['(-1/2) × 4 = -4/2 = -2'],
   ),
   const Task(
@@ -5799,6 +5866,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-3/4) ÷ (-3/8)',
     type: TaskType.textInput,
     answer: '2',
+    hint:
+        'Два отрицательных числа дают положительное частное. Вторую дробь переверни.',
     explanationSteps: ['(-3/4) × (-8/3) = 24/12 = 2'],
   ),
   const Task(
@@ -5808,6 +5877,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 2.5 + (-1.3)',
     type: TaskType.textInput,
     answer: '1.2',
+    hint: 'Прибавление отрицательного числа замени вычитанием его модуля.',
     explanationSteps: ['2.5 - 1.3 = 1.2'],
   ),
   const Task(
@@ -5817,6 +5887,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-0.4) × (-0.5)',
     type: TaskType.textInput,
     answer: '0.2',
+    hint:
+        'Два отрицательных множителя дают плюс. При умножении десятичных дробей учти число знаков после запятой.',
     explanationSteps: ['(-0.4) × (-0.5) = 0.2 (минус × минус = плюс)'],
   ),
   const Task(
@@ -5827,6 +5899,13 @@ final List<Task> _grade6Tasks = [
     type: TaskType.multipleChoice,
     options: ['√2', 'π', '1/3', 'e'],
     answer: '1/3',
+    hint:
+        'Рациональное число можно записать как отношение двух целых чисел с ненулевым знаменателем.',
+    explanationSteps: [
+      'Рациональное число имеет вид a/b, где a и b целые, b не равен нулю.',
+      'У 1/3 числитель 1 и знаменатель 3 целые, поэтому оно рационально.',
+      '√2, π и e — иррациональные числа.',
+    ],
   ),
   const Task(
     id: 'g6_rat_14',
@@ -5835,6 +5914,7 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: 3 - 5 + 2 - 4',
     type: TaskType.textInput,
     answer: '-4',
+    hint: 'Выполняй сложение и вычитание слева направо, сохраняя знаки чисел.',
     explanationSteps: ['3 + 2 = 5, 5 + 4 = 9', '5 - 9 = -4'],
   ),
   const Task(
@@ -5844,6 +5924,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-6) ÷ (-2) × (-3)',
     type: TaskType.textInput,
     answer: '-9',
+    hint:
+        'Деление и умножение имеют одинаковый приоритет: выполняй их слева направо.',
     explanationSteps: ['(-6) ÷ (-2) = 3', '3 × (-3) = -9'],
   ),
   const Task(
@@ -5854,6 +5936,13 @@ final List<Task> _grade6Tasks = [
     type: TaskType.multipleChoice,
     options: ['-1', '1', '0', '100'],
     answer: '1',
+    hint:
+        'У (-1) в чётной степени все отрицательные множители можно разбить на пары.',
+    explanationSteps: [
+      'Степень 100 — произведение ста множителей (-1).',
+      'В каждой паре (-1) × (-1) = 1.',
+      'Всего 50 пар; произведение единиц равно 1.',
+    ],
   ),
   const Task(
     id: 'g6_rat_17',
@@ -5862,6 +5951,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-5) + 5',
     type: TaskType.textInput,
     answer: '0',
+    hint:
+        'Противоположные числа имеют одинаковые модули и разные знаки. Их сумма равна нулю.',
     explanationSteps: ['Противоположные числа дают 0'],
   ),
   const Task(
@@ -5872,6 +5963,13 @@ final List<Task> _grade6Tasks = [
     type: TaskType.multipleChoice,
     options: ['Положительный', 'Отрицательный', 'Ноль', 'Нет знака'],
     answer: 'Отрицательный',
+    hint:
+        'Посчитай отрицательные множители. При нечётном количестве произведение отрицательно.',
+    explanationSteps: [
+      'В произведении пять отрицательных множителей — нечётное количество.',
+      'Две пары дают 1, а оставшийся множитель равен -1.',
+      'Результат отрицательный.',
+    ],
   ),
   const Task(
     id: 'g6_rat_19',
@@ -5880,6 +5978,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: |(-3) + (-4)|',
     type: TaskType.textInput,
     answer: '7',
+    hint:
+        'Сначала вычисли выражение внутри модуля. Затем возьми расстояние от результата до нуля.',
     explanationSteps: ['(-3) + (-4) = -7', '|-7| = 7'],
   ),
   const Task(
@@ -5889,6 +5989,8 @@ final List<Task> _grade6Tasks = [
     question: 'Вычислите: (-2)² - (-2)³',
     type: TaskType.textInput,
     answer: '12',
+    hint:
+        'Сначала вычисли обе степени. Затем при вычитании отрицательного результата замени два минуса плюсом.',
     explanationSteps: ['(-2)² = 4, (-2)³ = -8', '4 - (-8) = 4 + 8 = 12'],
   ),
 

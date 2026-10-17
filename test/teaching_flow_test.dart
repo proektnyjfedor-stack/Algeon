@@ -18,6 +18,8 @@ import 'package:math_pilot/services/sound_service.dart';
 import 'package:math_pilot/services/task_teaching.dart';
 import 'package:math_pilot/widgets/math_text.dart';
 import 'package:math_pilot/widgets/math_keyboard.dart';
+import 'package:math_pilot/widgets/formula_answer_field.dart';
+import 'package:math_pilot/screens/topic_intro_screen.dart';
 import 'design_layout_test.dart' show loadDesignFonts;
 
 void main() {
@@ -87,6 +89,29 @@ void main() {
       expect(ProgressService.getTotalAttempts(), 1);
       expect(ProgressService.getTotalCorrect(), 0);
       await capture('solution');
+
+      for (
+        var i = 0;
+        i < 10 &&
+            find.byIcon(Icons.arrow_downward_rounded).evaluate().isNotEmpty;
+        i++
+      ) {
+        await tester.ensureVisible(find.byIcon(Icons.arrow_downward_rounded));
+        await tester.tap(find.byIcon(Icons.arrow_downward_rounded));
+        await tester.pumpAndSettle();
+      }
+      final reinforce = find.text('Проверить себя · 1 похожее задание');
+      expect(reinforce, findsOneWidget);
+      await tester.ensureVisible(reinforce);
+      await tester.tap(reinforce);
+      await tester.pumpAndSettle();
+      final reinforcement = tester
+          .widget<TopicIntroScreen>(find.byType(TopicIntroScreen))
+          .tasks;
+      expect(reinforcement, hasLength(1));
+      expect(reinforcement.single.id, isNot(trig.id));
+      appRouter.pop();
+      await tester.pumpAndSettle();
       appRouter.pop();
       await tester.pumpAndSettle();
       appRouter.push(
@@ -112,6 +137,12 @@ void main() {
           'restart': true,
         },
       );
+      await tester.pumpAndSettle();
+      expect(find.byType(MathInputToolbar), findsNothing);
+      await tester.tap(find.text('Инструменты ввода'));
+      await tester.pumpAndSettle();
+      expect(find.byType(MathInputToolbar), findsOneWidget);
+      await tester.tap(find.text('Инструменты ввода'));
       await tester.pumpAndSettle();
       await tester.tap(
         find.byWidgetPredicate((w) => w is MathText && w.text == 'Введи ответ'),

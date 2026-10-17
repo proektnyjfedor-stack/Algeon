@@ -100,6 +100,32 @@ class LearningService extends ChangeNotifier {
             (plan['goal'] as String).length > 100)) {
       throw const FormatException('Invalid learning plan');
     }
+    if (plan['topics'] != null &&
+        (plan['topics'] is! List ||
+            (plan['topics'] as List).length > 50 ||
+            (plan['topics'] as List).any(
+              (t) => t is! String || t.length > 200,
+            ))) {
+      throw const FormatException('Invalid plan topics');
+    }
+    if (plan['minutes'] != null &&
+        (plan['minutes'] is! int ||
+            ![5, 10, 15, 20, 30].contains(plan['minutes']))) {
+      throw const FormatException('Invalid session duration');
+    }
+    final deferred = data['deferred'];
+    if (deferred != null &&
+        (deferred is! List ||
+            deferred.length > 30 ||
+            deferred.any(
+              (e) =>
+                  e is! Map ||
+                  e['day'] is! String ||
+                  DateTime.tryParse(e['day']) == null ||
+                  !validRef(e['ref']),
+            ))) {
+      throw const FormatException('Invalid postponed tasks');
+    }
     final diagnostic = data['diagnostic'] as Map;
     if (diagnostic.isNotEmpty &&
         (diagnostic['ids'] is! List ||
@@ -258,6 +284,9 @@ class LearningService extends ChangeNotifier {
       'recent': recent,
     };
     final mistakes = _data['mistakes'] as Map;
+    (_data['deferred'] as List?)?.removeWhere(
+      (e) => e['ref']['kind'] == ref['kind'] && e['ref']['id'] == ref['id'],
+    );
     if (!correct) {
       mistakes[id] = {
         'topic': topic,
@@ -300,8 +329,15 @@ class LearningService extends ChangeNotifier {
       final topic = r['topic'] as String;
       final g = groups.putIfAbsent(
         topic,
-        () => {'topic': topic, 'attempts': 0, 'correct': 0, 'recent': <bool>[]},
+        () => {
+          'topic': topic,
+          'attempts': 0,
+          'correct': 0,
+          'tasks': 0,
+          'recent': <bool>[],
+        },
       );
+      g['tasks'] += 1;
       g['attempts'] += r['attempts'];
       g['correct'] += r['correct'];
       (g['recent'] as List).addAll((r['recent'] as List).cast<bool>());
@@ -312,6 +348,42 @@ class LearningService extends ChangeNotifier {
       ),
     );
   }
+
+  String topicStatus(Map topic) {
+    if ((topic['tasks'] as int? ?? 0) < 5) return 'Пока мало данных';
+    final pending = mistakes.values.any(
+      (m) => m['topic'] == topic['topic'] && m['stage'] < 4,
+    );
+    final accuracy = (topic['correct'] as int) / (topic['attempts'] as int);
+    return accuracy >= .8 && !pending ? 'Освоено' : 'Нужно повторить';
+  }
+
+  Future<void> postpone(Map<String, dynamic> ref) => _mutate(() {
+    if (completedToday(ref)) return;
+    final entries = (_data['deferred'] as List? ?? []).cast<Map>().toList();
+    entries.removeWhere(
+      (e) => e['ref']['kind'] == ref['kind'] && e['ref']['id'] == ref['id'],
+    );
+    if (entries.length >= 30) {
+      throw const FormatException('Too many postponed tasks');
+    }
+    final now = clock();
+    entries.add({
+      'day': day(DateTime(now.year, now.month, now.day + 1)),
+      'ref': ref,
+    });
+    _data['deferred'] = entries;
+    final cached = _data['dailyPlan'];
+    if (cached is Map && cached['day'] == today) {
+      (cached['items'] as List).removeWhere(
+        (r) => r['kind'] == ref['kind'] && r['id'] == ref['id'],
+      );
+    }
+  });
+
+  int get postponedCount => (_data['deferred'] as List? ?? [])
+      .where((e) => (e['day'] as String).compareTo(today) > 0)
+      .length;
 
   bool completedToday(Map ref) =>
       stats[ref['kind'] == 'exam'
@@ -331,6 +403,34 @@ class LearningService extends ChangeNotifier {
     if (plan.isEmpty) return [];
     final candidates = <Map<String, dynamic>>[];
     final track = plan['track'];
+    final topics = (plan['topics'] as List? ?? []).cast<String>();
+    bool eligible(Map ref) {
+      if (track == 'school') {
+        final task = ref['kind'] == 'school'
+            ? getTaskById(ref['id'] as String)
+            : null;
+        return ref['kind'] == 'school' &&
+            task?.grade == plan['grade'] &&
+            (topics.isEmpty || topics.contains(task!.topic));
+      }
+      return ref['kind'] == 'exam' &&
+          ref['track'] == track &&
+          (topics.isEmpty || topics.contains('${ref['slot']}'));
+    }
+
+    final deferred = (_data['deferred'] as List? ?? []).cast<Map>();
+    bool postponedToday(Map ref) => deferred.any(
+      (e) =>
+          (e['day'] as String).compareTo(today) > 0 &&
+          e['ref']['kind'] == ref['kind'] &&
+          e['ref']['id'] == ref['id'],
+    );
+    candidates.addAll(
+      deferred
+          .where((e) => (e['day'] as String).compareTo(today) <= 0)
+          .map((e) => Map<String, dynamic>.from(e['ref'] as Map))
+          .where(eligible),
+    );
     for (final review in reviews(dueOnly: true)) {
       final ref = Map<String, dynamic>.from(review.value['ref'] as Map);
       if (track == 'school'
@@ -401,7 +501,12 @@ class LearningService extends ChangeNotifier {
     }
     final unique = <String>{};
     final available = candidates
-        .where((r) => unique.add('${r['kind']}:${r['id']}'))
+        .where(
+          (r) =>
+              eligible(r) &&
+              !postponedToday(r) &&
+              unique.add('${r['kind']}:${r['id']}'),
+        )
         .toList();
     // Reconfiguring the plan should not consume the new daily target with
     // attempts already counted today, including mistakes awaiting review.
@@ -469,11 +574,33 @@ class LearningService extends ChangeNotifier {
   static String taskTopic(Task task) => '${task.grade} класс · ${task.topic}';
   static String examTopic(Map<String, dynamic> q) =>
       '${examLabels[q['track']]} · №${q['slot']} · ${examGuide(q['track'] as String, q['slot'] as int).title}';
-  static List<Task> similar(Task task, {int count = 3}) => getAllTasks()
-      .where(
-        (t) =>
-            t.id != task.id && t.grade == task.grade && t.topic == task.topic,
-      )
-      .take(count)
-      .toList();
+  static List<Task> similar(Task task, {int count = 3}) {
+    final candidates =
+        getAllTasks()
+            .where(
+              (t) =>
+                  t.id != task.id &&
+                  t.grade == task.grade &&
+                  t.topic == task.topic,
+            )
+            .where(
+              (t) => t.question != task.question && t.answer != task.answer,
+            )
+            .toList()
+          ..sort((a, b) {
+            int score(Task t) {
+              var result = t.type == task.type ? 2 : 0;
+              for (final symbol in ['×', '÷', '/', '%', '²', '³', '|']) {
+                if (t.question.contains(symbol) &&
+                    task.question.contains(symbol)) {
+                  result += symbol == '/' ? 1 : 8;
+                }
+              }
+              return result;
+            }
+
+            return score(b).compareTo(score(a));
+          });
+    return candidates.take(count).toList();
+  }
 }

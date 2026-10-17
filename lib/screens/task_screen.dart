@@ -682,8 +682,13 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
               Column(
                 children: [
                   if (!(_showMathKeyboard && !_isChecked)) _buildTextInput(),
-                  if (!_isChecked && _task.type == TaskType.textInput)
-                    MathInputToolbar(controller: _textController),
+                  if (!_isChecked &&
+                      _task.type == TaskType.textInput &&
+                      !_showMathKeyboard)
+                    ExpansionTile(
+                      title: const Text('Инструменты ввода'),
+                      children: [MathInputToolbar(controller: _textController)],
+                    ),
                   if (_isInequalityTask) ...[
                     const SizedBox(height: 10),
                     Container(
@@ -1104,11 +1109,11 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
                   extra: {
                     'name': _task.topic,
                     'restart': true,
-                    'tasks': LearningService.similar(_task),
+                    'tasks': LearningService.similar(_task, count: 1),
                   },
                 ),
                 icon: const Icon(Icons.replay),
-                label: const Text('Закрепить похожими заданиями'),
+                label: const Text('Проверить себя · 1 похожее задание'),
               ),
           ],
         ),

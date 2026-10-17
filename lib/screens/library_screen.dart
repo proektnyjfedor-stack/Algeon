@@ -58,6 +58,17 @@ class _LibraryScreenState extends State<LibraryScreen> {
         if (total++ < limit) entries.add(widget);
       }
 
+      if (mode != 2 && (query.isEmpty || matches('Справочник формул'))) {
+        entries.add(
+          ListTile(
+            leading: const Icon(Icons.functions),
+            title: const Text('Справочник формул'),
+            subtitle: const Text('Обозначения, схемы и примеры'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/formulas'),
+          ),
+        );
+      }
       if (mode != 1) {
         for (var g = 1; g <= 11; g++) {
           if (grade != null && grade != g) continue;

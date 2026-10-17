@@ -5,6 +5,7 @@
 library;
 
 import '../screens/study_hub_screen.dart';
+import '../screens/formula_reference_screen.dart';
 import '../screens/daily_exam_screen.dart';
 import '../screens/library_screen.dart';
 import '../screens/mock_exam_screen.dart';
@@ -140,6 +141,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/study/run',
       builder: (context, state) => const DailyExamScreen(),
+    ),
+    GoRoute(
+      path: '/formulas',
+      builder: (context, state) => const FormulaReferenceScreen(),
     ),
     GoRoute(
       path: '/study',

@@ -61,10 +61,11 @@ void main() {
           );
         } else {
           expect(
-            find.byType(MathInputToolbar),
+            find.text('Инструменты ввода'),
             findsOneWidget,
             reason: task.id,
           );
+          expect(find.byType(MathInputToolbar), findsNothing, reason: task.id);
         }
         if (task.id == 'g10_trig_1') {
           expect(

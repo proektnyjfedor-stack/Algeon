@@ -14,6 +14,7 @@ import '../data/tasks_data.dart';
 import '../services/language_service.dart';
 import '../data/topic_titles_en.dart';
 import '../services/progress_service.dart';
+import '../services/learning_service.dart';
 import '../services/sound_service.dart';
 import '../models/task.dart';
 
@@ -25,7 +26,7 @@ class PracticeTab extends StatefulWidget {
 }
 
 class _PracticeTabState extends State<PracticeTab> {
-  int _selectedCount = 10;
+  int _selectedCount = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,12 @@ class _PracticeTabState extends State<PracticeTab> {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
-            Text('$grade класс · разные темы, без привязки к плану'),
+            Text(
+              ProgressService.getTotalAttempts() == 0 &&
+                      LearningService.instance.stats.isEmpty
+                  ? '$grade класс · начни с пяти заданий'
+                  : '$grade класс · разные темы, без привязки к плану',
+            ),
             const SizedBox(height: 14),
             Wrap(
               spacing: 8,
@@ -258,6 +264,20 @@ class _PracticeTabState extends State<PracticeTab> {
 
   Widget _buildStatsCard() {
     final t = context.watch<LanguageService>().t;
+    if (ProgressService.getTotalAttempts() == 0) {
+      if (LearningService.instance.stats.isNotEmpty) {
+        return Card(
+          child: ListTile(
+            leading: const Icon(Icons.insights),
+            title: const Text('Результаты по темам'),
+            subtitle: const Text('Посмотреть освоенные темы и рекомендации'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/study/topics'),
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    }
     final totalSolved = ProgressService.getTotalSolved();
     final accuracy = ProgressService.getAccuracy();
     final streak = ProgressService.getStreakDays();

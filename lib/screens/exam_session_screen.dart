@@ -420,7 +420,12 @@ class _ExamSessionScreenState extends State<ExamSessionScreen> {
                       ],
                     ),
                   ExamHtml(q['questionHtml'] as String),
-                  source(q['sourceUrl'] as String, 'Источник задания'),
+                  ExpansionTile(
+                    title: const Text('Источник задания'),
+                    children: [
+                      source(q['sourceUrl'] as String, 'Открыть оригинал'),
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   FormulaAnswerField(
                     controller: answer,

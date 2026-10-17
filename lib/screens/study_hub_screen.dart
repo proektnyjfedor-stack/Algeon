@@ -1,4 +1,6 @@
 import '../widgets/learning_note.dart';
+import '../widgets/study_report_dialog.dart';
+import '../data/exam_theory.dart';
 import '../widgets/day_boundary_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -108,7 +110,9 @@ class _StudyLinksState extends State<StudyLinks>
                   const SizedBox(height: 10),
                   Text(
                     hasPlan
-                        ? '${history.plan['track'] == 'school' ? '${history.plan['grade']} класс' : examLabels[history.plan['track']]} · выполнено $done из ${daily.length}'
+                        ? daily.isEmpty && history.postponedCount > 0
+                              ? 'Задания перенесены на завтра. Прогресс сохранён.'
+                              : '${history.plan['track'] == 'school' ? '${history.plan['grade']} класс' : examLabels[history.plan['track']]} · выполнено $done из ${daily.length}'
                         : inProgress
                         ? 'Сохранено $answered из $total ответов. Можно продолжить с того же места.'
                         : total > 0
@@ -174,6 +178,24 @@ class _StudyLinksState extends State<StudyLinks>
           Card(
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Wrap(
+                    spacing: 8,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () => open('/formulas'),
+                        icon: const Icon(Icons.functions),
+                        label: const Text('Формулы'),
+                      ),
+                      TextButton.icon(
+                        onPressed: () => showStudyReport(context),
+                        icon: const Icon(Icons.ios_share),
+                        label: const Text('Отчёт'),
+                      ),
+                    ],
+                  ),
+                ),
                 ListTile(
                   leading: const Icon(Icons.history_edu),
                   title: const Text('Мои ошибки'),
@@ -318,6 +340,10 @@ class _StudyHubScreenState extends State<StudyHubScreen>
   Future<void> configure() async {
     var track = history.plan['track'] as String? ?? 'school';
     var daily = history.plan['daily'] as int? ?? 5;
+    var minutes = history.plan['minutes'] as int? ?? 10;
+    final selectedTopics = (history.plan['topics'] as List? ?? [])
+        .cast<String>()
+        .toSet();
     var grade =
         history.plan['grade'] as int? ??
         history.diagnostic['grade'] as int? ??
@@ -359,7 +385,10 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                           ),
                         )
                         .toList(),
-                    onChanged: (v) => update(() => track = v!),
+                    onChanged: (v) => update(() {
+                      track = v!;
+                      selectedTopics.clear();
+                    }),
                   ),
                   if (track == 'school')
                     DropdownButtonFormField<int>(
@@ -372,7 +401,10 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                           child: Text('${i + 1} класс'),
                         ),
                       ),
-                      onChanged: (v) => update(() => grade = v!),
+                      onChanged: (v) => update(() {
+                        grade = v!;
+                        selectedTopics.clear();
+                      }),
                     ),
                   const SizedBox(height: 12),
                   TextField(
@@ -396,6 +428,26 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                       if (date != null) update(() => target = date);
                     },
                   ),
+                  const Text('Время на занятие'),
+                  Wrap(
+                    spacing: 6,
+                    children: [5, 10, 15, 20, 30]
+                        .map(
+                          (n) => ChoiceChip(
+                            label: Text('~$n мин'),
+                            selected: minutes == n,
+                            onSelected: (_) => update(() {
+                              minutes = n;
+                              daily = n;
+                            }),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const Text(
+                    'Ориентир: одна минута на задание. Сложные задачи могут занять больше времени.',
+                  ),
+                  const SizedBox(height: 12),
                   const Text('Заданий в день'),
                   Wrap(
                     spacing: 6,
@@ -408,6 +460,54 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                           ),
                         )
                         .toList(),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    selectedTopics.isEmpty
+                        ? 'Темы: все'
+                        : 'Выбрано тем: ${selectedTopics.length}',
+                  ),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children:
+                        (track == 'school'
+                                ? {
+                                    for (final topic in getTopicsInfoByGrade(
+                                      grade,
+                                    ))
+                                      topic.name: topic.name,
+                                  }
+                                : {
+                                    for (final slot
+                                        in (catalog!.questions.values
+                                            .where((q) => q['track'] == track)
+                                            .map((q) => q['slot'] as int)
+                                            .toSet()
+                                            .toList()
+                                          ..sort()))
+                                      '$slot':
+                                          '№$slot · ${examGuide(track, slot).title}',
+                                  })
+                            .entries
+                            .map(
+                              (entry) => FilterChip(
+                                label: Text(entry.value),
+                                selected: selectedTopics.contains(entry.key),
+                                onSelected: (selected) => update(() {
+                                  if (selected) {
+                                    selectedTopics.add(entry.key);
+                                  } else {
+                                    selectedTopics.remove(entry.key);
+                                  }
+                                }),
+                              ),
+                            )
+                            .toList(),
+                  ),
+                  TextButton(
+                    onPressed: () => update(selectedTopics.clear),
+                    child: const Text('Все темы'),
                   ),
                 ],
               ),
@@ -423,6 +523,8 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                 'track': track,
                 'grade': grade,
                 'daily': daily,
+                'minutes': minutes,
+                'topics': selectedTopics.toList(),
                 'target': target.toIso8601String(),
                 'goal': goal.text.trim().isEmpty
                     ? 'Заниматься регулярно'
@@ -548,7 +650,7 @@ class _StudyHubScreenState extends State<StudyHubScreen>
               ? 'Осталось $days дн.'
               : days == 0
               ? 'Цель на сегодня'
-              : 'Обнови дату цели'}\n${p['daily']} заданий в день',
+              : 'Обнови дату цели'}\n${p['daily']} заданий в день${p['minutes'] == null ? '' : ' · ~${p['minutes']} мин'}',
           Icons.flag_outlined,
         ),
         Align(
@@ -579,7 +681,15 @@ class _StudyHubScreenState extends State<StudyHubScreen>
             label: const Text('Продолжить план'),
           )
         else if (items.isNotEmpty)
-          const Text('План выполнен. Новый набор появится завтра.'),
+          const Text('План выполнен. Новый набор появится завтра.')
+        else
+          Text(
+            history.postponedCount > 0
+                ? 'Задания перенесены на завтра. Прогресс и ошибки сохранены.'
+                : 'Для выбранных тем нет заданий. Измени темы плана.',
+          ),
+        if (history.postponedCount > 0)
+          Text('На завтра перенесено: ${history.postponedCount}'),
         const SizedBox(height: 12),
         ...items.map((r) {
           final task = r['kind'] == 'school'
@@ -605,7 +715,33 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: done
+                  ? const Icon(Icons.check)
+                  : PopupMenuButton<String>(
+                      tooltip: 'Действия с заданием',
+                      itemBuilder: (_) => [
+                        const PopupMenuItem(
+                          value: 'tomorrow',
+                          child: Text('Перенести на завтра'),
+                        ),
+                      ],
+                      onSelected: (_) async {
+                        try {
+                          await history.postpone(r);
+                          if (mounted) await load();
+                        } catch (_) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Не удалось перенести задание. Попробуй ещё раз.',
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    ),
               onTap: () async {
                 await openLearningRef(context, r);
                 if (mounted) await load();
@@ -703,13 +839,13 @@ class _StudyHubScreenState extends State<StudyHubScreen>
       children: [
         panel(
           'Результаты по темам',
-          'Сначала темы, которым нужно больше практики.',
+          'Статусы помогают выбрать следующий шаг. Они уточняются по мере занятий.',
           Icons.insights,
         ),
         const LearningNote(
-          title: 'Как считается точность',
+          title: 'Как читать результат',
           text:
-              'Точность — доля верных ответов среди сохранённых попыток. Для развёрнутых экзаменационных задач учитывается самооценка. При одной-двух попытках выводы предварительные.',
+              'Пока мало данных — меньше 5 разных заданий. Освоено — не менее 5 разных заданий, точность от 80% и нет незавершённых повторений. Остальным темам нужно повторение. Это ориентир по практике, не экзаменационная оценка; развёрнутые ответы учитывают самооценку.',
         ),
         if (topics.isEmpty) ...[
           const Text('Реши несколько заданий, чтобы увидеть результаты.'),
@@ -731,6 +867,7 @@ class _StudyHubScreenState extends State<StudyHubScreen>
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
+                  Chip(label: Text(history.topicStatus(r))),
                   Text(
                     '${r['correct']} из ${r['attempts']} верно · ${(accuracy * 100).round()}%${r['attempts'] < 3 ? ' · Мало данных' : ''}',
                   ),
@@ -784,6 +921,13 @@ class _StudyHubScreenState extends State<StudyHubScreen>
           icon: const Icon(Icons.arrow_back),
         ),
         title: const Text('Моя подготовка'),
+        actions: [
+          IconButton(
+            tooltip: 'Экспорт результатов',
+            onPressed: () => showStudyReport(context),
+            icon: const Icon(Icons.ios_share),
+          ),
+        ],
         bottom: const TabBar(
           tabs: [
             Tab(text: 'План'),

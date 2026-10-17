@@ -229,7 +229,12 @@ class FormulaAnswerField extends StatelessWidget {
         onSubmitted: onSubmitted,
       ),
       if (!readOnly)
-        MathInputToolbar(controller: controller, onChanged: onChanged),
+        ExpansionTile(
+          title: const Text('Инструменты ввода'),
+          children: [
+            MathInputToolbar(controller: controller, onChanged: onChanged),
+          ],
+        ),
       const SizedBox(height: 10),
       ValueListenableBuilder<TextEditingValue>(
         valueListenable: controller,

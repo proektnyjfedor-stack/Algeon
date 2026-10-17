@@ -5,11 +5,12 @@ import '../backup_service.dart';
 
 const supportsBackupFiles = true;
 
-Future<void> downloadBackup(String text, String name) async {
-  final blob = web.Blob(
-    [text.toJS].toJS,
-    web.BlobPropertyBag(type: 'application/json;charset=utf-8'),
-  );
+Future<void> downloadBackup(
+  String text,
+  String name, {
+  String mimeType = 'application/json;charset=utf-8',
+}) async {
+  final blob = web.Blob([text.toJS].toJS, web.BlobPropertyBag(type: mimeType));
   final url = web.URL.createObjectURL(blob);
   final anchor = web.HTMLAnchorElement()
     ..href = url
