@@ -4,6 +4,8 @@
 /// Чистый дизайн, мягкие закругления
 library;
 
+import '../widgets/answer_format_notice.dart';
+
 import '../services/adaptive_practice.dart';
 import '../widgets/task_report_button.dart';
 
@@ -1515,6 +1517,12 @@ class _TaskScreenState extends State<TaskScreen> with TickerProviderStateMixin {
         ? _selectedOption
         : _textController.text;
     if (answer == null || answer.trim().isEmpty) return;
+    final formIssue = task.answerFormatIssue(answer);
+    if (formIssue != null) {
+      showAnswerFormatNotice(context, formIssue);
+      return;
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
     SoundService.playTap();
     final correct = task.checkAnswer(answer);
     setState(() {

@@ -49,6 +49,8 @@ class AdaptivePractice {
       return 'Ответ пропущен. Начни с первого шага разбора и попробуй объяснить его своими словами.';
     }
     if (task.checkAnswer(input)) return '';
+    final formIssue = task.answerFormatIssue(input);
+    if (formIssue != null) return formIssue;
     Rational? number(String value) {
       try {
         return Calculation.parse(value).value;

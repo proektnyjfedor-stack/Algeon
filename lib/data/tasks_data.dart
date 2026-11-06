@@ -4946,6 +4946,7 @@ final List<Task> _grade5Tasks = [
   ),
   const Task(
     id: 'g5_frac_7',
+    answerFormat: AnswerFormat.improperFraction,
     grade: 5,
     topic: 'Обыкновенные дроби',
     question: 'Переведите в неправильную дробь: 2 3/5',
@@ -4961,6 +4962,7 @@ final List<Task> _grade5Tasks = [
   ),
   const Task(
     id: 'g5_frac_8',
+    answerFormat: AnswerFormat.mixedNumber,
     grade: 5,
     topic: 'Обыкновенные дроби',
     question: 'Переведите в смешанное число: 17/4',
@@ -5060,6 +5062,7 @@ final List<Task> _grade5Tasks = [
   ),
   const Task(
     id: 'g5_frac_16',
+    answerFormat: AnswerFormat.reducedFraction,
     grade: 5,
     topic: 'Обыкновенные дроби',
     question: 'Сократите: 18/24',
@@ -5081,6 +5084,8 @@ final List<Task> _grade5Tasks = [
   ),
   const Task(
     id: 'g5_frac_18',
+    answerFormat: AnswerFormat.fractionWithDenominator,
+    requiredDenominator: 12,
     grade: 5,
     topic: 'Обыкновенные дроби',
     question: 'Запишите дробь, равную 2/3, со знаменателем 12',
@@ -5129,6 +5134,7 @@ final List<Task> _grade5Tasks = [
   ),
   const Task(
     id: 'g5_pct_2',
+    answerFormat: AnswerFormat.reducedFraction,
     grade: 5,
     topic: 'Проценты',
     question: 'Запишите 45% в виде дроби (сокращённой)',

@@ -1,3 +1,4 @@
+import 'answer_format_notice.dart';
 import 'package:flutter/material.dart';
 import '../models/task.dart';
 import '../services/adaptive_practice.dart';
@@ -51,6 +52,17 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
   void dispose() {
     answer.dispose();
     super.dispose();
+  }
+
+  void check(Task task) {
+    if (answer.text.trim().isEmpty) return;
+    final formIssue = task.answerFormatIssue(answer.text);
+    if (formIssue != null) {
+      showAnswerFormatNotice(context, formIssue);
+      return;
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
+    setState(() => checked = true);
   }
 
   @override
@@ -123,9 +135,7 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
                   border: const OutlineInputBorder(),
                 ),
                 onSubmitted: (_) {
-                  if (answer.text.trim().isNotEmpty) {
-                    setState(() => checked = true);
-                  }
+                  check(task);
                 },
               ),
             if (checked) ...[
@@ -164,7 +174,7 @@ class _TopicQuickCheckState extends State<TopicQuickCheck> {
                 builder: (context, _) => FilledButton(
                   onPressed: answer.text.trim().isEmpty
                       ? null
-                      : () => setState(() => checked = true),
+                      : () => check(task),
                   child: const Text('Проверить ответ'),
                 ),
               ),

@@ -1,3 +1,4 @@
+import '../widgets/answer_format_notice.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../data/tasks_data.dart';
@@ -86,6 +87,12 @@ class _DiagnosticScreenState extends State<DiagnosticScreen> {
     if (busy || current == null || (!skip && input.text.trim().isEmpty)) return;
     final task = current!;
     final value = skip ? '' : input.text;
+    final formIssue = skip ? null : task.answerFormatIssue(value);
+    if (formIssue != null) {
+      showAnswerFormatNotice(context, formIssue);
+      return;
+    }
+    ScaffoldMessenger.of(context).clearSnackBars();
     final correct = !skip && task.checkAnswer(value);
     setState(() => busy = true);
     try {

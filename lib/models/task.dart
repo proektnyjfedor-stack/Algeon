@@ -8,6 +8,15 @@ library;
 /// Тип задания
 enum TaskType { multipleChoice, textInput }
 
+/// Only explicit catalog metadata constrains notation; never infer it from prose.
+enum AnswerFormat {
+  any,
+  reducedFraction,
+  fractionWithDenominator,
+  improperFraction,
+  mixedNumber,
+}
+
 /// Модель математической задачи
 class Task {
   const Task({
@@ -21,6 +30,8 @@ class Task {
     this.unit,
     this.hint,
     this.imageAsset,
+    this.answerFormat = AnswerFormat.any,
+    this.requiredDenominator,
     this.explanationSteps = const [], // По умолчанию пустой список!
   });
 
@@ -36,6 +47,11 @@ class Task {
           .toList(),
       answer: json['answer'].toString(),
       unit: json['unit'] as String?,
+      answerFormat: AnswerFormat.values.firstWhere(
+        (value) => value.name == json['answerFormat'],
+        orElse: () => AnswerFormat.any,
+      ),
+      requiredDenominator: json['requiredDenominator'] as int?,
       hint: json['hint'] as String?,
       imageAsset: json['imageAsset'] as String?,
       explanationSteps:
@@ -54,6 +70,8 @@ class Task {
   final String answer;
   final String? unit;
   final String? hint;
+  final AnswerFormat answerFormat;
+  final int? requiredDenominator;
 
   /// Рисунок к условию (локальный asset), если есть
   final String? imageAsset;
@@ -69,6 +87,7 @@ class Task {
       return userAnswer.trim() == answer.trim();
     }
     if (userAnswer.trim().isEmpty || userAnswer.length > 1000) return false;
+    if (!_matchesRequiredFormat(userAnswer)) return false;
     final userNormalized = _normalize(userAnswer);
     final correctNormalized = _normalize(answer);
     if (userNormalized == correctNormalized) return true;
@@ -110,6 +129,65 @@ class Task {
     return false;
   }
 
+  String? get answerFormatHint => switch (answerFormat) {
+    AnswerFormat.any => null,
+    AnswerFormat.reducedFraction =>
+      'Запиши ответ несократимой обыкновенной дробью.',
+    AnswerFormat.fractionWithDenominator =>
+      'Запиши дробь со знаменателем $requiredDenominator.',
+    AnswerFormat.improperFraction => 'Запиши ответ неправильной дробью.',
+    AnswerFormat.mixedNumber =>
+      'Запиши смешанное число: целую часть и правильную дробь через пробел.',
+  };
+
+  /// Correct value in another notation is a chance to edit, not an arithmetic error.
+  String? answerFormatIssue(String input) {
+    if (type != TaskType.textInput ||
+        answerFormat == AnswerFormat.any ||
+        input.trim().isEmpty ||
+        input.length > 1000 ||
+        _matchesRequiredFormat(input)) {
+      return null;
+    }
+    if (!_numericEquivalent(
+      _valuePart(_normalize(input)),
+      _valuePart(_normalize(answer)),
+    )) {
+      return null;
+    }
+    return 'Значение верное. $answerFormatHint';
+  }
+
+  bool _matchesRequiredFormat(String input) {
+    if (answerFormat == AnswerFormat.any) return true;
+    if (input.contains('÷')) return false;
+    final value = _valuePart(_normalize(input));
+    if (answerFormat == AnswerFormat.mixedNumber) {
+      final mixed = RegExp(r'^([+-]?\d+)\s+(\d+)/(\d+)$').firstMatch(value);
+      if (mixed == null) return false;
+      final whole = BigInt.parse(mixed[1]!);
+      final numerator = BigInt.parse(mixed[2]!);
+      final denominator = BigInt.parse(mixed[3]!);
+      return whole != BigInt.zero &&
+          numerator > BigInt.zero &&
+          denominator > numerator;
+    }
+    final fraction = RegExp(r'^([+-]?\d+)/(\d+)$').firstMatch(value);
+    if (fraction == null) return false;
+    final numerator = BigInt.parse(fraction[1]!);
+    final denominator = BigInt.parse(fraction[2]!);
+    if (denominator == BigInt.zero) return false;
+    return switch (answerFormat) {
+      AnswerFormat.reducedFraction =>
+        numerator.abs().gcd(denominator) == BigInt.one,
+      AnswerFormat.fractionWithDenominator =>
+        requiredDenominator != null &&
+            denominator == BigInt.from(requiredDenominator!),
+      AnswerFormat.improperFraction => numerator.abs() >= denominator,
+      _ => false,
+    };
+  }
+
   String _normalize(String text) {
     var normalized = _normalizePowers(text)
         .trim()
@@ -124,7 +202,8 @@ class Task {
         .replaceAll('−', '-')
         .replaceAllMapped(RegExp(r'([<>])\s*='), (m) => '${m.group(1)}=')
         .replaceAllMapped(RegExp(r'([<>])\s+'), (m) => m.group(1)!)
-        .replaceAll(RegExp(r'\s+'), ' ');
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(RegExp(r'\s*/\s*'), '/');
     normalized = normalized
         .replaceAllMapped(
           RegExp(r'sqrt\(\s*(\d+(?:[.,]\d+)?|[a-zA-Zαβθ])\s*\)'),
