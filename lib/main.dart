@@ -52,7 +52,6 @@ class AlgeonBootstrap extends StatefulWidget {
 
 class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
   bool _ready = false;
-  bool _introDone = false;
   Object? _initError;
 
   static const Duration _initTimeout = Duration(seconds: 20);
@@ -118,7 +117,7 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
       );
     }
 
-    if (!_ready || !_introDone) {
+    if (!_ready) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         scrollBehavior: const _NoGlowScrollBehavior(),
@@ -141,12 +140,7 @@ class _AlgeonBootstrapState extends State<AlgeonBootstrap> {
           useMaterial3: true,
         ),
         themeMode: ThemeMode.system,
-        home: BrandSplashScreen(
-          ready: _ready,
-          onFinished: () {
-            if (mounted) setState(() => _introDone = true);
-          },
-        ),
+        home: BrandSplashScreen(ready: _ready, onFinished: () {}),
       );
     }
 

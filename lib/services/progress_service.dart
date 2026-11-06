@@ -109,8 +109,31 @@ class ProgressService {
 
   /// Сохранить кастомный аватар
   static Future<void> setCustomAvatar(Map<String, dynamic> data) async {
-    await _prefs?.setString('custom_avatar', jsonEncode(data));
-    await _prefs?.setString(_keyAvatar, 'custom');
+    final prefs = _prefs;
+    if (prefs == null) throw StateError('Profile not initialized');
+    final old = prefs.getString('custom_avatar');
+    final oldMode = prefs.getString(_keyAvatar);
+    Future<void> restoreAvatar() async {
+      if (old == null) {
+        await prefs.remove('custom_avatar');
+      } else {
+        await prefs.setString('custom_avatar', old);
+      }
+      if (oldMode == null) {
+        await prefs.remove(_keyAvatar);
+      } else {
+        await prefs.setString(_keyAvatar, oldMode);
+      }
+    }
+
+    if (!await prefs.setString('custom_avatar', jsonEncode(data))) {
+      await restoreAvatar();
+      throw StateError('Could not save avatar');
+    }
+    if (!await prefs.setString(_keyAvatar, 'custom')) {
+      await restoreAvatar();
+      throw StateError('Could not activate avatar');
+    }
     _log('Custom avatar saved');
   }
 

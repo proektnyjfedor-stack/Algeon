@@ -375,7 +375,10 @@ void main() {
           home: Scaffold(body: FormulaAnswerField(controller: controller)),
         ),
       );
-      await tester.tap(find.byType(OutlinedButton).first);
+      expect(find.byType(MathInputToolbar), findsNothing);
+      await tester.tap(find.text('Инструменты ввода'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Вставить дробь'));
       await tester.pumpAndSettle();
       final fields = find.byType(TextField);
       await tester.enterText(fields.at(1), '1');

@@ -12,6 +12,7 @@ import '../theme/app_theme.dart';
 import '../theme/theme_provider.dart';
 import '../widgets/accent_color_settings.dart';
 import '../widgets/avatar_builder.dart';
+import '../services/cloud_sync_service.dart';
 import '../widgets/avatars.dart';
 import '../widgets/user_avatar_display.dart';
 import '../widgets/progress_backup_dialog.dart';
@@ -339,19 +340,29 @@ class _ProfileTabState extends State<ProfileTab> {
   Future<void> _openAvatarBuilder() async {
     final t = context.read<LanguageService>().t;
     final savedCustom = ProgressService.getCustomAvatar();
-    final initialAvatar = savedCustom != null
-        ? AvatarData.fromMap(savedCustom)
-        : defaultCustomAvatar;
+    final active = ProgressService.getAvatar();
+    final initialAvatar =
+        (savedCustom != null && (active == 'custom' || active == 'photo')
+                ? AvatarData.fromMap(savedCustom)
+                : allAvatars.firstWhere(
+                    (a) => a.id == active && a.id != 'robot' && a.id != 'cat',
+                    orElse: () => defaultCustomAvatar,
+                  ))
+            .copyWith(id: 'custom');
 
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      constraints: const BoxConstraints(maxWidth: 1000),
       builder: (_) {
         return AvatarBuilderSheet(
           initialAvatar: initialAvatar,
           onSave: (avatar) async {
             await ProgressService.setCustomAvatar(avatar.toMap());
+            CloudSyncService.instance.schedule();
             if (!mounted) return;
             setState(() {});
             _showSnack(t('profile.customAvatarSaved'));
